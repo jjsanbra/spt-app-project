@@ -1,6 +1,6 @@
-import { ConflictException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { BookingStatus, BookingType, SportType } from '@prisma/client';
+import { BookingStatus, BookingType, ParticipantStatus, SportType } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { BookingsService } from './bookings.service';
 
@@ -14,6 +14,7 @@ describe('BookingsService', () => {
     name: 'Pista Pádel 1',
     sportType: SportType.PADEL,
     hasLighting: true,
+    maxPlayers: 4,
     isActive: true,
   };
 
@@ -26,7 +27,7 @@ describe('BookingsService', () => {
     status: BookingStatus.CONFIRMED,
     startTime: new Date('2026-10-25T10:00:00.000Z'),
     endTime: new Date('2026-10-25T11:30:00.000Z'),
-    totalPrice: 18.0,
+    totalPrice: 24.0,
     lightIncluded: false,
     notes: null,
     cancellationReason: null,
@@ -36,6 +37,7 @@ describe('BookingsService', () => {
       id: 'fac-1',
       name: 'Pista Pádel 1',
       sportType: SportType.PADEL,
+      maxPlayers: 4,
     },
     user: {
       id: 'user-1',
@@ -48,7 +50,9 @@ describe('BookingsService', () => {
   const mockPrisma = {
     facility: { findFirst: jest.fn() },
     facilityBlock: { findFirst: jest.fn() },
-    booking: { findMany: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
+    booking: { findMany: jest.fn(), findFirst: jest.fn(), update: jest.fn(), create: jest.fn() },
+    bookingParticipant: { create: jest.fn(), findMany: jest.fn(), findFirst: jest.fn(), update: jest.fn() },
+    payment: { create: jest.fn(), deleteMany: jest.fn() },
     $transaction: jest.fn(),
   };
 
@@ -65,95 +69,315 @@ describe('BookingsService', () => {
     jest.clearAllMocks();
   });
 
-  it('debe crear una reserva con éxito bajo transacción', async () => {
-    mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
-    mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+  describe('create', () => {
+    it('debe crear una reserva completa (FULL) con éxito bajo transacción', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
 
-    // Simular ejecución del callback de $transaction
-    mockPrisma.$transaction.mockImplementation(async (callback: any) => {
-      const txMock = {
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        const txMock = {
+          booking: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockResolvedValue(mockBooking),
+          },
+          pricingRule: { findMany: jest.fn().mockResolvedValue([]) },
+          clubMembership: { findFirst: jest.fn().mockResolvedValue(null) },
+          payment: { create: jest.fn().mockResolvedValue({ id: 'pay-1' }) },
+        };
+        return callback(txMock);
+      });
+
+      const result = await service.create('club-1', 'user-1', {
+        facilityId: 'fac-1',
+        startTime: '2026-10-25T10:00:00.000Z',
+        endTime: '2026-10-25T11:30:00.000Z',
+        lightIncluded: false,
+      });
+
+      expect(result.id).toBe('book-1');
+      expect(result.facility.name).toBe('Pista Pádel 1');
+      expect(mockPrisma.$transaction).toHaveBeenCalled();
+    });
+
+    it('debe crear una partida abierta (OPEN) registrando al anfitrión en slot 1 y su pago individual', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+
+      const openBooking = {
+        ...mockBooking,
+        bookingType: BookingType.OPEN,
+      };
+
+      const mockTx = {
         booking: {
-          findFirst: jest.fn().mockResolvedValue(null), // Sin conflicto
-          create: jest.fn().mockResolvedValue(mockBooking),
+          findFirst: jest.fn().mockResolvedValue(null),
+          create: jest.fn().mockResolvedValue(openBooking),
         },
         pricingRule: { findMany: jest.fn().mockResolvedValue([]) },
         clubMembership: { findFirst: jest.fn().mockResolvedValue(null) },
-        payment: { create: jest.fn().mockResolvedValue({ id: 'pay-1' }) },
-      };
-      return callback(txMock);
-    });
-
-    const result = await service.create('club-1', 'user-1', {
-      facilityId: 'fac-1',
-      startTime: '2026-10-25T10:00:00.000Z',
-      endTime: '2026-10-25T11:30:00.000Z',
-      lightIncluded: false,
-    });
-
-    expect(result.id).toBe('book-1');
-    expect(result.facility.name).toBe('Pista Pádel 1');
-    expect(mockPrisma.$transaction).toHaveBeenCalled();
-  });
-
-  it('debe rechazar con ConflictException si la pista está bloqueada por mantenimiento', async () => {
-    mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
-    mockPrisma.facilityBlock.findFirst.mockResolvedValue({
-      id: 'block-1',
-      title: 'Torneo',
-    });
-
-    await expect(
-      service.create('club-1', 'user-1', {
-        facilityId: 'fac-1',
-        startTime: '2026-10-25T10:00:00.000Z',
-        endTime: '2026-10-25T11:30:00.000Z',
-      }),
-    ).rejects.toThrow(ConflictException);
-  });
-
-  it('debe rechazar con ConflictException si se detecta solapamiento en la transacción', async () => {
-    mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
-    mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
-
-    mockPrisma.$transaction.mockImplementation(async (callback: any) => {
-      const txMock = {
-        booking: {
-          findFirst: jest.fn().mockResolvedValue({ id: 'conflicting-book' }),
+        bookingParticipant: {
+          create: jest.fn().mockResolvedValue({ id: 'part-1', slotNumber: 1, isHost: true }),
         },
+        payment: { create: jest.fn().mockResolvedValue({ id: 'pay-part-1' }) },
       };
-      return callback(txMock);
-    });
 
-    await expect(
-      service.create('club-1', 'user-1', {
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => callback(mockTx));
+
+      const result = await service.create('club-1', 'user-1', {
         facilityId: 'fac-1',
         startTime: '2026-10-25T10:00:00.000Z',
         endTime: '2026-10-25T11:30:00.000Z',
-      }),
-    ).rejects.toThrow(ConflictException);
-  });
+        bookingType: BookingType.OPEN,
+      });
 
-  it('debe permitir cancelar una reserva activa', async () => {
-    mockPrisma.booking.findFirst.mockResolvedValue(mockBooking);
-    mockPrisma.booking.update.mockResolvedValue({
-      ...mockBooking,
-      status: BookingStatus.CANCELLED,
-      cancellationReason: 'Motivo personal',
+      expect(result.bookingType).toBe(BookingType.OPEN);
+      expect(mockTx.bookingParticipant.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            isHost: true,
+            slotNumber: 1,
+          }),
+        }),
+      );
+      expect(mockTx.payment.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            participantId: 'part-1',
+          }),
+        }),
+      );
     });
 
-    const result = await service.cancel('club-1', 'user-1', 'book-1', {
-      cancellationReason: 'Motivo personal',
+    it('debe rechazar con ConflictException si la pista está bloqueada por mantenimiento', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue({
+        id: 'block-1',
+        title: 'Torneo',
+      });
+
+      await expect(
+        service.create('club-1', 'user-1', {
+          facilityId: 'fac-1',
+          startTime: '2026-10-25T10:00:00.000Z',
+          endTime: '2026-10-25T11:30:00.000Z',
+        }),
+      ).rejects.toThrow(ConflictException);
     });
 
-    expect(result.status).toBe(BookingStatus.CANCELLED);
-    expect(result.cancellationReason).toBe('Motivo personal');
+    it('debe rechazar con ConflictException si se detecta solapamiento en la transacción', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        const txMock = {
+          booking: {
+            findFirst: jest.fn().mockResolvedValue({ id: 'conflicting-book' }),
+          },
+        };
+        return callback(txMock);
+      });
+
+      await expect(
+        service.create('club-1', 'user-1', {
+          facilityId: 'fac-1',
+          startTime: '2026-10-25T10:00:00.000Z',
+          endTime: '2026-10-25T11:30:00.000Z',
+        }),
+      ).rejects.toThrow(ConflictException);
+    });
   });
 
-  it('debe lanzar NotFoundException si se intenta cancelar una reserva inexistente', async () => {
-    mockPrisma.booking.findFirst.mockResolvedValue(null);
+  describe('findOpenMatches', () => {
+    it('debe listar partidas abiertas calculando plazas disponibles', async () => {
+      const mockOpenMatches = [
+        {
+          id: 'open-1',
+          clubId: 'club-1',
+          facilityId: 'fac-1',
+          totalPrice: 24.0,
+          startTime: new Date('2026-10-25T18:00:00.000Z'),
+          endTime: new Date('2026-10-25T19:30:00.000Z'),
+          facility: { id: 'fac-1', name: 'Pista 1', sportType: SportType.PADEL, maxPlayers: 4 },
+          participants: [
+            {
+              id: 'part-1',
+              userId: 'user-host',
+              slotNumber: 1,
+              isHost: true,
+              individualPrice: 6.0,
+              status: ParticipantStatus.REGISTERED,
+              joinedAt: new Date(),
+              user: { id: 'user-host', firstName: 'Juan', lastName: 'Pérez', avatarUrl: null },
+            },
+          ],
+        },
+      ];
 
-    await expect(
-      service.cancel('club-1', 'user-1', 'non-existent'),
-    ).rejects.toThrow(NotFoundException);
+      mockPrisma.booking.findMany.mockResolvedValue(mockOpenMatches);
+
+      const result = await service.findOpenMatches('club-1', 'user-guest');
+
+      expect(result.length).toBe(1);
+      expect(result[0].occupiedSlots).toBe(1);
+      expect(result[0].availableSlots).toBe(3);
+      expect(result[0].pricePerPlayer).toBe(6.0);
+      expect(result[0].isCurrentUserJoined).toBe(false);
+    });
+  });
+
+  describe('joinOpenMatch', () => {
+    it('debe unirse exitosamente a una partida abierta con plazas disponibles', async () => {
+      const mockBookingWithSlots = {
+        id: 'open-1',
+        clubId: 'club-1',
+        totalPrice: 24.0,
+        startTime: new Date(Date.now() + 86400000), // Mañana
+        facility: { id: 'fac-1', name: 'Pista 1', sportType: SportType.PADEL, maxPlayers: 4 },
+        participants: [
+          { id: 'part-1', userId: 'user-host', slotNumber: 1, isHost: true },
+        ],
+      };
+
+      const mockTx = {
+        booking: {
+          findFirst: jest
+            .fn()
+            .mockResolvedValueOnce(mockBookingWithSlots)
+            .mockResolvedValueOnce({
+              ...mockBookingWithSlots,
+              participants: [
+                { id: 'part-1', userId: 'user-host', slotNumber: 1, isHost: true, user: { firstName: 'Juan', lastName: 'P' } },
+                { id: 'part-2', userId: 'user-2', slotNumber: 2, isHost: false, user: { firstName: 'Ana', lastName: 'G' } },
+              ],
+            }),
+        },
+        bookingParticipant: {
+          create: jest.fn().mockResolvedValue({ id: 'part-2', slotNumber: 2, isHost: false }),
+        },
+        payment: { create: jest.fn().mockResolvedValue({ id: 'pay-2' }) },
+      };
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => callback(mockTx));
+
+      const result = await service.joinOpenMatch('club-1', 'user-2', 'open-1');
+
+      expect(result.id).toBe('open-1');
+      expect(result.occupiedSlots).toBe(2);
+      expect(result.availableSlots).toBe(2);
+      expect(result.isCurrentUserJoined).toBe(true);
+      expect(mockTx.bookingParticipant.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({
+            userId: 'user-2',
+            slotNumber: 2,
+            individualPrice: 6.0,
+          }),
+        }),
+      );
+    });
+
+    it('debe rechazar con ConflictException si la partida ya está completa', async () => {
+      const mockFullBooking = {
+        id: 'open-1',
+        clubId: 'club-1',
+        startTime: new Date(Date.now() + 86400000),
+        facility: { maxPlayers: 2 },
+        participants: [
+          { id: 'p1', userId: 'u1', slotNumber: 1 },
+          { id: 'p2', userId: 'u2', slotNumber: 2 },
+        ],
+      };
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        return callback({
+          booking: { findFirst: jest.fn().mockResolvedValue(mockFullBooking) },
+        });
+      });
+
+      await expect(
+        service.joinOpenMatch('club-1', 'user-3', 'open-1'),
+      ).rejects.toThrow(ConflictException);
+    });
+
+    it('debe rechazar con BadRequestException si el usuario ya está inscrito', async () => {
+      const mockBookingAlreadyJoined = {
+        id: 'open-1',
+        clubId: 'club-1',
+        startTime: new Date(Date.now() + 86400000),
+        facility: { maxPlayers: 4 },
+        participants: [{ id: 'p1', userId: 'user-1', slotNumber: 1 }],
+      };
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        return callback({
+          booking: { findFirst: jest.fn().mockResolvedValue(mockBookingAlreadyJoined) },
+        });
+      });
+
+      await expect(
+        service.joinOpenMatch('club-1', 'user-1', 'open-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('leaveOpenMatch', () => {
+    it('debe permitir abandonar la partida y transferir capitanía si sale el anfitrión', async () => {
+      const mockMatch = {
+        id: 'open-1',
+        clubId: 'club-1',
+        startTime: new Date(Date.now() + 86400000),
+        participants: [
+          { id: 'part-host', userId: 'user-host', isHost: true },
+          { id: 'part-2', userId: 'user-2', isHost: false },
+        ],
+      };
+
+      const mockTx = {
+        booking: { findFirst: jest.fn().mockResolvedValue(mockMatch), update: jest.fn() },
+        bookingParticipant: { update: jest.fn() },
+        payment: { deleteMany: jest.fn() },
+      };
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => callback(mockTx));
+
+      const result = await service.leaveOpenMatch('club-1', 'user-host', 'open-1');
+
+      expect(result.success).toBe(true);
+      expect(mockTx.bookingParticipant.update).toHaveBeenCalledWith({
+        where: { id: 'part-host' },
+        data: { status: ParticipantStatus.CANCELLED },
+      });
+      // Comprobar que transfiere isHost al siguiente
+      expect(mockTx.bookingParticipant.update).toHaveBeenCalledWith({
+        where: { id: 'part-2' },
+        data: { isHost: true },
+      });
+    });
+  });
+
+  describe('cancel', () => {
+    it('debe permitir cancelar una reserva activa', async () => {
+      mockPrisma.booking.findFirst.mockResolvedValue(mockBooking);
+      mockPrisma.booking.update.mockResolvedValue({
+        ...mockBooking,
+        status: BookingStatus.CANCELLED,
+        cancellationReason: 'Motivo personal',
+      });
+
+      const result = await service.cancel('club-1', 'user-1', 'book-1', {
+        cancellationReason: 'Motivo personal',
+      });
+
+      expect(result.status).toBe(BookingStatus.CANCELLED);
+      expect(result.cancellationReason).toBe('Motivo personal');
+    });
+
+    it('debe lanzar NotFoundException si se intenta cancelar una reserva inexistente', async () => {
+      mockPrisma.booking.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.cancel('club-1', 'user-1', 'non-existent'),
+      ).rejects.toThrow(NotFoundException);
+    });
   });
 });

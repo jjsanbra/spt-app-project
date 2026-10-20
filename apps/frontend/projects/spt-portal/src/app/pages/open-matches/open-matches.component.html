@@ -1,0 +1,217 @@
+<div class="portal-page-container">
+  <!-- Cabecera de Página -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'PORTAL.OPEN_MATCHES.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'PORTAL.OPEN_MATCHES.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/portal/book">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-plus"
+        >
+          {{ 'PORTAL.OPEN_MATCHES.CREATE_BTN' | translate }}
+        </button>
+      </a>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros y Fechas -->
+  <div class="filter-bar-card">
+    <div class="quick-dates">
+      <button
+        type="button"
+        pButton
+        [text]="true"
+        icon="pi pi-calendar"
+        (click)="setQuickDate(0)"
+      >
+        {{ 'PORTAL.OPEN_MATCHES.TODAY' | translate }}
+      </button>
+      <button
+        type="button"
+        pButton
+        [text]="true"
+        icon="pi pi-forward"
+        (click)="setQuickDate(1)"
+      >
+        {{ 'PORTAL.OPEN_MATCHES.TOMORROW' | translate }}
+      </button>
+    </div>
+
+    <div class="filter-controls">
+      <div class="filter-item date-picker-item">
+        <label for="matchDate">{{ 'PORTAL.OPEN_MATCHES.DATE' | translate }}</label>
+        <input
+          id="matchDate"
+          type="date"
+          class="custom-date-input"
+          [(ngModel)]="selectedDate"
+          (change)="loadMatches()"
+        />
+      </div>
+
+      <div class="filter-item sport-select-item">
+        <label for="matchSport">{{ 'PORTAL.OPEN_MATCHES.SPORT' | translate }}</label>
+        <p-select
+          id="matchSport"
+          [(ngModel)]="selectedSport"
+          [options]="sportOptions"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onSportChange()"
+        >
+          <ng-template let-option #item>
+            <span>{{ option.label }}</span>
+          </ng-template>
+        </p-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Contenido Principal -->
+  @if (loading) {
+    <div class="loading-state">
+      <i class="pi pi-spin pi-spinner text-primary loading-spinner"></i>
+    </div>
+  } @else if (matches.length === 0) {
+    <div class="empty-state-card">
+      <i class="pi pi-users empty-icon"></i>
+      <p>{{ 'PORTAL.OPEN_MATCHES.EMPTY' | translate }}</p>
+      <a routerLink="/portal/book">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-calendar-plus"
+          [outlined]="true"
+        >
+          {{ 'PORTAL.OPEN_MATCHES.CREATE_BTN' | translate }}
+        </button>
+      </a>
+    </div>
+  } @else {
+    <div class="matches-grid">
+      @for (match of matches; track match.id) {
+        <div class="match-card">
+          <!-- Cabecera de la Tarjeta -->
+          <div class="match-card-header">
+            <div class="facility-badge">
+              <span class="sport-tag">{{ match.sportType }}</span>
+              <h3 class="facility-name">{{ match.facilityName }}</h3>
+            </div>
+            <div class="match-time-tag">
+              <i class="pi pi-clock"></i>
+              <span>{{ match.startTime | date: 'dd MMM' }} • {{ match.startTime | date: 'HH:mm' }} - {{ match.endTime | date: 'HH:mm' }}</span>
+            </div>
+          </div>
+
+          <!-- Indicador de Plazas Ocupadas / Libres -->
+          <div class="slots-container">
+            <div class="slots-header">
+              <span class="slots-title">{{ 'PORTAL.OPEN_MATCHES.TITLE' | translate }}</span>
+              @if (match.availableSlots > 0) {
+                <p-tag
+                  severity="success"
+                  [value]="match.availableSlots + ' ' + ('PORTAL.OPEN_MATCHES.AVAILABLE_SLOTS' | translate)"
+                ></p-tag>
+              } @else {
+                <p-tag
+                  severity="warn"
+                  [value]="'PORTAL.OPEN_MATCHES.FULL_MATCH' | translate"
+                ></p-tag>
+              }
+            </div>
+
+            <div class="players-list">
+              <!-- Participantes Inscritos -->
+              @for (p of match.participants; track p.id) {
+                <div class="player-slot occupied">
+                  <div class="player-avatar">
+                    @if (p.avatarUrl) {
+                      <img [src]="p.avatarUrl" [alt]="p.name" class="avatar-img" />
+                    } @else {
+                      <span class="avatar-initials">{{ p.name.substring(0, 2).toUpperCase() }}</span>
+                    }
+                  </div>
+                  <div class="player-info">
+                    <span class="player-name">{{ p.name }}</span>
+                    @if (p.isHost) {
+                      <span class="host-pill">{{ 'PORTAL.OPEN_MATCHES.HOST' | translate }}</span>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Plazas Vacías -->
+              @for (emptySlot of getEmptySlotsCount(match); track emptySlot) {
+                <div class="player-slot free">
+                  <div class="player-avatar placeholder">
+                    <i class="pi pi-plus"></i>
+                  </div>
+                  <div class="player-info">
+                    <span class="free-text">{{ 'PORTAL.OPEN_MATCHES.FREE_SLOT' | translate }}</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
+          @if (match.notes) {
+            <div class="match-notes">
+              <i class="pi pi-comment"></i>
+              <span>"{{ match.notes }}"</span>
+            </div>
+          }
+
+          <!-- Footer de Tarjeta y Acción -->
+          <div class="match-card-footer">
+            <div class="price-box">
+              <span class="price-value">{{ match.pricePerPlayer | currency: 'EUR':'symbol':'1.2-2' }}</span>
+              <span class="price-caption">{{ 'PORTAL.OPEN_MATCHES.PRICE_PER_PLAYER' | translate }}</span>
+            </div>
+
+            <div class="action-box">
+              @if (match.isCurrentUserJoined) {
+                <div class="joined-actions">
+                  <p-tag severity="info" [value]="'PORTAL.OPEN_MATCHES.ALREADY_JOINED' | translate"></p-tag>
+                  <button
+                    type="button"
+                    pButton
+                    [text]="true"
+                    severity="danger"
+                    icon="pi pi-sign-out"
+                    (click)="confirmLeaveMatch(match)"
+                  >
+                    {{ 'PORTAL.OPEN_MATCHES.LEAVE_BTN' | translate }}
+                  </button>
+                </div>
+              } @else if (match.availableSlots > 0) {
+                <button
+                  type="button"
+                  pButton
+                  severity="success"
+                  icon="pi pi-user-plus"
+                  (click)="confirmJoinMatch(match)"
+                >
+                  {{ 'PORTAL.OPEN_MATCHES.JOIN_BTN' | translate }}
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  pButton
+                  [disabled]="true"
+                  severity="secondary"
+                  icon="pi pi-lock"
+                >
+                  {{ 'PORTAL.OPEN_MATCHES.FULL_MATCH' | translate }}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

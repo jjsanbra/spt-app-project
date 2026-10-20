@@ -251,7 +251,20 @@
                 "TENNIS",
                 "FOOTBALL_7",
                 "FOOTBALL_11",
+                "FUTSAL",
                 "BASKETBALL",
+                "PICKLEBALL",
+                "SQUASH",
+                "BADMINTON",
+                "VOLLEYBALL",
+                "BEACH_VOLLEY",
+                "FRONTON",
+                "INDOOR_FRONTON",
+                "HANDBALL",
+                "TABLE_TENNIS",
+                "ATHLETICS_TRACK",
+                "SWIMMING_LANE",
+                "CLIMBING_WALL",
                 "MULTI_SPORT"
               ],
               "type": "string"
@@ -307,7 +320,20 @@
                 "TENNIS",
                 "FOOTBALL_7",
                 "FOOTBALL_11",
+                "FUTSAL",
                 "BASKETBALL",
+                "PICKLEBALL",
+                "SQUASH",
+                "BADMINTON",
+                "VOLLEYBALL",
+                "BEACH_VOLLEY",
+                "FRONTON",
+                "INDOOR_FRONTON",
+                "HANDBALL",
+                "TABLE_TENNIS",
+                "ATHLETICS_TRACK",
+                "SWIMMING_LANE",
+                "CLIMBING_WALL",
                 "MULTI_SPORT"
               ],
               "type": "string"
@@ -1336,6 +1362,168 @@
         ]
       }
     },
+    "/api/v1/bookings/open": {
+      "get": {
+        "operationId": "BookingsController_findOpenMatches",
+        "summary": "Listar partidas abiertas disponibles para unirse en el club",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": false,
+            "in": "query",
+            "description": "Fecha YYYY-MM-DD",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportType",
+            "required": false,
+            "in": "query",
+            "description": "Filtro por deporte",
+            "schema": {
+              "enum": [
+                "PADEL",
+                "TENNIS",
+                "FOOTBALL_7",
+                "FOOTBALL_11",
+                "FUTSAL",
+                "BASKETBALL",
+                "PICKLEBALL",
+                "SQUASH",
+                "BADMINTON",
+                "VOLLEYBALL",
+                "BEACH_VOLLEY",
+                "FRONTON",
+                "INDOOR_FRONTON",
+                "HANDBALL",
+                "TABLE_TENNIS",
+                "ATHLETICS_TRACK",
+                "SWIMMING_LANE",
+                "CLIMBING_WALL",
+                "MULTI_SPORT"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/OpenMatchResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/bookings/{id}/join": {
+      "post": {
+        "operationId": "BookingsController_joinOpenMatch",
+        "summary": "Unirse a una partida abierta por plazas",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OpenMatchResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/bookings/{id}/leave": {
+      "delete": {
+        "operationId": "BookingsController_leaveOpenMatch",
+        "summary": "Abandonar una partida abierta",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Participación cancelada y plaza liberada"
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/bookings/{id}": {
       "delete": {
         "operationId": "BookingsController_cancel",
@@ -1394,13 +1582,27 @@
   },
   "info": {
     "title": "SPT App API",
-    "description": "",
-    "version": "1.0",
+    "description": "API REST del SaaS Multi-tenant de gestión de reservas de centros deportivos",
+    "version": "1.0.0",
     "contact": {}
   },
   "tags": [],
   "servers": [],
   "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Introduce tu token JWT: Bearer <token>"
+      },
+      "tenant": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-tenant-id",
+        "description": "UUID del Club deportivo activo sobre el que se opera"
+      }
+    },
     "schemas": {
       "RegisterDto": {
         "type": "object",
@@ -1722,7 +1924,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL"
@@ -1796,7 +2011,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL"
@@ -1884,7 +2112,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL",
@@ -1960,7 +2201,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL",
@@ -2131,7 +2385,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL",
@@ -2229,7 +2496,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL",
@@ -2315,7 +2595,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL",
@@ -2734,6 +3027,16 @@
             "type": "string",
             "example": "Reserva para partido del torneo interno",
             "description": "Notas o comentarios adicionales sobre la reserva"
+          },
+          "bookingType": {
+            "type": "string",
+            "enum": [
+              "FULL",
+              "OPEN"
+            ],
+            "example": "FULL",
+            "default": "FULL",
+            "description": "Tipo de reserva: FULL (pista completa cerrada) u OPEN (partida abierta por plazas)"
           }
         },
         "required": [
@@ -2760,7 +3063,20 @@
               "TENNIS",
               "FOOTBALL_7",
               "FOOTBALL_11",
+              "FUTSAL",
               "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
               "MULTI_SPORT"
             ],
             "example": "PADEL"
@@ -2892,6 +3208,181 @@
           "lightIncluded",
           "createdAt",
           "facility"
+        ]
+      },
+      "OpenMatchParticipantDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "part-uuid-1"
+          },
+          "userId": {
+            "type": "string",
+            "example": "user-uuid-1",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Carlos Martínez"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": "https://images.unsplash.com/photo-1534528741775-53994a69daeb",
+            "nullable": true
+          },
+          "slotNumber": {
+            "type": "number",
+            "example": 1,
+            "description": "Número de plaza del 1 al máximo de jugadores"
+          },
+          "isHost": {
+            "type": "boolean",
+            "example": true,
+            "description": "Indica si este participante es el anfitrión/creador de la partida"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "REGISTERED",
+              "CONFIRMED",
+              "CANCELLED",
+              "PAID"
+            ],
+            "example": "REGISTERED"
+          },
+          "joinedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slotNumber",
+          "isHost",
+          "status",
+          "joinedAt"
+        ]
+      },
+      "OpenMatchResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "book-uuid-1"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "club-uuid-1"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "fac-uuid-1"
+          },
+          "facilityName": {
+            "type": "string",
+            "example": "Pista 1 Central"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "FUTSAL",
+              "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T18:00:00.000Z"
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T19:30:00.000Z"
+          },
+          "totalPrice": {
+            "type": "number",
+            "example": 24,
+            "description": "Precio total del alquiler de la pista"
+          },
+          "pricePerPlayer": {
+            "type": "number",
+            "example": 6,
+            "description": "Precio individual que abona cada jugador"
+          },
+          "maxPlayers": {
+            "type": "number",
+            "example": 4,
+            "description": "Número máximo de jugadores en la pista"
+          },
+          "availableSlots": {
+            "type": "number",
+            "example": 2,
+            "description": "Número de plazas aún disponibles para unirse"
+          },
+          "occupiedSlots": {
+            "type": "number",
+            "example": 2,
+            "description": "Número de plazas ya ocupadas"
+          },
+          "isCurrentUserJoined": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indica si el usuario que consulta ya está inscrito"
+          },
+          "isCurrentUserHost": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indica si el usuario que consulta es el anfitrión de la partida"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Buscamos nivel intermedio 3.5",
+            "nullable": true
+          },
+          "participants": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OpenMatchParticipantDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "facilityId",
+          "facilityName",
+          "sportType",
+          "startTime",
+          "endTime",
+          "totalPrice",
+          "pricePerPlayer",
+          "maxPlayers",
+          "availableSlots",
+          "occupiedSlots",
+          "isCurrentUserJoined",
+          "isCurrentUserHost",
+          "participants"
         ]
       },
       "CancelBookingDto": {

@@ -66,14 +66,29 @@ export class FacilitiesListComponent implements OnInit {
     maxPlayers: [4, [Validators.required, Validators.min(1)]],
   });
 
-  readonly sportOptions = [
-    { label: 'Pádel', value: SportType.PADEL },
-    { label: 'Tenis', value: SportType.TENNIS },
-    { label: 'Fútbol 7', value: SportType.FOOTBALL_7 },
-    { label: 'Fútbol 11', value: SportType.FOOTBALL_11 },
-    { label: 'Baloncesto', value: SportType.BASKETBALL },
-    { label: 'Multideporte', value: SportType.MULTI_SPORT },
-  ];
+  get sportOptions() {
+    return [
+      { label: this.translate.instant('SPORTS.PADEL'), value: SportType.PADEL },
+      { label: this.translate.instant('SPORTS.TENNIS'), value: SportType.TENNIS },
+      { label: this.translate.instant('SPORTS.FOOTBALL_7'), value: SportType.FOOTBALL_7 },
+      { label: this.translate.instant('SPORTS.FOOTBALL_11'), value: SportType.FOOTBALL_11 },
+      { label: this.translate.instant('SPORTS.FUTSAL'), value: SportType.FUTSAL },
+      { label: this.translate.instant('SPORTS.BASKETBALL'), value: SportType.BASKETBALL },
+      { label: this.translate.instant('SPORTS.PICKLEBALL'), value: SportType.PICKLEBALL },
+      { label: this.translate.instant('SPORTS.SQUASH'), value: SportType.SQUASH },
+      { label: this.translate.instant('SPORTS.BADMINTON'), value: SportType.BADMINTON },
+      { label: this.translate.instant('SPORTS.VOLLEYBALL'), value: SportType.VOLLEYBALL },
+      { label: this.translate.instant('SPORTS.BEACH_VOLLEY'), value: SportType.BEACH_VOLLEY },
+      { label: this.translate.instant('SPORTS.FRONTON'), value: SportType.FRONTON },
+      { label: this.translate.instant('SPORTS.INDOOR_FRONTON'), value: SportType.INDOOR_FRONTON },
+      { label: this.translate.instant('SPORTS.HANDBALL'), value: SportType.HANDBALL },
+      { label: this.translate.instant('SPORTS.TABLE_TENNIS'), value: SportType.TABLE_TENNIS },
+      { label: this.translate.instant('SPORTS.ATHLETICS_TRACK'), value: SportType.ATHLETICS_TRACK },
+      { label: this.translate.instant('SPORTS.SWIMMING_LANE'), value: SportType.SWIMMING_LANE },
+      { label: this.translate.instant('SPORTS.CLIMBING_WALL'), value: SportType.CLIMBING_WALL },
+      { label: this.translate.instant('SPORTS.MULTI_SPORT'), value: SportType.MULTI_SPORT },
+    ];
+  }
 
   readonly courtOptions = [
     { label: 'Indoor (Cubierta)', value: CourtType.INDOOR },

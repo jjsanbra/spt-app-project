@@ -30,6 +30,18 @@
           </div>
         </a>
 
+        <a routerLink="/portal/open-matches" class="feature-card-link">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-users"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_DESC' | translate }}</p>
+            </div>
+          </div>
+        </a>
+
         <a routerLink="/portal/my-bookings" class="feature-card-link">
           <div class="portal-feature-card">
             <div class="feature-icon">
@@ -47,6 +59,11 @@
         <a routerLink="/portal/book">
           <button type="button" pButton icon="pi pi-calendar-plus">
             {{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}
+          </button>
+        </a>
+        <a routerLink="/portal/open-matches">
+          <button type="button" pButton icon="pi pi-users" severity="success" [outlined]="true">
+            {{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}
           </button>
         </a>
         <a routerLink="/portal/my-bookings">

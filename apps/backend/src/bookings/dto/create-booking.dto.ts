@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsISO8601, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
+import { BookingType } from '@prisma/client';
+import { IsBoolean, IsEnum, IsISO8601, IsNotEmpty, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class CreateBookingDto {
   @ApiProperty({
@@ -42,6 +43,16 @@ export class CreateBookingDto {
   @IsOptional()
   @IsString({ message: 'Las notas deben ser una cadena de texto' })
   notes?: string;
+
+  @ApiPropertyOptional({
+    enum: BookingType,
+    example: BookingType.FULL,
+    default: BookingType.FULL,
+    description: 'Tipo de reserva: FULL (pista completa cerrada) u OPEN (partida abierta por plazas)',
+  })
+  @IsOptional()
+  @IsEnum(BookingType, { message: 'El tipo de reserva debe ser FULL u OPEN' })
+  bookingType?: BookingType = BookingType.FULL;
 }
 
 export class CancelBookingDto {

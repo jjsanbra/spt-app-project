@@ -66,11 +66,25 @@ export class BookingsGridComponent implements OnInit {
   get sportFilterOptions() {
     return [
       { label: this.translate.instant('PORTAL.BOOKINGS.FILTER_ALL_SPORTS'), value: null },
-      { label: 'Pádel', value: 'PADEL' },
-      { label: 'Tenis', value: 'TENNIS' },
-      { label: 'Fútbol 7', value: 'FOOTBALL_7' },
-      { label: 'Fútbol 11', value: 'FOOTBALL_11' },
-      { label: 'Baloncesto', value: 'BASKETBALL' },
+      { label: this.translate.instant('SPORTS.PADEL'), value: 'PADEL' },
+      { label: this.translate.instant('SPORTS.TENNIS'), value: 'TENNIS' },
+      { label: this.translate.instant('SPORTS.FOOTBALL_7'), value: 'FOOTBALL_7' },
+      { label: this.translate.instant('SPORTS.FOOTBALL_11'), value: 'FOOTBALL_11' },
+      { label: this.translate.instant('SPORTS.FUTSAL'), value: 'FUTSAL' },
+      { label: this.translate.instant('SPORTS.BASKETBALL'), value: 'BASKETBALL' },
+      { label: this.translate.instant('SPORTS.PICKLEBALL'), value: 'PICKLEBALL' },
+      { label: this.translate.instant('SPORTS.SQUASH'), value: 'SQUASH' },
+      { label: this.translate.instant('SPORTS.BADMINTON'), value: 'BADMINTON' },
+      { label: this.translate.instant('SPORTS.VOLLEYBALL'), value: 'VOLLEYBALL' },
+      { label: this.translate.instant('SPORTS.BEACH_VOLLEY'), value: 'BEACH_VOLLEY' },
+      { label: this.translate.instant('SPORTS.FRONTON'), value: 'FRONTON' },
+      { label: this.translate.instant('SPORTS.INDOOR_FRONTON'), value: 'INDOOR_FRONTON' },
+      { label: this.translate.instant('SPORTS.HANDBALL'), value: 'HANDBALL' },
+      { label: this.translate.instant('SPORTS.TABLE_TENNIS'), value: 'TABLE_TENNIS' },
+      { label: this.translate.instant('SPORTS.ATHLETICS_TRACK'), value: 'ATHLETICS_TRACK' },
+      { label: this.translate.instant('SPORTS.SWIMMING_LANE'), value: 'SWIMMING_LANE' },
+      { label: this.translate.instant('SPORTS.CLIMBING_WALL'), value: 'CLIMBING_WALL' },
+      { label: this.translate.instant('SPORTS.MULTI_SPORT'), value: 'MULTI_SPORT' },
     ];
   }
 

@@ -4,10 +4,18 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { BookingStatus, BookingType, PaymentMethod, PaymentStatus } from '@prisma/client';
+import {
+  BookingStatus,
+  BookingType,
+  ParticipantStatus,
+  PaymentMethod,
+  PaymentStatus,
+  SportType,
+} from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { BookingResponseDto } from './dto/booking-response.dto';
 import { CancelBookingDto, CreateBookingDto } from './dto/create-booking.dto';
+import { OpenMatchResponseDto } from './dto/open-match-response.dto';
 
 @Injectable()
 export class BookingsService {
@@ -103,12 +111,13 @@ export class BookingsService {
       const totalPrice = basePrice + lightSurcharge;
 
       // 5. Crear la reserva
+      const bookingType = dto.bookingType ?? BookingType.FULL;
       const newBooking = await tx.booking.create({
         data: {
           clubId,
           facilityId: facility.id,
           userId,
-          bookingType: BookingType.FULL,
+          bookingType,
           status: BookingStatus.CONFIRMED,
           startTime: start,
           endTime: end,
@@ -118,7 +127,7 @@ export class BookingsService {
         },
         include: {
           facility: {
-            select: { id: true, name: true, sportType: true },
+            select: { id: true, name: true, sportType: true, maxPlayers: true },
           },
           user: {
             select: { id: true, firstName: true, lastName: true, email: true },
@@ -126,22 +135,326 @@ export class BookingsService {
         },
       });
 
-      // 6. Generar registro de pago pendiente (Modalidad A: presencial en centro)
-      await tx.payment.create({
-        data: {
-          clubId,
-          bookingId: newBooking.id,
-          userId,
-          amount: totalPrice,
-          method: PaymentMethod.PRESENTIAL_CASH,
-          status: PaymentStatus.PENDING,
-        },
-      });
+      // 6. Generar registro de pago y participantes según tipo de reserva
+      if (bookingType === BookingType.OPEN) {
+        const maxPlayers = facility.maxPlayers || 4;
+        const individualPrice = Math.round((totalPrice / maxPlayers) * 100) / 100;
+
+        // Registrar al creador como anfitrión (slot 1)
+        const hostParticipant = await tx.bookingParticipant.create({
+          data: {
+            bookingId: newBooking.id,
+            userId,
+            isHost: true,
+            slotNumber: 1,
+            individualPrice,
+            status: ParticipantStatus.REGISTERED,
+          },
+        });
+
+        // Pago individual del anfitrión
+        await tx.payment.create({
+          data: {
+            clubId,
+            bookingId: newBooking.id,
+            userId,
+            participantId: hostParticipant.id,
+            amount: individualPrice,
+            method: PaymentMethod.PRESENTIAL_CASH,
+            status: PaymentStatus.PENDING,
+          },
+        });
+      } else {
+        // Reserva completa: un solo pago por el total
+        await tx.payment.create({
+          data: {
+            clubId,
+            bookingId: newBooking.id,
+            userId,
+            amount: totalPrice,
+            method: PaymentMethod.PRESENTIAL_CASH,
+            status: PaymentStatus.PENDING,
+          },
+        });
+      }
 
       return newBooking;
     });
 
     return this.mapToResponse(booking);
+  }
+
+  /**
+   * Listar partidas abiertas disponibles en el club
+   */
+  async findOpenMatches(
+    clubId: string,
+    currentUserId: string,
+    dateStr?: string,
+    sportType?: any,
+  ): Promise<any[]> {
+    const where: any = {
+      clubId,
+      bookingType: BookingType.OPEN,
+      status: { in: [BookingStatus.CONFIRMED, BookingStatus.PENDING_CONFIRMATION] },
+      startTime: { gt: new Date() },
+    };
+
+    if (dateStr) {
+      const dayStart = new Date(`${dateStr}T00:00:00.000Z`);
+      const dayEnd = new Date(`${dateStr}T23:59:59.999Z`);
+      where.startTime = { gte: dayStart, lte: dayEnd };
+    }
+
+    if (sportType) {
+      where.facility = { sportType };
+    }
+
+    const matches = await this.prisma.booking.findMany({
+      where,
+      include: {
+        facility: {
+          select: { id: true, name: true, sportType: true, maxPlayers: true },
+        },
+        participants: {
+          where: { status: { not: ParticipantStatus.CANCELLED } },
+          include: {
+            user: {
+              select: { id: true, firstName: true, lastName: true, avatarUrl: true },
+            },
+          },
+          orderBy: { slotNumber: 'asc' },
+        },
+      },
+      orderBy: { startTime: 'asc' },
+    });
+
+    return matches.map((m) => {
+      const maxPlayers = m.facility.maxPlayers || 4;
+      const occupiedSlots = m.participants.length;
+      const availableSlots = Math.max(0, maxPlayers - occupiedSlots);
+      const isCurrentUserJoined = m.participants.some((p) => p.userId === currentUserId);
+      const isCurrentUserHost = m.participants.some(
+        (p) => p.userId === currentUserId && p.isHost,
+      );
+      const pricePerPlayer =
+        m.participants[0]?.individualPrice != null
+          ? Number(m.participants[0].individualPrice)
+          : Math.round((Number(m.totalPrice) / maxPlayers) * 100) / 100;
+
+      return {
+        id: m.id,
+        clubId: m.clubId,
+        facilityId: m.facilityId,
+        facilityName: m.facility.name,
+        sportType: m.facility.sportType,
+        startTime: m.startTime,
+        endTime: m.endTime,
+        totalPrice: Number(m.totalPrice),
+        pricePerPlayer,
+        maxPlayers,
+        availableSlots,
+        occupiedSlots,
+        isCurrentUserJoined,
+        isCurrentUserHost,
+        notes: m.notes,
+        participants: m.participants.map((p) => ({
+          id: p.id,
+          userId: p.userId,
+          name: p.user ? `${p.user.firstName} ${p.user.lastName}`.trim() : (p.guestName || 'Invitado'),
+          avatarUrl: p.user?.avatarUrl,
+          slotNumber: p.slotNumber,
+          isHost: p.isHost,
+          status: p.status,
+          joinedAt: p.joinedAt,
+        })),
+      };
+    });
+  }
+
+  /**
+   * Unirse a una partida abierta
+   */
+  async joinOpenMatch(clubId: string, userId: string, bookingId: string): Promise<any> {
+    return this.prisma.$transaction(async (tx) => {
+      const booking = await tx.booking.findFirst({
+        where: { id: bookingId, clubId, bookingType: BookingType.OPEN },
+        include: {
+          facility: true,
+          participants: {
+            where: { status: { not: ParticipantStatus.CANCELLED } },
+            include: { user: true },
+          },
+        },
+      });
+
+      if (!booking) {
+        throw new NotFoundException('Partida abierta no encontrada');
+      }
+
+      if (booking.status === BookingStatus.CANCELLED) {
+        throw new BadRequestException('La partida abierta ha sido cancelada');
+      }
+
+      if (booking.startTime <= new Date()) {
+        throw new BadRequestException('No puedes unirte a una partida que ya ha comenzado');
+      }
+
+      const isAlreadyJoined = booking.participants.some((p) => p.userId === userId);
+      if (isAlreadyJoined) {
+        throw new BadRequestException('Ya formas parte de esta partida abierta');
+      }
+
+      const maxPlayers = booking.facility.maxPlayers || 4;
+      if (booking.participants.length >= maxPlayers) {
+        throw new ConflictException('La partida abierta ya ha alcanzado el límite máximo de jugadores');
+      }
+
+      // Encontrar el menor slot libre
+      const occupiedSlots = new Set(booking.participants.map((p) => p.slotNumber));
+      let nextSlot = 1;
+      while (occupiedSlots.has(nextSlot) && nextSlot <= maxPlayers) {
+        nextSlot++;
+      }
+
+      const individualPrice = Math.round((Number(booking.totalPrice) / maxPlayers) * 100) / 100;
+
+      const newParticipant = await tx.bookingParticipant.create({
+        data: {
+          bookingId: booking.id,
+          userId,
+          isHost: false,
+          slotNumber: nextSlot,
+          individualPrice,
+          status: ParticipantStatus.REGISTERED,
+        },
+      });
+
+      await tx.payment.create({
+        data: {
+          clubId,
+          bookingId: booking.id,
+          userId,
+          participantId: newParticipant.id,
+          amount: individualPrice,
+          method: PaymentMethod.PRESENTIAL_CASH,
+          status: PaymentStatus.PENDING,
+        },
+      });
+
+      // Devolver partida abierta actualizada
+      const updatedMatch = await tx.booking.findFirst({
+        where: { id: bookingId },
+        include: {
+          facility: true,
+          participants: {
+            where: { status: { not: ParticipantStatus.CANCELLED } },
+            include: { user: true },
+            orderBy: { slotNumber: 'asc' },
+          },
+        },
+      });
+
+      const updatedOccupied = updatedMatch!.participants.length;
+
+      return {
+        id: updatedMatch!.id,
+        clubId: updatedMatch!.clubId,
+        facilityId: updatedMatch!.facilityId,
+        facilityName: updatedMatch!.facility.name,
+        sportType: updatedMatch!.facility.sportType,
+        startTime: updatedMatch!.startTime,
+        endTime: updatedMatch!.endTime,
+        totalPrice: Number(updatedMatch!.totalPrice),
+        pricePerPlayer: individualPrice,
+        maxPlayers,
+        availableSlots: Math.max(0, maxPlayers - updatedOccupied),
+        occupiedSlots: updatedOccupied,
+        isCurrentUserJoined: true,
+        isCurrentUserHost: false,
+        notes: updatedMatch!.notes,
+        participants: updatedMatch!.participants.map((p) => ({
+          id: p.id,
+          userId: p.userId,
+          name: p.user ? `${p.user.firstName} ${p.user.lastName}`.trim() : (p.guestName || 'Invitado'),
+          avatarUrl: p.user?.avatarUrl,
+          slotNumber: p.slotNumber,
+          isHost: p.isHost,
+          status: p.status,
+          joinedAt: p.joinedAt,
+        })),
+      };
+    });
+  }
+
+  /**
+   * Abandonar una partida abierta
+   */
+  async leaveOpenMatch(
+    clubId: string,
+    userId: string,
+    bookingId: string,
+  ): Promise<{ success: boolean; message: string }> {
+    return this.prisma.$transaction(async (tx) => {
+      const booking = await tx.booking.findFirst({
+        where: { id: bookingId, clubId, bookingType: BookingType.OPEN },
+        include: {
+          participants: {
+            where: { status: { not: ParticipantStatus.CANCELLED } },
+            orderBy: { joinedAt: 'asc' },
+          },
+        },
+      });
+
+      if (!booking) {
+        throw new NotFoundException('Partida abierta no encontrada');
+      }
+
+      if (booking.startTime <= new Date()) {
+        throw new BadRequestException('No puedes abandonar una partida que ya ha comenzado');
+      }
+
+      const participant = booking.participants.find((p) => p.userId === userId);
+      if (!participant) {
+        throw new BadRequestException('No estás inscrito en esta partida abierta');
+      }
+
+      // Marcar participante como cancelado
+      await tx.bookingParticipant.update({
+        where: { id: participant.id },
+        data: { status: ParticipantStatus.CANCELLED },
+      });
+
+      // Eliminar su pago pendiente no efectuado
+      await tx.payment.deleteMany({
+        where: { participantId: participant.id, status: PaymentStatus.PENDING },
+      });
+
+      const remainingParticipants = booking.participants.filter((p) => p.id !== participant.id);
+
+      if (remainingParticipants.length === 0) {
+        // Si no queda nadie, cancelar la reserva
+        await tx.booking.update({
+          where: { id: booking.id },
+          data: {
+            status: BookingStatus.CANCELLED,
+            cancellationReason: 'Todos los participantes han abandonado la partida',
+            cancelledAt: new Date(),
+          },
+        });
+      } else if (participant.isHost) {
+        // Traspasar el rol de anfitrión al siguiente participante
+        await tx.bookingParticipant.update({
+          where: { id: remainingParticipants[0].id },
+          data: { isHost: true },
+        });
+      }
+
+      return {
+        success: true,
+        message: 'Has abandonado la partida abierta correctamente',
+      };
+    });
   }
 
   /**

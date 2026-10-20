@@ -25,3 +25,4 @@ export * from './api/endpoints/auth/auth.faker';
 export * from './api/endpoints/users/users.faker';
 export * from './api/endpoints/facilities/facilities.faker';
 export * from './api/endpoints/pricing/pricing.faker';
+export * from './api/endpoints/bookings/bookings.faker';

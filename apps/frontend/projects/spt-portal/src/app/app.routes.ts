@@ -22,4 +22,11 @@ export const routes: Routes = [
         (m) => m.MyBookingsComponent,
       ),
   },
+  {
+    path: 'open-matches',
+    loadComponent: () =>
+      import('./pages/open-matches/open-matches.component').then(
+        (m) => m.OpenMatchesComponent,
+      ),
+  },
 ];

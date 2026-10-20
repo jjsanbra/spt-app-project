@@ -4,6 +4,27 @@
     "TAGLINE": "Reservas de centros deportivos",
     "LOADING": "Cargando..."
   },
+  "SPORTS": {
+    "PADEL": "Pádel",
+    "TENNIS": "Tenis",
+    "FOOTBALL_7": "Fútbol 7",
+    "FOOTBALL_11": "Fútbol 11",
+    "FUTSAL": "Fútbol Sala",
+    "BASKETBALL": "Baloncesto",
+    "PICKLEBALL": "Pickleball",
+    "SQUASH": "Squash",
+    "BADMINTON": "Bádminton",
+    "VOLLEYBALL": "Voleibol",
+    "BEACH_VOLLEY": "Vóley Playa",
+    "FRONTON": "Frontón",
+    "INDOOR_FRONTON": "Frontón Cubierto",
+    "HANDBALL": "Balonmano",
+    "TABLE_TENNIS": "Tenis de Mesa",
+    "ATHLETICS_TRACK": "Pista de Atletismo",
+    "SWIMMING_LANE": "Calle de Natación",
+    "CLIMBING_WALL": "Rocódromo / Escalada",
+    "MULTI_SPORT": "Polideportivo / Multideporte"
+  },
   "NAV": {
     "HOME": "Inicio",
     "ADMIN": "Administración",
@@ -299,6 +320,8 @@
       "GO_TO_PROFILE": "Mi Perfil",
       "BOOKINGS_CARD_TITLE": "Disponibilidad de Pistas",
       "BOOKINGS_CARD_DESC": "Consulta horarios y reserva tu pista al instante",
+      "OPEN_MATCHES_CARD_TITLE": "Partidas Abiertas",
+      "OPEN_MATCHES_CARD_DESC": "Únete a partidos convocados por otros socios y comparte pista",
       "MY_BOOKINGS_CARD_TITLE": "Mis Reservas",
       "MY_BOOKINGS_CARD_DESC": "Consulta y gestiona tus reservas confirmadas"
     },
@@ -341,6 +364,32 @@
       "CONFIRM_CANCEL_MSG": "¿Estás seguro de que deseas cancelar esta reserva? La pista volverá a quedar disponible para otros jugadores.",
       "SUCCESS_CANCEL": "Reserva cancelada correctamente",
       "CANCEL_BTN": "Cancelar Reserva"
+    },
+    "OPEN_MATCHES": {
+      "TITLE": "Partidas Abiertas",
+      "SUBTITLE": "Únete a partidos de la comunidad o reserva tu plaza individual",
+      "DATE": "Fecha",
+      "SPORT": "Deporte",
+      "FILTER_ALL_SPORTS": "Todos los deportes",
+      "TODAY": "Hoy",
+      "TOMORROW": "Mañana",
+      "EMPTY": "No hay partidas abiertas programadas para los filtros seleccionados.",
+      "CREATE_BTN": "Crear Partida",
+      "AVAILABLE_SLOTS": "plazas libres",
+      "FULL_MATCH": "Partida Completa",
+      "PRICE_PER_PLAYER": "/ jugador",
+      "HOST": "Organizador",
+      "FREE_SLOT": "Plaza libre",
+      "JOIN_BTN": "Unirme al partido",
+      "ALREADY_JOINED": "Inscrito",
+      "LEAVE_BTN": "Abandonar",
+      "CONFIRM_JOIN_TITLE": "Unirse a la Partida",
+      "CONFIRM_JOIN_MSG": "¿Deseas unirte a este partido en {{facility}} el {{date}} a las {{time}} por {{price}}?",
+      "CONFIRM_LEAVE_TITLE": "Abandonar Partida",
+      "CONFIRM_LEAVE_MSG": "¿Estás seguro de que deseas liberar tu plaza en esta partida?",
+      "SUCCESS_JOIN": "¡Te has unido al partido con éxito!",
+      "SUCCESS_LEAVE": "Has abandonado el partido correctamente",
+      "PAYMENT_NOTICE": "Abonarás tu plaza individualmente en recepción antes de jugar."
     }
   }
 }
