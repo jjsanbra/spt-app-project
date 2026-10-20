@@ -26,7 +26,12 @@ export function authInterceptor(
     headers = headers.set('x-tenant-id', activeClubId);
   }
 
-  const clonedReq = req.clone({ headers });
+  let url = req.url;
+  if (url.startsWith('/api')) {
+    url = `http://localhost:3000${url}`;
+  }
+
+  const clonedReq = req.clone({ url, headers });
 
   return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {

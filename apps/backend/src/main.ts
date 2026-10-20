@@ -18,15 +18,16 @@ async function bootstrap() {
   app.use(helmet());
 
   // ─── CORS ──────────────────────────────────────────────────
+  const defaultOrigins = 'http://localhost:4200,http://localhost:4201,http://localhost:4202,http://localhost:4203';
   const corsOrigins = configService
-    .get<string>('CORS_ORIGINS', 'http://localhost:4200')
+    .get<string>('CORS_ORIGINS', defaultOrigins)
     .split(',')
     .map((o) => o.trim());
 
   app.enableCors({
     origin: corsOrigins,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-tenant-id'],
     credentials: true,
   });
 

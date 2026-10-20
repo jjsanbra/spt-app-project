@@ -1,0 +1,51 @@
+<div class="portal-home-page">
+  <div class="portal-home-container">
+    <div class="welcome-card">
+      <div class="welcome-header">
+        <div class="portal-badge">
+          <i class="pi pi-calendar"></i>
+        </div>
+        <div class="welcome-info">
+          <h1 class="welcome-title">{{ 'PORTAL.HOME.TITLE' | translate }}</h1>
+          <p class="welcome-subtitle">
+            {{ 'PORTAL.HOME.GREETING_PREFIX' | translate }}, {{ authService.currentUser()?.firstName }}!
+          </p>
+        </div>
+      </div>
+
+      <p class="welcome-desc">
+        {{ 'PORTAL.HOME.DESCRIPTION' | translate }}
+      </p>
+
+      <div class="portal-cards-grid">
+        <div class="portal-feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-table"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'PORTAL.HOME.BOOKINGS_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+
+        <div class="portal-feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-clock"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-actions">
+        <a routerLink="/profile">
+          <button type="button" pButton icon="pi pi-user" severity="secondary" [outlined]="true">
+            {{ 'PORTAL.HOME.GO_TO_PROFILE' | translate }}
+          </button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
