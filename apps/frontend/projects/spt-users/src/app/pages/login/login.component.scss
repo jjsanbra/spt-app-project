@@ -74,6 +74,20 @@
   margin-top: var(--spacing-2xs);
 }
 
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: calc(-1 * var(--spacing-xs));
+}
+
+.checkbox-label {
+  font-size: var(--font-size-sm);
+  color: var(--text-color);
+  cursor: pointer;
+  user-select: none;
+}
+
 .form-actions {
   margin-top: var(--spacing-sm);
 }

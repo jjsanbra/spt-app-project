@@ -18,6 +18,7 @@
     "PASSWORD": "Contraseña",
     "CONFIRM_PASSWORD": "Confirmar contraseña",
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "REMEMBER_ME": "Recordar usuario",
     "NAME": "Nombre",
     "SUBMIT": "Entrar",
     "LOGOUT": "Cerrar sesión",

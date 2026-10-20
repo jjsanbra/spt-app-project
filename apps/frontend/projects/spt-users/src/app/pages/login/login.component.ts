@@ -1,16 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { CheckboxModule } from 'primeng/checkbox';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+
+export const REMEMBERED_EMAIL_KEY = 'spt_remembered_email';
 
 @Component({
   selector: 'app-login',
@@ -23,6 +26,7 @@ import { MessageService } from 'primeng/api';
     CardModule,
     InputTextModule,
     PasswordModule,
+    CheckboxModule,
     ButtonModule,
     FloatLabelModule,
     ToastModule,
@@ -31,7 +35,7 @@ import { MessageService } from 'primeng/api';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -41,9 +45,20 @@ export class LoginComponent {
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
+    rememberMe: [false],
   });
 
   loading = false;
+
+  ngOnInit(): void {
+    const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);
+    if (rememberedEmail) {
+      this.loginForm.patchValue({
+        email: rememberedEmail,
+        rememberMe: true,
+      });
+    }
+  }
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -52,7 +67,13 @@ export class LoginComponent {
     }
 
     this.loading = true;
-    const { email, password } = this.loginForm.value;
+    const { email, password, rememberMe } = this.loginForm.value;
+
+    if (rememberMe) {
+      localStorage.setItem(REMEMBERED_EMAIL_KEY, email);
+    } else {
+      localStorage.removeItem(REMEMBERED_EMAIL_KEY);
+    }
 
     this.authService.login({ email, password }).subscribe({
       next: (res) => {

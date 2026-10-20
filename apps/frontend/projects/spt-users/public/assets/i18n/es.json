@@ -18,6 +18,7 @@
     "PASSWORD": "Contraseña",
     "CONFIRM_PASSWORD": "Confirmar contraseña",
     "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "REMEMBER_ME": "Recordar usuario",
     "NAME": "Nombre",
     "SUBMIT": "Entrar",
     "LOGOUT": "Cerrar sesión",
@@ -110,5 +111,30 @@
     "CHANGE_CLUB": "Cambiar de club",
     "NO_MEMBERSHIPS": "No tienes membresías activas en ningún club",
     "SUPERADMIN_BADGE": "Superadmin Global"
+  },
+  "ADMIN": {
+    "DASHBOARD": {
+      "TITLE": "Panel de Administración",
+      "SUBTITLE": "Gestión de instalaciones, tarifas y reservas",
+      "DESCRIPTION": "Desde este panel podrás configurar pistas, aplicar bloqueos por mantenimiento o torneos y gestionar las tarifas de precios.",
+      "GO_TO_PROFILE": "Mi Perfil",
+      "FACILITIES_CARD_TITLE": "Instalaciones Deportivas",
+      "FACILITIES_CARD_DESC": "Pistas de pádel, tenis y campos de fútbol",
+      "PRICING_CARD_TITLE": "Tarifas y Reglas",
+      "PRICING_CARD_DESC": "Precios valle/punta y suplementos de iluminación"
+    }
+  },
+  "PORTAL": {
+    "HOME": {
+      "TITLE": "Portal de Reservas",
+      "GREETING_PREFIX": "¡Hola",
+      "SUBTITLE": "Bienvenido a tu centro deportivo",
+      "DESCRIPTION": "Reserva pistas de pádel, tenis y fútbol en tiempo real o únete a partidas abiertas.",
+      "GO_TO_PROFILE": "Mi Perfil",
+      "BOOKINGS_CARD_TITLE": "Disponibilidad de Pistas",
+      "BOOKINGS_CARD_DESC": "Consulta horarios y reserva tu pista al instante",
+      "MY_BOOKINGS_CARD_TITLE": "Mis Reservas",
+      "MY_BOOKINGS_CARD_DESC": "Consulta y gestiona tus reservas confirmadas"
+    }
   }
 }

@@ -5,7 +5,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import { AuthService, getAuthControllerLoginResponseMock } from '@core';
-import { LoginComponent } from './login.component';
+import { LoginComponent, REMEMBERED_EMAIL_KEY } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -14,6 +14,7 @@ describe('LoginComponent', () => {
   let router: Router;
 
   beforeEach(async () => {
+    localStorage.clear();
     authServiceSpy = {
       login: vi.fn(),
     };
@@ -36,11 +37,27 @@ describe('LoginComponent', () => {
     fixture.detectChanges();
   });
 
-  it('debe crear el componente e inicializar el formulario inválido', () => {
+  afterEach(() => {
+    localStorage.clear();
+  });
+
+  it('debe crear el componente e inicializar el formulario inválido con rememberMe en false por defecto', () => {
     expect(component).toBeTruthy();
     expect(component.loginForm.valid).toBeFalsy();
     expect(component.loginForm.get('email')?.hasError('required')).toBeTruthy();
     expect(component.loginForm.get('password')?.hasError('required')).toBeTruthy();
+    expect(component.loginForm.get('rememberMe')?.value).toBeFalsy();
+  });
+
+  it('debe precargar el email y marcar rememberMe si existe un usuario recordado en localStorage', () => {
+    localStorage.setItem(REMEMBERED_EMAIL_KEY, 'recordado@spt.com');
+
+    const fixtureWithRemembered = TestBed.createComponent(LoginComponent);
+    const compWithRemembered = fixtureWithRemembered.componentInstance;
+    fixtureWithRemembered.detectChanges();
+
+    expect(compWithRemembered.loginForm.get('email')?.value).toBe('recordado@spt.com');
+    expect(compWithRemembered.loginForm.get('rememberMe')?.value).toBeTruthy();
   });
 
   it('debe validar el formato correcto de email', () => {
@@ -52,8 +69,38 @@ describe('LoginComponent', () => {
     expect(emailControl?.hasError('email')).toBeFalsy();
   });
 
+  it('debe guardar el email en localStorage si rememberMe es true al iniciar sesión', () => {
+    const mockAuthResponse = getAuthControllerLoginResponseMock();
+    authServiceSpy.login.mockReturnValue(of(mockAuthResponse));
+
+    component.loginForm.setValue({
+      email: 'guardar@spt.com',
+      password: 'Password123!',
+      rememberMe: true,
+    });
+
+    component.onSubmit();
+
+    expect(localStorage.getItem(REMEMBERED_EMAIL_KEY)).toBe('guardar@spt.com');
+  });
+
+  it('debe eliminar el email de localStorage si rememberMe es false al iniciar sesión', () => {
+    localStorage.setItem(REMEMBERED_EMAIL_KEY, 'antiguo@spt.com');
+    const mockAuthResponse = getAuthControllerLoginResponseMock();
+    authServiceSpy.login.mockReturnValue(of(mockAuthResponse));
+
+    component.loginForm.setValue({
+      email: 'otro@spt.com',
+      password: 'Password123!',
+      rememberMe: false,
+    });
+
+    component.onSubmit();
+
+    expect(localStorage.getItem(REMEMBERED_EMAIL_KEY)).toBeNull();
+  });
+
   it('debe iniciar sesión exitosamente usando el mock de Orval y redirigir', () => {
-    // Generar respuesta tipada y realista mediante Orval Faker Mock
     const mockAuthResponse = getAuthControllerLoginResponseMock({
       user: {
         id: 'user-test-1',
@@ -78,6 +125,7 @@ describe('LoginComponent', () => {
     component.loginForm.setValue({
       email: 'admin@spt.com',
       password: 'Password123!',
+      rememberMe: false,
     });
 
     component.onSubmit();
@@ -98,6 +146,7 @@ describe('LoginComponent', () => {
     component.loginForm.setValue({
       email: 'erroneo@spt.com',
       password: 'BadPassword',
+      rememberMe: false,
     });
 
     component.onSubmit();

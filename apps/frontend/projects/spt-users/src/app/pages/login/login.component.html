@@ -50,6 +50,19 @@
           }
         </div>
 
+        <!-- Remember Me Checkbox -->
+        <div class="form-group-checkbox">
+          <p-checkbox
+            id="login-remember-me"
+            formControlName="rememberMe"
+            [binary]="true"
+            inputId="login-remember-me-input"
+          ></p-checkbox>
+          <label for="login-remember-me-input" class="checkbox-label">
+            {{ 'AUTH.REMEMBER_ME' | translate }}
+          </label>
+        </div>
+
         <!-- Submit Button -->
         <div class="form-actions">
           <button
