@@ -24,6 +24,7 @@ export const appConfig: ApplicationConfig = {
       suffix: '.json',
     }),
     providePrimeNG({
+      license: 'eyJpZCI6ImQwYjM1YmY2LTNjMTktNGZjNi05ZTdjLTYyNjE5YWMxMzliNSIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3OTA5MzgzODgsImV4cCI6MTgyMjQ3NDM4OH0.SxDwyjRjd-JUMsD9_YHgE5EplULSxX7-nLLAL2e6KJwa8mHsm6EZXNnbnqzY8NCbSesRxzoD7a9OjhwyZsfiCw',
       theme: {
         preset: Aura,
         options: {
