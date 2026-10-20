@@ -1,0 +1,18 @@
+version: "1.0"
+project: spt-app-project
+description: "SaaS Multi-tenant para gestión de reservas de centros deportivos"
+created_at: "2026-10-19"
+
+# Convenciones de nombres para cambios
+naming_convention: "kebab-case"
+# Ejemplo: domain-modeling, auth-jwt, booking-engine
+
+# Prefijos de commit recomendados
+commit_prefixes:
+  - feat      # Nueva funcionalidad
+  - fix       # Corrección de bug
+  - refactor  # Refactorización sin cambio funcional
+  - test      # Tests
+  - docs      # Documentación
+  - chore     # Mantenimiento
+  - perf      # Mejora de rendimiento

@@ -1,0 +1,48 @@
+{
+  "name": "spt-frontend",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve spt-app",
+    "start:shell": "ng serve spt-app",
+    "start:admin": "ng serve spt-admin",
+    "start:portal": "ng serve spt-portal",
+    "start:users": "ng serve spt-users",
+    "build": "ng build",
+    "build:all": "ng build spt-admin && ng build spt-portal && ng build spt-users && ng build spt-app",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "packageManager": "npm@10.9.8",
+  "dependencies": {
+    "@angular-architects/native-federation": "^22.2.3",
+    "@angular/animations": "^22.2.3",
+    "@angular/common": "^22.2.0",
+    "@angular/compiler": "^22.2.0",
+    "@angular/core": "^22.2.0",
+    "@angular/forms": "^22.2.0",
+    "@angular/platform-browser": "^22.2.0",
+    "@angular/router": "^22.2.0",
+    "@ngx-translate/core": "^18.0.0",
+    "@ngx-translate/http-loader": "^18.0.0",
+    "@primeng/themes": "^21.0.4",
+    "chart.js": "^4.5.1",
+    "es-module-shims": "^2.8.0",
+    "primeicons": "^8.0.2",
+    "primeng": "^22.1.2",
+    "rxjs": "~7.8.0",
+    "tailwindcss": "^4.3.3",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.2.3",
+    "@angular/cli": "^22.2.3",
+    "@angular/compiler-cli": "^22.2.0",
+    "@softarc/native-federation-orchestrator": "^4.8.0",
+    "jsdom": "^30.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "vitest": "^5.0.0"
+  }
+}

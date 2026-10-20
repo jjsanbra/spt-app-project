@@ -1,0 +1,30 @@
+// =====================================================
+// SPT App — Prisma Schema
+// =====================================================
+// El schema completo se define en la Fase 1 (domain-modeling).
+// Este fichero es el punto de partida mínimo para que
+// Prisma genere el cliente y la conexión funcione.
+// =====================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────────────────────
+// NOTA: Las entidades de dominio se añaden en la Fase 1.
+// Ver .openspec/changes/domain-modeling/ para el diseño completo.
+// Se define este modelo provisional para permitir la generación
+// de @prisma/client durante la Fase 0 (Scaffolding).
+// ──────────────────────────────────────────────────────────────
+
+model HealthCheck {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("health_checks")
+}

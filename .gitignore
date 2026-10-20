@@ -1,0 +1,69 @@
+# ─── Dependencies ────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ─── Build outputs ───────────────────────────────────────────
+dist/
+build/
+out/
+.next/
+.nuxt/
+
+# ─── Angular ─────────────────────────────────────────────────
+.angular/
+apps/frontend/.angular/
+
+# ─── Environment & Secrets ───────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ─── Prisma ──────────────────────────────────────────────────
+# No ignorar prisma/migrations (deben versionarse)
+apps/backend/prisma/*.db
+apps/backend/prisma/*.db-journal
+
+# ─── Logs ────────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# ─── OS ──────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ─── IDE / Editors ───────────────────────────────────────────
+.vscode/*
+!.vscode/settings.json
+!.vscode/mcp.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ─── Testing ─────────────────────────────────────────────────
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# ─── Docker ──────────────────────────────────────────────────
+# No ignorar docker-compose (debe versionarse)
+
+# ─── Misc ────────────────────────────────────────────────────
+*.tgz
+*.zip
+.cache/
+.turbo/
