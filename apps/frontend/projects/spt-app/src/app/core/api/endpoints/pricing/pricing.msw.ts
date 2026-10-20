@@ -28,7 +28,7 @@ export { getPricingControllerFindAllResponseMock, getPricingControllerCreateResp
 
 
 export const getPricingControllerFindAllMockHandler = (overrideResponse?: PricingRuleResponseDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<PricingRuleResponseDto[]> | PricingRuleResponseDto[]), options?: RequestHandlerOptions) => {
-  return http.get('*/api/pricing', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/api/v1/pricing', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -40,7 +40,7 @@ export const getPricingControllerFindAllMockHandler = (overrideResponse?: Pricin
 }
 
 export const getPricingControllerCreateMockHandler = (overrideResponse?: PricingRuleResponseDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<PricingRuleResponseDto> | PricingRuleResponseDto), options?: RequestHandlerOptions) => {
-  return http.post('*/api/pricing', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  return http.post('*/api/v1/pricing', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -52,7 +52,7 @@ export const getPricingControllerCreateMockHandler = (overrideResponse?: Pricing
 }
 
 export const getPricingControllerFindOneMockHandler = (overrideResponse?: PricingRuleResponseDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<PricingRuleResponseDto> | PricingRuleResponseDto), options?: RequestHandlerOptions) => {
-  return http.get('*/api/pricing/:id', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/api/v1/pricing/:id', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -64,7 +64,7 @@ export const getPricingControllerFindOneMockHandler = (overrideResponse?: Pricin
 }
 
 export const getPricingControllerUpdateMockHandler = (overrideResponse?: PricingRuleResponseDto | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<PricingRuleResponseDto> | PricingRuleResponseDto), options?: RequestHandlerOptions) => {
-  return http.put('*/api/pricing/:id', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+  return http.put('*/api/v1/pricing/:id', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -76,7 +76,7 @@ export const getPricingControllerUpdateMockHandler = (overrideResponse?: Pricing
 }
 
 export const getPricingControllerRemoveMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.delete('*/api/pricing/:id', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
+  return http.delete('*/api/v1/pricing/:id', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,

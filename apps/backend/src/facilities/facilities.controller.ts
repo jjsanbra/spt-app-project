@@ -40,7 +40,7 @@ import { FacilitiesService } from './facilities.service';
   required: true,
 })
 @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
-@Controller('facilities')
+@Controller({ path: 'facilities', version: '1' })
 export class FacilitiesController {
   constructor(private readonly facilitiesService: FacilitiesService) {}
 

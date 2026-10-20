@@ -31,7 +31,7 @@ export { getFacilitiesControllerFindAllResponseMock, getFacilitiesControllerCrea
 
 
 export const getFacilitiesControllerFindAllMockHandler = (overrideResponse?: FacilityResponseDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FacilityResponseDto[]> | FacilityResponseDto[]), options?: RequestHandlerOptions) => {
-  return http.get('*/api/facilities', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/api/v1/facilities', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -43,7 +43,7 @@ export const getFacilitiesControllerFindAllMockHandler = (overrideResponse?: Fac
 }
 
 export const getFacilitiesControllerCreateMockHandler = (overrideResponse?: FacilityResponseDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<FacilityResponseDto> | FacilityResponseDto), options?: RequestHandlerOptions) => {
-  return http.post('*/api/facilities', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  return http.post('*/api/v1/facilities', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -55,7 +55,7 @@ export const getFacilitiesControllerCreateMockHandler = (overrideResponse?: Faci
 }
 
 export const getFacilitiesControllerFindOneMockHandler = (overrideResponse?: FacilityResponseDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FacilityResponseDto> | FacilityResponseDto), options?: RequestHandlerOptions) => {
-  return http.get('*/api/facilities/:id', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/api/v1/facilities/:id', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -67,7 +67,7 @@ export const getFacilitiesControllerFindOneMockHandler = (overrideResponse?: Fac
 }
 
 export const getFacilitiesControllerUpdateMockHandler = (overrideResponse?: FacilityResponseDto | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<FacilityResponseDto> | FacilityResponseDto), options?: RequestHandlerOptions) => {
-  return http.put('*/api/facilities/:id', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
+  return http.put('*/api/v1/facilities/:id', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -79,7 +79,7 @@ export const getFacilitiesControllerUpdateMockHandler = (overrideResponse?: Faci
 }
 
 export const getFacilitiesControllerRemoveMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.delete('*/api/facilities/:id', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
+  return http.delete('*/api/v1/facilities/:id', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,
@@ -89,7 +89,7 @@ export const getFacilitiesControllerRemoveMockHandler = (overrideResponse?: void
 }
 
 export const getFacilitiesControllerFindBlocksMockHandler = (overrideResponse?: FacilityBlockResponseDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FacilityBlockResponseDto[]> | FacilityBlockResponseDto[]), options?: RequestHandlerOptions) => {
-  return http.get('*/api/facilities/:id/blocks', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+  return http.get('*/api/v1/facilities/:id/blocks', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -101,7 +101,7 @@ export const getFacilitiesControllerFindBlocksMockHandler = (overrideResponse?: 
 }
 
 export const getFacilitiesControllerCreateBlockMockHandler = (overrideResponse?: FacilityBlockResponseDto | ((info: Parameters<Parameters<typeof http.post>[1]>[0]) => Promise<FacilityBlockResponseDto> | FacilityBlockResponseDto), options?: RequestHandlerOptions) => {
-  return http.post('*/api/facilities/:id/blocks', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
+  return http.post('*/api/v1/facilities/:id/blocks', async (info: Parameters<Parameters<typeof http.post>[1]>[0]) => {
 
 
     return HttpResponse.json(overrideResponse !== undefined
@@ -113,7 +113,7 @@ export const getFacilitiesControllerCreateBlockMockHandler = (overrideResponse?:
 }
 
 export const getFacilitiesControllerRemoveBlockMockHandler = (overrideResponse?: void | ((info: Parameters<Parameters<typeof http.delete>[1]>[0]) => Promise<void> | void), options?: RequestHandlerOptions) => {
-  return http.delete('*/api/facilities/:id/blocks/:blockId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
+  return http.delete('*/api/v1/facilities/:id/blocks/:blockId', async (info: Parameters<Parameters<typeof http.delete>[1]>[0]) => {
   if (typeof overrideResponse === 'function') {await overrideResponse(info); }
 
     return new HttpResponse(null,

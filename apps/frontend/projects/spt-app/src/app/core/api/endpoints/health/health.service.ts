@@ -86,7 +86,7 @@ export class HealthService {
      options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/health`,{
+      `/api/v1/health`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -95,7 +95,7 @@ export class HealthService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/health`,{
+      `/api/v1/health`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -103,7 +103,7 @@ export class HealthService {
     }
 
     return this.http.get<TData>(
-      `/api/health`,{
+      `/api/v1/health`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }

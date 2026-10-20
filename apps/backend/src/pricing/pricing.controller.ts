@@ -36,7 +36,7 @@ import { PricingService } from './pricing.service';
   required: true,
 })
 @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
-@Controller('pricing')
+@Controller({ path: 'pricing', version: '1' })
 export class PricingController {
   constructor(private readonly pricingService: PricingService) {}
 

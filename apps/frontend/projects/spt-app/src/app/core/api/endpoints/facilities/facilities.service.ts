@@ -168,7 +168,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/facilities`,{
+      `/api/v1/facilities`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
         params: filteredParams,}
@@ -177,7 +177,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/facilities`,{
+      `/api/v1/facilities`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
         params: filteredParams,}
@@ -185,7 +185,7 @@ export class FacilitiesService {
     }
 
     return this.http.get<TData>(
-      `/api/facilities`,{
+      `/api/v1/facilities`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
         params: filteredParams,}
@@ -201,7 +201,7 @@ export class FacilitiesService {
     createFacilityDto: CreateFacilityDto, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.post<TData>(
-      `/api/facilities`,
+      `/api/v1/facilities`,
       createFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
@@ -211,7 +211,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.post<TData>(
-      `/api/facilities`,
+      `/api/v1/facilities`,
       createFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
@@ -220,7 +220,7 @@ export class FacilitiesService {
     }
 
     return this.http.post<TData>(
-      `/api/facilities`,
+      `/api/v1/facilities`,
       createFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
@@ -237,7 +237,7 @@ export class FacilitiesService {
     id: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -246,7 +246,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -254,7 +254,7 @@ export class FacilitiesService {
     }
 
     return this.http.get<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }
@@ -274,7 +274,7 @@ export class FacilitiesService {
     updateFacilityDto: UpdateFacilityDto, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.put<TData>(
-      `/api/facilities/${id}`,
+      `/api/v1/facilities/${id}`,
       updateFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
@@ -284,7 +284,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.put<TData>(
-      `/api/facilities/${id}`,
+      `/api/v1/facilities/${id}`,
       updateFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
@@ -293,7 +293,7 @@ export class FacilitiesService {
     }
 
     return this.http.put<TData>(
-      `/api/facilities/${id}`,
+      `/api/v1/facilities/${id}`,
       updateFacilityDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
@@ -310,7 +310,7 @@ export class FacilitiesService {
     id: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.delete<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -319,7 +319,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.delete<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -327,7 +327,7 @@ export class FacilitiesService {
     }
 
     return this.http.delete<TData>(
-      `/api/facilities/${id}`,{
+      `/api/v1/facilities/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }
@@ -343,7 +343,7 @@ export class FacilitiesService {
     id: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/facilities/${id}/blocks`,{
+      `/api/v1/facilities/${id}/blocks`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -352,7 +352,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/facilities/${id}/blocks`,{
+      `/api/v1/facilities/${id}/blocks`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -360,7 +360,7 @@ export class FacilitiesService {
     }
 
     return this.http.get<TData>(
-      `/api/facilities/${id}/blocks`,{
+      `/api/v1/facilities/${id}/blocks`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }
@@ -380,7 +380,7 @@ export class FacilitiesService {
     createFacilityBlockDto: CreateFacilityBlockDto, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.post<TData>(
-      `/api/facilities/${id}/blocks`,
+      `/api/v1/facilities/${id}/blocks`,
       createFacilityBlockDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
@@ -390,7 +390,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.post<TData>(
-      `/api/facilities/${id}/blocks`,
+      `/api/v1/facilities/${id}/blocks`,
       createFacilityBlockDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
@@ -399,7 +399,7 @@ export class FacilitiesService {
     }
 
     return this.http.post<TData>(
-      `/api/facilities/${id}/blocks`,
+      `/api/v1/facilities/${id}/blocks`,
       createFacilityBlockDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
@@ -420,7 +420,7 @@ export class FacilitiesService {
     blockId: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.delete<TData>(
-      `/api/facilities/${id}/blocks/${blockId}`,{
+      `/api/v1/facilities/${id}/blocks/${blockId}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -429,7 +429,7 @@ export class FacilitiesService {
 
     if (options?.observe === 'response') {
       return this.http.delete<TData>(
-      `/api/facilities/${id}/blocks/${blockId}`,{
+      `/api/v1/facilities/${id}/blocks/${blockId}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -437,7 +437,7 @@ export class FacilitiesService {
     }
 
     return this.http.delete<TData>(
-      `/api/facilities/${id}/blocks/${blockId}`,{
+      `/api/v1/facilities/${id}/blocks/${blockId}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }

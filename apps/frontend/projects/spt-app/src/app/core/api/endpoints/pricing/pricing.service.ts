@@ -166,7 +166,7 @@ export class PricingService {
 
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/pricing`,{
+      `/api/v1/pricing`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
         params: filteredParams,}
@@ -175,7 +175,7 @@ export class PricingService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/pricing`,{
+      `/api/v1/pricing`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
         params: filteredParams,}
@@ -183,7 +183,7 @@ export class PricingService {
     }
 
     return this.http.get<TData>(
-      `/api/pricing`,{
+      `/api/v1/pricing`,{
     ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
         params: filteredParams,}
@@ -199,7 +199,7 @@ export class PricingService {
     createPricingRuleDto: CreatePricingRuleDto, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.post<TData>(
-      `/api/pricing`,
+      `/api/v1/pricing`,
       createPricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
@@ -209,7 +209,7 @@ export class PricingService {
 
     if (options?.observe === 'response') {
       return this.http.post<TData>(
-      `/api/pricing`,
+      `/api/v1/pricing`,
       createPricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
@@ -218,7 +218,7 @@ export class PricingService {
     }
 
     return this.http.post<TData>(
-      `/api/pricing`,
+      `/api/v1/pricing`,
       createPricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
@@ -235,7 +235,7 @@ export class PricingService {
     id: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.get<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -244,7 +244,7 @@ export class PricingService {
 
     if (options?.observe === 'response') {
       return this.http.get<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -252,7 +252,7 @@ export class PricingService {
     }
 
     return this.http.get<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }
@@ -272,7 +272,7 @@ export class PricingService {
     updatePricingRuleDto: UpdatePricingRuleDto, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.put<TData>(
-      `/api/pricing/${id}`,
+      `/api/v1/pricing/${id}`,
       updatePricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
@@ -282,7 +282,7 @@ export class PricingService {
 
     if (options?.observe === 'response') {
       return this.http.put<TData>(
-      `/api/pricing/${id}`,
+      `/api/v1/pricing/${id}`,
       updatePricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
@@ -291,7 +291,7 @@ export class PricingService {
     }
 
     return this.http.put<TData>(
-      `/api/pricing/${id}`,
+      `/api/v1/pricing/${id}`,
       updatePricingRuleDto,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
@@ -308,7 +308,7 @@ export class PricingService {
     id: string, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
     if (options?.observe === 'events') {
       return this.http.delete<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'events',
       }
@@ -317,7 +317,7 @@ export class PricingService {
 
     if (options?.observe === 'response') {
       return this.http.delete<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'response',
       }
@@ -325,7 +325,7 @@ export class PricingService {
     }
 
     return this.http.delete<TData>(
-      `/api/pricing/${id}`,{
+      `/api/v1/pricing/${id}`,{
         ...(options as Omit<NonNullable<typeof options>, 'observe'>),
         observe: 'body',
       }

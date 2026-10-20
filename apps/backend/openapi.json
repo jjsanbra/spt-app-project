@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.0",
   "paths": {
-    "/api/health": {
+    "/api/v1/health": {
       "get": {
         "operationId": "HealthController_check",
         "summary": "Health check del sistema",
@@ -217,7 +217,7 @@
         ]
       }
     },
-    "/api/facilities": {
+    "/api/v1/facilities": {
       "get": {
         "operationId": "FacilitiesController_findAll",
         "summary": "Listar todas las instalaciones deportivas del club activo",
@@ -326,7 +326,7 @@
         ]
       }
     },
-    "/api/facilities/{id}": {
+    "/api/v1/facilities/{id}": {
       "get": {
         "operationId": "FacilitiesController_findOne",
         "summary": "Obtener detalle de una instalación deportiva",
@@ -460,7 +460,7 @@
         ]
       }
     },
-    "/api/facilities/{id}/blocks": {
+    "/api/v1/facilities/{id}/blocks": {
       "get": {
         "operationId": "FacilitiesController_findBlocks",
         "summary": "Listar bloqueos temporales de una instalación",
@@ -561,7 +561,7 @@
         ]
       }
     },
-    "/api/facilities/{id}/blocks/{blockId}": {
+    "/api/v1/facilities/{id}/blocks/{blockId}": {
       "delete": {
         "operationId": "FacilitiesController_removeBlock",
         "summary": "Eliminar o levantar bloqueo temporal (Admin)",
@@ -607,7 +607,7 @@
         ]
       }
     },
-    "/api/pricing": {
+    "/api/v1/pricing": {
       "get": {
         "operationId": "PricingController_findAll",
         "summary": "Listar todas las reglas tarifarias del club activo",
@@ -701,7 +701,7 @@
         ]
       }
     },
-    "/api/pricing/{id}": {
+    "/api/v1/pricing/{id}": {
       "get": {
         "operationId": "PricingController_findOne",
         "summary": "Obtener detalle de una regla de precios",
