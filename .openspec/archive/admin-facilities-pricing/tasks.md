@@ -61,4 +61,4 @@
 ## 5. Documentación y Sincronización
 
 - [x] **DOC-01:** Ejecutar `npm run codegraph:sync`.
-- [ ] **DOC-02:** Archivar cambio con `node scripts/spec-archive.js admin-facilities-pricing` antes de preparar commit.
+- [x] **DOC-02:** Archivar cambio con `node scripts/spec-archive.js admin-facilities-pricing` antes de preparar commit.
