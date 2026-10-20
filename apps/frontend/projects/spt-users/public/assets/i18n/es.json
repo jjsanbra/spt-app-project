@@ -85,6 +85,7 @@
     "SAVE": "Guardar",
     "CANCEL": "Cancelar",
     "CONFIRM": "Confirmar",
+    "ACCEPT": "Aceptar",
     "DELETE": "Eliminar",
     "EDIT": "Editar",
     "SEARCH": "Buscar",
@@ -94,7 +95,14 @@
     "YES": "Sí",
     "NO": "No",
     "CLOSE": "Cerrar",
-    "BACK": "Volver"
+    "BACK": "Volver",
+    "SUCCESS": "Éxito",
+    "ERROR": "Error",
+    "WARN": "Advertencia",
+    "INFO": "Información",
+    "CONFIRM_TITLE": "Confirmación",
+    "CONFIRM_DELETE_TITLE": "¿Eliminar elemento?",
+    "CONFIRM_DELETE_MSG": "Esta acción no se puede deshacer. ¿Deseas continuar?"
   },
   "USERS": {
     "PROFILE_TITLE": "Mi Perfil",
@@ -165,7 +173,12 @@
       "EMPTY": "No hay bloqueos programados en esta pista.",
       "SUCCESS_CREATE": "Bloqueo programado con éxito",
       "SUCCESS_DELETE": "Bloqueo eliminado correctamente",
-      "BACK_TO_FACILITIES": "Volver a Pistas"
+      "BACK_TO_FACILITIES": "Volver a Pistas",
+      "CONFIRM_DELETE_TITLE": "Levantar Bloqueo",
+      "CONFIRM_DELETE_MSG": "¿Estás seguro de que deseas eliminar este bloqueo de pista?",
+      "ERRORS": {
+        "INVALID_DATES": "La fecha y hora de fin debe ser posterior a la de inicio"
+      }
     },
     "PRICING": {
       "TITLE": "Tarifas y Precios",
@@ -185,6 +198,8 @@
       "EMPTY": "No hay reglas de tarificación configuradas.",
       "DIALOG_CREATE_TITLE": "Nueva Regla de Tarifa",
       "DIALOG_EDIT_TITLE": "Editar Regla de Tarifa",
+      "CONFIRM_DELETE_TITLE": "Eliminar Regla Tarifaria",
+      "CONFIRM_DELETE_MSG": "¿Estás seguro de que deseas eliminar esta regla de tarificación?",
       "SUCCESS_CREATE": "Tarifa creada con éxito",
       "SUCCESS_UPDATE": "Tarifa actualizada con éxito",
       "SUCCESS_DELETE": "Tarifa eliminada con éxito",

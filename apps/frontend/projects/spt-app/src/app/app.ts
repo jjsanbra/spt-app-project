@@ -6,7 +6,8 @@ import { AuthService } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +21,9 @@ import { MessageService } from 'primeng/api';
     ButtonModule,
     TagModule,
     ToastModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })

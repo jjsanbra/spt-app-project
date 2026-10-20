@@ -4,13 +4,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
+  ConfirmDialogService,
   CreateFacilityDtoCourtType as CourtType,
   CreateFacilityDtoSportType as SportType,
   CreateFacilityDtoSurfaceType as SurfaceType,
   FacilitiesService,
   FacilityResponseDto,
+  NotificationService,
 } from '@core';
-import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -19,7 +20,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-facilities-list',
@@ -37,16 +37,15 @@ import { ToastModule } from 'primeng/toast';
     InputNumberModule,
     SelectModule,
     CheckboxModule,
-    ToastModule,
   ],
-  providers: [MessageService],
   templateUrl: './facilities-list.component.html',
   styleUrls: ['./facilities-list.component.scss'],
 })
 export class FacilitiesListComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly facilitiesService = inject(FacilitiesService);
-  private readonly messageService = inject(MessageService);
+  private readonly notify = inject(NotificationService);
+  private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
 
   facilities: FacilityResponseDto[] = [];
@@ -111,11 +110,7 @@ export class FacilitiesListComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('ERRORS.GENERIC'),
-          detail: this.translate.instant('ERRORS.NETWORK'),
-        });
+        this.notify.error('ERRORS.NETWORK');
       },
     });
   }
@@ -168,20 +163,12 @@ export class FacilitiesListComponent implements OnInit {
           next: () => {
             this.saving = false;
             this.displayModal = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: this.translate.instant('APP.NAME'),
-              detail: this.translate.instant('ADMIN.FACILITIES.SUCCESS_UPDATE'),
-            });
+            this.notify.success('ADMIN.FACILITIES.SUCCESS_UPDATE');
             this.loadFacilities();
           },
           error: () => {
             this.saving = false;
-            this.messageService.add({
-              severity: 'error',
-              summary: this.translate.instant('ERRORS.GENERIC'),
-              detail: this.translate.instant('ERRORS.GENERIC'),
-            });
+            this.notify.error('ERRORS.GENERIC');
           },
         });
     } else {
@@ -189,40 +176,30 @@ export class FacilitiesListComponent implements OnInit {
         next: () => {
           this.saving = false;
           this.displayModal = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('ADMIN.FACILITIES.SUCCESS_CREATE'),
-          });
+          this.notify.success('ADMIN.FACILITIES.SUCCESS_CREATE');
           this.loadFacilities();
         },
         error: () => {
           this.saving = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail: this.translate.instant('ERRORS.GENERIC'),
-          });
+          this.notify.error('ERRORS.GENERIC');
         },
       });
     }
   }
 
   onDeleteFacility(facility: FacilityResponseDto): void {
-    this.facilitiesService.facilitiesControllerRemove(facility.id).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'info',
-          summary: this.translate.instant('APP.NAME'),
-          detail: this.translate.instant('ADMIN.FACILITIES.SUCCESS_DELETE'),
-        });
-        this.loadFacilities();
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('ERRORS.GENERIC'),
-          detail: this.translate.instant('ERRORS.GENERIC'),
+    this.confirmService.confirmDelete({
+      headerKey: 'ADMIN.FACILITIES.CONFIRM_DELETE_TITLE',
+      messageKey: 'ADMIN.FACILITIES.CONFIRM_DELETE_MSG',
+      onAccept: () => {
+        this.facilitiesService.facilitiesControllerRemove(facility.id).subscribe({
+          next: () => {
+            this.notify.info('ADMIN.FACILITIES.SUCCESS_DELETE');
+            this.loadFacilities();
+          },
+          error: () => {
+            this.notify.error('ERRORS.GENERIC');
+          },
         });
       },
     });

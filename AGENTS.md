@@ -108,6 +108,46 @@
 
 ---
 
+## 🔔 Notificaciones y Diálogos Centralizados (@core) (Regla Permanente de UI)
+- **PROHIBICIÓN DE `<p-toast>` Y `MessageService` LOCALES EN VISTAS:**
+  - NUNCA declares etiquetas `<p-toast></p-toast>` ni agregues `providers: [MessageService]` en componentes o vistas locales.
+  - El contenedor `<p-toast>` es global y reside exclusivamente en el Shell host (`spt-app/app.html`).
+  - Todos los mensajes de notificación deben emitirse mediante `NotificationService` importado desde `@core`:
+    ```typescript
+    import { NotificationService } from '@core';
+
+    export class MyComponent {
+      private readonly notify = inject(NotificationService);
+
+      onSuccess(): void {
+        this.notify.success('ADMIN.FACILITIES.SUCCESS_CREATE');
+        // También disponibles: notify.error('...'), notify.warn('...'), notify.info('...')
+      }
+    }
+    ```
+- **PROHIBICIÓN DE `window.confirm(...)` O DIÁLOGOS DE CONFIRMACIÓN AD-HOC:**
+  - NUNCA utilices `window.confirm()` o diálogos nativos del navegador para confirmar acciones destructivas o críticas.
+  - El contenedor `<p-confirmdialog>` reside de forma centralizada en el Shell host (`spt-app/app.html`).
+  - Utiliza OBLIGATORIAMENTE `ConfirmDialogService` importado desde `@core`:
+    ```typescript
+    import { ConfirmDialogService } from '@core';
+
+    export class MyComponent {
+      private readonly confirmService = inject(ConfirmDialogService);
+
+      onDelete(item: MyItem): void {
+        this.confirmService.confirmDelete({
+          headerKey: 'ADMIN.FACILITIES.CONFIRM_DELETE_TITLE',
+          messageKey: 'ADMIN.FACILITIES.CONFIRM_DELETE_MSG',
+          onAccept: () => this.doDelete(item.id),
+        });
+      }
+    }
+    ```
+
+---
+
 ## 🧠 CodeGraph e Indexación de Dependencias
 - Mantén la estructura de código, decoradores NestJS e interfaces limpios para que CodeGraph mapee y sincronice correctamente las relaciones entre microfrontends, capas y backend.
 - Tras completar evolutivos relevantes o crear nuevos módulos/controladores, ejecuta `npm run codegraph:sync` para refrescar el grafo.
+

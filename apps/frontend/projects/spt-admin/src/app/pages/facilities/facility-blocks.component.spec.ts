@@ -3,11 +3,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
+  ConfirmDialogService,
   FacilitiesService,
   FacilityBlockResponseDto,
+  NotificationService,
   getFacilitiesControllerFindOneResponseMock,
 } from '@core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { FacilityBlocksComponent } from './facility-blocks.component';
 
@@ -15,6 +17,7 @@ describe('FacilityBlocksComponent', () => {
   let component: FacilityBlocksComponent;
   let fixture: ComponentFixture<FacilityBlocksComponent>;
   let facilitiesServiceSpy: any;
+  let confirmDialogServiceMock: any;
 
   const mockFacility = getFacilitiesControllerFindOneResponseMock({
     id: 'fac-1',
@@ -43,6 +46,11 @@ describe('FacilityBlocksComponent', () => {
       facilitiesControllerRemoveBlock: vi.fn().mockReturnValue(of({ success: true })),
     };
 
+    confirmDialogServiceMock = {
+      confirmDelete: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+      confirm: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+    };
+
     await TestBed.configureTestingModule({
       imports: [FacilityBlocksComponent],
       providers: [
@@ -50,6 +58,9 @@ describe('FacilityBlocksComponent', () => {
         provideRouter([]),
         provideTranslateService({ lang: 'es' }),
         MessageService,
+        ConfirmationService,
+        NotificationService,
+        { provide: ConfirmDialogService, useValue: confirmDialogServiceMock },
         { provide: FacilitiesService, useValue: facilitiesServiceSpy },
         {
           provide: ActivatedRoute,

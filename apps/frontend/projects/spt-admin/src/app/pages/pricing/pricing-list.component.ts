@@ -2,8 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { PricingRuleResponseDto, PricingService } from '@core';
-import { MessageService } from 'primeng/api';
+import {
+  ConfirmDialogService,
+  NotificationService,
+  PricingRuleResponseDto,
+  PricingService,
+} from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
@@ -11,7 +15,6 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-pricing-list',
@@ -27,16 +30,15 @@ import { ToastModule } from 'primeng/toast';
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
-    ToastModule,
   ],
-  providers: [MessageService],
   templateUrl: './pricing-list.component.html',
   styleUrls: ['./pricing-list.component.scss'],
 })
 export class PricingListComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly pricingService = inject(PricingService);
-  private readonly messageService = inject(MessageService);
+  private readonly notify = inject(NotificationService);
+  private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
 
   pricingRules: PricingRuleResponseDto[] = [];
@@ -70,11 +72,7 @@ export class PricingListComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('ERRORS.GENERIC'),
-          detail: this.translate.instant('ERRORS.NETWORK'),
-        });
+        this.notify.error('ERRORS.NETWORK');
       },
     });
   }
@@ -143,20 +141,12 @@ export class PricingListComponent implements OnInit {
           next: () => {
             this.saving = false;
             this.displayModal = false;
-            this.messageService.add({
-              severity: 'success',
-              summary: this.translate.instant('APP.NAME'),
-              detail: this.translate.instant('ADMIN.PRICING.SUCCESS_UPDATE'),
-            });
+            this.notify.success('ADMIN.PRICING.SUCCESS_UPDATE');
             this.loadPricingRules();
           },
           error: () => {
             this.saving = false;
-            this.messageService.add({
-              severity: 'error',
-              summary: this.translate.instant('ERRORS.GENERIC'),
-              detail: this.translate.instant('ERRORS.GENERIC'),
-            });
+            this.notify.error('ERRORS.GENERIC');
           },
         });
     } else {
@@ -164,40 +154,30 @@ export class PricingListComponent implements OnInit {
         next: () => {
           this.saving = false;
           this.displayModal = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('ADMIN.PRICING.SUCCESS_CREATE'),
-          });
+          this.notify.success('ADMIN.PRICING.SUCCESS_CREATE');
           this.loadPricingRules();
         },
         error: () => {
           this.saving = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail: this.translate.instant('ERRORS.GENERIC'),
-          });
+          this.notify.error('ERRORS.GENERIC');
         },
       });
     }
   }
 
   onDeleteRule(ruleId: string): void {
-    this.pricingService.pricingControllerRemove(ruleId).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'info',
-          summary: this.translate.instant('APP.NAME'),
-          detail: this.translate.instant('ADMIN.PRICING.SUCCESS_DELETE'),
-        });
-        this.loadPricingRules();
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('ERRORS.GENERIC'),
-          detail: this.translate.instant('ERRORS.GENERIC'),
+    this.confirmService.confirmDelete({
+      headerKey: 'ADMIN.PRICING.CONFIRM_DELETE_TITLE',
+      messageKey: 'ADMIN.PRICING.CONFIRM_DELETE_MSG',
+      onAccept: () => {
+        this.pricingService.pricingControllerRemove(ruleId).subscribe({
+          next: () => {
+            this.notify.info('ADMIN.PRICING.SUCCESS_DELETE');
+            this.loadPricingRules();
+          },
+          error: () => {
+            this.notify.error('ERRORS.GENERIC');
+          },
         });
       },
     });

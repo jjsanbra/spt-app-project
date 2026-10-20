@@ -221,9 +221,47 @@
   --shadow-glow-ball: 0 0 14px rgba(16, 185, 129, 0.50);
 
   /* --------------------------------------------------------------------------
-     12. PrimeNG Theme Tokens
+     12. PrimeNG Theme Tokens & Form Overrides
      -------------------------------------------------------------------------- */
   --p-primary-color: var(--primary-turf);
   --p-primary-hover-color: var(--primary-hover);
   --p-focus-ring-color: rgba(16, 185, 129, 0.20);
+
+  /* Form Fields Base */
+  --p-form-field-background: var(--surface-pure);
+  --p-form-field-border-color: var(--border-input);
+  --p-form-field-hover-border-color: var(--primary-turf);
+  --p-form-field-focus-border-color: var(--primary-turf);
+  --p-form-field-color: var(--text-main);
+  --p-form-field-placeholder-color: var(--text-subtle);
+  --p-form-field-border-radius: var(--radius-sm);
+  --p-form-field-padding-x: var(--spacing-md);
+  --p-form-field-padding-y: var(--spacing-sm);
+
+  /* InputText */
+  --p-inputtext-background: var(--surface-pure);
+  --p-inputtext-border-color: var(--border-input);
+  --p-inputtext-hover-border-color: var(--primary-turf);
+  --p-inputtext-focus-border-color: var(--primary-turf);
+  --p-inputtext-color: var(--text-main);
+  --p-inputtext-placeholder-color: var(--text-subtle);
+  --p-inputtext-border-radius: var(--radius-sm);
+
+  /* Select / Dropdown */
+  --p-select-background: var(--surface-pure);
+  --p-select-border-color: var(--border-input);
+  --p-select-hover-border-color: var(--primary-turf);
+  --p-select-focus-border-color: var(--primary-turf);
+  --p-select-color: var(--text-main);
+  --p-select-placeholder-color: var(--text-subtle);
+  --p-select-border-radius: var(--radius-sm);
+
+  /* Checkbox */
+  --p-checkbox-background: var(--surface-pure);
+  --p-checkbox-border-color: var(--border-input);
+  --p-checkbox-hover-border-color: var(--primary-turf);
+  --p-checkbox-checked-background: var(--primary-turf);
+  --p-checkbox-checked-border-color: var(--primary-turf);
+  --p-checkbox-icon-color: #FFFFFF;
 }
+

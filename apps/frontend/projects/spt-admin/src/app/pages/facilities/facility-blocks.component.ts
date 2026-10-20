@@ -3,13 +3,16 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { FacilitiesService, FacilityBlockResponseDto } from '@core';
-import { MessageService } from 'primeng/api';
+import {
+  ConfirmDialogService,
+  FacilitiesService,
+  FacilityBlockResponseDto,
+  NotificationService,
+} from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
-import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-facility-blocks',
@@ -23,9 +26,7 @@ import { ToastModule } from 'primeng/toast';
     ButtonModule,
     DialogModule,
     InputTextModule,
-    ToastModule,
   ],
-  providers: [MessageService],
   templateUrl: './facility-blocks.component.html',
   styleUrls: ['./facility-blocks.component.scss'],
 })
@@ -33,7 +34,8 @@ export class FacilityBlocksComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly fb = inject(FormBuilder);
   private readonly facilitiesService = inject(FacilitiesService);
-  private readonly messageService = inject(MessageService);
+  private readonly notify = inject(NotificationService);
+  private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
 
   facilityId!: string;
@@ -75,11 +77,7 @@ export class FacilityBlocksComponent implements OnInit {
       },
       error: () => {
         this.loading = false;
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('ERRORS.GENERIC'),
-          detail: this.translate.instant('ERRORS.NETWORK'),
-        });
+        this.notify.error('ERRORS.NETWORK');
       },
     });
   }
@@ -103,11 +101,7 @@ export class FacilityBlocksComponent implements OnInit {
     const { title, reason, startTime, endTime } = this.blockForm.value;
 
     if (new Date(startTime) >= new Date(endTime)) {
-      this.messageService.add({
-        severity: 'warn',
-        summary: this.translate.instant('APP.NAME'),
-        detail: 'La fecha y hora de fin debe ser posterior a la de inicio',
-      });
+      this.notify.warn('ADMIN.BLOCKS.ERRORS.INVALID_DATES');
       return;
     }
 
@@ -123,43 +117,33 @@ export class FacilityBlocksComponent implements OnInit {
         next: () => {
           this.saving = false;
           this.displayModal = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('ADMIN.BLOCKS.SUCCESS_CREATE'),
-          });
+          this.notify.success('ADMIN.BLOCKS.SUCCESS_CREATE');
           this.loadBlocks();
         },
         error: () => {
           this.saving = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail: this.translate.instant('ERRORS.GENERIC'),
-          });
+          this.notify.error('ERRORS.GENERIC');
         },
       });
   }
 
   onRemoveBlock(blockId: string): void {
-    this.facilitiesService
-      .facilitiesControllerRemoveBlock(this.facilityId, blockId)
-      .subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'info',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('ADMIN.BLOCKS.SUCCESS_DELETE'),
+    this.confirmService.confirmDelete({
+      headerKey: 'ADMIN.BLOCKS.CONFIRM_DELETE_TITLE',
+      messageKey: 'ADMIN.BLOCKS.CONFIRM_DELETE_MSG',
+      onAccept: () => {
+        this.facilitiesService
+          .facilitiesControllerRemoveBlock(this.facilityId, blockId)
+          .subscribe({
+            next: () => {
+              this.notify.info('ADMIN.BLOCKS.SUCCESS_DELETE');
+              this.loadBlocks();
+            },
+            error: () => {
+              this.notify.error('ERRORS.GENERIC');
+            },
           });
-          this.loadBlocks();
-        },
-        error: () => {
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail: this.translate.instant('ERRORS.GENERIC'),
-          });
-        },
-      });
+      },
+    });
   }
 }

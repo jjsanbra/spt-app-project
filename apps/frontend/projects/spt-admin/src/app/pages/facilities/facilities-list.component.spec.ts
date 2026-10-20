@@ -3,13 +3,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
+  ConfirmDialogService,
   CreateFacilityDtoCourtType as CourtType,
   CreateFacilityDtoSportType as SportType,
   CreateFacilityDtoSurfaceType as SurfaceType,
   FacilitiesService,
   FacilityResponseDto,
+  NotificationService,
 } from '@core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { FacilitiesListComponent } from './facilities-list.component';
 
@@ -17,6 +19,7 @@ describe('FacilitiesListComponent', () => {
   let component: FacilitiesListComponent;
   let fixture: ComponentFixture<FacilitiesListComponent>;
   let facilitiesServiceSpy: any;
+  let confirmDialogServiceMock: any;
 
   const mockFacilities: FacilityResponseDto[] = [
     {
@@ -59,6 +62,11 @@ describe('FacilitiesListComponent', () => {
       facilitiesControllerRemove: vi.fn().mockReturnValue(of({ success: true })),
     };
 
+    confirmDialogServiceMock = {
+      confirmDelete: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+      confirm: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+    };
+
     await TestBed.configureTestingModule({
       imports: [FacilitiesListComponent],
       providers: [
@@ -66,6 +74,9 @@ describe('FacilitiesListComponent', () => {
         provideRouter([]),
         provideTranslateService({ lang: 'es' }),
         MessageService,
+        ConfirmationService,
+        NotificationService,
+        { provide: ConfirmDialogService, useValue: confirmDialogServiceMock },
         { provide: FacilitiesService, useValue: facilitiesServiceSpy },
       ],
     }).compileComponents();

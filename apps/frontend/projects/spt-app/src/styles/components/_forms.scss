@@ -7,33 +7,47 @@
 @use "../base/responsive" as *;
 
 .form-group {
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .form-label {
   display: block;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
-  margin-bottom: var(--spacing-xs);
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-2xs);
 }
 
 .form-control,
-.p-inputtext {
+.p-inputtext,
+input.p-inputtext {
   width: 100%;
-  padding: var(--spacing-md) var(--spacing-base);
+  height: 42px !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
   font-family: var(--font-body);
-  font-size: var(--font-size-md);
-  background: var(--surface-pure);
-  border: 1px solid var(--border-input);
-  border-radius: var(--radius-sm);
-  color: var(--text-main);
-  outline: none;
+  font-size: var(--font-size-base) !important;
+  background: var(--surface-pure) !important;
+  border: 1px solid var(--border-input) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-main) !important;
+  outline: none !important;
+  box-sizing: border-box !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
-  &:focus {
-    border-color: var(--primary-turf);
-    box-shadow: 0 0 0 3px var(--p-focus-ring-color);
+  &::placeholder {
+    color: var(--text-subtle) !important;
+  }
+
+  &:hover:not(:disabled) {
+    border-color: var(--border-color-focus, var(--primary-turf)) !important;
+  }
+
+  &:focus,
+  &.p-focus {
+    border-color: var(--primary-turf) !important;
+    box-shadow: 0 0 0 2px var(--p-focus-ring-color) !important;
   }
 }
 
@@ -44,27 +58,131 @@
 .form-group p-select,
 .modal-form .p-select,
 .modal-form p-select,
+.facility-form .p-select,
+.pricing-form .p-select,
+.block-form .p-select,
 .form-control.p-select,
 .p-select.w-full,
 p-select.w-full {
-  width: 100%;
+  width: 100% !important;
+  display: flex !important;
 }
 
 .p-select {
-  background: var(--surface-pure);
-  border: 1px solid var(--border-input);
-  border-radius: var(--radius-sm);
+  background: var(--surface-pure) !important;
+  border: 1px solid var(--border-input) !important;
+  border-radius: var(--radius-sm) !important;
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 
+  .p-select-label {
+    color: var(--text-main) !important;
+    font-size: var(--font-size-base) !important;
+    font-family: var(--font-body) !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    line-height: normal !important;
+
+    &.p-placeholder {
+      color: var(--text-subtle) !important;
+    }
+  }
+
+  .p-select-dropdown {
+    color: var(--text-dim) !important;
+    padding-right: var(--spacing-sm) !important;
+  }
+
   &:not(.p-disabled):hover {
-    border-color: var(--border-color-focus, var(--primary-turf));
+    border-color: var(--border-color-focus, var(--primary-turf)) !important;
   }
 
   &.p-focus {
-    border-color: var(--primary-turf);
-    box-shadow: 0 0 0 3px var(--p-focus-ring-color);
+    border-color: var(--primary-turf) !important;
+    box-shadow: 0 0 0 2px var(--p-focus-ring-color) !important;
   }
 }
+
+/* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG InputNumber (p-inputnumber)
+   -------------------------------------------------------------------------- */
+.form-group .p-inputnumber,
+.form-group p-inputnumber,
+.facility-form .p-inputnumber,
+.pricing-form .p-inputnumber,
+.block-form .p-inputnumber,
+.p-inputnumber.w-full,
+p-inputnumber.w-full {
+  width: 100% !important;
+  display: inline-flex !important;
+}
+
+.p-inputnumber {
+  width: 100% !important;
+
+  .p-inputnumber-input {
+    width: 100% !important;
+    height: 42px !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    font-family: var(--font-body);
+    font-size: var(--font-size-base) !important;
+    background: var(--surface-pure) !important;
+    border: 1px solid var(--border-input) !important;
+    border-radius: var(--radius-sm) !important;
+    color: var(--text-main) !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover:not(:disabled) {
+      border-color: var(--border-color-focus, var(--primary-turf)) !important;
+    }
+
+    &:focus {
+      border-color: var(--primary-turf) !important;
+      box-shadow: 0 0 0 2px var(--p-focus-ring-color) !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG Checkbox (p-checkbox)
+   -------------------------------------------------------------------------- */
+.p-checkbox {
+  display: inline-flex !important;
+  align-items: center !important;
+  vertical-align: middle !important;
+
+  .p-checkbox-box {
+    width: 20px !important;
+    height: 20px !important;
+    background: var(--surface-pure) !important;
+    border: 1.5px solid var(--border-input) !important;
+    border-radius: var(--radius-xs) !important;
+    transition: all 0.2s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    &:hover {
+      border-color: var(--primary-turf) !important;
+    }
+  }
+
+  &.p-checkbox-checked .p-checkbox-box,
+  .p-checkbox-box.p-highlight {
+    background: var(--primary-turf) !important;
+    border-color: var(--primary-turf) !important;
+
+    .p-checkbox-icon {
+      color: #FFFFFF !important;
+      font-size: 11px !important;
+    }
+  }
+}
+
 
 /* Overlay de Opciones Desplegables (p-select-overlay) */
 .p-select-overlay,

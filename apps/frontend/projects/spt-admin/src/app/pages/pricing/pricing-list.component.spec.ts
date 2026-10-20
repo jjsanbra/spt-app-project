@@ -3,10 +3,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
+  ConfirmDialogService,
+  NotificationService,
   PricingRuleResponseDto,
   PricingService,
 } from '@core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
 import { PricingListComponent } from './pricing-list.component';
 
@@ -14,6 +16,7 @@ describe('PricingListComponent', () => {
   let component: PricingListComponent;
   let fixture: ComponentFixture<PricingListComponent>;
   let pricingServiceSpy: any;
+  let confirmDialogServiceMock: any;
 
   const mockRules: PricingRuleResponseDto[] = [
     {
@@ -56,6 +59,11 @@ describe('PricingListComponent', () => {
       pricingControllerRemove: vi.fn().mockReturnValue(of({ success: true })),
     };
 
+    confirmDialogServiceMock = {
+      confirmDelete: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+      confirm: vi.fn().mockImplementation((opts: any) => opts.onAccept()),
+    };
+
     await TestBed.configureTestingModule({
       imports: [PricingListComponent],
       providers: [
@@ -63,6 +71,9 @@ describe('PricingListComponent', () => {
         provideRouter([]),
         provideTranslateService({ lang: 'es' }),
         MessageService,
+        ConfirmationService,
+        NotificationService,
+        { provide: ConfirmDialogService, useValue: confirmDialogServiceMock },
         { provide: PricingService, useValue: pricingServiceSpy },
       ],
     }).compileComponents();

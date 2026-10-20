@@ -140,7 +140,38 @@
   }
 }
 
-/* 6. Variante Glassmorphism (.glass-dialog) */
+/* 6. Diálogos de Confirmación PrimeNG (.p-confirmdialog) */
+.p-confirmdialog.p-dialog {
+  max-width: 480px !important;
+
+  .p-dialog-content {
+    display: flex !important;
+    align-items: center !important;
+    gap: var(--spacing-md) !important;
+    padding: var(--spacing-lg) !important;
+
+    .p-confirmdialog-icon {
+      font-size: 1.75rem !important;
+      color: var(--status-disputed, #DC2626) !important;
+      flex-shrink: 0 !important;
+    }
+
+    .p-confirmdialog-message {
+      font-size: var(--font-size-base) !important;
+      color: var(--text-main) !important;
+      line-height: 1.5 !important;
+    }
+  }
+
+  .p-dialog-footer {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+    gap: var(--spacing-sm) !important;
+  }
+}
+
+/* 7. Variante Glassmorphism (.glass-dialog) */
 .glass-dialog.p-dialog {
   background: rgba(255, 255, 255, 0.95) !important;
   backdrop-filter: blur(12px) !important;
@@ -148,7 +179,10 @@
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
 }
 
-.modal-form {
+.modal-form,
+.facility-form,
+.pricing-form,
+.block-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
@@ -156,6 +190,50 @@
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
+
+  .form-row {
+    display: flex;
+    gap: var(--spacing-md);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+    width: 100%;
+    box-sizing: border-box;
+
+    &.flex-1 {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  .form-label {
+    display: block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--spacing-2xs);
+  }
+
+  .form-group-checkbox {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-xs);
+
+    .checkbox-label {
+      font-size: var(--font-size-sm);
+      color: var(--text-color);
+      cursor: pointer;
+      user-select: none;
+    }
+  }
 
   @include mobile {
     .enroll-form-row,
@@ -169,6 +247,7 @@
 
       .p-select,
       .enroll-select,
+      .p-inputnumber,
       input,
       button {
         width: 100% !important;
@@ -178,6 +257,7 @@
   }
 }
 
+.dialog-actions,
 .modal-actions {
   display: flex;
   align-items: center;
@@ -186,7 +266,9 @@
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
-  margin-top: var(--spacing-md);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
 
   &.modal-actions--between {
     justify-content: space-between;
@@ -196,6 +278,15 @@
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
+  }
+
+  button[severity="secondary"] {
+    color: var(--text-muted) !important;
+
+    &:hover {
+      background: var(--surface-muted) !important;
+      color: var(--text-main) !important;
+    }
   }
 
   @include mobile {
@@ -217,3 +308,4 @@
     }
   }
 }
+

@@ -8,8 +8,10 @@ export { UsersService } from './api/endpoints/users/users.service';
 export { FacilitiesService } from './api/endpoints/facilities/facilities.service';
 export { PricingService } from './api/endpoints/pricing/pricing.service';
 
-// Servicios de infraestructura
+// Servicios de infraestructura y UI
 export * from './services/auth.service';
+export * from './services/notification.service';
+export * from './services/confirm-dialog.service';
 
 // Interceptores y Guards
 export * from './interceptors/auth.interceptor';
