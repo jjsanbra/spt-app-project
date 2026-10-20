@@ -12,16 +12,14 @@
         <!-- Email -->
         <div class="form-group">
           <label for="login-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
-          <span class="p-input-icon-left w-full">
-            <input
-              id="login-email"
-              type="email"
-              pInputText
-              class="w-full"
-              formControlName="email"
-              [placeholder]="'AUTH.EMAIL' | translate"
-            />
-          </span>
+          <input
+            id="login-email"
+            type="email"
+            pInputText
+            class="w-full"
+            formControlName="email"
+            [placeholder]="'AUTH.EMAIL' | translate"
+          />
           @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
             <small class="form-error">
               @if (loginForm.get('email')?.hasError('required')) {
