@@ -838,25 +838,47 @@
   },
   "info": {
     "title": "SPT App API",
-    "description": "API REST del SaaS Multi-tenant de gestión de reservas de centros deportivos",
-    "version": "1.0.0",
+    "description": "API para el sistema SaaS de gestión de reservas deportivas",
+    "version": "1.0",
     "contact": {}
   },
-  "tags": [],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Autenticación y autorización"
+    },
+    {
+      "name": "users",
+      "description": "Gestión de usuarios"
+    },
+    {
+      "name": "clubs",
+      "description": "Gestión de clubes (tenants)"
+    },
+    {
+      "name": "facilities",
+      "description": "Instalaciones y pistas"
+    },
+    {
+      "name": "bookings",
+      "description": "Motor de reservas"
+    },
+    {
+      "name": "pricing",
+      "description": "Configuración de precios"
+    },
+    {
+      "name": "notifications",
+      "description": "Notificaciones"
+    }
+  ],
   "servers": [],
   "components": {
     "securitySchemes": {
-      "bearer": {
+      "access-token": {
         "scheme": "bearer",
         "bearerFormat": "JWT",
-        "type": "http",
-        "description": "Introduce tu token JWT: Bearer <token>"
-      },
-      "tenant": {
-        "type": "apiKey",
-        "in": "header",
-        "name": "x-tenant-id",
-        "description": "UUID del Club deportivo activo sobre el que se opera"
+        "type": "http"
       }
     },
     "schemas": {
