@@ -10,11 +10,17 @@ export { PricingService } from './api/endpoints/pricing/pricing.service';
 export { ClubsMembersService } from './api/endpoints/clubs-members/clubs-members.service';
 export { ClubsSettingsService } from './api/endpoints/clubs-settings/clubs-settings.service';
 export { BookingsService } from './api/endpoints/bookings/bookings.service';
+export { NotificationsService } from './api/endpoints/notifications/notifications.service';
+export {
+  SuperadminClubsService,
+  SuperadminClubsService as SuperAdminClubsService,
+} from './api/endpoints/superadmin-clubs/superadmin-clubs.service';
 
 // Servicios de infraestructura y UI
 export * from './services/auth.service';
 export * from './services/notification.service';
 export * from './services/confirm-dialog.service';
+export * from './services/realtime-notifications.service';
 
 // Interceptores y Guards
 export * from './interceptors/auth.interceptor';
@@ -26,3 +32,5 @@ export * from './api/endpoints/users/users.faker';
 export * from './api/endpoints/facilities/facilities.faker';
 export * from './api/endpoints/pricing/pricing.faker';
 export * from './api/endpoints/bookings/bookings.faker';
+export * from './api/endpoints/notifications/notifications.faker';
+export * from './api/endpoints/superadmin-clubs/superadmin-clubs.faker';

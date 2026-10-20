@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, NotFoundException } from '@nest
 import { Test, TestingModule } from '@nestjs/testing';
 import { BookingStatus, BookingType, ParticipantStatus, SportType } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { BookingsService } from './bookings.service';
 
 describe('BookingsService', () => {
@@ -56,11 +57,16 @@ describe('BookingsService', () => {
     $transaction: jest.fn(),
   };
 
+  const mockNotificationsService = {
+    createNotification: jest.fn().mockResolvedValue({ id: 'notif-1' }),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BookingsService,
         { provide: PrismaService, useValue: mockPrisma },
+        { provide: NotificationsService, useValue: mockNotificationsService },
       ],
     }).compile();
 

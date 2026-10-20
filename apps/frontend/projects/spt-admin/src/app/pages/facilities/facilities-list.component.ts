@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -47,6 +47,7 @@ export class FacilitiesListComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   facilities: FacilityResponseDto[] = [];
   loading = false;
@@ -118,14 +119,17 @@ export class FacilitiesListComponent implements OnInit {
 
   loadFacilities(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.facilitiesService.facilitiesControllerFindAll().subscribe({
       next: (data) => {
         this.facilities = data;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
         this.notify.error('ERRORS.NETWORK');
+        this.cdr.markForCheck();
       },
     });
   }
@@ -144,6 +148,7 @@ export class FacilitiesListComponent implements OnInit {
       maxPlayers: 4,
     });
     this.displayModal = true;
+    this.cdr.markForCheck();
   }
 
   openEditModal(facility: FacilityResponseDto): void {
@@ -160,6 +165,7 @@ export class FacilitiesListComponent implements OnInit {
       maxPlayers: facility.maxPlayers,
     });
     this.displayModal = true;
+    this.cdr.markForCheck();
   }
 
   onSubmitModal(): void {
@@ -169,6 +175,7 @@ export class FacilitiesListComponent implements OnInit {
     }
 
     this.saving = true;
+    this.cdr.markForCheck();
     const formValue = this.facilityForm.value;
 
     if (this.isEditing && this.selectedFacilityId) {
@@ -180,10 +187,12 @@ export class FacilitiesListComponent implements OnInit {
             this.displayModal = false;
             this.notify.success('ADMIN.FACILITIES.SUCCESS_UPDATE');
             this.loadFacilities();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.saving = false;
             this.notify.error('ERRORS.GENERIC');
+            this.cdr.markForCheck();
           },
         });
     } else {
@@ -193,10 +202,12 @@ export class FacilitiesListComponent implements OnInit {
           this.displayModal = false;
           this.notify.success('ADMIN.FACILITIES.SUCCESS_CREATE');
           this.loadFacilities();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.saving = false;
           this.notify.error('ERRORS.GENERIC');
+          this.cdr.markForCheck();
         },
       });
     }
@@ -211,9 +222,11 @@ export class FacilitiesListComponent implements OnInit {
           next: () => {
             this.notify.info('ADMIN.FACILITIES.SUCCESS_DELETE');
             this.loadFacilities();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.notify.error('ERRORS.GENERIC');
+            this.cdr.markForCheck();
           },
         });
       },

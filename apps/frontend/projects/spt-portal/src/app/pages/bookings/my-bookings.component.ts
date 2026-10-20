@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import {
@@ -31,6 +31,7 @@ export class MyBookingsComponent implements OnInit {
   private readonly bookingsService = inject(BookingsService);
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   bookings: BookingResponseDto[] = [];
   loading = false;
@@ -41,14 +42,17 @@ export class MyBookingsComponent implements OnInit {
 
   loadBookings(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.bookingsService.bookingsControllerFindMyBookings().subscribe({
       next: (data) => {
         this.bookings = data;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.notify.error('ERRORS.SERVER_ERROR');
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -67,9 +71,11 @@ export class MyBookingsComponent implements OnInit {
           next: () => {
             this.notify.success('PORTAL.MY_BOOKINGS.SUCCESS_CANCEL');
             this.loadBookings();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.notify.error('ERRORS.SERVER_ERROR');
+            this.cdr.markForCheck();
           },
         });
       },

@@ -1,0 +1,332 @@
+<div class="superadmin-page-container">
+  <!-- Cabecera de Página -->
+  <header class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'SUPERADMIN.CLUBS.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'SUPERADMIN.CLUBS.SUBTITLE' | translate }}</p>
+    </div>
+
+    <div class="header-actions">
+      <button
+        type="button"
+        pButton
+        severity="primary"
+        (click)="openNewModal()"
+      >
+        <i class="pi pi-plus"></i>
+        {{ 'SUPERADMIN.CLUBS.NEW_CLUB_BTN' | translate }}
+      </button>
+    </div>
+  </header>
+
+  <!-- Barra de Filtros -->
+  <div class="filters-toolbar">
+    <div class="search-box">
+      <i class="pi pi-search search-icon"></i>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchFilter"
+        (input)="onSearchChange()"
+        [placeholder]="'SUPERADMIN.CLUBS.SEARCH_PLACEHOLDER' | translate"
+        class="search-input"
+      />
+    </div>
+
+    <div class="filter-controls">
+      <p-select
+        [options]="statusOptions"
+        [(ngModel)]="statusFilter"
+        (onChange)="onStatusFilterChange($event.value)"
+        optionLabel="label"
+        optionValue="value"
+        [placeholder]="'SUPERADMIN.CLUBS.STATUS_ALL' | translate"
+        class="status-select"
+      ></p-select>
+    </div>
+  </div>
+
+  <!-- Tabla de Clubes -->
+  <div class="table-card">
+    <p-table
+      [value]="clubs"
+      [loading]="loading"
+      [paginator]="true"
+      [rows]="10"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template #header pTemplate="header">
+        <tr>
+          <th>{{ 'SUPERADMIN.CLUBS.TABLE.NAME' | translate }}</th>
+          <th>{{ 'SUPERADMIN.CLUBS.TABLE.SLUG' | translate }}</th>
+          <th>{{ 'SUPERADMIN.CLUBS.TABLE.CITY' | translate }}</th>
+          <th>{{ 'SUPERADMIN.CLUBS.TABLE.PAYMENT_MODE' | translate }}</th>
+          <th class="text-center">{{ 'SUPERADMIN.CLUBS.TABLE.FACILITIES' | translate }}</th>
+          <th class="text-center">{{ 'SUPERADMIN.CLUBS.TABLE.MEMBERS' | translate }}</th>
+          <th class="text-center">{{ 'SUPERADMIN.CLUBS.TABLE.STATUS' | translate }}</th>
+          <th class="text-right">{{ 'SUPERADMIN.CLUBS.TABLE.ACTIONS' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-club pTemplate="body">
+        <tr>
+          <td>
+            <div class="club-info-cell">
+              <span class="club-name">{{ club.name }}</span>
+              <span class="club-email">{{ club.email }}</span>
+            </div>
+          </td>
+          <td>
+            <code class="slug-code">{{ club.slug }}</code>
+          </td>
+          <td>{{ club.city || '—' }}</td>
+          <td>
+            <p-tag
+              [value]="club.paymentMode"
+              [severity]="club.paymentMode === 'HYBRID' ? 'info' : (club.paymentMode === 'ONLINE' ? 'success' : 'secondary')"
+            ></p-tag>
+          </td>
+          <td class="text-center font-semibold">{{ club.facilitiesCount }}</td>
+          <td class="text-center font-semibold">{{ club.membersCount }}</td>
+          <td class="text-center">
+            <p-tag
+              [value]="club.isActive ? ('SUPERADMIN.CLUBS.STATUS_ACTIVE' | translate) : ('SUPERADMIN.CLUBS.STATUS_INACTIVE' | translate)"
+              [severity]="club.isActive ? 'success' : 'danger'"
+            ></p-tag>
+          </td>
+          <td class="text-right">
+            <div class="table-actions">
+              <button
+                type="button"
+                pButton
+                [text]="true"
+                severity="secondary"
+                size="small"
+                (click)="openEditModal(club)"
+                [title]="'SUPERADMIN.CLUBS.MODAL.TITLE_EDIT' | translate"
+              >
+                <i class="pi pi-pencil"></i>
+              </button>
+
+              @if (club.isActive) {
+                <button
+                  type="button"
+                  pButton
+                  [text]="true"
+                  severity="danger"
+                  size="small"
+                  (click)="toggleClubStatus(club)"
+                  [title]="'SUPERADMIN.CLUBS.TOOLTIP_DEACTIVATE' | translate"
+                >
+                  <i class="pi pi-ban"></i>
+                </button>
+              } @else {
+                <button
+                  type="button"
+                  pButton
+                  [text]="true"
+                  severity="success"
+                  size="small"
+                  (click)="toggleClubStatus(club)"
+                  [title]="'SUPERADMIN.CLUBS.TOOLTIP_ACTIVATE' | translate"
+                >
+                  <i class="pi pi-check"></i>
+                </button>
+              }
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="text-center empty-message">
+            <i class="pi pi-inbox empty-icon"></i>
+            <p>{{ 'SUPERADMIN.CLUBS.EMPTY' | translate }}</p>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Diálogo Modal: Alta y Edición de Club -->
+  <p-dialog
+    [(visible)]="displayModal"
+    [modal]="true"
+    [header]="(isEditing ? 'SUPERADMIN.CLUBS.MODAL.TITLE_EDIT' : 'SUPERADMIN.CLUBS.MODAL.TITLE_NEW') | translate"
+    [style]="{ width: '42rem', maxWidth: '95vw' }"
+  >
+    <form [formGroup]="clubForm" (ngSubmit)="saveClub()" class="modal-form">
+      <!-- Sección: Información General -->
+      <div class="form-section">
+        <h4 class="section-title">{{ 'SUPERADMIN.CLUBS.MODAL.BASIC_INFO' | translate }}</h4>
+
+        <div class="form-grid">
+          <div class="form-field full-width">
+            <label for="name">{{ 'SUPERADMIN.CLUBS.MODAL.NAME' | translate }} *</label>
+            <input
+              id="name"
+              type="text"
+              pInputText
+              formControlName="name"
+              (blur)="onNameBlur()"
+              [placeholder]="'SUPERADMIN.CLUBS.MODAL.NAME_PLACEHOLDER' | translate"
+            />
+          </div>
+
+          <div class="form-field full-width">
+            <label for="slug">{{ 'SUPERADMIN.CLUBS.MODAL.SLUG' | translate }} *</label>
+            <input
+              id="slug"
+              type="text"
+              pInputText
+              formControlName="slug"
+              [placeholder]="'SUPERADMIN.CLUBS.MODAL.SLUG_PLACEHOLDER' | translate"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="email">{{ 'SUPERADMIN.CLUBS.MODAL.EMAIL' | translate }} *</label>
+            <input
+              id="email"
+              type="email"
+              pInputText
+              formControlName="email"
+              [placeholder]="'SUPERADMIN.CLUBS.MODAL.EMAIL_PLACEHOLDER' | translate"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="phone">{{ 'SUPERADMIN.CLUBS.MODAL.PHONE' | translate }}</label>
+            <input
+              id="phone"
+              type="text"
+              pInputText
+              formControlName="phone"
+              placeholder="+34..."
+            />
+          </div>
+
+          <div class="form-field full-width">
+            <label for="address">{{ 'SUPERADMIN.CLUBS.MODAL.ADDRESS' | translate }}</label>
+            <input
+              id="address"
+              type="text"
+              pInputText
+              formControlName="address"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="city">{{ 'SUPERADMIN.CLUBS.MODAL.CITY' | translate }}</label>
+            <input
+              id="city"
+              type="text"
+              pInputText
+              formControlName="city"
+            />
+          </div>
+
+          <div class="form-field">
+            <label for="postalCode">{{ 'SUPERADMIN.CLUBS.MODAL.POSTAL_CODE' | translate }}</label>
+            <input
+              id="postalCode"
+              type="text"
+              pInputText
+              formControlName="postalCode"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección: Horarios y Cobros -->
+      <div class="form-section">
+        <h4 class="section-title">{{ 'SUPERADMIN.CLUBS.MODAL.SCHEDULE_TITLE' | translate }}</h4>
+
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="openingHour">{{ 'SUPERADMIN.CLUBS.MODAL.OPENING_HOUR' | translate }} (0-23)</label>
+            <p-inputnumber
+              id="openingHour"
+              formControlName="openingHour"
+              [min]="0"
+              [max]="23"
+            ></p-inputnumber>
+          </div>
+
+          <div class="form-field">
+            <label for="closingHour">{{ 'SUPERADMIN.CLUBS.MODAL.CLOSING_HOUR' | translate }} (1-24)</label>
+            <p-inputnumber
+              id="closingHour"
+              formControlName="closingHour"
+              [min]="1"
+              [max]="24"
+            ></p-inputnumber>
+          </div>
+
+          <div class="form-field">
+            <label for="slotDurationMinutes">{{ 'SUPERADMIN.CLUBS.MODAL.SLOT_DURATION' | translate }}</label>
+            <p-inputnumber
+              id="slotDurationMinutes"
+              formControlName="slotDurationMinutes"
+              [step]="30"
+              [min]="30"
+              [max]="120"
+            ></p-inputnumber>
+          </div>
+
+          <div class="form-field">
+            <label for="paymentMode">{{ 'SUPERADMIN.CLUBS.MODAL.PAYMENT_MODE' | translate }}</label>
+            <p-select
+              id="paymentMode"
+              [options]="paymentModes"
+              formControlName="paymentMode"
+              optionLabel="label"
+              optionValue="value"
+            ></p-select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección: Propietario Inicial (Solo en creación) -->
+      @if (!isEditing) {
+        <div class="form-section">
+          <h4 class="section-title">{{ 'SUPERADMIN.CLUBS.MODAL.OWNER_TITLE' | translate }}</h4>
+          <div class="form-field full-width">
+            <label for="ownerEmail">{{ 'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL' | translate }}</label>
+            <input
+              id="ownerEmail"
+              type="email"
+              pInputText
+              formControlName="ownerEmail"
+              [placeholder]="'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL_PLACEHOLDER' | translate"
+            />
+          </div>
+        </div>
+      }
+
+      <!-- Acciones del Modal -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          pButton
+          [text]="true"
+          severity="secondary"
+          (click)="displayModal = false"
+        >
+          {{ 'SUPERADMIN.CLUBS.MODAL.CANCEL' | translate }}
+        </button>
+
+        <button
+          type="submit"
+          pButton
+          severity="primary"
+          [loading]="saving"
+          [disabled]="clubForm.invalid"
+        >
+          {{ (isEditing ? 'SUPERADMIN.CLUBS.MODAL.SAVE_EDIT' : 'SUPERADMIN.CLUBS.MODAL.SAVE') | translate }}
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

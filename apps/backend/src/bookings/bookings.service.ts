@@ -7,19 +7,24 @@ import {
 import {
   BookingStatus,
   BookingType,
+  NotificationType,
   ParticipantStatus,
   PaymentMethod,
   PaymentStatus,
   SportType,
 } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import { BookingResponseDto } from './dto/booking-response.dto';
 import { CancelBookingDto, CreateBookingDto } from './dto/create-booking.dto';
 import { OpenMatchResponseDto } from './dto/open-match-response.dto';
 
 @Injectable()
 export class BookingsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly notificationsService: NotificationsService,
+  ) {}
 
   /**
    * Crear una nueva reserva completa (FULL) con validación transaccional contra solapamientos
@@ -181,6 +186,21 @@ export class BookingsService {
       return newBooking;
     });
 
+    // Notificar al usuario (in-app y email simulado)
+    const isHost = dto.bookingType === BookingType.OPEN;
+    this.notificationsService
+      .createNotification({
+        userId,
+        clubId,
+        title: isHost ? 'Partida abierta creada' : '¡Reserva confirmada!',
+        message: `Pista ${booking.facility.name} confirmada para el ${start.toLocaleDateString('es-ES')}.`,
+        type: NotificationType.BOOKING_CONFIRMED,
+        metadata: { bookingId: booking.id, facilityId: booking.facilityId },
+        sendEmail: true,
+        userEmail: booking.user?.email,
+      })
+      .catch(() => null);
+
     return this.mapToResponse(booking);
   }
 
@@ -276,7 +296,7 @@ export class BookingsService {
    * Unirse a una partida abierta
    */
   async joinOpenMatch(clubId: string, userId: string, bookingId: string): Promise<any> {
-    return this.prisma.$transaction(async (tx) => {
+    const result = await this.prisma.$transaction(async (tx) => {
       const booking = await tx.booking.findFirst({
         where: { id: bookingId, clubId, bookingType: BookingType.OPEN },
         include: {
@@ -385,6 +405,41 @@ export class BookingsService {
         })),
       };
     });
+
+    // Notificar al anfitrión
+    const host = result.participants.find((p: any) => p.isHost);
+    if (host && host.userId && host.userId !== userId) {
+      this.notificationsService
+        .createNotification({
+          userId: host.userId,
+          clubId,
+          title: 'Nuevo jugador en tu partida',
+          message: `Un nuevo jugador se ha unido a tu partido en ${result.facilityName}.`,
+          type: NotificationType.OPEN_GAME_JOINED,
+          metadata: { bookingId },
+        })
+        .catch(() => null);
+    }
+
+    // Notificar si la partida se ha completado
+    if (result.availableSlots === 0) {
+      for (const p of result.participants) {
+        if (p.userId) {
+          this.notificationsService
+            .createNotification({
+              userId: p.userId,
+              clubId,
+              title: '¡Partida completa!',
+              message: `El partido en ${result.facilityName} ya tiene todas las plazas cubiertas.`,
+              type: NotificationType.OPEN_GAME_COMPLETE,
+              metadata: { bookingId },
+            })
+            .catch(() => null);
+        }
+      }
+    }
+
+    return result;
   }
 
   /**
@@ -522,6 +577,18 @@ export class BookingsService {
         },
       },
     });
+
+    // Notificar cancelación al usuario
+    this.notificationsService
+      .createNotification({
+        userId,
+        clubId,
+        title: 'Reserva cancelada',
+        message: `Tu reserva en ${booking.facility.name} ha sido cancelada.`,
+        type: NotificationType.BOOKING_CANCELLED,
+        metadata: { bookingId: booking.id },
+      })
+      .catch(() => null);
 
     return this.mapToResponse(updated);
   }

@@ -23,7 +23,14 @@ export default withNativeFederation({
     .patch(['@angular/*'], { includeSecondaries: { keepAll: true } })
     .get(),
 
-  skip: ['rxjs/ajax', 'rxjs/fetch', 'rxjs/testing', 'rxjs/webSocket'],
+  skip: [
+    'rxjs/ajax',
+    'rxjs/fetch',
+    'rxjs/testing',
+    'rxjs/webSocket',
+    'socket.io-client',
+    'zone.js',
+  ],
 
   features: {
     denseChunking: true,

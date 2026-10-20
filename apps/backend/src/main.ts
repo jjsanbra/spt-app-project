@@ -16,6 +16,7 @@ async function bootstrap() {
 
   // ─── Seguridad ─────────────────────────────────────────────
   app.use(helmet());
+  app.getHttpAdapter().getInstance().set('etag', false);
 
   // ─── CORS ──────────────────────────────────────────────────
   const defaultOrigins = 'http://localhost:4200,http://localhost:4201,http://localhost:4202,http://localhost:4203';

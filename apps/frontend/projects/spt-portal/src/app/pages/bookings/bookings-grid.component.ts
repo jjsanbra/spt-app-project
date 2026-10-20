@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -45,6 +45,7 @@ export class BookingsGridComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly translate = inject(TranslateService);
   private readonly router = inject(Router);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   loading = false;
   bookingInProgress = false;
@@ -94,6 +95,7 @@ export class BookingsGridComponent implements OnInit {
 
   loadAvailability(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.facilitiesService
       .facilitiesControllerGetAvailability({
         date: this.selectedDate,
@@ -103,10 +105,12 @@ export class BookingsGridComponent implements OnInit {
         next: (data) => {
           this.facilitiesAvailability = data;
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.notify.error('ERRORS.SERVER_ERROR');
           this.loading = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -131,18 +135,21 @@ export class BookingsGridComponent implements OnInit {
       notes: '',
     });
     this.displayConfirmModal = true;
+    this.cdr.markForCheck();
   }
 
   closeConfirmModal(): void {
     this.displayConfirmModal = false;
     this.selectedFacility = null;
     this.selectedSlot = null;
+    this.cdr.markForCheck();
   }
 
   confirmBooking(): void {
     if (!this.selectedFacility || !this.selectedSlot) return;
 
     this.bookingInProgress = true;
+    this.cdr.markForCheck();
     const formVal = this.bookingForm.value;
 
     this.bookingsService
@@ -158,6 +165,7 @@ export class BookingsGridComponent implements OnInit {
           this.notify.success('PORTAL.BOOKINGS.SUCCESS_CREATE');
           this.bookingInProgress = false;
           this.displayConfirmModal = false;
+          this.cdr.markForCheck();
           this.router.navigate(['/portal/my-bookings']);
         },
         error: (err) => {
@@ -169,6 +177,7 @@ export class BookingsGridComponent implements OnInit {
           } else {
             this.notify.error('ERRORS.SERVER_ERROR');
           }
+          this.cdr.markForCheck();
         },
       });
   }

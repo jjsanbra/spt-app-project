@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -40,6 +40,7 @@ export class PricingListComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   pricingRules: PricingRuleResponseDto[] = [];
   loading = false;
@@ -65,14 +66,17 @@ export class PricingListComponent implements OnInit {
 
   loadPricingRules(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.pricingService.pricingControllerFindAll().subscribe({
       next: (data) => {
         this.pricingRules = data;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
         this.notify.error('ERRORS.NETWORK');
+        this.cdr.markForCheck();
       },
     });
   }
@@ -95,6 +99,7 @@ export class PricingListComponent implements OnInit {
       isPeakHour: false,
     });
     this.displayModal = true;
+    this.cdr.markForCheck();
   }
 
   openEditModal(rule: PricingRuleResponseDto): void {
@@ -111,6 +116,7 @@ export class PricingListComponent implements OnInit {
       isPeakHour: rule.isPeakHour,
     });
     this.displayModal = true;
+    this.cdr.markForCheck();
   }
 
   onSubmitModal(): void {
@@ -120,6 +126,7 @@ export class PricingListComponent implements OnInit {
     }
 
     this.saving = true;
+    this.cdr.markForCheck();
     const formValue = this.pricingForm.value;
 
     const payload = {
@@ -143,10 +150,12 @@ export class PricingListComponent implements OnInit {
             this.displayModal = false;
             this.notify.success('ADMIN.PRICING.SUCCESS_UPDATE');
             this.loadPricingRules();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.saving = false;
             this.notify.error('ERRORS.GENERIC');
+            this.cdr.markForCheck();
           },
         });
     } else {
@@ -156,10 +165,12 @@ export class PricingListComponent implements OnInit {
           this.displayModal = false;
           this.notify.success('ADMIN.PRICING.SUCCESS_CREATE');
           this.loadPricingRules();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.saving = false;
           this.notify.error('ERRORS.GENERIC');
+          this.cdr.markForCheck();
         },
       });
     }
@@ -174,9 +185,11 @@ export class PricingListComponent implements OnInit {
           next: () => {
             this.notify.info('ADMIN.PRICING.SUCCESS_DELETE');
             this.loadPricingRules();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.notify.error('ERRORS.GENERIC');
+            this.cdr.markForCheck();
           },
         });
       },

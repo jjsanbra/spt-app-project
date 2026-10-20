@@ -1,0 +1,209 @@
+@use "../../../styles/base/responsive" as *;
+
+
+.notification-bell-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .bell-button {
+    position: relative;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
+    color: var(--text-color);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    &:hover {
+      background-color: var(--surface-muted);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    .bell-icon {
+      font-size: var(--font-size-lg);
+    }
+
+    .bell-badge {
+      position: absolute;
+      top: -0.15rem;
+      right: -0.15rem;
+    }
+  }
+}
+
+:host ::ng-deep .notification-popover {
+  .p-popover-content {
+    padding: 0;
+  }
+}
+
+.popover-content {
+  width: 22rem;
+  max-width: 90vw;
+  background-color: var(--surface-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+
+  @include mobile {
+    width: 19rem;
+  }
+}
+
+.popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--surface-pure);
+
+  .header-title-box {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+
+    .header-title {
+      font-size: var(--font-size-base);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-color);
+    }
+  }
+}
+
+.notifications-list {
+  max-height: 24rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.notifications-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xl);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+
+  .loading-spinner {
+    font-size: var(--font-size-lg);
+  }
+}
+
+.notifications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  gap: var(--spacing-sm);
+  color: var(--text-muted);
+
+  .empty-icon-wrap {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+    background-color: var(--surface-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-xl);
+    color: var(--text-muted);
+  }
+
+  .empty-text {
+    margin: 0;
+    font-size: var(--font-size-sm);
+    text-align: center;
+  }
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: 1px solid var(--border-subtle);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  position: relative;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:hover {
+    background-color: var(--surface-muted);
+  }
+
+  &.is-unread {
+    background-color: rgba(var(--primary-rgb, 59, 130, 246), 0.05);
+
+    .item-title {
+      font-weight: var(--font-weight-bold);
+    }
+  }
+
+  .item-icon-box {
+    margin-top: 0.2rem;
+    font-size: var(--font-size-md);
+    flex-shrink: 0;
+  }
+
+  .item-content {
+    flex: 1;
+    min-width: 0;
+
+    .item-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: var(--spacing-xs);
+      margin-bottom: var(--spacing-2xs);
+
+      .item-title {
+        font-size: var(--font-size-sm);
+        color: var(--text-color);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .item-time {
+        font-size: var(--font-size-2xs);
+        color: var(--text-muted);
+        flex-shrink: 0;
+      }
+    }
+
+    .item-message {
+      margin: 0;
+      font-size: var(--font-size-xs);
+      color: var(--text-muted);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  }
+
+  .unread-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: var(--radius-full);
+    background-color: var(--primary-color);
+    flex-shrink: 0;
+    margin-top: 0.4rem;
+  }
+}

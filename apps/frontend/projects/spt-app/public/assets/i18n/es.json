@@ -391,5 +391,86 @@
       "SUCCESS_LEAVE": "Has abandonado el partido correctamente",
       "PAYMENT_NOTICE": "Abonarás tu plaza individualmente en recepción antes de jugar."
     }
+  },
+  "NOTIFICATIONS": {
+    "TITLE": "Notificaciones",
+    "EMPTY": "No tienes notificaciones pendientes",
+    "MARK_ALL_READ": "Marcar todas como leídas",
+    "MARK_READ": "Marcar como leída",
+    "UNREAD_COUNT": "{{ count }} nuevas",
+    "JUST_NOW": "Ahora mismo",
+    "MINUTES_AGO": "Hace {{ min }} min",
+    "HOURS_AGO": "Hace {{ hours }} h",
+    "DAYS_AGO": "Hace {{ days }} d",
+    "NEW_NOTIFICATION_RECEIVED": "Nueva notificación recibida",
+    "TYPES": {
+      "BOOKING_CONFIRMED": "Reserva confirmada",
+      "BOOKING_CANCELLED": "Reserva cancelada",
+      "OPEN_GAME_JOINED": "Nuevo jugador",
+      "OPEN_GAME_COMPLETE": "Partida completa",
+      "PAYMENT_RECEIVED": "Pago recibido",
+      "SYSTEM": "Aviso del sistema"
+    }
+  },
+  "SUPERADMIN": {
+    "TITLE": "Administración Global",
+    "NAV_LINK": "SuperAdmin",
+    "CLUBS": {
+      "TITLE": "Gestión Global de Clubes",
+      "SUBTITLE": "Directorio de inquilinos, alta de centros deportivos y supervisión de la plataforma",
+      "NEW_CLUB_BTN": "Nuevo Club",
+      "SEARCH_PLACEHOLDER": "Buscar por nombre, slug o ciudad...",
+      "STATUS_ALL": "Todos los estados",
+      "STATUS_ACTIVE": "Activos",
+      "STATUS_INACTIVE": "Inactivos",
+      "EMPTY": "No se encontraron clubes registrados.",
+      "TABLE": {
+        "NAME": "Centro Deportivo",
+        "SLUG": "Slug / URL",
+        "CITY": "Ciudad",
+        "PAYMENT_MODE": "Modalidad de Cobro",
+        "FACILITIES": "Pistas",
+        "MEMBERS": "Socios",
+        "STATUS": "Estado",
+        "ACTIONS": "Acciones"
+      },
+      "MODAL": {
+        "TITLE_NEW": "Dar de Alta Nuevo Club",
+        "TITLE_EDIT": "Editar Centro Deportivo",
+        "BASIC_INFO": "Información General",
+        "NAME": "Nombre del Club",
+        "NAME_PLACEHOLDER": "Ej: Club Deportivo Las Rozas",
+        "SLUG": "Slug Único (URL)",
+        "SLUG_PLACEHOLDER": "ej: las-rozas-padel",
+        "EMAIL": "Email Oficial",
+        "EMAIL_PLACEHOLDER": "info@club.com",
+        "PHONE": "Teléfono",
+        "ADDRESS": "Dirección",
+        "CITY": "Ciudad",
+        "POSTAL_CODE": "Código Postal",
+        "SCHEDULE_TITLE": "Horarios y Configuración",
+        "OPENING_HOUR": "Hora de Apertura",
+        "CLOSING_HOUR": "Hora de Cierre",
+        "SLOT_DURATION": "Duración de Franja (min)",
+        "PAYMENT_MODE": "Modo de Pago",
+        "OWNER_TITLE": "Asignación de Propietario (Opcional)",
+        "OWNER_EMAIL": "Email del Propietario (OWNER)",
+        "OWNER_EMAIL_PLACEHOLDER": "owner@club.com",
+        "CANCEL": "Cancelar",
+        "SAVE": "Crear Club",
+        "SAVE_EDIT": "Guardar Cambios"
+      },
+      "CONFIRM_TOGGLE_TITLE": "Cambiar Estado del Club",
+      "CONFIRM_DEACTIVATE_TITLE": "Desactivar Centro Deportivo",
+      "CONFIRM_ACTIVATE_TITLE": "Activar Centro Deportivo",
+      "TOOLTIP_DEACTIVATE": "Desactivar club (bloquear reservas)",
+      "TOOLTIP_ACTIVATE": "Reactivar club (permitir reservas)",
+      "CONFIRM_DEACTIVATE_MSG": "¿Estás seguro de que deseas desactivar el club {{name}}? Sus pistas quedarán temporalmente bloqueadas para reservas.",
+      "CONFIRM_ACTIVATE_MSG": "¿Deseas reactivar el club {{name}}?",
+      "SUCCESS_CREATE": "¡Centro deportivo dado de alta exitosamente!",
+      "SUCCESS_UPDATE": "Centro deportivo actualizado correctamente",
+      "SUCCESS_TOGGLE": "Estado del centro deportivo actualizado"
+    }
   }
 }
+

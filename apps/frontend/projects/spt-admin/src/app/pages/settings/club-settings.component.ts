@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -35,6 +35,7 @@ export class ClubSettingsComponent implements OnInit {
   private readonly clubsSettingsService = inject(ClubsSettingsService);
   private readonly notify = inject(NotificationService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   loading = false;
   saving = false;
@@ -98,6 +99,7 @@ export class ClubSettingsComponent implements OnInit {
 
   loadSettings(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.clubsSettingsService.clubsControllerGetSettings().subscribe({
       next: (data) => {
         this.club = data;
@@ -116,10 +118,12 @@ export class ClubSettingsComponent implements OnInit {
           paymentMode: data.paymentMode,
         });
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.notify.error('ERRORS.SERVER_ERROR');
         this.loading = false;
+        this.cdr.markForCheck();
       },
     });
   }
@@ -137,6 +141,7 @@ export class ClubSettingsComponent implements OnInit {
     }
 
     this.saving = true;
+    this.cdr.markForCheck();
     this.clubsSettingsService
       .clubsControllerUpdateSettings({
         name: formVal.name.trim(),
@@ -157,6 +162,7 @@ export class ClubSettingsComponent implements OnInit {
           this.club = updated;
           this.notify.success('ADMIN.SETTINGS.SUCCESS_UPDATE');
           this.saving = false;
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.saving = false;
@@ -165,6 +171,7 @@ export class ClubSettingsComponent implements OnInit {
           } else {
             this.notify.error('ERRORS.SERVER_ERROR');
           }
+          this.cdr.markForCheck();
         },
       });
   }

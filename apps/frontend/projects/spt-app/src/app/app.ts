@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { NotificationBellComponent } from './layout/notification-bell/notification-bell.component';
 
 @Component({
   selector: 'app-root',
@@ -22,8 +22,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
     TagModule,
     ToastModule,
     ConfirmDialogModule,
+    NotificationBellComponent,
   ],
-  providers: [MessageService, ConfirmationService],
   templateUrl: './app.html',
   styleUrls: ['./app.scss'],
 })

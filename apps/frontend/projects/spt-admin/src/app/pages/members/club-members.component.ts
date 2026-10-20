@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -40,6 +40,7 @@ export class ClubMembersComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   members: ClubMemberResponseDto[] = [];
   loading = false;
@@ -87,6 +88,7 @@ export class ClubMembersComponent implements OnInit {
 
   loadMembers(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.membersService
       .clubsMembersControllerFindAll({
         role: this.selectedRoleFilter ?? undefined,
@@ -96,10 +98,12 @@ export class ClubMembersComponent implements OnInit {
         next: (data) => {
           this.members = data;
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.notify.error('ERRORS.SERVER_ERROR');
           this.loading = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -120,10 +124,12 @@ export class ClubMembersComponent implements OnInit {
       memberNumber: '',
     });
     this.displayInviteModal = true;
+    this.cdr.markForCheck();
   }
 
   closeInviteModal(): void {
     this.displayInviteModal = false;
+    this.cdr.markForCheck();
   }
 
   submitInvite(): void {
@@ -133,6 +139,7 @@ export class ClubMembersComponent implements OnInit {
     }
 
     this.saving = true;
+    this.cdr.markForCheck();
     const formValue = this.inviteForm.value;
 
     this.membersService
@@ -147,6 +154,7 @@ export class ClubMembersComponent implements OnInit {
           this.saving = false;
           this.displayInviteModal = false;
           this.loadMembers();
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.saving = false;
@@ -155,6 +163,7 @@ export class ClubMembersComponent implements OnInit {
           } else {
             this.notify.error('ERRORS.SERVER_ERROR');
           }
+          this.cdr.markForCheck();
         },
       });
   }
@@ -165,17 +174,20 @@ export class ClubMembersComponent implements OnInit {
       role: member.role,
     });
     this.displayRoleModal = true;
+    this.cdr.markForCheck();
   }
 
   closeRoleModal(): void {
     this.displayRoleModal = false;
     this.selectedMember = null;
+    this.cdr.markForCheck();
   }
 
   submitRoleChange(): void {
     if (!this.selectedMember || this.roleForm.invalid) return;
 
     this.saving = true;
+    this.cdr.markForCheck();
     const newRole = this.roleForm.value.role;
 
     this.membersService
@@ -187,6 +199,7 @@ export class ClubMembersComponent implements OnInit {
           this.displayRoleModal = false;
           this.selectedMember = null;
           this.loadMembers();
+          this.cdr.markForCheck();
         },
         error: (err) => {
           this.saving = false;
@@ -195,6 +208,7 @@ export class ClubMembersComponent implements OnInit {
           } else {
             this.notify.error('ERRORS.SERVER_ERROR');
           }
+          this.cdr.markForCheck();
         },
       });
   }
@@ -221,6 +235,7 @@ export class ClubMembersComponent implements OnInit {
         next: () => {
           this.notify.success('ADMIN.MEMBERS.SUCCESS_STATUS_UPDATE');
           this.loadMembers();
+          this.cdr.markForCheck();
         },
         error: (err) => {
           if (err.status === 400) {
@@ -228,6 +243,7 @@ export class ClubMembersComponent implements OnInit {
           } else {
             this.notify.error('ERRORS.SERVER_ERROR');
           }
+          this.cdr.markForCheck();
         },
       });
   }
@@ -241,6 +257,7 @@ export class ClubMembersComponent implements OnInit {
           next: () => {
             this.notify.success('ADMIN.MEMBERS.SUCCESS_DELETE');
             this.loadMembers();
+            this.cdr.markForCheck();
           },
           error: (err) => {
             if (err.status === 400) {
@@ -248,6 +265,7 @@ export class ClubMembersComponent implements OnInit {
             } else {
               this.notify.error('ERRORS.SERVER_ERROR');
             }
+            this.cdr.markForCheck();
           },
         });
       },

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -37,6 +37,7 @@ export class FacilityBlocksComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   facilityId!: string;
   facilityName = '';
@@ -64,20 +65,24 @@ export class FacilityBlocksComponent implements OnInit {
     this.facilitiesService.facilitiesControllerFindOne(this.facilityId).subscribe({
       next: (facility) => {
         this.facilityName = facility.name;
+        this.cdr.markForCheck();
       },
     });
   }
 
   loadBlocks(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     this.facilitiesService.facilitiesControllerFindBlocks(this.facilityId).subscribe({
       next: (data) => {
         this.blocks = data;
         this.loading = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.loading = false;
         this.notify.error('ERRORS.NETWORK');
+        this.cdr.markForCheck();
       },
     });
   }
@@ -90,6 +95,7 @@ export class FacilityBlocksComponent implements OnInit {
       endTime: '',
     });
     this.displayModal = true;
+    this.cdr.markForCheck();
   }
 
   onSubmitBlock(): void {
@@ -106,6 +112,7 @@ export class FacilityBlocksComponent implements OnInit {
     }
 
     this.saving = true;
+    this.cdr.markForCheck();
     this.facilitiesService
       .facilitiesControllerCreateBlock(this.facilityId, {
         title,
@@ -119,10 +126,12 @@ export class FacilityBlocksComponent implements OnInit {
           this.displayModal = false;
           this.notify.success('ADMIN.BLOCKS.SUCCESS_CREATE');
           this.loadBlocks();
+          this.cdr.markForCheck();
         },
         error: () => {
           this.saving = false;
           this.notify.error('ERRORS.GENERIC');
+          this.cdr.markForCheck();
         },
       });
   }
@@ -138,9 +147,11 @@ export class FacilityBlocksComponent implements OnInit {
             next: () => {
               this.notify.info('ADMIN.BLOCKS.SUCCESS_DELETE');
               this.loadBlocks();
+              this.cdr.markForCheck();
             },
             error: () => {
               this.notify.error('ERRORS.GENERIC');
+              this.cdr.markForCheck();
             },
           });
       },

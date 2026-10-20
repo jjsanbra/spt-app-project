@@ -68,7 +68,7 @@
               }
             ],
             "styles": ["projects/spt-app/src/styles.scss"],
-            "polyfills": ["es-module-shims"]
+            "polyfills": ["es-module-shims", "zone.js"]
           },
           "configurations": {
             "production": {
@@ -173,7 +173,7 @@
               }
             ],
             "styles": ["projects/spt-admin/src/styles.scss"],
-            "polyfills": ["es-module-shims"]
+            "polyfills": ["es-module-shims", "zone.js"]
           },
           "configurations": {
             "production": {
@@ -278,7 +278,7 @@
               }
             ],
             "styles": ["projects/spt-portal/src/styles.scss"],
-            "polyfills": ["es-module-shims"]
+            "polyfills": ["es-module-shims", "zone.js"]
           },
           "configurations": {
             "production": {
@@ -383,7 +383,7 @@
               }
             ],
             "styles": ["projects/spt-users/src/styles.scss"],
-            "polyfills": ["es-module-shims"]
+            "polyfills": ["es-module-shims", "zone.js"]
           },
           "configurations": {
             "production": {

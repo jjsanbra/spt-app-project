@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
   private readonly usersService = inject(UsersService);
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   profileForm: FormGroup = this.fb.group({
     email: [{ value: '', disabled: true }],
@@ -82,6 +83,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.loading = true;
+    this.cdr.markForCheck();
     const { firstName, lastName, phone } = this.profileForm.value;
 
     this.usersService
@@ -99,6 +101,7 @@ export class ProfileComponent implements OnInit {
             summary: this.translate.instant('APP.NAME'),
             detail: this.translate.instant('USERS.UPDATE_SUCCESS'),
           });
+          this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
@@ -107,6 +110,7 @@ export class ProfileComponent implements OnInit {
             summary: this.translate.instant('ERRORS.GENERIC'),
             detail: this.translate.instant('ERRORS.GENERIC'),
           });
+          this.cdr.markForCheck();
         },
       });
   }

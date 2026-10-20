@@ -11,6 +11,8 @@ import { FacilitiesModule } from './facilities/facilities.module';
 import { PricingModule } from './pricing/pricing.module';
 import { ClubsModule } from './clubs/clubs.module';
 import { BookingsModule } from './bookings/bookings.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { SuperAdminModule } from './superadmin/superadmin.module';
 
 /**
  * AppModule — Módulo raíz de la aplicación SPT Backend.
@@ -45,9 +47,8 @@ import { BookingsModule } from './bookings/bookings.module';
     PricingModule,
     ClubsModule,
     BookingsModule,
-
-    // NotificationsModule, <- Fase 6
-    // SuperadminModule,    <- Fase 7
+    NotificationsModule,
+    SuperAdminModule,
   ],
 })
 export class AppModule {}

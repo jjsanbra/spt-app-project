@@ -4,14 +4,15 @@ import {
   HttpHandlerFn,
   HttpRequest,
 } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { catchError, Observable, switchMap, throwError } from 'rxjs';
+import { ApplicationRef, inject } from '@angular/core';
+import { catchError, finalize, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 export function authInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
+  const appRef = inject(ApplicationRef);
   const authService = inject(AuthService);
   const token = authService.getAccessToken();
   const activeClubId = authService.getActiveClubId();
@@ -54,6 +55,15 @@ export function authInterceptor(
       }
 
       return throwError(() => error);
+    }),
+    finalize(() => {
+      setTimeout(() => {
+        try {
+          appRef.tick();
+        } catch {
+          // No-op si el ciclo de detección ya está en curso o el componente fue destruido
+        }
+      }, 0);
     }),
   );
 }

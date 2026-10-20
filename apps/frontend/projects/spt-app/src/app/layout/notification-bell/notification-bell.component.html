@@ -1,0 +1,99 @@
+<div class="notification-bell-container">
+  <!-- Botón de Campana con Badge -->
+  <button
+    type="button"
+    pButton
+    [text]="true"
+    [rounded]="true"
+    severity="secondary"
+    class="bell-button"
+    (click)="op.toggle($event)"
+    [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+  >
+    <i class="pi pi-bell bell-icon"></i>
+    @if (unreadCount() > 0) {
+      <p-badge
+        class="bell-badge"
+        [value]="unreadCount().toString()"
+        severity="danger"
+        size="small"
+      ></p-badge>
+    }
+  </button>
+
+  <!-- Panel Desplegable (Popover) -->
+  <p-popover #op styleClass="notification-popover">
+    <div class="popover-content">
+      <!-- Cabecera del Panel -->
+      <div class="popover-header">
+        <div class="header-title-box">
+          <span class="header-title">{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
+          @if (unreadCount() > 0) {
+            <p-badge
+              class="unread-pill"
+              [value]="unreadCount().toString()"
+              severity="warn"
+            ></p-badge>
+          }
+        </div>
+
+        @if (unreadCount() > 0) {
+          <button
+            type="button"
+            pButton
+            [text]="true"
+            size="small"
+            severity="primary"
+            icon="pi pi-check-double"
+            (click)="onMarkAllAsRead()"
+          >
+            {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+          </button>
+        }
+      </div>
+
+      <!-- Lista de Notificaciones -->
+      <div class="notifications-list">
+        @if (isLoading()) {
+          <div class="notifications-loading">
+            <i class="pi pi-spin pi-spinner loading-spinner"></i>
+            <span>{{ 'APP.LOADING' | translate }}</span>
+          </div>
+        } @else if (notifications().length === 0) {
+          <div class="notifications-empty">
+            <div class="empty-icon-wrap">
+              <i class="pi pi-bell-slash"></i>
+            </div>
+            <p class="empty-text">{{ 'NOTIFICATIONS.EMPTY' | translate }}</p>
+          </div>
+        } @else {
+          @for (notif of notifications(); track notif.id) {
+            <div
+              class="notification-item"
+              [class.is-unread]="!notif.isRead"
+              (click)="onMarkAsRead(notif)"
+              role="button"
+              tabindex="0"
+            >
+              <div class="item-icon-box">
+                <i [class]="getNotificationIcon(notif.type)"></i>
+              </div>
+
+              <div class="item-content">
+                <div class="item-header">
+                  <span class="item-title">{{ notif.title }}</span>
+                  <span class="item-time">{{ formatTime(notif.createdAt) }}</span>
+                </div>
+                <p class="item-message">{{ notif.message }}</p>
+              </div>
+
+              @if (!notif.isRead) {
+                <span class="unread-dot" [title]="'NOTIFICATIONS.MARK_READ' | translate"></span>
+              }
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </p-popover>
+</div>

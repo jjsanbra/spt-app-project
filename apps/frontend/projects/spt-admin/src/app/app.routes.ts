@@ -43,4 +43,12 @@ export const routes: Routes = [
         (m) => m.ClubSettingsComponent,
       ),
   },
+  {
+    path: 'superadmin/clubs',
+    loadComponent: () =>
+      import('./pages/superadmin/clubs/superadmin-clubs.component').then(
+        (m) => m.SuperAdminClubsComponent,
+      ),
+  },
 ];
+

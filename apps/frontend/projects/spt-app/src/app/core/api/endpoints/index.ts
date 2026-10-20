@@ -4,5 +4,7 @@ export * from './clubs-members/clubs-members.service';
 export * from './clubs-settings/clubs-settings.service';
 export * from './facilities/facilities.service';
 export * from './health/health.service';
+export * from './notifications/notifications.service';
 export * from './pricing/pricing.service';
+export * from './superadmin-clubs/superadmin-clubs.service';
 export * from './users/users.service';

@@ -51,6 +51,17 @@
             </a>
           }
 
+          @if (authService.isSuperAdmin()) {
+            <a
+              routerLink="/admin/superadmin/clubs"
+              routerLinkActive="active-nav-link"
+              class="nav-link"
+            >
+              <i class="pi pi-globe"></i>
+              <span>{{ 'SUPERADMIN.NAV_LINK' | translate }}</span>
+            </a>
+          }
+
           <a
             routerLink="/profile"
             routerLinkActive="active-nav-link"
@@ -76,6 +87,8 @@
               </span>
             }
           </div>
+
+          <app-notification-bell></app-notification-bell>
 
           <button
             type="button"

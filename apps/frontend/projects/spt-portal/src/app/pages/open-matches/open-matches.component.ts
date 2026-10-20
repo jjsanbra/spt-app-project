@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -36,6 +36,7 @@ export class OpenMatchesComponent implements OnInit {
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   matches: OpenMatchResponseDto[] = [];
   loading = false;
@@ -68,6 +69,7 @@ export class OpenMatchesComponent implements OnInit {
 
   loadMatches(): void {
     this.loading = true;
+    this.cdr.markForCheck();
     const sportParam = this.selectedSport === 'ALL' ? undefined : (this.selectedSport as SportType);
 
     this.bookingsService
@@ -79,10 +81,12 @@ export class OpenMatchesComponent implements OnInit {
         next: (data) => {
           this.matches = data;
           this.loading = false;
+          this.cdr.markForCheck();
         },
         error: () => {
           this.notify.error('ERRORS.SERVER_ERROR');
           this.loading = false;
+          this.cdr.markForCheck();
         },
       });
   }
@@ -121,6 +125,7 @@ export class OpenMatchesComponent implements OnInit {
           next: () => {
             this.notify.success('PORTAL.OPEN_MATCHES.SUCCESS_JOIN');
             this.loadMatches();
+            this.cdr.markForCheck();
           },
           error: (err) => {
             if (err?.status === 409) {
@@ -128,6 +133,7 @@ export class OpenMatchesComponent implements OnInit {
             } else {
               this.notify.error('ERRORS.SERVER_ERROR');
             }
+            this.cdr.markForCheck();
           },
         });
       },
@@ -144,9 +150,11 @@ export class OpenMatchesComponent implements OnInit {
           next: () => {
             this.notify.success('PORTAL.OPEN_MATCHES.SUCCESS_LEAVE');
             this.loadMatches();
+            this.cdr.markForCheck();
           },
           error: () => {
             this.notify.error('ERRORS.SERVER_ERROR');
+            this.cdr.markForCheck();
           },
         });
       },
