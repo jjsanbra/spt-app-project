@@ -58,6 +58,18 @@
             </div>
           </div>
         </a>
+
+        <a routerLink="/admin/settings" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-cog"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'ADMIN.SETTINGS.TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'ADMIN.SETTINGS.SUBTITLE' | translate }}</p>
+            </div>
+          </div>
+        </a>
       </div>
 
       <div class="quick-actions">
@@ -74,6 +86,11 @@
         <a routerLink="/admin/members">
           <button type="button" pButton icon="pi pi-users" severity="secondary" [outlined]="true">
             {{ 'ADMIN.MEMBERS.TITLE' | translate }}
+          </button>
+        </a>
+        <a routerLink="/admin/settings">
+          <button type="button" pButton icon="pi pi-cog" severity="secondary" [outlined]="true">
+            {{ 'ADMIN.SETTINGS.TITLE' | translate }}
           </button>
         </a>
         <a routerLink="/profile">

@@ -1,5 +1,6 @@
 export * from './auth/auth.service';
 export * from './clubs-members/clubs-members.service';
+export * from './clubs-settings/clubs-settings.service';
 export * from './facilities/facilities.service';
 export * from './health/health.service';
 export * from './pricing/pricing.service';

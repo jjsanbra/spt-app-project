@@ -835,6 +835,88 @@
         ]
       }
     },
+    "/api/v1/clubs/settings": {
+      "get": {
+        "operationId": "ClubsController_getSettings",
+        "summary": "Obtener configuración y horarios del club activo",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubSettingsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Settings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "operationId": "ClubsController_updateSettings",
+        "summary": "Actualizar configuración, horarios y modo de pago del club activo",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateClubSettingsDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubSettingsResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Settings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/clubs/members": {
       "get": {
         "operationId": "ClubsMembersController_findAll",
@@ -1988,6 +2070,171 @@
             "example": 1,
             "default": 1,
             "description": "Prioridad de evaluación de la regla (mayor número = mayor precedencia)"
+          }
+        }
+      },
+      "ClubSettingsResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "888e4567-e89b-12d3-a456-426614174000"
+          },
+          "name": {
+            "type": "string",
+            "example": "Club Pádel Pro Madrid"
+          },
+          "slug": {
+            "type": "string",
+            "example": "padel-pro-madrid"
+          },
+          "description": {
+            "type": "object",
+            "example": "Centro deportivo de alto rendimiento",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "example": "info@padelpromadrid.es"
+          },
+          "phone": {
+            "type": "object",
+            "example": "+34910000000",
+            "nullable": true
+          },
+          "address": {
+            "type": "object",
+            "example": "Calle de los Deportes 12",
+            "nullable": true
+          },
+          "city": {
+            "type": "object",
+            "example": "Madrid",
+            "nullable": true
+          },
+          "postalCode": {
+            "type": "object",
+            "example": "28001",
+            "nullable": true
+          },
+          "openingHour": {
+            "type": "number",
+            "example": 8,
+            "description": "Hora de apertura (0 a 23)"
+          },
+          "closingHour": {
+            "type": "number",
+            "example": 23,
+            "description": "Hora de cierre (1 a 24)"
+          },
+          "slotDurationMinutes": {
+            "type": "number",
+            "example": 60,
+            "description": "Duración por defecto de franjas en minutos"
+          },
+          "openGameMinNoticeHours": {
+            "type": "number",
+            "example": 2,
+            "description": "Horas mínimas de antelación para partidas abiertas"
+          },
+          "paymentMode": {
+            "type": "string",
+            "enum": [
+              "PRESENTIAL",
+              "ONLINE",
+              "HYBRID"
+            ],
+            "example": "PRESENTIAL"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "email",
+          "openingHour",
+          "closingHour",
+          "slotDurationMinutes",
+          "openGameMinNoticeHours",
+          "paymentMode",
+          "isActive",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "UpdateClubSettingsDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Club Pádel Pro Madrid"
+          },
+          "description": {
+            "type": "string",
+            "example": "El mejor club de pádel"
+          },
+          "email": {
+            "type": "string",
+            "example": "contacto@club.com"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+34910000000"
+          },
+          "address": {
+            "type": "string",
+            "example": "Calle Mayor 10"
+          },
+          "city": {
+            "type": "string",
+            "example": "Madrid"
+          },
+          "postalCode": {
+            "type": "string",
+            "example": "28001"
+          },
+          "openingHour": {
+            "type": "number",
+            "example": 8,
+            "description": "Hora de apertura (0 a 23)"
+          },
+          "closingHour": {
+            "type": "number",
+            "example": 23,
+            "description": "Hora de cierre (1 a 24)"
+          },
+          "slotDurationMinutes": {
+            "type": "number",
+            "example": 60,
+            "description": "Duración por defecto de franjas"
+          },
+          "openGameMinNoticeHours": {
+            "type": "number",
+            "example": 2,
+            "description": "Antelación mínima para partidas abiertas (horas)"
+          },
+          "paymentMode": {
+            "type": "string",
+            "enum": [
+              "PRESENTIAL",
+              "ONLINE",
+              "HYBRID"
+            ],
+            "example": "PRESENTIAL"
           }
         }
       },

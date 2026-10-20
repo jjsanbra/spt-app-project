@@ -36,4 +36,11 @@ export const routes: Routes = [
         (m) => m.ClubMembersComponent,
       ),
   },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('./pages/settings/club-settings.component').then(
+        (m) => m.ClubSettingsComponent,
+      ),
+  },
 ];
