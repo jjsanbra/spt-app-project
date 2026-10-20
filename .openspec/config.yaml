@@ -1,7 +1,34 @@
-version: "1.0"
-project: spt-app-project
-description: "SaaS Multi-tenant para gestión de reservas de centros deportivos"
-created_at: "2026-10-19"
+name: spt-app-project
+version: 1.0.0
+description: "SaaS Multi-tenant para gestión de reservas de centros deportivos — Monorepo Angular Microfrontends & NestJS API"
+schema: spec-driven-delivery
+
+context: |
+  Ecosistema: Monorepo Angular 22 con Native Federation (4 aplicaciones: Shell Host, Admin, Portal, Users) + Backend NestJS 10 con Prisma ORM sobre PostgreSQL 16 y Redis/BullMQ.
+  Arquitectura: Spec-Driven Development (SDD) con especificaciones OpenSpec, contratos OpenAPI 3.0 exportados desde NestJS Swagger y generación estricta de tipos y clientes con Orval en la capa compartida (@core).
+  Multi-Tenancy: Estrategia Row-Level Security con clave foránea club_id e inyección obligatoria de cabecera x-tenant-id validada contra ClubMembership.
+  Idioma: Todos los artefactos generados (propuestas, diseños técnicos, especificaciones y tareas) deben estar redactados en español.
+  Control de Versiones: Regla estricta: NUNCA hacer commit ni push a Git salvo que el usuario lo solicite de manera expresa y explícita.
+  Estilos & UI: PrimeNG con directiva pButton obligatoria (prohibido <button> nativo), TailwindCSS, tokens de _variables.scss, mixins de _responsive.scss y ngx-translate en todos los textos.
+
+tech_stack:
+  backend:
+    framework: nestjs-10
+    runtime: node-v22
+    database: postgresql-16
+    orm: prisma-5
+    queue: redis-7-bullmq
+    documentation: openapi-3.0
+    swagger_path: ./apps/backend/src/main.ts
+    spec_export: ./apps/backend/openapi.json
+  frontend:
+    framework: angular-22
+    architecture: microfrontends-native-federation
+    ui_library: primeng-v22
+    styling: tailwindcss-and-scss-tokens
+    i18n: ngx-translate
+    shared_core: ./libs/core
+    code_generator: orval
 
 # Convenciones de nombres para cambios
 naming_convention: "kebab-case"
@@ -16,3 +43,96 @@ commit_prefixes:
   - docs      # Documentación
   - chore     # Mantenimiento
   - perf      # Mejora de rendimiento
+
+# Estrategia de actualización de documentación al archivar cambios
+doc_refresh:
+  strategy: docs-dir
+  output_dir: docs/
+  catalog_file: docs/architecture-capabilities.md
+
+# Reglas operativas para los artefactos generados por la IA
+rules:
+  git:
+    - NUNCA ejecutar `git commit` ni `git push` automáticamente.
+    - Mantener siempre los cambios en el working tree local y esperar la orden expresa del usuario para commitear o subir a remoto.
+  proposal:
+    - Describir claramente el problema de negocio y la solución funcional propuesta
+    - Incluir criterios de aceptación medibles y numerados (CA-01, CA-02, etc.)
+    - Redactar siempre en español
+  design:
+    - Detallar los contratos de datos y endpoints nuevos o modificados en OpenAPI 3.0 / DTOs
+    - Incluir diagramas Mermaid para relaciones de datos o flujos de estado
+    - Documentar evaluación de riesgo de base de datos y mitigaciones
+    - Especificar qué microfrontends y componentes se ven afectados
+    - Documentar decisiones técnicas clave y patrones arquitectónicos aplicados
+    - Redactar siempre en español
+  specs:
+    - Describir el comportamiento funcional desde la perspectiva del usuario o sistema
+    - Cada requerimiento debe incluir al menos un escenario de prueba BDD (Dado / Cuando / Entonces) o casos de uso
+    - Redactar siempre en español
+  tasks:
+    - Ordenar las tareas secuencialmente por dependencias técnicas (Backend/Prisma -> Swagger -> Orval -> Microfrontends)
+    - Cada tarea debe referenciar el requerimiento o criterio de aceptación que implementa
+    - Las tareas deben ser atómicas y verificables
+
+# Guía operativa para agentes de IA durante el ciclo de vida de un cambio
+operations:
+  planning:
+    guidance:
+      - Al iniciar una fase o cambio, ejecutar `node scripts/spec-new-change.js <kebab-name>`
+      - Redactar exhaustivamente `proposal.md`, `design.md`, `tasks.md` y `specs/<modulo>.spec.md`
+      - Presentar el plan al usuario y solicitar confirmación expresa antes de modificar código
+  apply:
+    guidance:
+      - Ejecutar las tareas de `tasks.md` en orden secuencial
+      - Tras cambios en entidades de Prisma: generar migración y cliente con `npx prisma generate`
+      - Tras cambios en endpoints: exportar swagger y regenerar clientes tipados con Orval
+      - Marcar tareas completadas en `tasks.md` conforme se van finalizando
+      - PROHIBIDO realizar commits o pushes automáticos durante o al final de la implementación
+  archive:
+    guidance:
+      - Verificar que todas las tareas estén completadas y la compilación (`npm run build:all` y `npm run build:backend`) pase con 0 errores
+      - Ejecutar `node scripts/spec-archive.js <kebab-name>` para mover la carpeta a `.openspec/archive/`
+      - NO hacer commit ni push del archivo a menos que el usuario lo solicite explícitamente
+
+modules:
+  - id: core-database
+    name: "Modelado de Dominio & Base de Datos Multi-tenant"
+    spec: specs/domain-modeling.spec.md
+    mfe: apps/backend
+    backend_routes: apps/backend/src/core/database
+  - id: auth
+    name: "Autenticación, JWT & Membresías Multi-club"
+    spec: specs/auth.spec.md
+    mfe: apps/frontend/projects/spt-users
+    backend_routes: apps/backend/src/modules/auth
+  - id: clubs
+    name: "Gestión de Clubes (Tenants) & Configuración"
+    spec: specs/clubs.spec.md
+    mfe: apps/frontend/projects/spt-admin
+    backend_routes: apps/backend/src/modules/clubs
+  - id: facilities
+    name: "Instalaciones, Pistas & Bloqueos de Mantenimiento"
+    spec: specs/facilities.spec.md
+    mfe: apps/frontend/projects/spt-admin
+    backend_routes: apps/backend/src/modules/facilities
+  - id: pricing
+    name: "Motor de Tarifas, Franjas Punta/Valle & Socios"
+    spec: specs/pricing.spec.md
+    mfe: apps/frontend/projects/spt-admin
+    backend_routes: apps/backend/src/modules/pricing
+  - id: bookings
+    name: "Motor de Reservas Completas & Partidas Abiertas"
+    spec: specs/bookings.spec.md
+    mfe: apps/frontend/projects/spt-portal
+    backend_routes: apps/backend/src/modules/bookings
+  - id: payments
+    name: "Cobros Presenciales (Mostrador/TPV), Monedero & Pasarelas"
+    spec: specs/payments.spec.md
+    mfe: apps/frontend/projects/spt-admin
+    backend_routes: apps/backend/src/modules/payments
+  - id: notifications
+    name: "Centro de Notificaciones (Email, Push, Alertas)"
+    spec: specs/notifications.spec.md
+    mfe: apps/frontend/projects/spt-app
+    backend_routes: apps/backend/src/modules/notifications
