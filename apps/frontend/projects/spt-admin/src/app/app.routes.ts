@@ -29,4 +29,11 @@ export const routes: Routes = [
         (m) => m.PricingListComponent,
       ),
   },
+  {
+    path: 'members',
+    loadComponent: () =>
+      import('./pages/members/club-members.component').then(
+        (m) => m.ClubMembersComponent,
+      ),
+  },
 ];

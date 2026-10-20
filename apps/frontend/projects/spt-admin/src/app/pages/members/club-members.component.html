@@ -1,0 +1,304 @@
+<div class="admin-page-container">
+  <!-- Cabecera de Página -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'ADMIN.MEMBERS.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'ADMIN.MEMBERS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-user-plus"
+        (click)="openInviteModal()"
+      >
+        {{ 'ADMIN.MEMBERS.INVITE_BTN' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de Filtros y Búsqueda -->
+  <div class="filters-bar">
+    <div class="search-input-wrapper">
+      <i class="pi pi-search search-icon"></i>
+      <input
+        type="text"
+        pInputText
+        [placeholder]="'ADMIN.MEMBERS.SEARCH_PLACEHOLDER' | translate"
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+        class="search-input"
+      />
+    </div>
+
+    <div class="role-filter-wrapper">
+      <p-select
+        [options]="filterRoleOptions"
+        [(ngModel)]="selectedRoleFilter"
+        (onChange)="onRoleFilterChange($event)"
+        optionLabel="label"
+        optionValue="value"
+        styleClass="role-select"
+      ></p-select>
+    </div>
+  </div>
+
+  <!-- Tabla de Miembros -->
+  <div class="table-card">
+    <p-table
+      [value]="members"
+      [loading]="loading"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'ADMIN.MEMBERS.COL_MEMBER' | translate }}</th>
+          <th>{{ 'ADMIN.MEMBERS.COL_ROLE' | translate }}</th>
+          <th>{{ 'ADMIN.MEMBERS.COL_MEMBER_NUMBER' | translate }}</th>
+          <th>{{ 'ADMIN.MEMBERS.COL_WALLET' | translate }}</th>
+          <th>{{ 'ADMIN.MEMBERS.COL_STATUS' | translate }}</th>
+          <th>{{ 'ADMIN.MEMBERS.COL_JOINED' | translate }}</th>
+          <th class="text-right">{{ 'ADMIN.MEMBERS.COL_ACTIONS' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-member>
+        <tr>
+          <!-- Datos del usuario -->
+          <td>
+            <div class="member-profile-cell">
+              <div class="member-avatar">
+                @if (member.user.avatarUrl) {
+                  <img [src]="member.user.avatarUrl" [alt]="member.user.firstName" />
+                } @else {
+                  <div class="avatar-placeholder">
+                    {{ member.user.firstName.charAt(0) }}{{ member.user.lastName.charAt(0) }}
+                  </div>
+                }
+              </div>
+              <div class="member-info">
+                <span class="member-name">{{ member.user.firstName }} {{ member.user.lastName }}</span>
+                <span class="member-email">{{ member.user.email }}</span>
+              </div>
+            </div>
+          </td>
+
+          <!-- Rol -->
+          <td>
+            <p-tag
+              [value]="'ADMIN.MEMBERS.ROLE_' + member.role | translate"
+              [severity]="getRoleSeverity(member.role)"
+            ></p-tag>
+          </td>
+
+          <!-- Número de socio -->
+          <td>
+            <span class="member-number">{{ member.memberNumber || '—' }}</span>
+          </td>
+
+          <!-- Monedero -->
+          <td>
+            <span class="wallet-amount font-mono">{{ member.walletBalance | currency: 'EUR':'symbol':'1.2-2' }}</span>
+          </td>
+
+          <!-- Estado -->
+          <td>
+            @if (member.isActive) {
+              <p-tag [value]="'ADMIN.MEMBERS.STATUS_ACTIVE' | translate" severity="success"></p-tag>
+            } @else {
+              <p-tag [value]="'ADMIN.MEMBERS.STATUS_INACTIVE' | translate" severity="danger"></p-tag>
+            }
+          </td>
+
+          <!-- Fecha de Alta -->
+          <td>
+            <span class="date-cell">{{ member.createdAt | date: 'dd/MM/yyyy' }}</span>
+          </td>
+
+          <!-- Acciones -->
+          <td class="text-right">
+            <div class="actions-cell">
+              <!-- Cambiar Rol -->
+              <button
+                type="button"
+                pButton
+                icon="pi pi-user-edit"
+                [text]="true"
+                severity="info"
+                (click)="openRoleModal(member)"
+                [title]="'ADMIN.MEMBERS.DIALOG_ROLE_TITLE' | translate"
+              ></button>
+
+              <!-- Pausar / Activar -->
+              @if (member.isActive) {
+                <button
+                  type="button"
+                  pButton
+                  icon="pi pi-ban"
+                  [text]="true"
+                  severity="warn"
+                  (click)="toggleMemberStatus(member)"
+                  [title]="'ADMIN.MEMBERS.CONFIRM_DEACTIVATE_TITLE' | translate"
+                ></button>
+              } @else {
+                <button
+                  type="button"
+                  pButton
+                  icon="pi pi-check"
+                  [text]="true"
+                  severity="success"
+                  (click)="toggleMemberStatus(member)"
+                  [title]="'ADMIN.MEMBERS.STATUS_ACTIVE' | translate"
+                ></button>
+              }
+
+              <!-- Eliminar membresía -->
+              <button
+                type="button"
+                pButton
+                icon="pi pi-trash"
+                [text]="true"
+                severity="danger"
+                (click)="confirmRemoveMember(member)"
+                [title]="'COMMON.DELETE' | translate"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center py-6 text-muted">
+            <div class="empty-state">
+              <i class="pi pi-users empty-icon"></i>
+              <p>{{ 'ADMIN.MEMBERS.EMPTY' | translate }}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Diálogo Modal: Invitar o Vincular Socio -->
+  <p-dialog
+    [(visible)]="displayInviteModal"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [header]="'ADMIN.MEMBERS.DIALOG_INVITE_TITLE' | translate"
+    [style]="{ width: '480px' }"
+  >
+    <form [formGroup]="inviteForm" (ngSubmit)="submitInvite()" class="member-form">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="memberEmail">{{ 'ADMIN.MEMBERS.FIELD_EMAIL' | translate }} *</label>
+        <input
+          id="memberEmail"
+          type="email"
+          pInputText
+          formControlName="email"
+          [placeholder]="'ADMIN.MEMBERS.FIELD_EMAIL_PLACEHOLDER' | translate"
+          class="w-full"
+        />
+      </div>
+
+      <!-- Rol -->
+      <div class="form-group">
+        <label for="memberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
+        <p-select
+          id="memberRole"
+          [options]="roleOptions"
+          formControlName="role"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        ></p-select>
+      </div>
+
+      <!-- Número de Socio -->
+      <div class="form-group">
+        <label for="memberNum">{{ 'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER' | translate }}</label>
+        <input
+          id="memberNum"
+          type="text"
+          pInputText
+          formControlName="memberNumber"
+          [placeholder]="'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER_PLACEHOLDER' | translate"
+          class="w-full"
+        />
+      </div>
+
+      <div class="dialog-actions">
+        <button
+          type="button"
+          pButton
+          [outlined]="true"
+          severity="secondary"
+          (click)="closeInviteModal()"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button
+          type="submit"
+          pButton
+          icon="pi pi-check"
+          [loading]="saving"
+        >
+          {{ 'ADMIN.MEMBERS.INVITE_BTN' | translate }}
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+
+  <!-- Diálogo Modal: Modificar Rol -->
+  <p-dialog
+    [(visible)]="displayRoleModal"
+    [modal]="true"
+    [draggable]="false"
+    [resizable]="false"
+    [header]="'ADMIN.MEMBERS.DIALOG_ROLE_TITLE' | translate"
+    [style]="{ width: '420px' }"
+  >
+    @if (selectedMember) {
+      <div class="member-summary-box">
+        <span class="font-semibold">{{ selectedMember.user.firstName }} {{ selectedMember.user.lastName }}</span>
+        <span class="text-muted text-sm">{{ selectedMember.user.email }}</span>
+      </div>
+    }
+
+    <form [formGroup]="roleForm" (ngSubmit)="submitRoleChange()" class="member-form">
+      <div class="form-group">
+        <label for="editMemberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
+        <p-select
+          id="editMemberRole"
+          [options]="roleOptions"
+          formControlName="role"
+          optionLabel="label"
+          optionValue="value"
+          styleClass="w-full"
+        ></p-select>
+      </div>
+
+      <div class="dialog-actions">
+        <button
+          type="button"
+          pButton
+          [outlined]="true"
+          severity="secondary"
+          (click)="closeRoleModal()"
+        >
+          {{ 'COMMON.CANCEL' | translate }}
+        </button>
+        <button
+          type="submit"
+          pButton
+          icon="pi pi-check"
+          [loading]="saving"
+        >
+          {{ 'COMMON.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+  </p-dialog>
+</div>

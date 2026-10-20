@@ -834,6 +834,272 @@
           }
         ]
       }
+    },
+    "/api/v1/clubs/members": {
+      "get": {
+        "operationId": "ClubsMembersController_findAll",
+        "summary": "Listar socios y miembros del club activo",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "role",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "OWNER",
+                "ADMIN",
+                "STAFF",
+                "MEMBER",
+                "GUEST"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "isActive",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ClubMemberResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Members"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clubs/members/invite": {
+      "post": {
+        "operationId": "ClubsMembersController_invite",
+        "summary": "Invitar o vincular un socio al club",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InviteMemberDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubMemberResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Members"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clubs/members/{id}/role": {
+      "patch": {
+        "operationId": "ClubsMembersController_updateRole",
+        "summary": "Modificar el rol de un miembro del club",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMemberRoleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubMemberResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Members"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clubs/members/{id}/status": {
+      "patch": {
+        "operationId": "ClubsMembersController_updateStatus",
+        "summary": "Activar o desactivar la membresía de un miembro",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMemberStatusDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubMemberResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Members"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clubs/members/{id}": {
+      "delete": {
+        "operationId": "ClubsMembersController_remove",
+        "summary": "Eliminar la membresía de un socio del club",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Membresía eliminada"
+          }
+        },
+        "tags": [
+          "Clubs - Members"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -1724,6 +1990,172 @@
             "description": "Prioridad de evaluación de la regla (mayor número = mayor precedencia)"
           }
         }
+      },
+      "MemberUserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "email": {
+            "type": "string",
+            "example": "usuario@club.com"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Carlos"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Martínez"
+          },
+          "phone": {
+            "type": "object",
+            "example": "+34600000000",
+            "nullable": true
+          },
+          "avatarUrl": {
+            "type": "object",
+            "example": "https://cdn.example.com/avatars/carlos.jpg",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "ClubMemberResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "a1b2c3d4-e5f6-7a8b-9c0d-1e2f3a4b5c6d"
+          },
+          "userId": {
+            "type": "string",
+            "example": "123e4567-e89b-12d3-a456-426614174000"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "888e4567-e89b-12d3-a456-426614174000"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ADMIN",
+              "STAFF",
+              "MEMBER",
+              "GUEST"
+            ],
+            "example": "MEMBER"
+          },
+          "walletBalance": {
+            "type": "number",
+            "example": 0,
+            "description": "Saldo en el monedero del club"
+          },
+          "memberNumber": {
+            "type": "object",
+            "example": "SOCIO-001",
+            "nullable": true
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "user": {
+            "$ref": "#/components/schemas/MemberUserSummaryDto"
+          }
+        },
+        "required": [
+          "id",
+          "userId",
+          "clubId",
+          "role",
+          "walletBalance",
+          "isActive",
+          "createdAt",
+          "updatedAt",
+          "user"
+        ]
+      },
+      "InviteMemberDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "nuevo.socio@club.com",
+            "description": "Correo electrónico del usuario a invitar o asociar al club"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ADMIN",
+              "STAFF",
+              "MEMBER",
+              "GUEST"
+            ],
+            "default": "MEMBER",
+            "description": "Rol que tendrá el socio en el club"
+          },
+          "memberNumber": {
+            "type": "string",
+            "example": "SOCIO-102",
+            "description": "Número de socio asignado internamente por el club"
+          }
+        },
+        "required": [
+          "email"
+        ]
+      },
+      "UpdateMemberRoleDto": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ADMIN",
+              "STAFF",
+              "MEMBER",
+              "GUEST"
+            ],
+            "example": "ADMIN",
+            "description": "Nuevo rol asignado a la membresía del club"
+          }
+        },
+        "required": [
+          "role"
+        ]
+      },
+      "UpdateMemberStatusDto": {
+        "type": "object",
+        "properties": {
+          "isActive": {
+            "type": "boolean",
+            "example": true,
+            "description": "Estado de activación de la membresía del socio"
+          }
+        },
+        "required": [
+          "isActive"
+        ]
       }
     }
   }

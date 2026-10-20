@@ -7,6 +7,7 @@ export { HealthService } from './api/endpoints/health/health.service';
 export { UsersService } from './api/endpoints/users/users.service';
 export { FacilitiesService } from './api/endpoints/facilities/facilities.service';
 export { PricingService } from './api/endpoints/pricing/pricing.service';
+export { ClubsMembersService } from './api/endpoints/clubs-members/clubs-members.service';
 
 // Servicios de infraestructura y UI
 export * from './services/auth.service';

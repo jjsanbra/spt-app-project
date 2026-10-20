@@ -129,7 +129,9 @@
       "FACILITIES_CARD_TITLE": "Instalaciones Deportivas",
       "FACILITIES_CARD_DESC": "Pistas de pádel, tenis y campos de fútbol",
       "PRICING_CARD_TITLE": "Tarifas y Reglas",
-      "PRICING_CARD_DESC": "Precios valle/punta y suplementos de iluminación"
+      "PRICING_CARD_DESC": "Precios valle/punta y suplementos de iluminación",
+      "MEMBERS_CARD_TITLE": "Socios y Miembros",
+      "MEMBERS_CARD_DESC": "Equipo directivo, staff y jugadores registrados"
     },
     "FACILITIES": {
       "TITLE": "Gestión de Pistas e Instalaciones",
@@ -213,6 +215,43 @@
         "0": "Domingo",
         "7": "Domingo"
       }
+    },
+    "MEMBERS": {
+      "TITLE": "Gestión de Socios y Miembros",
+      "SUBTITLE": "Administra el equipo directivo, personal y jugadores registrados en el club",
+      "INVITE_BTN": "Vincular / Invitar Socio",
+      "SEARCH_PLACEHOLDER": "Buscar por nombre o correo...",
+      "FILTER_ALL_ROLES": "Todos los roles",
+      "ROLE_OWNER": "Propietario",
+      "ROLE_ADMIN": "Administrador",
+      "ROLE_STAFF": "Personal / Staff",
+      "ROLE_MEMBER": "Socio / Jugador",
+      "STATUS_ACTIVE": "Activo",
+      "STATUS_INACTIVE": "Inactivo",
+      "COL_MEMBER": "Miembro",
+      "COL_ROLE": "Rol",
+      "COL_MEMBER_NUMBER": "Nº Socio",
+      "COL_WALLET": "Monedero",
+      "COL_STATUS": "Estado",
+      "COL_JOINED": "Fecha Alta",
+      "COL_ACTIONS": "Acciones",
+      "EMPTY": "No se encontraron miembros en el club.",
+      "DIALOG_INVITE_TITLE": "Vincular o Invitar Nuevo Socio",
+      "DIALOG_ROLE_TITLE": "Modificar Rol del Miembro",
+      "FIELD_EMAIL": "Correo Electrónico",
+      "FIELD_EMAIL_PLACEHOLDER": "ejemplo@correo.com",
+      "FIELD_ROLE": "Rol en el Club",
+      "FIELD_MEMBER_NUMBER": "Número de Socio (opcional)",
+      "FIELD_MEMBER_NUMBER_PLACEHOLDER": "Ej: SOCIO-042",
+      "CONFIRM_DELETE_TITLE": "Dar de baja Miembro",
+      "CONFIRM_DELETE_MSG": "¿Estás seguro de que deseas retirar a este miembro del club? Esta acción no eliminará su cuenta general de usuario.",
+      "CONFIRM_DEACTIVATE_TITLE": "Desactivar Membresía",
+      "CONFIRM_DEACTIVATE_MSG": "¿Deseas pausar el acceso de este socio al club?",
+      "SUCCESS_INVITE": "Socio vinculado e invitado con éxito",
+      "SUCCESS_ROLE_UPDATE": "Rol de miembro actualizado con éxito",
+      "SUCCESS_STATUS_UPDATE": "Estado de la membresía actualizado",
+      "SUCCESS_DELETE": "Membresía retirada con éxito",
+      "ERROR_OWNER_PROTECTED": "No se puede degradar o dar de baja al único propietario del club"
     }
   },
   "PORTAL": {
