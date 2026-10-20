@@ -96,6 +96,12 @@
   }
 }
 
+.feature-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .feature-card {
   display: flex;
   align-items: flex-start;

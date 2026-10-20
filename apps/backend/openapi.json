@@ -216,6 +216,624 @@
           }
         ]
       }
+    },
+    "/api/facilities": {
+      "get": {
+        "operationId": "FacilitiesController_findAll",
+        "summary": "Listar todas las instalaciones deportivas del club activo",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "PADEL",
+                "TENNIS",
+                "FOOTBALL_7",
+                "FOOTBALL_11",
+                "BASKETBALL",
+                "MULTI_SPORT"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "isActive",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "FacilitiesController_create",
+        "summary": "Crear una nueva pista o instalación deportiva (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFacilityDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/facilities/{id}": {
+      "get": {
+        "operationId": "FacilitiesController_findOne",
+        "summary": "Obtener detalle de una instalación deportiva",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "FacilitiesController_update",
+        "summary": "Actualizar datos de una instalación deportiva (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFacilityDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "FacilitiesController_remove",
+        "summary": "Desactivar instalación deportiva (Borrado lógico) (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Instalación desactivada con éxito"
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/facilities/{id}/blocks": {
+      "get": {
+        "operationId": "FacilitiesController_findBlocks",
+        "summary": "Listar bloqueos temporales de una instalación",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityBlockResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "FacilitiesController_createBlock",
+        "summary": "Crear un bloqueo temporal de pista (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFacilityBlockDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacilityBlockResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/facilities/{id}/blocks/{blockId}": {
+      "delete": {
+        "operationId": "FacilitiesController_removeBlock",
+        "summary": "Eliminar o levantar bloqueo temporal (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "blockId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bloqueo eliminado correctamente"
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/pricing": {
+      "get": {
+        "operationId": "PricingController_findAll",
+        "summary": "Listar todas las reglas tarifarias del club activo",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "facilityId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por pista específica",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PricingRuleResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pricing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "post": {
+        "operationId": "PricingController_create",
+        "summary": "Crear una nueva regla tarifaria (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePricingRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingRuleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pricing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/pricing/{id}": {
+      "get": {
+        "operationId": "PricingController_findOne",
+        "summary": "Obtener detalle de una regla de precios",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingRuleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pricing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "put": {
+        "operationId": "PricingController_update",
+        "summary": "Actualizar regla tarifaria (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdatePricingRuleDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingRuleResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Pricing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "operationId": "PricingController_remove",
+        "summary": "Eliminar regla tarifaria (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Regla eliminada correctamente"
+          }
+        },
+        "tags": [
+          "Pricing"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -481,6 +1099,607 @@
             "type": "string",
             "example": "https://example.com/avatar.jpg",
             "description": "URL del avatar"
+          }
+        }
+      },
+      "FacilityResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "ba916b62-92d3-4a9d-86df-87d547e457ea"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "ca816b62-92d3-4a9d-86df-87d547e457eb"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pista 1 - Pádel Cristal Indoor"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL"
+          },
+          "courtType": {
+            "type": "string",
+            "enum": [
+              "INDOOR",
+              "OUTDOOR",
+              "COVERED"
+            ],
+            "example": "INDOOR"
+          },
+          "surfaceType": {
+            "type": "string",
+            "enum": [
+              "CRYSTAL",
+              "CLAY",
+              "SYNTHETIC_GRASS",
+              "CONCRETE",
+              "PARQUET",
+              "RESIN"
+            ],
+            "example": "CRYSTAL"
+          },
+          "hasLighting": {
+            "type": "boolean",
+            "example": true
+          },
+          "defaultSlotMinutes": {
+            "type": "number",
+            "example": 90
+          },
+          "minPlayers": {
+            "type": "number",
+            "example": 4
+          },
+          "maxPlayers": {
+            "type": "number",
+            "example": 4
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "name",
+          "sportType",
+          "courtType",
+          "surfaceType",
+          "hasLighting",
+          "defaultSlotMinutes",
+          "minPlayers",
+          "maxPlayers",
+          "isActive",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateFacilityDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Pista 1 - Pádel Cristal Indoor",
+            "description": "Nombre identificativo de la pista o instalación deportiva"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL",
+            "description": "Deporte principal para el que está habilitada la pista"
+          },
+          "courtType": {
+            "type": "string",
+            "enum": [
+              "INDOOR",
+              "OUTDOOR",
+              "COVERED"
+            ],
+            "example": "INDOOR",
+            "default": "OUTDOOR",
+            "description": "Ubicación y cubierta de la pista (INDOOR, OUTDOOR, COVERED)"
+          },
+          "surfaceType": {
+            "type": "string",
+            "enum": [
+              "CRYSTAL",
+              "CLAY",
+              "SYNTHETIC_GRASS",
+              "CONCRETE",
+              "PARQUET",
+              "RESIN"
+            ],
+            "example": "CRYSTAL",
+            "default": "SYNTHETIC_GRASS",
+            "description": "Superficie de juego (CRYSTAL, CLAY, SYNTHETIC_GRASS, etc.)"
+          },
+          "hasLighting": {
+            "type": "boolean",
+            "example": true,
+            "default": true,
+            "description": "Indica si la pista dispone de sistema de iluminación artificial"
+          },
+          "defaultSlotMinutes": {
+            "type": "number",
+            "example": 90,
+            "default": 90,
+            "description": "Duración por defecto de cada franja de reserva en minutos (30, 60, 90, 120)"
+          },
+          "minPlayers": {
+            "type": "number",
+            "example": 4,
+            "default": 4,
+            "description": "Número mínimo de jugadores requeridos para reservar"
+          },
+          "maxPlayers": {
+            "type": "number",
+            "example": 4,
+            "default": 4,
+            "description": "Número máximo de jugadores admitidos en la pista"
+          }
+        },
+        "required": [
+          "name",
+          "sportType"
+        ]
+      },
+      "UpdateFacilityDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Pista 1 - Pádel Cristal Indoor",
+            "description": "Nombre identificativo de la pista o instalación deportiva"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL",
+            "description": "Deporte principal para el que está habilitada la pista"
+          },
+          "courtType": {
+            "type": "string",
+            "enum": [
+              "INDOOR",
+              "OUTDOOR",
+              "COVERED"
+            ],
+            "example": "INDOOR",
+            "default": "OUTDOOR",
+            "description": "Ubicación y cubierta de la pista (INDOOR, OUTDOOR, COVERED)"
+          },
+          "surfaceType": {
+            "type": "string",
+            "enum": [
+              "CRYSTAL",
+              "CLAY",
+              "SYNTHETIC_GRASS",
+              "CONCRETE",
+              "PARQUET",
+              "RESIN"
+            ],
+            "example": "CRYSTAL",
+            "default": "SYNTHETIC_GRASS",
+            "description": "Superficie de juego (CRYSTAL, CLAY, SYNTHETIC_GRASS, etc.)"
+          },
+          "hasLighting": {
+            "type": "boolean",
+            "example": true,
+            "default": true,
+            "description": "Indica si la pista dispone de sistema de iluminación artificial"
+          },
+          "defaultSlotMinutes": {
+            "type": "number",
+            "example": 90,
+            "default": 90,
+            "description": "Duración por defecto de cada franja de reserva en minutos (30, 60, 90, 120)"
+          },
+          "minPlayers": {
+            "type": "number",
+            "example": 4,
+            "default": 4,
+            "description": "Número mínimo de jugadores requeridos para reservar"
+          },
+          "maxPlayers": {
+            "type": "number",
+            "example": 4,
+            "default": 4,
+            "description": "Número máximo de jugadores admitidos en la pista"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true,
+            "description": "Estado operativo de la instalación deportiva"
+          }
+        }
+      },
+      "FacilityBlockResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "blk-916b62-92d3-4a9d-86df-87d547e457ea"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "ca816b62-92d3-4a9d-86df-87d547e457eb"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "fac-816b62-92d3-4a9d-86df-87d547e457ec"
+          },
+          "title": {
+            "type": "string",
+            "example": "Mantenimiento focos y red"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "example": "Revisión técnica anual de iluminación"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T10:00:00.000Z"
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T14:00:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "facilityId",
+          "title",
+          "startTime",
+          "endTime",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreateFacilityBlockDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Mantenimiento focos y red",
+            "description": "Título o concepto del bloqueo de pista"
+          },
+          "reason": {
+            "type": "string",
+            "example": "Revisión técnica anual de iluminación y tensión de red",
+            "description": "Motivo o detalle explicativo adicional del bloqueo"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "2026-10-25T10:00:00.000Z",
+            "description": "Fecha y hora de inicio del bloqueo (formato ISO 8601)"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "2026-10-25T14:00:00.000Z",
+            "description": "Fecha y hora de finalización del bloqueo (formato ISO 8601)"
+          }
+        },
+        "required": [
+          "title",
+          "startTime",
+          "endTime"
+        ]
+      },
+      "PricingRuleResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "rule-916b62-92d3-4a9d-86df-87d547e457ea"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "ca816b62-92d3-4a9d-86df-87d547e457eb"
+          },
+          "facilityId": {
+            "type": "string",
+            "nullable": true,
+            "example": "fac-816b62-92d3-4a9d-86df-87d547e457ec"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "example": "Tarifa Estándar Mañanas (Valle)"
+          },
+          "isPeakHour": {
+            "type": "boolean",
+            "example": false
+          },
+          "startTime": {
+            "type": "string",
+            "nullable": true,
+            "example": "08:00"
+          },
+          "endTime": {
+            "type": "string",
+            "nullable": true,
+            "example": "17:00"
+          },
+          "daysOfWeek": {
+            "example": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "memberPrice": {
+            "type": "number",
+            "example": 16
+          },
+          "guestPrice": {
+            "type": "number",
+            "example": 24
+          },
+          "lightSurcharge": {
+            "type": "number",
+            "example": 0
+          },
+          "priority": {
+            "type": "number",
+            "example": 1
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "name",
+          "isPeakHour",
+          "daysOfWeek",
+          "memberPrice",
+          "guestPrice",
+          "lightSurcharge",
+          "priority",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "CreatePricingRuleDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tarifa Estándar Mañanas (Valle)",
+            "description": "Nombre descriptivo de la regla tarifaria"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "ba916b62-92d3-4a9d-86df-87d547e457ea",
+            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL",
+            "description": "Deporte al que aplica la regla tarifaria (null = todos)"
+          },
+          "isPeakHour": {
+            "type": "boolean",
+            "example": false,
+            "default": false,
+            "description": "Indica si se considera hora punta (alta demanda)"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "08:00",
+            "description": "Hora de inicio de la franja (formato HH:mm)"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "17:00",
+            "description": "Hora de fin de la franja (formato HH:mm)"
+          },
+          "daysOfWeek": {
+            "example": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "description": "Días de la semana en los que aplica (1=Lunes, 7=Domingo o 0=Domingo)",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "memberPrice": {
+            "type": "number",
+            "example": 16,
+            "description": "Precio aplicable para socios del club (en euros)"
+          },
+          "guestPrice": {
+            "type": "number",
+            "example": 24,
+            "description": "Precio aplicable para usuarios no socios / invitados (en euros)"
+          },
+          "lightSurcharge": {
+            "type": "number",
+            "example": 0,
+            "default": 0,
+            "description": "Suplemento añadido por uso de iluminación artificial"
+          },
+          "priority": {
+            "type": "number",
+            "example": 1,
+            "default": 1,
+            "description": "Prioridad de evaluación de la regla (mayor número = mayor precedencia)"
+          }
+        },
+        "required": [
+          "name",
+          "daysOfWeek",
+          "memberPrice",
+          "guestPrice"
+        ]
+      },
+      "UpdatePricingRuleDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tarifa Estándar Mañanas (Valle)",
+            "description": "Nombre descriptivo de la regla tarifaria"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "ba916b62-92d3-4a9d-86df-87d547e457ea",
+            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL",
+            "description": "Deporte al que aplica la regla tarifaria (null = todos)"
+          },
+          "isPeakHour": {
+            "type": "boolean",
+            "example": false,
+            "default": false,
+            "description": "Indica si se considera hora punta (alta demanda)"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "08:00",
+            "description": "Hora de inicio de la franja (formato HH:mm)"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "17:00",
+            "description": "Hora de fin de la franja (formato HH:mm)"
+          },
+          "daysOfWeek": {
+            "example": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "description": "Días de la semana en los que aplica (1=Lunes, 7=Domingo o 0=Domingo)",
+            "type": "array",
+            "items": {
+              "type": "number"
+            }
+          },
+          "memberPrice": {
+            "type": "number",
+            "example": 16,
+            "description": "Precio aplicable para socios del club (en euros)"
+          },
+          "guestPrice": {
+            "type": "number",
+            "example": 24,
+            "description": "Precio aplicable para usuarios no socios / invitados (en euros)"
+          },
+          "lightSurcharge": {
+            "type": "number",
+            "example": 0,
+            "default": 0,
+            "description": "Suplemento añadido por uso de iluminación artificial"
+          },
+          "priority": {
+            "type": "number",
+            "example": 1,
+            "default": 1,
+            "description": "Prioridad de evaluación de la regla (mayor número = mayor precedencia)"
           }
         }
       }

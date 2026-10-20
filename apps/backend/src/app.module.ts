@@ -7,6 +7,8 @@ import { HealthModule } from './health/health.module';
 
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { FacilitiesModule } from './facilities/facilities.module';
+import { PricingModule } from './pricing/pricing.module';
 
 /**
  * AppModule — Módulo raíz de la aplicación SPT Backend.
@@ -37,10 +39,10 @@ import { UsersModule } from './users/users.module';
     // ─── Módulos de negocio ─────────────────────────────────
     AuthModule,
     UsersModule,
+    FacilitiesModule,
+    PricingModule,
 
     // ClubsModule,     <- Fase 3
-    // FacilitiesModule,<- Fase 3
-    // PricingModule,   <- Fase 3
     // BookingsModule,  <- Fase 4
     // NotificationsModule, <- Fase 6
     // SuperadminModule,    <- Fase 7

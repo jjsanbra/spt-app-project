@@ -1,0 +1,255 @@
+<p-toast></p-toast>
+
+<div class="admin-page-container">
+  <!-- Header de página -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'ADMIN.PRICING.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'ADMIN.PRICING.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        (click)="openCreateModal()"
+      >
+        {{ 'ADMIN.PRICING.ADD_BUTTON' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla de Reglas de Tarifas -->
+  <div class="table-card">
+    <p-table
+      [value]="pricingRules"
+      [loading]="loading"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'ADMIN.PRICING.NAME' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.DAYS' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.HOURS' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.PRIORITY' | translate }}</th>
+          <th class="text-right"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-rule>
+        <tr>
+          <td class="font-semibold">
+            {{ rule.name }}
+            @if (rule.isPeakHour) {
+              <p-tag [value]="'ADMIN.PRICING.PEAK_HOUR' | translate" severity="danger" class="ml-2"></p-tag>
+            }
+          </td>
+          <td>
+            <div class="days-badges">
+              @for (day of rule.daysOfWeek; track day) {
+                <span class="day-chip">{{ getDayName(day) }}</span>
+              }
+            </div>
+          </td>
+          <td>
+            @if (rule.startTime && rule.endTime) {
+              {{ rule.startTime }} - {{ rule.endTime }}
+            } @else {
+              <span class="text-muted">Todo el día</span>
+            }
+          </td>
+          <td class="price-value">{{ rule.memberPrice | currency: 'EUR' }}</td>
+          <td class="price-value">{{ rule.guestPrice | currency: 'EUR' }}</td>
+          <td>
+            @if (rule.lightSurcharge > 0) {
+              +{{ rule.lightSurcharge | currency: 'EUR' }}
+            } @else {
+              <span class="text-muted">0.00 €</span>
+            }
+          </td>
+          <td>
+            <p-tag [value]="'P' + rule.priority" severity="info"></p-tag>
+          </td>
+          <td class="text-right actions-cell">
+            <button
+              type="button"
+              pButton
+              icon="pi pi-pencil"
+              severity="secondary"
+              [text]="true"
+              size="small"
+              (click)="openEditModal(rule)"
+            >
+              {{ 'ADMIN.PRICING.EDIT_BUTTON' | translate }}
+            </button>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-trash"
+              severity="danger"
+              [text]="true"
+              size="small"
+              (click)="onDeleteRule(rule.id)"
+            >
+              {{ 'ADMIN.PRICING.DELETE_BUTTON' | translate }}
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="text-center p-4 text-muted">
+            {{ 'ADMIN.PRICING.EMPTY' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Modal para Crear / Editar Regla de Precios -->
+<p-dialog
+  [(visible)]="displayModal"
+  [header]="(isEditing ? 'ADMIN.PRICING.DIALOG_EDIT_TITLE' : 'ADMIN.PRICING.DIALOG_CREATE_TITLE') | translate"
+  [modal]="true"
+  [style]="{ width: '580px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form [formGroup]="pricingForm" (ngSubmit)="onSubmitModal()" class="pricing-form">
+    <!-- Nombre -->
+    <div class="form-group">
+      <label for="pricing-name" class="form-label">{{ 'ADMIN.PRICING.NAME' | translate }}</label>
+      <input
+        id="pricing-name"
+        type="text"
+        pInputText
+        class="w-full"
+        formControlName="name"
+        placeholder="Ej. Tarifa Fines de Semana Punta"
+      />
+    </div>
+
+    <!-- Horas Inicio / Fin -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="pricing-start" class="form-label">Hora Inicio (HH:mm)</label>
+        <input
+          id="pricing-start"
+          type="text"
+          pInputText
+          class="w-full"
+          formControlName="startTime"
+          placeholder="08:00"
+        />
+      </div>
+      <div class="form-group flex-1">
+        <label for="pricing-end" class="form-label">Hora Fin (HH:mm)</label>
+        <input
+          id="pricing-end"
+          type="text"
+          pInputText
+          class="w-full"
+          formControlName="endTime"
+          placeholder="17:00"
+        />
+      </div>
+    </div>
+
+    <!-- Precios Socio e Invitado -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="pricing-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
+        <p-inputnumber
+          id="pricing-member-price"
+          formControlName="memberPrice"
+          [min]="0"
+          mode="currency"
+          currency="EUR"
+          locale="es-ES"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+      <div class="form-group flex-1">
+        <label for="pricing-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
+        <p-inputnumber
+          id="pricing-guest-price"
+          formControlName="guestPrice"
+          [min]="0"
+          mode="currency"
+          currency="EUR"
+          locale="es-ES"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+    </div>
+
+    <!-- Suplemento Luz y Prioridad -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="pricing-light-surcharge" class="form-label">{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</label>
+        <p-inputnumber
+          id="pricing-light-surcharge"
+          formControlName="lightSurcharge"
+          [min]="0"
+          mode="currency"
+          currency="EUR"
+          locale="es-ES"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+      <div class="form-group flex-1">
+        <label for="pricing-priority" class="form-label">{{ 'ADMIN.PRICING.PRIORITY' | translate }}</label>
+        <p-inputnumber
+          id="pricing-priority"
+          formControlName="priority"
+          [min]="1"
+          [max]="100"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+    </div>
+
+    <!-- Checkbox Hora Punta -->
+    <div class="form-group-checkbox">
+      <p-checkbox
+        id="pricing-peak"
+        formControlName="isPeakHour"
+        [binary]="true"
+        inputId="pricing-peak-input"
+      ></p-checkbox>
+      <label for="pricing-peak-input" class="checkbox-label">
+        {{ 'ADMIN.PRICING.PEAK_HOUR' | translate }}
+      </label>
+    </div>
+
+    <!-- Acciones -->
+    <div class="dialog-actions">
+      <button
+        type="button"
+        pButton
+        severity="secondary"
+        [text]="true"
+        (click)="displayModal = false"
+      >
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button
+        type="submit"
+        pButton
+        [loading]="saving"
+        [disabled]="pricingForm.invalid || saving"
+      >
+        {{ 'COMMON.SAVE' | translate }}
+      </button>
+    </div>
+  </form>
+</p-dialog>

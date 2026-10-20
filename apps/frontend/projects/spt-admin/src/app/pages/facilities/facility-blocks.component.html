@@ -1,0 +1,163 @@
+<p-toast></p-toast>
+
+<div class="admin-page-container">
+  <!-- Header de página con botón volver -->
+  <div class="page-header">
+    <div class="header-titles">
+      <div class="breadcrumbs-back">
+        <a routerLink="/admin/facilities" class="back-link">
+          <i class="pi pi-arrow-left"></i> {{ 'ADMIN.BLOCKS.BACK_TO_FACILITIES' | translate }}
+        </a>
+      </div>
+      <h1 class="page-title">
+        {{ 'ADMIN.BLOCKS.TITLE' | translate }}
+        @if (facilityName) {
+          <span class="facility-badge-name">— {{ facilityName }}</span>
+        }
+      </h1>
+      <p class="page-subtitle">{{ 'ADMIN.BLOCKS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        (click)="openCreateModal()"
+      >
+        {{ 'ADMIN.BLOCKS.ADD_BUTTON' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla de Bloqueos -->
+  <div class="table-card">
+    <p-table
+      [value]="blocks"
+      [loading]="loading"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</th>
+          <th>{{ 'ADMIN.BLOCKS.REASON' | translate }}</th>
+          <th>{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</th>
+          <th>{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</th>
+          <th class="text-right"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-block>
+        <tr>
+          <td class="font-semibold">{{ block.title }}</td>
+          <td class="text-muted">{{ block.reason || '-' }}</td>
+          <td>{{ block.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ block.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
+          <td class="text-right">
+            <button
+              type="button"
+              pButton
+              icon="pi pi-trash"
+              severity="danger"
+              [text]="true"
+              size="small"
+              (click)="onRemoveBlock(block.id)"
+            >
+              {{ 'ADMIN.BLOCKS.DELETE_BUTTON' | translate }}
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="text-center p-4 text-muted">
+            {{ 'ADMIN.BLOCKS.EMPTY' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Modal para programar bloqueo -->
+<p-dialog
+  [(visible)]="displayModal"
+  [header]="'ADMIN.BLOCKS.ADD_BUTTON' | translate"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form [formGroup]="blockForm" (ngSubmit)="onSubmitBlock()" class="block-form">
+    <!-- Título -->
+    <div class="form-group">
+      <label for="block-title" class="form-label">{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</label>
+      <input
+        id="block-title"
+        type="text"
+        pInputText
+        class="w-full"
+        formControlName="title"
+        placeholder="Ej. Torneo Primavera / Mantenimiento focos"
+      />
+    </div>
+
+    <!-- Fechas Inicio / Fin (tipo datetime-local) -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="block-start" class="form-label">{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</label>
+        <input
+          id="block-start"
+          type="datetime-local"
+          pInputText
+          class="w-full"
+          formControlName="startTime"
+        />
+      </div>
+      <div class="form-group flex-1">
+        <label for="block-end" class="form-label">{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</label>
+        <input
+          id="block-end"
+          type="datetime-local"
+          pInputText
+          class="w-full"
+          formControlName="endTime"
+        />
+      </div>
+    </div>
+
+    <!-- Motivo -->
+    <div class="form-group">
+      <label for="block-reason" class="form-label">{{ 'ADMIN.BLOCKS.REASON' | translate }}</label>
+      <input
+        id="block-reason"
+        type="text"
+        pInputText
+        class="w-full"
+        formControlName="reason"
+        placeholder="Opcional: detalles del trabajo a realizar"
+      />
+    </div>
+
+    <!-- Acciones -->
+    <div class="dialog-actions">
+      <button
+        type="button"
+        pButton
+        severity="secondary"
+        [text]="true"
+        (click)="displayModal = false"
+      >
+        {{ 'COMMON.CANCEL' | translate }}
+      </button>
+      <button
+        type="submit"
+        pButton
+        [loading]="saving"
+        [disabled]="blockForm.invalid || saving"
+      >
+        {{ 'COMMON.SAVE' | translate }}
+      </button>
+    </div>
+  </form>
+</p-dialog>

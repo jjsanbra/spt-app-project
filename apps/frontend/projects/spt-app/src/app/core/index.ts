@@ -5,6 +5,8 @@ export * from './api/model';
 export { AuthService as AuthApiService } from './api/endpoints/auth/auth.service';
 export { HealthService } from './api/endpoints/health/health.service';
 export { UsersService } from './api/endpoints/users/users.service';
+export { FacilitiesService } from './api/endpoints/facilities/facilities.service';
+export { PricingService } from './api/endpoints/pricing/pricing.service';
 
 // Servicios de infraestructura
 export * from './services/auth.service';
@@ -16,3 +18,5 @@ export * from './guards/auth.guard';
 // Mocks y generadores de datos ficticios generados por Orval
 export * from './api/endpoints/auth/auth.faker';
 export * from './api/endpoints/users/users.faker';
+export * from './api/endpoints/facilities/facilities.faker';
+export * from './api/endpoints/pricing/pricing.faker';

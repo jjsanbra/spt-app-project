@@ -1,0 +1,252 @@
+<p-toast></p-toast>
+
+<div class="admin-page-container">
+  <!-- Header de página -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'ADMIN.FACILITIES.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'ADMIN.FACILITIES.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        type="button"
+        pButton
+        icon="pi pi-plus"
+        (click)="openCreateModal()"
+      >
+        {{ 'ADMIN.FACILITIES.ADD_BUTTON' | translate }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla de Pistas -->
+  <div class="table-card">
+    <p-table
+      [value]="facilities"
+      [loading]="loading"
+      styleClass="p-datatable-striped"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th>{{ 'ADMIN.FACILITIES.NAME' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.SPORT' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.LIGHTING' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</th>
+          <th>{{ 'ADMIN.FACILITIES.STATUS' | translate }}</th>
+          <th class="text-right"></th>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-facility>
+        <tr>
+          <td class="font-semibold">{{ facility.name }}</td>
+          <td>
+            <p-tag [value]="facility.sportType" severity="info"></p-tag>
+          </td>
+          <td>{{ facility.courtType }}</td>
+          <td>{{ facility.surfaceType }}</td>
+          <td>
+            @if (facility.hasLighting) {
+              <i class="pi pi-check text-success"></i>
+            } @else {
+              <i class="pi pi-times text-muted"></i>
+            }
+          </td>
+          <td>{{ facility.defaultSlotMinutes }} min</td>
+          <td>
+            @if (facility.isActive) {
+              <p-tag [value]="'ADMIN.FACILITIES.ACTIVE' | translate" severity="success"></p-tag>
+            } @else {
+              <p-tag [value]="'ADMIN.FACILITIES.INACTIVE' | translate" severity="secondary"></p-tag>
+            }
+          </td>
+          <td class="text-right actions-cell">
+            <a [routerLink]="['/admin/facilities', facility.id, 'blocks']">
+              <button
+                type="button"
+                pButton
+                icon="pi pi-ban"
+                severity="warn"
+                [text]="true"
+                size="small"
+              >
+                {{ 'ADMIN.FACILITIES.BLOCKS_BUTTON' | translate }}
+              </button>
+            </a>
+            <button
+              type="button"
+              pButton
+              icon="pi pi-pencil"
+              severity="secondary"
+              [text]="true"
+              size="small"
+              (click)="openEditModal(facility)"
+            >
+              {{ 'ADMIN.FACILITIES.EDIT_BUTTON' | translate }}
+            </button>
+            @if (facility.isActive) {
+              <button
+                type="button"
+                pButton
+                icon="pi pi-trash"
+                severity="danger"
+                [text]="true"
+                size="small"
+                (click)="onDeleteFacility(facility)"
+              >
+                {{ 'ADMIN.FACILITIES.DELETE_BUTTON' | translate }}
+              </button>
+            }
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8" class="text-center p-4 text-muted">
+            {{ 'ADMIN.FACILITIES.EMPTY' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>
+
+<!-- Modal de Crear / Editar Pista -->
+<p-dialog
+  [(visible)]="displayModal"
+  [header]="(isEditing ? 'ADMIN.FACILITIES.DIALOG_EDIT_TITLE' : 'ADMIN.FACILITIES.DIALOG_CREATE_TITLE') | translate"
+  [modal]="true"
+  [style]="{ width: '560px' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form [formGroup]="facilityForm" (ngSubmit)="onSubmitModal()" class="facility-form">
+    <!-- Nombre -->
+    <div class="form-group">
+      <label for="facility-name" class="form-label">{{ 'ADMIN.FACILITIES.NAME' | translate }}</label>
+      <input
+        id="facility-name"
+        type="text"
+        pInputText
+        class="w-full"
+        formControlName="name"
+        placeholder="Ej. Pista 1 Central"
+      />
+    </div>
+
+    <!-- Deporte y Tipo de Pista -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="facility-sport" class="form-label">{{ 'ADMIN.FACILITIES.SPORT' | translate }}</label>
+        <p-select
+          id="facility-sport"
+          [options]="sportOptions"
+          formControlName="sportType"
+          styleClass="w-full"
+          optionLabel="label"
+          optionValue="value"
+        ></p-select>
+      </div>
+      <div class="form-group flex-1">
+        <label for="facility-court" class="form-label">{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</label>
+        <p-select
+          id="facility-court"
+          [options]="courtOptions"
+          formControlName="courtType"
+          styleClass="w-full"
+          optionLabel="label"
+          optionValue="value"
+        ></p-select>
+      </div>
+    </div>
+
+    <!-- Superficie y Franja Minutos -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="facility-surface" class="form-label">{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</label>
+        <p-select
+          id="facility-surface"
+          [options]="surfaceOptions"
+          formControlName="surfaceType"
+          styleClass="w-full"
+          optionLabel="label"
+          optionValue="value"
+        ></p-select>
+      </div>
+      <div class="form-group flex-1">
+        <label for="facility-slot" class="form-label">{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</label>
+        <p-select
+          id="facility-slot"
+          [options]="slotOptions"
+          formControlName="defaultSlotMinutes"
+          styleClass="w-full"
+          optionLabel="label"
+          optionValue="value"
+        ></p-select>
+      </div>
+    </div>
+
+    <!-- Jugadores Min / Max -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="facility-min-players" class="form-label">Min Jugadores</label>
+        <p-inputnumber
+          id="facility-min-players"
+          formControlName="minPlayers"
+          [min]="1"
+          [max]="50"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+      <div class="form-group flex-1">
+        <label for="facility-max-players" class="form-label">Max Jugadores</label>
+        <p-inputnumber
+          id="facility-max-players"
+          formControlName="maxPlayers"
+          [min]="1"
+          [max]="50"
+          styleClass="w-full"
+          inputStyleClass="w-full"
+        ></p-inputnumber>
+      </div>
+    </div>
+
+    <!-- Checkbox Iluminación -->
+    <div class="form-group-checkbox">
+      <p-checkbox
+        id="facility-lighting"
+        formControlName="hasLighting"
+        [binary]="true"
+        inputId="facility-lighting-input"
+      ></p-checkbox>
+      <label for="facility-lighting-input" class="checkbox-label">
+        {{ 'ADMIN.FACILITIES.HAS_LIGHTING' | translate }}
+      </label>
+    </div>
+
+    <!-- Acciones -->
+    <div class="dialog-actions">
+      <button
+        type="button"
+        pButton
+        severity="secondary"
+        [text]="true"
+        (click)="displayModal = false"
+      >
+        {{ 'ADMIN.FACILITIES.CANCEL' | translate }}
+      </button>
+      <button
+        type="submit"
+        pButton
+        [loading]="saving"
+        [disabled]="facilityForm.invalid || saving"
+      >
+        {{ 'ADMIN.FACILITIES.SAVE' | translate }}
+      </button>
+    </div>
+  </form>
+</p-dialog>

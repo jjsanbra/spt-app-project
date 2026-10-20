@@ -23,30 +23,44 @@
       </p>
 
       <div class="dashboard-cards-grid">
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-th-large"></i>
+        <a routerLink="/admin/facilities" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-th-large"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_DESC' | translate }}</p>
+            </div>
           </div>
-          <div class="feature-content">
-            <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_DESC' | translate }}</p>
-          </div>
-        </div>
+        </a>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-dollar"></i>
+        <a routerLink="/admin/pricing" class="feature-card-link">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-dollar"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.PRICING_CARD_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'ADMIN.DASHBOARD.PRICING_CARD_DESC' | translate }}</p>
+            </div>
           </div>
-          <div class="feature-content">
-            <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.PRICING_CARD_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'ADMIN.DASHBOARD.PRICING_CARD_DESC' | translate }}</p>
-          </div>
-        </div>
+        </a>
       </div>
 
       <div class="quick-actions">
+        <a routerLink="/admin/facilities">
+          <button type="button" pButton icon="pi pi-th-large">
+            {{ 'ADMIN.FACILITIES.TITLE' | translate }}
+          </button>
+        </a>
+        <a routerLink="/admin/pricing">
+          <button type="button" pButton icon="pi pi-dollar" severity="secondary" [outlined]="true">
+            {{ 'ADMIN.PRICING.TITLE' | translate }}
+          </button>
+        </a>
         <a routerLink="/profile">
-          <button type="button" pButton icon="pi pi-user" severity="secondary" [outlined]="true">
+          <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
             {{ 'ADMIN.DASHBOARD.GO_TO_PROFILE' | translate }}
           </button>
         </a>

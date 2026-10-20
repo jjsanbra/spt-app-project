@@ -72,6 +72,10 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, swaggerConfig);
+    const fs = await import('fs');
+    const path = await import('path');
+    fs.writeFileSync(path.resolve(__dirname, '..', 'openapi.json'), JSON.stringify(document, null, 2));
+
     SwaggerModule.setup('api-docs', app, document, {
       swaggerOptions: { persistAuthorization: true },
     });
