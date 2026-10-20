@@ -1,0 +1,489 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "HealthController_check",
+        "summary": "Health check del sistema",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/api/v1/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "summary": "Registrar un nuevo usuario en la plataforma",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario registrado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de registro inválidos"
+          },
+          "409": {
+            "description": "El correo electrónico ya existe"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "summary": "Iniciar sesión con email y contraseña",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Credenciales válidas, sesión iniciada",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Credenciales inválidas o cuenta inactiva"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "summary": "Renovar el Access Token utilizando un Refresh Token válido",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshTokenDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Nuevo token generado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TokenResponseDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh token inválido o expirado"
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "summary": "Cerrar sesión activa",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Sesión cerrada correctamente"
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "operationId": "AuthController_getMe",
+        "summary": "Consultar el perfil del usuario autenticado y sus membresías de club",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Perfil del usuario con clubes asociados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No autenticado o token expirado"
+          }
+        },
+        "tags": [
+          "Auth"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/profile": {
+      "put": {
+        "operationId": "UsersController_updateProfile",
+        "summary": "Actualizar los datos del perfil del usuario autenticado",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil actualizado exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserSummaryDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Datos de perfil no válidos"
+          },
+          "401": {
+            "description": "No autenticado o token expirado"
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "SPT App API",
+    "description": "API REST del SaaS Multi-tenant de gestión de reservas de centros deportivos",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Introduce tu token JWT: Bearer <token>"
+      },
+      "tenant": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-tenant-id",
+        "description": "UUID del Club deportivo activo sobre el que se opera"
+      }
+    },
+    "schemas": {
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "jugador@spt-app.local",
+            "description": "Correo electrónico único del usuario"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Contraseña segura (mínimo 8 caracteres)",
+            "minLength": 8
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Alejandro",
+            "description": "Nombre del usuario"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "García",
+            "description": "Apellidos del usuario"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+34600112233",
+            "description": "Teléfono de contacto opcional"
+          }
+        },
+        "required": [
+          "email",
+          "password",
+          "firstName",
+          "lastName"
+        ]
+      },
+      "ClubMembershipSummaryDto": {
+        "type": "object",
+        "properties": {
+          "clubId": {
+            "type": "string",
+            "example": "5a298a06-e5c6-457a-af99-2a0673263f26",
+            "description": "ID del club"
+          },
+          "clubName": {
+            "type": "string",
+            "example": "Club Deportivo Central Pádel & Tenis",
+            "description": "Nombre del club"
+          },
+          "clubSlug": {
+            "type": "string",
+            "example": "central-padel",
+            "description": "Slug del club"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "OWNER",
+              "ADMIN",
+              "STAFF",
+              "MEMBER",
+              "GUEST"
+            ],
+            "example": "MEMBER",
+            "description": "Rol del usuario en el club"
+          },
+          "memberNumber": {
+            "type": "string",
+            "example": "SOC-001",
+            "nullable": true,
+            "description": "Número de socio"
+          },
+          "walletBalance": {
+            "type": "number",
+            "example": 50,
+            "description": "Saldo en el monedero virtual del club"
+          }
+        },
+        "required": [
+          "clubId",
+          "clubName",
+          "clubSlug",
+          "role",
+          "walletBalance"
+        ]
+      },
+      "UserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "8df98b1f-c3b5-4267-b564-c89d65500cb7",
+            "description": "ID del usuario"
+          },
+          "email": {
+            "type": "string",
+            "example": "socio@spt-app.local",
+            "description": "Correo electrónico"
+          },
+          "firstName": {
+            "type": "string",
+            "example": "Marcos",
+            "description": "Nombre del usuario"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "Gómez",
+            "description": "Apellidos del usuario"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+34622222222",
+            "nullable": true,
+            "description": "Teléfono"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": null,
+            "nullable": true,
+            "description": "URL del avatar"
+          },
+          "isSuperAdmin": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indica si es administrador global del SaaS"
+          },
+          "memberships": {
+            "description": "Membresías del usuario en clubes",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClubMembershipSummaryDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "firstName",
+          "lastName",
+          "isSuperAdmin",
+          "memberships"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "JWT Access token (expira en 15 minutos)"
+          },
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "JWT Refresh token (expira en 7 días)"
+          },
+          "user": {
+            "description": "Datos del usuario autenticado",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserSummaryDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "accessToken",
+          "refreshToken",
+          "user"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "socio@spt-app.local",
+            "description": "Correo electrónico registrado del usuario"
+          },
+          "password": {
+            "type": "string",
+            "example": "Player123!",
+            "description": "Contraseña de la cuenta"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshTokenDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Refresh token emitido en el login"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      },
+      "TokenResponseDto": {
+        "type": "object",
+        "properties": {
+          "accessToken": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Nuevo JWT Access token"
+          }
+        },
+        "required": [
+          "accessToken"
+        ]
+      },
+      "UpdateProfileDto": {
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "example": "Alejandro",
+            "description": "Nombre del usuario"
+          },
+          "lastName": {
+            "type": "string",
+            "example": "García",
+            "description": "Apellidos del usuario"
+          },
+          "phone": {
+            "type": "string",
+            "example": "+34600112233",
+            "description": "Teléfono de contacto"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "example": "https://example.com/avatar.jpg",
+            "description": "URL del avatar"
+          }
+        }
+      }
+    }
+  }
+}

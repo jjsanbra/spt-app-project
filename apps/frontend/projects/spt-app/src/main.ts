@@ -2,9 +2,9 @@ import { initFederation } from '@angular-architects/native-federation';
 
 initFederation(
   {
-    sptAdmin: 'http://localhost:4200/remoteEntry.json',
-    sptPortal: 'http://localhost:4200/remoteEntry.json',
-    sptUsers: 'http://localhost:4200/remoteEntry.json',
+    'spt-admin': 'http://localhost:4201/remoteEntry.json',
+    'spt-portal': 'http://localhost:4202/remoteEntry.json',
+    'spt-users': 'http://localhost:4203/remoteEntry.json',
   },
   {
     hostRemoteEntry: { url: './remoteEntry.json' },

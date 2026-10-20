@@ -1,0 +1,91 @@
+/* ==========================================================================
+   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — RESPONSIVE MODULE
+   Ruta: projects/rpm-app/src/styles/base/_responsive.scss
+   ========================================================================== */
+
+/* 1. Breakpoints Estándar */
+$bp-xs: 480px;   // Móviles compactos (iPhone SE, Galaxy A)
+$bp-sm: 640px;   // Móviles estándar y phablets
+$bp-md: 768px;   // Tablets portrait
+$bp-lg: 1024px;  // Tablets landscape / Laptops compactas
+$bp-xl: 1280px;  // Pantallas de escritorio estándar
+
+/* 2. Mixins Semánticos de Medios */
+@mixin mobile-xs {
+  @media (max-width: #{$bp-xs}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$bp-sm}) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (min-width: #{$bp-sm + 1px}) and (max-width: #{$bp-lg}) {
+    @content;
+  }
+}
+
+@mixin mobile-or-tablet {
+  @media (max-width: #{$bp-lg}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$bp-lg + 1px}) {
+    @content;
+  }
+}
+
+/* 3. Clases Utilitarias Responsivas */
+.hide-mobile {
+  @include mobile {
+    display: none !important;
+  }
+}
+
+.hide-mobile-xs {
+  @include mobile-xs {
+    display: none !important;
+  }
+}
+
+.only-mobile {
+  display: none !important;
+  @include mobile {
+    display: block !important;
+  }
+}
+
+.only-mobile-flex {
+  display: none !important;
+  @include mobile {
+    display: flex !important;
+  }
+}
+
+.mobile-stack {
+  @include mobile {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+}
+
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.touch-scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+}

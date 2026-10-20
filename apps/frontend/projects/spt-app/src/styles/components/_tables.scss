@@ -1,0 +1,596 @@
+/* ==========================================================================
+   FIGMA ATHLETIC LUXURY DESIGN SYSTEM — TABLAS Y COMPONENTES RELACIONADOS
+   Ruta: projects/rpm-app/src/styles/components/_tables.scss
+   ========================================================================== */
+
+@use "../base/variables" as *;
+@use "../base/responsive" as *;
+
+/* --------------------------------------------------------------------------
+   1. Contenedor Card de Tabla
+   -------------------------------------------------------------------------- */
+.table-container,
+.admin-table-card {
+  background: var(--surface-pure);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-table);
+  overflow: visible;
+  padding: 0 !important;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   2. Estilos PrimeNG Table (p-datatable)
+   -------------------------------------------------------------------------- */
+p-table,
+.p-datatable {
+  display: block;
+  width: 100%;
+
+  .p-datatable-wrapper {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+  }
+
+  .p-datatable-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+  }
+
+  /* Cabecera Lavanda */
+  .p-datatable-thead > tr > th {
+    background: var(--surface-table-th) !important;
+    color: var(--text-dim) !important;
+    font-family: var(--font-body) !important;
+    font-size: var(--font-size-xs) !important;
+    font-weight: var(--font-weight-bold) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    padding: 0.95rem var(--spacing-lg) !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: 1px solid var(--border-table-header) !important;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &.p-sortable-column {
+      cursor: pointer;
+
+      &:hover {
+        background: var(--surface-table-th-hover) !important;
+        color: var(--text-secondary) !important;
+      }
+
+      &.p-highlight {
+        color: var(--admin-primary) !important;
+
+        .p-sortable-column-icon {
+          color: var(--admin-primary) !important;
+        }
+      }
+    }
+
+    .p-sortable-column-icon {
+      font-size: var(--font-size-xs) !important;
+      margin-left: 0.35rem !important;
+      color: var(--text-subtle);
+      vertical-align: middle;
+      transition: color 0.2s ease;
+    }
+  }
+
+  /* Filas y celdas */
+  .p-datatable-tbody > tr {
+    background: var(--surface-pure);
+    transition: background-color 0.15s ease;
+
+    &:hover {
+      background-color: var(--surface-table-row-hover) !important;
+    }
+
+    > td {
+      padding: var(--spacing-base) var(--spacing-lg) !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-bottom: 1px solid var(--border-table-row) !important;
+      color: var(--text-secondary);
+      font-size: var(--font-size-base);
+      vertical-align: middle;
+    }
+
+    &:last-child > td {
+      border-bottom: none !important;
+    }
+  }
+
+  /* --------------------------------------------------------------------------
+     3. Paginador PrimeNG Coordinado
+     -------------------------------------------------------------------------- */
+  p-paginator,
+  .p-paginator,
+  .p-datatable-paginator-bottom,
+  .p-datatable-paginator-top {
+    background: var(--paginator-bg) !important;
+    border-top: 1px solid var(--paginator-border) !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+    padding: var(--spacing-sm) var(--spacing-lg) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    flex-wrap: nowrap !important;
+    gap: 0.65rem !important;
+
+    .p-paginator-current {
+      font-size: var(--font-size-sm);
+      color: var(--text-dim);
+      font-weight: var(--font-weight-medium);
+      display: inline-flex;
+      align-items: center;
+      white-space: nowrap;
+
+      &::after {
+        content: "|";
+        margin-left: var(--spacing-md);
+        margin-right: var(--spacing-xs);
+        color: var(--border-input);
+        font-weight: 300;
+      }
+
+      strong,
+      b {
+        color: var(--text-slate);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+
+    .p-paginator-rpp-dropdown,
+    .p-select,
+    p-select {
+      display: inline-flex !important;
+      align-items: center !important;
+      width: auto !important;
+      min-width: 60px !important;
+      max-width: 76px !important;
+      height: var(--paginator-btn-size) !important;
+      font-size: var(--font-size-sm) !important;
+      border-radius: var(--paginator-btn-radius) !important;
+      border: 1px solid var(--border-input) !important;
+      background: var(--surface-pure) !important;
+      margin-left: auto !important;
+      margin-right: 0 !important;
+      flex: 0 0 auto !important;
+      flex-shrink: 0 !important;
+
+      .p-select-label {
+        padding: 0 0.25rem 0 0.5rem !important;
+        font-size: var(--font-size-sm) !important;
+        text-align: center !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .p-select-dropdown {
+        width: 1.35rem !important;
+        padding-right: 0.35rem !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+      }
+
+      .p-select-overlay {
+        z-index: 1200 !important;
+        min-width: 60px !important;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.18) !important;
+        border: 1px solid var(--border-subtle) !important;
+        border-radius: var(--radius-sm) !important;
+
+        .p-select-option {
+          justify-content: center !important;
+          text-align: center !important;
+          padding: 0.35rem 0.5rem !important;
+        }
+      }
+    }
+
+    .p-paginator-pages {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .p-paginator-page,
+    .p-paginator-next,
+    .p-paginator-prev,
+    .p-paginator-first,
+    .p-paginator-last {
+      min-width: var(--paginator-btn-size) !important;
+      height: var(--paginator-btn-size) !important;
+      border-radius: var(--paginator-btn-radius) !important;
+      border: 1px solid transparent !important;
+      font-size: var(--font-size-sm) !important;
+      font-weight: var(--font-weight-semibold) !important;
+      color: #334155 !important;
+      transition: all 0.18s ease;
+
+      &:hover:not(.p-disabled):not(.p-highlight) {
+        background: var(--paginator-btn-hover) !important;
+        color: var(--text-slate) !important;
+      }
+
+      &.p-highlight {
+        background: var(--paginator-btn-active-bg) !important;
+        color: var(--paginator-btn-active-text) !important;
+        border-color: var(--paginator-btn-active-bg) !important;
+      }
+
+      &.p-disabled {
+        opacity: 0.35 !important;
+      }
+    }
+
+    .p-paginator-prev,
+    .p-paginator-next {
+      background: var(--surface-pure) !important;
+      border: 1px solid var(--border-subtle) !important;
+      color: var(--text-dim) !important;
+
+      &:hover:not(.p-disabled) {
+        background: var(--surface-table-row-hover) !important;
+        border-color: var(--border-input) !important;
+      }
+    }
+  }
+}
+
+/* Regla raíz para paginadores (aislados o anidados) */
+p-paginator,
+.p-paginator,
+.p-datatable-paginator-bottom,
+.p-datatable-paginator-top {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 0.65rem !important;
+
+  .p-paginator-rpp-dropdown,
+  .p-select,
+  p-select {
+    display: inline-flex !important;
+    align-items: center !important;
+    width: auto !important;
+    min-width: 60px !important;
+    max-width: 76px !important;
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    margin-right: 0 !important;
+
+    .p-select-label {
+      padding: 0 0.25rem 0 0.5rem !important;
+      font-size: var(--font-size-sm) !important;
+      text-align: center !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .p-select-dropdown {
+      width: 1.35rem !important;
+      padding-right: 0.35rem !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Utilidades Semánticas de Celdas (Design System Components)
+   -------------------------------------------------------------------------- */
+
+/* Título o Identificador principal */
+.team-name-cell,
+.table-cell-title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-md);
+  color: var(--text-slate);
+  letter-spacing: -0.01em;
+}
+
+/* Jerarquía de dos líneas en celdas (jugador 1 / jugador 2, nombre / subtítulo) */
+.player-lead,
+.table-cell-lead {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-slate);
+  font-size: var(--font-size-base);
+  line-height: 1.3;
+}
+
+.player-sub,
+.table-cell-sub {
+  font-weight: var(--font-weight-regular);
+  color: var(--text-dim);
+  font-size: var(--font-size-sm);
+  line-height: 1.3;
+  margin-top: 0.15rem;
+}
+
+/* Celda vacía / Guión */
+.cell-dash {
+  color: var(--text-subtle);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-base);
+}
+
+/* Texto de reserva o rol secundario */
+.reserve-text,
+.table-cell-reserve {
+  color: var(--status-pending-text);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Filas con iconos de contacto */
+.email-row,
+.table-cell-email {
+  font-size: var(--font-size-sm);
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.2rem;
+
+  i {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+}
+
+.phone-row,
+.table-cell-phone {
+  font-size: var(--font-size-sm);
+  color: var(--text-slate);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.2rem;
+  font-weight: var(--font-weight-medium);
+
+  i {
+    color: var(--status-confirmed);
+    font-size: 0.8rem;
+  }
+}
+
+/* Pastillas de estado redondeadas (Pill badges) */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs) 0.85rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: capitalize;
+
+  &.is-active,
+  &.status-active {
+    background: var(--pill-active-bg);
+    color: var(--pill-active-text);
+    border: 1px solid var(--pill-active-border);
+  }
+
+  &.is-inactive,
+  &.status-inactive {
+    background: var(--pill-inactive-bg);
+    color: var(--pill-inactive-text);
+    border: 1px solid var(--pill-inactive-border);
+  }
+
+  &.is-pending,
+  &.status-pending {
+    background: var(--pill-pending-bg);
+    color: var(--pill-pending-text);
+    border: 1px solid var(--pill-pending-border);
+  }
+
+  &.is-disputed,
+  &.status-disputed {
+    background: var(--pill-disputed-bg);
+    color: var(--pill-disputed-text);
+    border: 1px solid var(--pill-disputed-border);
+  }
+}
+
+/* Contenedor y Botones de acción compactos (34px con pButton) */
+.action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+
+  .action-btn-sm {
+    width: var(--action-btn-size) !important;
+    height: var(--action-btn-size) !important;
+    min-width: var(--action-btn-size) !important;
+    border-radius: var(--action-btn-radius) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: var(--action-btn-bg) !important;
+    border: 1px solid var(--action-btn-border) !important;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    padding: 0 !important;
+
+    .p-button-icon,
+    i {
+      font-size: var(--font-size-base) !important;
+      margin: 0 !important;
+    }
+
+    &.btn-action-edit {
+      color: var(--action-btn-edit-color) !important;
+
+      &:hover {
+        background: var(--action-btn-edit-hover-bg) !important;
+        border-color: var(--action-btn-edit-hover-border) !important;
+        transform: translateY(-1px);
+      }
+    }
+
+    &.btn-action-toggle {
+      color: var(--action-btn-toggle-color) !important;
+
+      &:hover {
+        background: var(--action-btn-toggle-hover-bg) !important;
+        border-color: var(--action-btn-toggle-hover-border) !important;
+        color: var(--text-slate) !important;
+        transform: translateY(-1px);
+      }
+    }
+
+    &.btn-action-resend {
+      color: var(--action-btn-resend-color) !important;
+
+      &:hover {
+        background: var(--action-btn-resend-hover-bg) !important;
+        border-color: var(--action-btn-resend-hover-border) !important;
+        transform: translateY(-1px);
+      }
+    }
+
+    &.btn-action-live {
+      color: var(--admin-primary) !important;
+
+      &:hover {
+        background: rgba(0, 105, 72, 0.08) !important;
+        border-color: var(--admin-primary) !important;
+        transform: translateY(-1px);
+      }
+    }
+
+    &.btn-action-delete {
+      color: var(--action-btn-delete-color) !important;
+
+      &:hover {
+        background: var(--action-btn-delete-hover-bg) !important;
+        border-color: var(--action-btn-delete-hover-border) !important;
+        transform: translateY(-1px);
+      }
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Adaptación Responsiva Canónica para Tablas y Paginador
+   -------------------------------------------------------------------------- */
+@include tablet {
+  p-table,
+  .p-datatable {
+    p-paginator,
+    .p-paginator,
+    .p-datatable-paginator-bottom,
+    .p-datatable-paginator-top {
+      padding: var(--spacing-sm) var(--spacing-md) !important;
+      justify-content: space-between !important;
+      gap: var(--spacing-sm) !important;
+      flex-wrap: nowrap !important;
+
+      .p-paginator-current {
+        font-size: var(--font-size-xs) !important;
+      }
+    }
+  }
+}
+
+@include mobile {
+  p-table,
+  .p-datatable {
+    .p-datatable-thead > tr > th {
+      padding: 0.65rem var(--spacing-sm) !important;
+      font-size: var(--font-size-2xs) !important;
+    }
+
+    .p-datatable-tbody > tr > td {
+      padding: var(--spacing-sm) var(--spacing-sm) !important;
+      font-size: var(--font-size-sm) !important;
+    }
+
+    p-paginator,
+    .p-paginator,
+    .p-datatable-paginator-bottom,
+    .p-datatable-paginator-top {
+      padding: var(--spacing-sm) var(--spacing-sm) !important;
+      flex-direction: row !important;
+      flex-wrap: wrap !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      gap: var(--spacing-xs) !important;
+
+      .p-paginator-current {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
+        font-size: var(--font-size-xs) !important;
+        padding-bottom: var(--spacing-2xs) !important;
+        border-bottom: 1px solid var(--border-subtle) !important;
+
+        &::after {
+          display: none !important;
+        }
+      }
+
+      .p-paginator-pages {
+        display: inline-flex !important;
+        justify-content: center !important;
+      }
+
+      .p-paginator-rpp-dropdown,
+      .p-select,
+      p-select {
+        margin: 0 !important;
+        height: 34px !important;
+        min-width: 60px !important;
+        max-width: 74px !important;
+        width: auto !important;
+        flex: 0 0 auto !important;
+        display: inline-flex !important;
+        align-items: center !important;
+
+        .p-select-label {
+          padding: 0 0.2rem 0 0.4rem !important;
+          font-size: var(--font-size-xs) !important;
+          text-align: center !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+
+        .p-select-dropdown {
+          width: 1.25rem !important;
+          padding-right: 0.25rem !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+      }
+    }
+  }
+}
+

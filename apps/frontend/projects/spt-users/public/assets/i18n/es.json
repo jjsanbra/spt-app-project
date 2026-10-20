@@ -1,0 +1,114 @@
+{
+  "APP": {
+    "NAME": "SPT App",
+    "TAGLINE": "Reservas de centros deportivos",
+    "LOADING": "Cargando..."
+  },
+  "NAV": {
+    "HOME": "Inicio",
+    "ADMIN": "Administración",
+    "PORTAL": "Reservas",
+    "PROFILE": "Mi Perfil",
+    "LOGOUT": "Cerrar sesión"
+  },
+  "AUTH": {
+    "LOGIN": "Iniciar sesión",
+    "REGISTER": "Registrarse",
+    "EMAIL": "Correo electrónico",
+    "PASSWORD": "Contraseña",
+    "CONFIRM_PASSWORD": "Confirmar contraseña",
+    "FORGOT_PASSWORD": "¿Olvidaste tu contraseña?",
+    "NAME": "Nombre",
+    "SUBMIT": "Entrar",
+    "LOGOUT": "Cerrar sesión",
+    "HAVE_ACCOUNT": "¿Ya tienes cuenta? Inicia sesión",
+    "NO_ACCOUNT": "¿No tienes cuenta? Regístrate aquí",
+    "REGISTER_SUBMIT": "Crear cuenta",
+    "REGISTER_SUCCESS": "Cuenta creada con éxito",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellidos",
+    "PHONE": "Teléfono",
+    "ERRORS": {
+      "INVALID_CREDENTIALS": "Email o contraseña incorrectos",
+      "EMAIL_EXISTS": "Este email ya está registrado",
+      "REQUIRED": "Este campo es obligatorio",
+      "EMAIL_FORMAT": "Introduce un email válido",
+      "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+      "PASSWORD_MIN_LENGTH": "La contraseña debe tener al menos 8 caracteres"
+    }
+  },
+  "CLUBS": {
+    "SELECT": "Selecciona un club",
+    "YOUR_CLUBS": "Tus clubes",
+    "JOIN": "Unirse al club",
+    "NO_CLUBS": "No perteneces a ningún club aún"
+  },
+  "FACILITIES": {
+    "TITLE": "Instalaciones",
+    "ADD": "Añadir instalación",
+    "EDIT": "Editar instalación",
+    "DELETE": "Eliminar",
+    "NAME": "Nombre",
+    "SPORT": "Deporte",
+    "CAPACITY": "Capacidad",
+    "SLOT_DURATION": "Duración de franja (min)"
+  },
+  "BOOKINGS": {
+    "TITLE": "Reservas",
+    "NEW": "Nueva reserva",
+    "MY_BOOKINGS": "Mis reservas",
+    "CONFIRM": "Confirmar reserva",
+    "CANCEL": "Cancelar reserva",
+    "DATE": "Fecha",
+    "TIME": "Hora",
+    "DURATION": "Duración",
+    "PRICE": "Precio",
+    "STATUS": {
+      "PENDING": "Pendiente",
+      "CONFIRMED": "Confirmada",
+      "CANCELLED": "Cancelada",
+      "COMPLETED": "Completada"
+    },
+    "TYPE": {
+      "FULL": "Reserva completa",
+      "OPEN": "Partida abierta"
+    }
+  },
+  "ERRORS": {
+    "GENERIC": "Ha ocurrido un error. Por favor, inténtalo de nuevo.",
+    "NOT_FOUND": "No encontrado",
+    "UNAUTHORIZED": "No autorizado",
+    "NETWORK": "Error de conexión. Comprueba tu internet."
+  },
+  "COMMON": {
+    "SAVE": "Guardar",
+    "CANCEL": "Cancelar",
+    "CONFIRM": "Confirmar",
+    "DELETE": "Eliminar",
+    "EDIT": "Editar",
+    "SEARCH": "Buscar",
+    "FILTER": "Filtrar",
+    "LOADING": "Cargando...",
+    "NO_RESULTS": "Sin resultados",
+    "YES": "Sí",
+    "NO": "No",
+    "CLOSE": "Cerrar",
+    "BACK": "Volver"
+  },
+  "USERS": {
+    "PROFILE_TITLE": "Mi Perfil",
+    "PERSONAL_DATA": "Datos Personales",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellidos",
+    "PHONE": "Teléfono",
+    "MEMBERSHIPS_TITLE": "Mis Clubes y Membresías",
+    "WALLET_BALANCE": "Saldo en Monedero",
+    "MEMBER_NUMBER": "Nº Socio",
+    "ROLE": "Rol en el Club",
+    "UPDATE_SUCCESS": "Perfil actualizado correctamente",
+    "ACTIVE_CLUB": "Club Activo",
+    "CHANGE_CLUB": "Cambiar de club",
+    "NO_MEMBERSHIPS": "No tienes membresías activas en ningún club",
+    "SUPERADMIN_BADGE": "Superadmin Global"
+  }
+}

@@ -1,0 +1,114 @@
+@use "base/responsive" as *;
+
+.auth-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--spacing-xl) var(--spacing-md);
+  background-color: var(--surface-pure);
+
+  @include mobile {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 440px;
+}
+
+.auth-card-wrapper {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+
+  @include mobile {
+    padding: var(--spacing-lg) var(--spacing-md);
+  }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin: 0 0 var(--spacing-xs) 0;
+}
+
+.auth-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-error {
+  font-size: var(--font-size-2xs);
+  color: var(--status-cancelled);
+  margin-top: var(--spacing-2xs);
+}
+
+.form-actions {
+  margin-top: var(--spacing-sm);
+}
+
+.auth-footer {
+  margin-top: var(--spacing-xl);
+  text-align: center;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: var(--spacing-md);
+}
+
+.footer-text {
+  margin: 0;
+  font-size: var(--font-size-sm);
+}
+
+.auth-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: var(--font-weight-medium);
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    text-decoration: underline;
+    opacity: 0.85;
+  }
+}
+
+:host ::ng-deep {
+  .p-password,
+  .p-password-input {
+    width: 100%;
+  }
+
+  .p-inputtext {
+    width: 100%;
+  }
+}

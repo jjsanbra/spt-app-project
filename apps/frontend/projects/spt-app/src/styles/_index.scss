@@ -1,0 +1,24 @@
+/* ==========================================================================
+   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — MAIN STYLESHEET MANIFEST
+   Ruta: projects/rpm-app/src/styles/_index.scss
+   ========================================================================== */
+
+/* 1. Base tokens & CSS resets */
+@forward "base/variables";
+@forward "base/responsive";
+
+@use "base/variables" as *;
+@use "base/reset" as *;
+@use "base/responsive" as *;
+
+/* 2. Components */
+@use "components/cards" as *;
+@use "components/buttons" as *;
+@use "components/badges" as *;
+@use "components/forms" as *;
+@use "components/tables" as *;
+@use "components/auth" as *;
+@use "components/dialogs" as *;
+
+/* 3. Utilities */
+@use "utilities/scrollbar" as *;

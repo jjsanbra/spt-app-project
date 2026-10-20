@@ -1,0 +1,247 @@
+@use "base/responsive" as *;
+
+.profile-page {
+  padding: var(--spacing-xl) var(--spacing-md);
+  min-height: calc(100vh - 64px);
+  background-color: var(--surface-pure);
+
+  @include mobile {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}
+
+.profile-container {
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+
+  @include mobile {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+}
+
+.user-avatar-badge {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-glow));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  .avatar-icon {
+    font-size: var(--font-size-2xl);
+    color: var(--primary-contrast);
+  }
+}
+
+.user-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+
+  @include mobile {
+    align-items: center;
+  }
+}
+
+.user-fullname {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.user-email {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.superadmin-tag {
+  align-self: flex-start;
+  margin-top: var(--spacing-xs);
+
+  @include mobile {
+    align-self: center;
+  }
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-xl);
+
+  @include mobile-or-tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.profile-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+
+  @include mobile {
+    padding: var(--spacing-md);
+  }
+}
+
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+
+  @include mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.form-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.form-error {
+  font-size: var(--font-size-2xs);
+  color: var(--status-cancelled);
+  margin-top: var(--spacing-2xs);
+}
+
+.form-actions {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.memberships-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);
+}
+
+.membership-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  background-color: var(--surface-pure);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color 0.2s ease, transform 0.2s ease;
+
+  &.active-membership {
+    border-color: var(--primary-color);
+    background-color: rgba(0, 245, 160, 0.03);
+  }
+
+  @include mobile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+  }
+}
+
+.membership-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.membership-top {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.club-name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.membership-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.detail-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+
+  i {
+    font-size: var(--font-size-xs);
+  }
+
+  &.wallet-badge {
+    color: var(--primary-color);
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+.membership-action {
+  flex-shrink: 0;
+
+  @include mobile {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+.empty-memberships {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl) var(--spacing-md);
+  color: var(--text-muted);
+  gap: var(--spacing-sm);
+
+  .empty-icon {
+    font-size: var(--font-size-2xl);
+  }
+}

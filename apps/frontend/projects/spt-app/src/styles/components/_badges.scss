@@ -1,0 +1,67 @@
+/* ==========================================================================
+   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — BADGES & PODIUM MEDALS
+   Ruta: projects/rpm-app/src/styles/components/_badges.scss
+   ========================================================================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-full);
+}
+
+.badge-confirmed {
+  background: var(--status-confirmed-bg);
+  color: var(--status-confirmed-text)
+}
+
+.badge-pending,
+.badge-pending-confirmation,
+.badge-pending-result {
+  background: var(--status-pending-bg);
+  color: var(--status-pending-text)
+}
+
+.badge-disputed {
+  background: var(--status-disputed-bg);
+  color: var(--status-disputed-text)
+}
+
+/* Podium circles */
+.podium-medal {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--font-size-base);
+  color: var(--surface-pure);
+
+  &.gold {
+    background: var(--podium-gold);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+  }
+
+  &.silver {
+    background: var(--podium-silver);
+    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.35);
+  }
+
+  &.bronze {
+    background: var(--podium-bronze);
+    box-shadow: 0 2px 8px rgba(180, 83, 9, 0.35);
+  }
+
+  &.standard {
+    background: var(--surface-muted);
+    color: var(--text-muted);
+  }
+}

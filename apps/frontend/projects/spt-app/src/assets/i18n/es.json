@@ -21,11 +21,20 @@
     "NAME": "Nombre",
     "SUBMIT": "Entrar",
     "LOGOUT": "Cerrar sesión",
+    "HAVE_ACCOUNT": "¿Ya tienes cuenta? Inicia sesión",
+    "NO_ACCOUNT": "¿No tienes cuenta? Regístrate aquí",
+    "REGISTER_SUBMIT": "Crear cuenta",
+    "REGISTER_SUCCESS": "Cuenta creada con éxito",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellidos",
+    "PHONE": "Teléfono",
     "ERRORS": {
       "INVALID_CREDENTIALS": "Email o contraseña incorrectos",
       "EMAIL_EXISTS": "Este email ya está registrado",
       "REQUIRED": "Este campo es obligatorio",
-      "EMAIL_FORMAT": "Introduce un email válido"
+      "EMAIL_FORMAT": "Introduce un email válido",
+      "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
+      "PASSWORD_MIN_LENGTH": "La contraseña debe tener al menos 8 caracteres"
     }
   },
   "CLUBS": {
@@ -85,5 +94,21 @@
     "NO": "No",
     "CLOSE": "Cerrar",
     "BACK": "Volver"
+  },
+  "USERS": {
+    "PROFILE_TITLE": "Mi Perfil",
+    "PERSONAL_DATA": "Datos Personales",
+    "FIRST_NAME": "Nombre",
+    "LAST_NAME": "Apellidos",
+    "PHONE": "Teléfono",
+    "MEMBERSHIPS_TITLE": "Mis Clubes y Membresías",
+    "WALLET_BALANCE": "Saldo en Monedero",
+    "MEMBER_NUMBER": "Nº Socio",
+    "ROLE": "Rol en el Club",
+    "UPDATE_SUCCESS": "Perfil actualizado correctamente",
+    "ACTIVE_CLUB": "Club Activo",
+    "CHANGE_CLUB": "Cambiar de club",
+    "NO_MEMBERSHIPS": "No tienes membresías activas en ningún club",
+    "SUPERADMIN_BADGE": "Superadmin Global"
   }
 }

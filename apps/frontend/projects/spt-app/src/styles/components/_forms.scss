@@ -1,0 +1,179 @@
+/* ==========================================================================
+   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — FORMS & INPUTS
+   Ruta: projects/rpm-app/src/styles/components/_forms.scss
+   ========================================================================== */
+
+@use "../base/variables" as *;
+@use "../base/responsive" as *;
+
+.form-group {
+  margin-bottom: var(--spacing-lg);
+}
+
+.form-label {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xs);
+}
+
+.form-control,
+.p-inputtext {
+  width: 100%;
+  padding: var(--spacing-md) var(--spacing-base);
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  background: var(--surface-pure);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: var(--primary-turf);
+    box-shadow: 0 0 0 3px var(--p-focus-ring-color);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG Select (p-select / p-dropdown)
+   -------------------------------------------------------------------------- */
+.form-group .p-select,
+.form-group p-select,
+.modal-form .p-select,
+.modal-form p-select,
+.form-control.p-select,
+.p-select.w-full,
+p-select.w-full {
+  width: 100%;
+}
+
+.p-select {
+  background: var(--surface-pure);
+  border: 1px solid var(--border-input);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:not(.p-disabled):hover {
+    border-color: var(--border-color-focus, var(--primary-turf));
+  }
+
+  &.p-focus {
+    border-color: var(--primary-turf);
+    box-shadow: 0 0 0 3px var(--p-focus-ring-color);
+  }
+}
+
+/* Overlay de Opciones Desplegables (p-select-overlay) */
+.p-select-overlay,
+.p-dropdown-panel {
+  background: var(--surface-pure) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-tier2, 0 10px 25px -5px rgba(15, 23, 42, 0.15)) !important;
+  z-index: 1250 !important;
+  overflow: visible !important;
+  max-height: none !important;
+
+  .p-select-header,
+  .p-select-filter-container,
+  .p-dropdown-filter-container {
+    padding: var(--spacing-sm) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+
+    .p-inputtext,
+    .p-select-filter {
+      padding: 0.5rem 0.75rem 0.5rem 2rem !important;
+      font-size: var(--font-size-sm) !important;
+      border-radius: var(--radius-sm) !important;
+    }
+  }
+
+  .p-select-list-container,
+  .p-dropdown-items-wrapper {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    max-height: 240px !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
+    pointer-events: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(5, 150, 105, 0.45) #f1f5f9 !important;
+
+    &::-webkit-scrollbar {
+      width: 6px !important;
+      display: block !important;
+    }
+    &::-webkit-scrollbar-track {
+      background: #f1f5f9 !important;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba(5, 150, 105, 0.45) !important;
+      border-radius: 4px !important;
+    }
+  }
+
+  .p-select-list,
+  .p-dropdown-items {
+    padding: 0.35rem 0.35rem var(--spacing-md) 0.35rem !important;
+  }
+
+  .p-select-option,
+  .p-dropdown-item {
+    border-radius: var(--radius-xs) !important;
+    padding: 0.65rem 0.85rem !important;
+    font-size: var(--font-size-base) !important;
+    cursor: pointer !important;
+    pointer-events: auto !important;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &.p-select-option-selected,
+    &.p-highlight {
+      background: rgba(16, 185, 129, 0.12) !important;
+      color: var(--primary-turf, #059669) !important;
+      font-weight: var(--font-weight-semibold) !important;
+    }
+
+    &:not(.p-select-option-selected):not(.p-highlight):hover {
+      background: var(--surface-muted) !important;
+      color: var(--text-slate) !important;
+    }
+  }
+
+  /* Comportamiento Táctil y Fluido en Pantallas Móviles */
+  @include mobile {
+    min-width: min(92vw, 380px) !important;
+    box-shadow: 0 12px 30px -4px rgba(15, 23, 42, 0.28) !important;
+
+    .p-select-list-container,
+    .p-dropdown-items-wrapper {
+      max-height: min(42vh, 230px) !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    .p-select-option,
+    .p-dropdown-item {
+      min-height: 44px !important;
+      display: flex !important;
+      align-items: center !important;
+      font-size: var(--font-size-base) !important;
+      padding: 0.75rem 1rem !important;
+    }
+
+    .p-select-filter-container,
+    .p-dropdown-filter-container {
+      padding: var(--spacing-sm) !important;
+
+      .p-inputtext,
+      .p-select-filter {
+        height: 42px !important;
+        font-size: var(--font-size-base) !important;
+      }
+    }
+  }
+}
+

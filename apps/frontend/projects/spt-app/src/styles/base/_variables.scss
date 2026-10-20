@@ -1,0 +1,225 @@
+/* ==========================================================================
+   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — VARIABLES & TOKENS (:root)
+   Ruta: projects/rpm-app/src/styles/base/_variables.scss
+   ========================================================================== */
+
+:root {
+  /* --------------------------------------------------------------------------
+     1. Surface & Canvas System
+     -------------------------------------------------------------------------- */
+  --bg-canvas: #F8FAFC;
+  --surface-pure: #FFFFFF;
+  --surface-card: rgba(255, 255, 255, 0.95);
+  --surface-glass: rgba(255, 255, 255, 0.15);
+  --surface-muted: #F1F5F9;
+
+  /* Table & Matrix Surfaces */
+  --surface-table-th: #F4F6FB;
+  --surface-table-th-hover: #EAEDFA;
+  --surface-table-row-hover: #F8FAFC;
+
+  /* --------------------------------------------------------------------------
+     2. Borders & Dividers
+     -------------------------------------------------------------------------- */
+  --border-subtle: #E2E8F0;
+  --border-input: #CBD5E1;
+  --border-glass: rgba(226, 232, 240, 0.8);
+  --border-table-row: #F1F5F9;
+  --border-table-header: #E2E8F0;
+
+  /* --------------------------------------------------------------------------
+     3. Spacing System (Margins & Paddings)
+     -------------------------------------------------------------------------- */
+  --spacing-2xs: 0.125rem;   /* 2px */
+  --spacing-xs: 0.25rem;     /* 4px */
+  --spacing-sm: 0.5rem;      /* 8px */
+  --spacing-md: 0.75rem;     /* 12px */
+  --spacing-base: 1rem;      /* 16px */
+  --spacing-lg: 1.25rem;     /* 20px */
+  --spacing-xl: 1.5rem;      /* 24px */
+  --spacing-2xl: 2rem;       /* 32px */
+  --spacing-3xl: 2.5rem;     /* 40px */
+
+  /* --------------------------------------------------------------------------
+     4. Border Radii
+     -------------------------------------------------------------------------- */
+  --radius-xs: 0.25rem;      /* 4px */
+  --radius-sm: 0.5rem;       /* 8px */
+  --radius-md: 0.75rem;      /* 12px */
+  --radius-lg: 1rem;         /* 16px - Cards & Tables */
+  --radius-xl: 1.5rem;       /* 24px */
+  --radius-full: 9999px;     /* Pills & Badges */
+
+  /* --------------------------------------------------------------------------
+     5. Primary Brand & Athletic Gradients
+     -------------------------------------------------------------------------- */
+  --primary: #059669;
+  --primary-hover: #047857;
+  --primary-turf: #059669;
+  --primary-gradient: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #059669 0%, #0891B2 100%);
+  --cyan-pulse: #0891B2;
+  --court-blue: #2563EB;
+  --accent-purple: #7C3AED;
+
+  /* KPI Metric Cards Semantics (Negative Gradients: 65% solid to 35% lighter) */
+  --kpi-blue-color: var(--court-blue);
+  --kpi-blue-gradient: linear-gradient(135deg, #1D4ED8 0%, #2563EB 65%, #60A5FA 100%);
+  --kpi-blue-glow: rgba(37, 99, 235, 0.28);
+
+  --kpi-amber-color: var(--status-pending);
+  --kpi-amber-gradient: linear-gradient(135deg, #B45309 0%, #D97706 65%, #FBBF24 100%);
+  --kpi-amber-glow: rgba(245, 158, 11, 0.28);
+
+  --kpi-purple-color: var(--accent-purple);
+  --kpi-purple-gradient: linear-gradient(135deg, #6D28D9 0%, #7C3AED 65%, #A78BFA 100%);
+  --kpi-purple-glow: rgba(124, 58, 237, 0.28);
+
+  --kpi-emerald-color: var(--primary);
+  --kpi-emerald-gradient: linear-gradient(135deg, #047857 0%, #059669 65%, #10B981 100%);
+  --kpi-emerald-glow: rgba(5, 150, 105, 0.28);
+
+  --kpi-text-subtle-white: rgba(255, 255, 255, 0.88);
+
+  /* Figma Athletic Luxury Admin Dashboard */
+  --admin-primary: #006948;
+  --admin-primary-hover: #005137;
+  --admin-pill-active: #85F8C4;
+  --admin-pill-active-text: #002114;
+  --admin-pill-inactive: #EAEDFF;
+  --admin-pill-inactive-text: #003EA8;
+  --admin-surface-low: #F2F3FF;
+  --admin-sidebar-w: 280px;
+
+  /* --------------------------------------------------------------------------
+     6. Semantic Lifecycle & Match States
+     -------------------------------------------------------------------------- */
+  --status-confirmed: #10B981;
+  --status-confirmed-bg: rgba(16, 185, 129, 0.12);
+  --status-confirmed-border: rgba(16, 185, 129, 0.25);
+  --status-confirmed-text: #047857;
+
+  --status-pending: #D97706;
+  --status-pending-bg: rgba(245, 158, 11, 0.12);
+  --status-pending-border: rgba(245, 158, 11, 0.25);
+  --status-pending-text: #B45309;
+
+  --status-disputed: #DC2626;
+  --status-disputed-bg: rgba(239, 68, 68, 0.12);
+  --status-disputed-border: rgba(239, 68, 68, 0.25);
+  --status-disputed-text: #B91C1C;
+
+  --status-cancelled: #64748B;
+  --status-cancelled-bg: rgba(100, 116, 139, 0.12);
+  --status-cancelled-border: rgba(100, 116, 139, 0.25);
+  --status-cancelled-text: #475569;
+
+  /* Status Pills */
+  --pill-active-bg: #ECFDF5;
+  --pill-active-text: #006948;
+  --pill-active-border: rgba(16, 185, 129, 0.25);
+
+  --pill-inactive-bg: #F1F5F9;
+  --pill-inactive-text: #64748B;
+  --pill-inactive-border: #CBD5E1;
+
+  --pill-pending-bg: #FEF3C7;
+  --pill-pending-text: #B45309;
+  --pill-pending-border: #FDE68A;
+
+  --pill-disputed-bg: #FEF2F2;
+  --pill-disputed-text: #DC2626;
+  --pill-disputed-border: #FECACA;
+
+  /* --------------------------------------------------------------------------
+     7. Compact Action Buttons (34px)
+     -------------------------------------------------------------------------- */
+  --action-btn-size: 34px;
+  --action-btn-radius: 8px;
+  --action-btn-border: #E2E8F0;
+  --action-btn-bg: #FFFFFF;
+
+  --action-btn-edit-color: #D97706;
+  --action-btn-edit-hover-bg: #FFFBEB;
+  --action-btn-edit-hover-border: #FCD34D;
+
+  --action-btn-toggle-color: #64748B;
+  --action-btn-toggle-hover-bg: #F1F5F9;
+  --action-btn-toggle-hover-border: #CBD5E1;
+
+  --action-btn-resend-color: #2563EB;
+  --action-btn-resend-hover-bg: #EFF6FF;
+  --action-btn-resend-hover-border: #BFDBFE;
+
+  --action-btn-delete-color: #DC2626;
+  --action-btn-delete-hover-bg: #FEF2F2;
+  --action-btn-delete-hover-border: #FECACA;
+
+  /* --------------------------------------------------------------------------
+     8. Paginator Tokens
+     -------------------------------------------------------------------------- */
+  --paginator-bg: #F4F6FB;
+  --paginator-border: #E2E8F0;
+  --paginator-btn-size: 32px;
+  --paginator-btn-radius: 6px;
+  --paginator-btn-active-bg: var(--admin-primary);
+  --paginator-btn-active-text: #FFFFFF;
+  --paginator-btn-hover: #E2E8F0;
+
+  /* --------------------------------------------------------------------------
+     9. Podium Rank Medals
+     -------------------------------------------------------------------------- */
+  --podium-gold: linear-gradient(135deg, #F59E0B, #D97706);
+  --podium-silver: linear-gradient(135deg, #94A3B8, #64748B);
+  --podium-bronze: linear-gradient(135deg, #B45309, #78350F);
+
+  /* --------------------------------------------------------------------------
+     10. Typography System (Scale & Weights)
+     -------------------------------------------------------------------------- */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Font Sizes */
+  --font-size-2xs: 0.6875rem; /* 11px */
+  --font-size-xs: 0.75rem;    /* 12px - headers de tabla, badges, micro-etiquetas */
+  --font-size-sm: 0.8125rem;  /* 13px - paginador, subtítulos, hints */
+  --font-size-base: 0.875rem; /* 14px - celdas de tabla, cuerpo estándar */
+  --font-size-md: 0.95rem;    /* 15.2px - inputs, botones, títulos destacados de celda */
+  --font-size-lg: 1.125rem;   /* 18px - subtítulos de sección */
+  --font-size-xl: 1.25rem;    /* 20px */
+  --font-size-2xl: 1.5rem;    /* 24px - h2 */
+  --font-size-3xl: 1.875rem;  /* 30px - h1 */
+  --font-size-4xl: 2.25rem;   /* 36px */
+
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+
+  --text-slate: #0F172A;
+  --text-main: #0F172A;
+  --text-secondary: #1E293B;
+  --text-muted: #475569;
+  --text-dim: #64748B;
+  --text-subtle: #94A3B8;
+
+  /* --------------------------------------------------------------------------
+     11. 4-Tier Elevation & Shadow System
+     -------------------------------------------------------------------------- */
+  --shadow-tier1: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 12px 0 rgba(15, 23, 42, 0.03);
+  --shadow-tier2: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --shadow-tier3: 0 12px 32px -4px rgba(15, 23, 42, 0.08);
+  --shadow-tier4: 0 20px 40px -8px rgba(15, 23, 42, 0.16);
+  --shadow-table: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-glow-emerald: 0 0 20px rgba(16, 185, 129, 0.20);
+  --shadow-glow-ball: 0 0 14px rgba(16, 185, 129, 0.50);
+
+  /* --------------------------------------------------------------------------
+     12. PrimeNG Theme Tokens
+     -------------------------------------------------------------------------- */
+  --p-primary-color: var(--primary-turf);
+  --p-primary-hover-color: var(--primary-hover);
+  --p-focus-ring-color: rgba(16, 185, 129, 0.20);
+}

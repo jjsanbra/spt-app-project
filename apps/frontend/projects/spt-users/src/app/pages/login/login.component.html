@@ -1,0 +1,79 @@
+<p-toast></p-toast>
+
+<div class="auth-page">
+  <div class="auth-container">
+    <div class="auth-card-wrapper">
+      <div class="auth-header">
+        <h1 class="auth-title">{{ 'AUTH.LOGIN' | translate }}</h1>
+        <p class="auth-subtitle">{{ 'APP.TAGLINE' | translate }}</p>
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        <!-- Email -->
+        <div class="form-group">
+          <label for="login-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+          <span class="p-input-icon-left w-full">
+            <input
+              id="login-email"
+              type="email"
+              pInputText
+              class="w-full"
+              formControlName="email"
+              [placeholder]="'AUTH.EMAIL' | translate"
+            />
+          </span>
+          @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
+            <small class="form-error">
+              @if (loginForm.get('email')?.hasError('required')) {
+                {{ 'AUTH.ERRORS.REQUIRED' | translate }}
+              } @else if (loginForm.get('email')?.hasError('email')) {
+                {{ 'AUTH.ERRORS.EMAIL_FORMAT' | translate }}
+              }
+            </small>
+          }
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="login-password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
+          <p-password
+            id="login-password"
+            formControlName="password"
+            [feedback]="false"
+            [toggleMask]="true"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            [placeholder]="'AUTH.PASSWORD' | translate"
+          ></p-password>
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
+            <small class="form-error">
+              {{ 'AUTH.ERRORS.REQUIRED' | translate }}
+            </small>
+          }
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            pButton
+            class="w-full"
+            [loading]="loading"
+            [disabled]="loading"
+            icon="pi pi-sign-in"
+          >
+            {{ 'AUTH.SUBMIT' | translate }}
+          </button>
+        </div>
+      </form>
+
+      <div class="auth-footer">
+        <p class="footer-text">
+          <a routerLink="/register" class="auth-link">
+            {{ 'AUTH.NO_ACCOUNT' | translate }}
+          </a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

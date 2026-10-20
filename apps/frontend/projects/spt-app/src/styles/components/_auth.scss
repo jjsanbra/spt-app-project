@@ -1,0 +1,499 @@
+/* ==========================================================================
+   FIGMA ATHLETIC LUXURY DESIGN SYSTEM — AUTENTICACIÓN FEDERATIVA (LOGIN)
+   Ruta Oficial: projects/rpm-app/src/styles/components/_auth.scss
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Contenedor y Tarjeta Principal
+   -------------------------------------------------------------------------- */
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) var(--spacing-base);
+}
+
+.auth-card-federation {
+  width: 100%;
+  max-width: 580px;
+  background: var(--surface-pure);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-tier4);
+  position: relative;
+  overflow: hidden;
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-xl);
+}
+
+/* Barra superior decorativa en gradiente esmeralda a cian */
+.auth-top-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #006948 0%, #10B981 50%, #06B6D4 100%);
+}
+
+/* --------------------------------------------------------------------------
+   2. Cabecera y Branding Tour Federation Suite
+   -------------------------------------------------------------------------- */
+.auth-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.auth-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.auth-brand-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  color: var(--surface-pure);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 105, 72, 0.25);
+
+  svg, i {
+    font-size: 1.35rem;
+  }
+.auth-brand-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+}
+
+.auth-brand-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.auth-brand-title {
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: var(--font-weight-extrabold);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+
+  .brand-prefix {
+    color: var(--text-slate);
+  }
+
+  .brand-highlight {
+    color: var(--admin-primary);
+    margin-left: 0.2rem;
+  }
+}
+
+.auth-brand-tagline {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text-dim);
+  margin-top: 0.15rem;
+}
+
+.auth-title {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-slate);
+  margin-bottom: var(--spacing-2xs);
+  letter-spacing: -0.01em;
+}
+
+.auth-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-dim);
+  max-width: 440px;
+  line-height: 1.45;
+  margin: 0 auto;
+}
+
+/* --------------------------------------------------------------------------
+   3. Formulario y Campos Federativos
+   -------------------------------------------------------------------------- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.federation-field {
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-pure);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.6rem var(--spacing-base);
+  transition: all 0.2s ease;
+
+  &:focus-within {
+    border-color: var(--admin-primary);
+    box-shadow: 0 0 0 3px rgba(0, 105, 72, 0.12);
+  }
+
+  &.is-invalid {
+    border-color: var(--status-disputed);
+  }
+}
+
+.federation-field-label {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-dim);
+  margin-bottom: 0.2rem;
+  letter-spacing: 0.02em;
+}
+
+.federation-field-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+
+  .field-icon {
+    color: var(--text-dim);
+    font-size: var(--font-size-base);
+    min-width: 18px;
+  }
+
+  input {
+    width: 100%;
+    border: none !important;
+    outline: none !important;
+    background: transparent !important;
+    color: var(--text-slate) !important;
+    font-size: var(--font-size-base) !important;
+    font-weight: var(--font-weight-medium) !important;
+    padding: 0.15rem 0 !important;
+    box-shadow: none !important;
+
+    &::placeholder {
+      color: var(--text-subtle);
+      font-weight: var(--font-weight-regular);
+    }
+  }
+
+  /* Override integrado de p-password */
+  p-password {
+    width: 100%;
+
+    .p-password {
+      width: 100%;
+    }
+
+    input {
+      width: 100% !important;
+      border: none !important;
+      box-shadow: none !important;
+      outline: none !important;
+      background: transparent !important;
+      color: var(--text-slate) !important;
+      font-size: var(--font-size-base) !important;
+      font-weight: var(--font-weight-medium) !important;
+      padding: 0.15rem 0 !important;
+    }
+
+    .p-password-toggle-mask-icon,
+    i {
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: var(--font-size-base);
+      transition: color 0.18s ease;
+
+      &:hover {
+        color: var(--text-slate);
+      }
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Opciones y Botón Principal
+   -------------------------------------------------------------------------- */
+.auth-options-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.remember-checkbox-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+
+  .remember-label {
+    font-size: var(--font-size-sm);
+    color: #334155;
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* PrimeNG Checkbox custom styling */
+  .p-checkbox .p-checkbox-box {
+    border-radius: var(--radius-xs);
+    border-color: var(--border-input);
+
+    &.p-highlight {
+      background: var(--admin-primary) !important;
+      border-color: var(--admin-primary) !important;
+    }
+  }
+}
+
+.forgot-password-link {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--admin-primary);
+  text-decoration: none;
+  transition: all 0.18s ease;
+
+  &:hover {
+    text-decoration: underline;
+    color: var(--admin-primary-hover);
+  }
+}
+
+.btn-federation-submit {
+  width: 100% !important;
+  background: var(--admin-primary) !important;
+  color: var(--surface-pure) !important;
+  border: 1px solid var(--admin-primary) !important;
+  border-radius: var(--radius-md) !important;
+  padding: 0.85rem var(--spacing-lg) !important;
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-bold) !important;
+  letter-spacing: -0.01em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--spacing-sm) !important;
+  box-shadow: 0 4px 14px rgba(0, 105, 72, 0.22) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--admin-primary-hover) !important;
+    border-color: var(--admin-primary-hover) !important;
+    box-shadow: 0 6px 18px rgba(0, 105, 72, 0.32) !important;
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+  }
+
+  .submit-icon {
+    font-size: var(--font-size-base);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Separador Demo
+   -------------------------------------------------------------------------- */
+.demo-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: var(--spacing-xl) 0 var(--spacing-base);
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .demo-divider-text {
+    padding: 0 var(--spacing-base);
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Cuadrícula de Perfiles Demo (2x2)
+   -------------------------------------------------------------------------- */
+.demo-profiles-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-xl);
+}
+
+.demo-profile-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: #f8fafc;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.5rem 0.65rem;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  position: relative;
+  overflow: hidden;
+
+  &:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+}
+
+.profile-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+
+  &.avatar-admin {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  &.avatar-club {
+    background: #dbeafe;
+    color: #1e40af;
+  }
+
+  &.avatar-org {
+    background: #fef3c7;
+    color: #92400e;
+  }
+
+  &.avatar-court {
+    background: #e2e8f0;
+    color: #334155;
+  }
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.profile-name {
+  font-size: 0.8125rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--text-slate);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+}
+
+.profile-email {
+  font-size: var(--font-size-2xs);
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.25;
+  margin-top: 0.1rem;
+}
+
+.profile-badge {
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-bold);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  white-space: nowrap;
+  margin-left: auto;
+  flex-shrink: 0;
+
+  &.badge-admin {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+  }
+
+  &.badge-club {
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid rgba(59, 130, 246, 0.25);
+  }
+
+  &.badge-org {
+    background: #fffbeb;
+    color: #b45309;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+  }
+
+  &.badge-court {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid rgba(148, 163, 184, 0.25);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Enlace Inferior de Retorno
+   -------------------------------------------------------------------------- */
+.auth-back-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: all 0.18s ease;
+
+  i {
+    font-size: var(--font-size-xs);
+    transition: transform 0.18s ease;
+  }
+
+  &:hover {
+    color: var(--admin-primary);
+
+    i {
+      transform: translateX(-3px);
+    }
+  }
+}
