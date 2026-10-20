@@ -19,7 +19,17 @@ export class TenantGuard implements CanActivate {
       throw new ForbiddenException('Usuario no autenticado');
     }
 
-    const tenantId = request.headers['x-tenant-id'] as string;
+    let tenantId = request.headers['x-tenant-id'] as string;
+
+    if (!tenantId && user.isSuperAdmin) {
+      const defaultClub = await this.prisma.club.findFirst({
+        where: { isActive: true },
+        select: { id: true },
+      });
+      if (defaultClub) {
+        tenantId = defaultClub.id;
+      }
+    }
 
     if (!tenantId) {
       throw new BadRequestException(

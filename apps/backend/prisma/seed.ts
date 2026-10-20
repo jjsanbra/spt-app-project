@@ -62,6 +62,17 @@ async function main(): Promise<void> {
   });
   console.log(`🏟️  Club creado: ${club.name} (ID: ${club.id})`);
 
+  // Asignar SuperAdmin como OWNER al club de prueba
+  await prisma.clubMembership.create({
+    data: {
+      userId: superAdmin.id,
+      clubId: club.id,
+      role: ClubRole.OWNER,
+      isActive: true,
+    },
+  });
+  console.log(`👑 SuperAdmin asignado como OWNER a: ${club.name}`);
+
   // 4. Crear Administrador del Club
   const clubAdminPassword = await bcrypt.hash('ClubAdmin123!', 10);
   const clubAdmin = await prisma.user.create({

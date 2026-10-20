@@ -9,6 +9,7 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { ClubRole } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { AuthResponseDto, TokenResponseDto, UserSummaryDto } from './dto/auth-response.dto';
 import { LoginDto } from './dto/login.dto';
@@ -106,10 +107,18 @@ export class AuthService {
       isSuperAdmin: user.isSuperAdmin,
     });
 
+    let extraClubs: any[] = [];
+    if (user.isSuperAdmin && (!user.memberships || user.memberships.length === 0)) {
+      extraClubs = await this.prisma.club.findMany({
+        where: { isActive: true },
+        select: { id: true, name: true, slug: true, isActive: true },
+      });
+    }
+
     return {
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
-      user: this.mapUserSummary(user),
+      user: this.mapUserSummary(user, extraClubs),
     };
   }
 
@@ -177,7 +186,15 @@ export class AuthService {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-    return this.mapUserSummary(user);
+    let extraClubs: any[] = [];
+    if (user.isSuperAdmin && (!user.memberships || user.memberships.length === 0)) {
+      extraClubs = await this.prisma.club.findMany({
+        where: { isActive: true },
+        select: { id: true, name: true, slug: true, isActive: true },
+      });
+    }
+
+    return this.mapUserSummary(user, extraClubs);
   }
 
   private async generateTokens(payload: JwtPayload): Promise<{ accessToken: string; refreshToken: string }> {
@@ -204,7 +221,30 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private mapUserSummary(user: any): UserSummaryDto {
+  private mapUserSummary(user: any, extraClubs: any[] = []): UserSummaryDto {
+    const directMemberships = (user.memberships || [])
+      .filter((m: any) => m.club && m.club.isActive)
+      .map((m: any) => ({
+        clubId: m.club.id,
+        clubName: m.club.name,
+        clubSlug: m.club.slug,
+        role: m.role,
+        memberNumber: m.memberNumber,
+        walletBalance: Number(m.walletBalance),
+      }));
+
+    const memberships =
+      directMemberships.length > 0
+        ? directMemberships
+        : extraClubs.map((c) => ({
+            clubId: c.id,
+            clubName: c.name,
+            clubSlug: c.slug,
+            role: ClubRole.OWNER,
+            memberNumber: 'SUPERADMIN',
+            walletBalance: 0,
+          }));
+
     return {
       id: user.id,
       email: user.email,
@@ -213,16 +253,7 @@ export class AuthService {
       phone: user.phone,
       avatarUrl: user.avatarUrl,
       isSuperAdmin: user.isSuperAdmin,
-      memberships: (user.memberships || [])
-        .filter((m: any) => m.club && m.club.isActive)
-        .map((m: any) => ({
-          clubId: m.club.id,
-          clubName: m.club.name,
-          clubSlug: m.club.slug,
-          role: m.role,
-          memberNumber: m.memberNumber,
-          walletBalance: Number(m.walletBalance),
-        })),
+      memberships,
     };
   }
 }
