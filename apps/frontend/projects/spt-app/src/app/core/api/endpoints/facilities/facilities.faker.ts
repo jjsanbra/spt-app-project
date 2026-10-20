@@ -9,10 +9,13 @@ import {
 } from '@faker-js/faker';
 
 import type {
+  FacilityAvailabilityResponseDto,
   FacilityBlockResponseDto,
   FacilityResponseDto
 } from '../../model';
 
+
+export const getFacilitiesControllerGetAvailabilityResponseMock = (): FacilityAvailabilityResponseDto[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({facilityId: faker.string.alpha({length: {min: 10, max: 20}}), facilityName: faker.string.alpha({length: {min: 10, max: 20}}), sportType: faker.helpers.arrayElement(['PADEL','TENNIS','FOOTBALL_7','FOOTBALL_11','BASKETBALL','MULTI_SPORT'] as const), courtType: faker.helpers.arrayElement(['INDOOR','OUTDOOR','COVERED'] as const), surfaceType: faker.helpers.arrayElement(['CRYSTAL','CLAY','SYNTHETIC_GRASS','CONCRETE','PARQUET','RESIN'] as const), hasLighting: faker.datatype.boolean(), defaultSlotMinutes: faker.number.float({fractionDigits: 2}), slots: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({startTime: faker.string.alpha({length: {min: 10, max: 20}}), endTime: faker.string.alpha({length: {min: 10, max: 20}}), startHourText: faker.string.alpha({length: {min: 10, max: 20}}), endHourText: faker.string.alpha({length: {min: 10, max: 20}}), status: faker.helpers.arrayElement(['AVAILABLE','OCCUPIED','BLOCKED'] as const), price: faker.number.float({fractionDigits: 2}), isPeakHour: faker.datatype.boolean(), lightSurcharge: faker.number.float({fractionDigits: 2}), blockedReason: faker.helpers.arrayElement([{}, null])}))})))
 
 export const getFacilitiesControllerFindAllResponseMock = (): FacilityResponseDto[] => (Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), clubId: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), sportType: faker.helpers.arrayElement(['PADEL','TENNIS','FOOTBALL_7','FOOTBALL_11','BASKETBALL','MULTI_SPORT'] as const), courtType: faker.helpers.arrayElement(['INDOOR','OUTDOOR','COVERED'] as const), surfaceType: faker.helpers.arrayElement(['CRYSTAL','CLAY','SYNTHETIC_GRASS','CONCRETE','PARQUET','RESIN'] as const), hasLighting: faker.datatype.boolean(), defaultSlotMinutes: faker.number.float({fractionDigits: 2}), minPlayers: faker.number.float({fractionDigits: 2}), maxPlayers: faker.number.float({fractionDigits: 2}), isActive: faker.datatype.boolean(), createdAt: faker.date.past().toISOString().slice(0, 19) + 'Z', updatedAt: faker.date.past().toISOString().slice(0, 19) + 'Z'})))
 

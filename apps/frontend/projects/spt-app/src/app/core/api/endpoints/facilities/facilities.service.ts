@@ -26,6 +26,8 @@ import type {
   CreateFacilityBlockDto,
   CreateFacilityDto,
   FacilitiesControllerFindAllParams,
+  FacilitiesControllerGetAvailabilityParams,
+  FacilityAvailabilityResponseDto,
   FacilityBlockResponseDto,
   FacilityResponseDto,
   UpdateFacilityDto
@@ -155,6 +157,41 @@ function filterParams(
 @Injectable({ providedIn: 'root' })
 export class FacilitiesService {
   private readonly http = inject(HttpClient);
+/**
+ * @summary Obtener matriz de franjas horarias y disponibilidad por pistas
+ */
+ facilitiesControllerGetAvailability<TData = FacilityAvailabilityResponseDto[]>(params: FacilitiesControllerGetAvailabilityParams, options?: HttpClientBodyOptions): Observable<TData>;
+ facilitiesControllerGetAvailability<TData = FacilityAvailabilityResponseDto[]>(params: FacilitiesControllerGetAvailabilityParams, options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
+ facilitiesControllerGetAvailability<TData = FacilityAvailabilityResponseDto[]>(params: FacilitiesControllerGetAvailabilityParams, options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
+  facilitiesControllerGetAvailability<TData = FacilityAvailabilityResponseDto[]>(
+    params: FacilitiesControllerGetAvailabilityParams, options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    const filteredParams = filterParams({...params, ...options?.params}, new Set<string>([]));
+
+    if (options?.observe === 'events') {
+      return this.http.get<TData>(
+      `/api/v1/facilities/availability`,{
+    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+        params: filteredParams,}
+    );
+    }
+
+    if (options?.observe === 'response') {
+      return this.http.get<TData>(
+      `/api/v1/facilities/availability`,{
+    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+        params: filteredParams,}
+    );
+    }
+
+    return this.http.get<TData>(
+      `/api/v1/facilities/availability`,{
+    ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'body',
+        params: filteredParams,}
+    );
+  }
 /**
  * @summary Listar todas las instalaciones deportivas del club activo
  */

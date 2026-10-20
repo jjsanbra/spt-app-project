@@ -9,6 +9,7 @@ export { FacilitiesService } from './api/endpoints/facilities/facilities.service
 export { PricingService } from './api/endpoints/pricing/pricing.service';
 export { ClubsMembersService } from './api/endpoints/clubs-members/clubs-members.service';
 export { ClubsSettingsService } from './api/endpoints/clubs-settings/clubs-settings.service';
+export { BookingsService } from './api/endpoints/bookings/bookings.service';
 
 // Servicios de infraestructura y UI
 export * from './services/auth.service';

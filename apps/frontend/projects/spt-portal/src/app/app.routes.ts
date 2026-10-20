@@ -8,4 +8,18 @@ export const routes: Routes = [
         (m) => m.PortalHomeComponent,
       ),
   },
+  {
+    path: 'book',
+    loadComponent: () =>
+      import('./pages/bookings/bookings-grid.component').then(
+        (m) => m.BookingsGridComponent,
+      ),
+  },
+  {
+    path: 'my-bookings',
+    loadComponent: () =>
+      import('./pages/bookings/my-bookings.component').then(
+        (m) => m.MyBookingsComponent,
+      ),
+  },
 ];

@@ -301,6 +301,46 @@
       "BOOKINGS_CARD_DESC": "Consulta horarios y reserva tu pista al instante",
       "MY_BOOKINGS_CARD_TITLE": "Mis Reservas",
       "MY_BOOKINGS_CARD_DESC": "Consulta y gestiona tus reservas confirmadas"
+    },
+    "BOOKINGS": {
+      "TITLE": "Reserva de Pistas y Disponibilidad",
+      "SUBTITLE": "Selecciona fecha y deporte para comprobar franjas libres y reservar al instante",
+      "DATE": "Fecha",
+      "SPORT": "Deporte",
+      "FILTER_ALL_SPORTS": "Todos los deportes",
+      "EMPTY": "No hay pistas disponibles para la fecha o deporte seleccionados.",
+      "PEAK_HOUR": "Hora Punta",
+      "LIGHT_INCLUDED": "Incluye Luz",
+      "LIGHT_EXTRA": "Suplemento Luz",
+      "SLOT_AVAILABLE": "Libre",
+      "SLOT_OCCUPIED": "Ocupado",
+      "SLOT_BLOCKED": "Bloqueado",
+      "DIALOG_CONFIRM_TITLE": "Confirmar Reserva de Pista",
+      "DIALOG_CONFIRM_DESC": "Revisa los detalles antes de completar tu reserva",
+      "FIELD_FACILITY": "Instalación / Pista",
+      "FIELD_DATE_TIME": "Horario Reservado",
+      "FIELD_DURATION": "Duración",
+      "FIELD_PRICE": "Precio Total",
+      "FIELD_LIGHT": "¿Deseas iluminación de pista?",
+      "FIELD_NOTES": "Comentarios o notas (opcional)",
+      "FIELD_NOTES_PLACEHOLDER": "Ej: Jugamos con bolas propias, etc.",
+      "PAYMENT_NOTICE": "Modalidad de Pago: Abonarás la reserva en recepción al llegar al centro.",
+      "CONFIRM_BTN": "Confirmar Reserva",
+      "SUCCESS_CREATE": "¡Reserva confirmada con éxito!",
+      "VIEW_MY_BOOKINGS": "Ver mis reservas"
+    },
+    "MY_BOOKINGS": {
+      "TITLE": "Mis Reservas",
+      "SUBTITLE": "Gestiona tus pistas reservadas y consulta el historial",
+      "NEW_BOOKING_BTN": "Nueva Reserva",
+      "EMPTY": "Aún no tienes ninguna reserva confirmada.",
+      "STATUS_CONFIRMED": "Confirmada",
+      "STATUS_CANCELLED": "Cancelada",
+      "STATUS_PENDING": "Pendiente",
+      "CONFIRM_CANCEL_TITLE": "Cancelar Reserva",
+      "CONFIRM_CANCEL_MSG": "¿Estás seguro de que deseas cancelar esta reserva? La pista volverá a quedar disponible para otros jugadores.",
+      "SUCCESS_CANCEL": "Reserva cancelada correctamente",
+      "CANCEL_BTN": "Cancelar Reserva"
     }
   }
 }

@@ -18,30 +18,44 @@
       </p>
 
       <div class="portal-cards-grid">
-        <div class="portal-feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-table"></i>
+        <a routerLink="/portal/book" class="feature-card-link">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-table"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'PORTAL.HOME.BOOKINGS_CARD_DESC' | translate }}</p>
+            </div>
           </div>
-          <div class="feature-content">
-            <h3 class="feature-title">{{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'PORTAL.HOME.BOOKINGS_CARD_DESC' | translate }}</p>
-          </div>
-        </div>
+        </a>
 
-        <div class="portal-feature-card">
-          <div class="feature-icon">
-            <i class="pi pi-clock"></i>
+        <a routerLink="/portal/my-bookings" class="feature-card-link">
+          <div class="portal-feature-card">
+            <div class="feature-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+            <div class="feature-content">
+              <h3 class="feature-title">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}</h3>
+              <p class="feature-desc">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_DESC' | translate }}</p>
+            </div>
           </div>
-          <div class="feature-content">
-            <h3 class="feature-title">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}</h3>
-            <p class="feature-desc">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_DESC' | translate }}</p>
-          </div>
-        </div>
+        </a>
       </div>
 
       <div class="quick-actions">
+        <a routerLink="/portal/book">
+          <button type="button" pButton icon="pi pi-calendar-plus">
+            {{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}
+          </button>
+        </a>
+        <a routerLink="/portal/my-bookings">
+          <button type="button" pButton icon="pi pi-calendar" severity="secondary" [outlined]="true">
+            {{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}
+          </button>
+        </a>
         <a routerLink="/profile">
-          <button type="button" pButton icon="pi pi-user" severity="secondary" [outlined]="true">
+          <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
             {{ 'PORTAL.HOME.GO_TO_PROFILE' | translate }}
           </button>
         </a>

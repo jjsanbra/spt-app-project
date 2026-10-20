@@ -1,0 +1,312 @@
+@use "base/responsive" as *;
+
+.portal-page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-md);
+
+  @include mobile {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.page-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  margin: 0 0 var(--spacing-2xs) 0;
+}
+
+.page-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.filter-controls-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.date-quick-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+
+  .date-input {
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+}
+
+.sport-filter-wrapper {
+  min-width: 200px;
+
+  @include mobile {
+    width: 100%;
+  }
+
+  .sport-select {
+    width: 100%;
+  }
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: var(--spacing-2xl) 0;
+
+  .loading-spinner {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.empty-state-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xl);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  color: var(--text-muted);
+
+  .empty-icon {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+.facilities-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.facility-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.facility-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--border-subtle);
+
+  .facility-sport-badge {
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .facility-name {
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+    margin: var(--spacing-3xs) 0;
+  }
+
+  .facility-specs {
+    font-size: var(--font-size-xs);
+  }
+
+  .lighting-badge {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    background-color: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--font-size-sm);
+  }
+}
+
+.slots-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: var(--spacing-xs);
+}
+
+.slot-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-xs);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background-color: var(--surface-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 56px;
+
+  .slot-time {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+  }
+
+  .slot-price {
+    font-size: var(--font-size-2xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+    margin-top: 2px;
+  }
+
+  .slot-status-text {
+    font-size: var(--font-size-2xs);
+    color: var(--text-muted);
+    margin-top: 2px;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+
+  &.slot-available {
+    background-color: var(--surface-card);
+    border-color: rgba(16, 185, 129, 0.3);
+
+    &:hover {
+      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+    }
+
+    &.peak-hour {
+      border-left: 3px solid #f59e0b;
+    }
+  }
+
+  &.slot-occupied {
+    background-color: var(--surface-muted);
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &.slot-blocked {
+    background-color: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.2);
+    cursor: not-allowed;
+    .slot-status-text {
+      color: #ef4444;
+    }
+  }
+}
+
+.booking-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.dialog-desc {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.booking-summary-box {
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+
+  .summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-xs);
+
+    .label {
+      color: var(--text-muted);
+    }
+
+    .value {
+      color: var(--text-color);
+    }
+
+    &.total-row {
+      margin-top: var(--spacing-2xs);
+      padding-top: var(--spacing-2xs);
+      border-top: 1px solid var(--border-subtle);
+
+      .total-price {
+        font-size: var(--font-size-md);
+        font-weight: var(--font-weight-bold);
+        color: var(--primary-color);
+      }
+    }
+  }
+}
+
+.lighting-option-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: rgba(245, 158, 11, 0.05);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+
+  .checkbox-label {
+    font-size: var(--font-size-xs);
+    cursor: pointer;
+  }
+}
+
+.payment-notice-box {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background-color: var(--surface-muted);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-2xs);
+  color: var(--text-muted);
+
+  p {
+    margin: 0;
+  }
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}

@@ -21,6 +21,7 @@ import {
 } from '@nestjs/swagger';
 import { ClubRole, SportType } from '@prisma/client';
 import { CurrentTenant } from '../auth/decorators/current-tenant.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -29,8 +30,10 @@ import { CreateFacilityBlockDto } from './dto/create-facility-block.dto';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { FacilityBlockResponseDto } from './dto/facility-block-response.dto';
 import { FacilityResponseDto } from './dto/facility-response.dto';
+import { FacilityAvailabilityResponseDto } from './dto/facility-availability-response.dto';
 import { UpdateFacilityDto } from './dto/update-facility.dto';
 import { FacilitiesService } from './facilities.service';
+import { FacilitiesAvailabilityService } from './facilities-availability.service';
 
 @ApiTags('Facilities')
 @ApiBearerAuth()
@@ -42,7 +45,26 @@ import { FacilitiesService } from './facilities.service';
 @UseGuards(JwtAuthGuard, TenantGuard, RolesGuard)
 @Controller({ path: 'facilities', version: '1' })
 export class FacilitiesController {
-  constructor(private readonly facilitiesService: FacilitiesService) {}
+  constructor(
+    private readonly facilitiesService: FacilitiesService,
+    private readonly availabilityService: FacilitiesAvailabilityService,
+  ) {}
+
+  // ─── Disponibilidad dinámica de Pistas ─────────────────────
+
+  @Get('availability')
+  @ApiOperation({ summary: 'Obtener matriz de franjas horarias y disponibilidad por pistas' })
+  @ApiQuery({ name: 'date', type: String, example: '2026-10-25', description: 'Fecha YYYY-MM-DD' })
+  @ApiQuery({ name: 'sportType', enum: SportType, required: false })
+  @ApiResponse({ status: 200, type: [FacilityAvailabilityResponseDto] })
+  async getAvailability(
+    @CurrentTenant('clubId') clubId: string,
+    @Query('date') date: string,
+    @Query('sportType') sportType?: SportType,
+    @CurrentUser('id') userId?: string,
+  ): Promise<FacilityAvailabilityResponseDto[]> {
+    return this.availabilityService.getAvailability(clubId, date, sportType, userId);
+  }
 
   // ─── Pistas / Instalaciones ────────────────────────────────
 

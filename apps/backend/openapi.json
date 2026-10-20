@@ -217,6 +217,72 @@
         ]
       }
     },
+    "/api/v1/facilities/availability": {
+      "get": {
+        "operationId": "FacilitiesController_getAvailability",
+        "summary": "Obtener matriz de franjas horarias y disponibilidad por pistas",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "date",
+            "required": true,
+            "in": "query",
+            "description": "Fecha YYYY-MM-DD",
+            "schema": {
+              "example": "2026-10-25",
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportType",
+            "required": false,
+            "in": "query",
+            "schema": {
+              "enum": [
+                "PADEL",
+                "TENNIS",
+                "FOOTBALL_7",
+                "FOOTBALL_11",
+                "BASKETBALL",
+                "MULTI_SPORT"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityAvailabilityResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/facilities": {
       "get": {
         "operationId": "FacilitiesController_findAll",
@@ -1182,53 +1248,159 @@
           }
         ]
       }
+    },
+    "/api/v1/bookings": {
+      "post": {
+        "operationId": "BookingsController_create",
+        "summary": "Crear una reserva de pista completa (FULL)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/bookings/my": {
+      "get": {
+        "operationId": "BookingsController_findMyBookings",
+        "summary": "Listar las reservas del usuario autenticado en el club",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BookingResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/bookings/{id}": {
+      "delete": {
+        "operationId": "BookingsController_cancel",
+        "summary": "Cancelar una reserva del usuario autenticado",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelBookingDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BookingResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Bookings"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
     "title": "SPT App API",
-    "description": "API para el sistema SaaS de gestión de reservas deportivas",
+    "description": "",
     "version": "1.0",
     "contact": {}
   },
-  "tags": [
-    {
-      "name": "auth",
-      "description": "Autenticación y autorización"
-    },
-    {
-      "name": "users",
-      "description": "Gestión de usuarios"
-    },
-    {
-      "name": "clubs",
-      "description": "Gestión de clubes (tenants)"
-    },
-    {
-      "name": "facilities",
-      "description": "Instalaciones y pistas"
-    },
-    {
-      "name": "bookings",
-      "description": "Motor de reservas"
-    },
-    {
-      "name": "pricing",
-      "description": "Configuración de precios"
-    },
-    {
-      "name": "notifications",
-      "description": "Notificaciones"
-    }
-  ],
+  "tags": [],
   "servers": [],
   "components": {
-    "securitySchemes": {
-      "access-token": {
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "type": "http"
-      }
-    },
     "schemas": {
       "RegisterDto": {
         "type": "object",
@@ -1471,6 +1643,136 @@
             "description": "URL del avatar"
           }
         }
+      },
+      "TimeSlotAvailabilityDto": {
+        "type": "object",
+        "properties": {
+          "startTime": {
+            "type": "string",
+            "example": "2026-10-25T09:00:00.000Z"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "2026-10-25T10:30:00.000Z"
+          },
+          "startHourText": {
+            "type": "string",
+            "example": "09:00"
+          },
+          "endHourText": {
+            "type": "string",
+            "example": "10:30"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "AVAILABLE",
+              "OCCUPIED",
+              "BLOCKED"
+            ],
+            "example": "AVAILABLE"
+          },
+          "price": {
+            "type": "number",
+            "example": 16,
+            "description": "Precio del slot según pricing rule aplicable"
+          },
+          "isPeakHour": {
+            "type": "boolean",
+            "example": false,
+            "description": "Indica si la franja es hora punta"
+          },
+          "lightSurcharge": {
+            "type": "number",
+            "example": 2,
+            "description": "Suplemento de iluminación si aplica"
+          },
+          "blockedReason": {
+            "type": "object",
+            "example": "Mantenimiento de red",
+            "nullable": true
+          }
+        },
+        "required": [
+          "startTime",
+          "endTime",
+          "startHourText",
+          "endHourText",
+          "status",
+          "price",
+          "isPeakHour",
+          "lightSurcharge"
+        ]
+      },
+      "FacilityAvailabilityResponseDto": {
+        "type": "object",
+        "properties": {
+          "facilityId": {
+            "type": "string",
+            "example": "fac-uuid-1"
+          },
+          "facilityName": {
+            "type": "string",
+            "example": "Pista 1 - Cristal Central"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL"
+          },
+          "courtType": {
+            "type": "string",
+            "enum": [
+              "INDOOR",
+              "OUTDOOR",
+              "COVERED"
+            ],
+            "example": "INDOOR"
+          },
+          "surfaceType": {
+            "type": "string",
+            "enum": [
+              "CRYSTAL",
+              "CLAY",
+              "SYNTHETIC_GRASS",
+              "CONCRETE",
+              "PARQUET",
+              "RESIN"
+            ],
+            "example": "CRYSTAL"
+          },
+          "hasLighting": {
+            "type": "boolean",
+            "example": true
+          },
+          "defaultSlotMinutes": {
+            "type": "number",
+            "example": 90
+          },
+          "slots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TimeSlotAvailabilityDto"
+            }
+          }
+        },
+        "required": [
+          "facilityId",
+          "facilityName",
+          "sportType",
+          "courtType",
+          "surfaceType",
+          "hasLighting",
+          "defaultSlotMinutes",
+          "slots"
+        ]
       },
       "FacilityResponseDto": {
         "type": "object",
@@ -2403,6 +2705,204 @@
         "required": [
           "isActive"
         ]
+      },
+      "CreateBookingDto": {
+        "type": "object",
+        "properties": {
+          "facilityId": {
+            "type": "string",
+            "example": "fac-uuid-1",
+            "description": "Identificador único de la pista o instalación deportiva"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "2026-10-25T10:00:00.000Z",
+            "description": "Fecha y hora de inicio de la reserva en formato ISO 8601"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "2026-10-25T11:30:00.000Z",
+            "description": "Fecha y hora de fin de la reserva en formato ISO 8601"
+          },
+          "lightIncluded": {
+            "type": "boolean",
+            "example": false,
+            "default": false,
+            "description": "Indica si se solicita encendido de iluminación en la pista"
+          },
+          "notes": {
+            "type": "string",
+            "example": "Reserva para partido del torneo interno",
+            "description": "Notas o comentarios adicionales sobre la reserva"
+          }
+        },
+        "required": [
+          "facilityId",
+          "startTime",
+          "endTime"
+        ]
+      },
+      "BookingFacilitySummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "fac-uuid-1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pista 1 Central"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "BASKETBALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "sportType"
+        ]
+      },
+      "BookingUserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "user-uuid-1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Carlos Martínez"
+          },
+          "email": {
+            "type": "string",
+            "example": "carlos@ejemplo.com"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email"
+        ]
+      },
+      "BookingResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "book-uuid-1"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "club-uuid-1"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "fac-uuid-1"
+          },
+          "userId": {
+            "type": "string",
+            "example": "user-uuid-1"
+          },
+          "bookingType": {
+            "type": "string",
+            "enum": [
+              "FULL",
+              "OPEN"
+            ],
+            "example": "FULL"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING_CONFIRMATION",
+              "CONFIRMED",
+              "CANCELLED",
+              "COMPLETED",
+              "NO_SHOW"
+            ],
+            "example": "CONFIRMED"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T10:00:00.000Z"
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T11:30:00.000Z"
+          },
+          "totalPrice": {
+            "type": "number",
+            "example": 18,
+            "description": "Precio total de la reserva"
+          },
+          "lightIncluded": {
+            "type": "boolean",
+            "example": true,
+            "description": "Si incluye luz artificial"
+          },
+          "notes": {
+            "type": "object",
+            "example": "Reserva para partido amistoso",
+            "nullable": true
+          },
+          "cancellationReason": {
+            "type": "object",
+            "example": null,
+            "nullable": true
+          },
+          "cancelledAt": {
+            "type": "object",
+            "example": null,
+            "nullable": true
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T12:00:00.000Z"
+          },
+          "facility": {
+            "$ref": "#/components/schemas/BookingFacilitySummaryDto"
+          },
+          "user": {
+            "$ref": "#/components/schemas/BookingUserSummaryDto"
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "facilityId",
+          "userId",
+          "bookingType",
+          "status",
+          "startTime",
+          "endTime",
+          "totalPrice",
+          "lightIncluded",
+          "createdAt",
+          "facility"
+        ]
+      },
+      "CancelBookingDto": {
+        "type": "object",
+        "properties": {
+          "cancellationReason": {
+            "type": "string",
+            "example": "Imposibilidad de asistencia por motivos laborales",
+            "description": "Motivo de la cancelación de la reserva"
+          }
+        }
       }
     }
   }

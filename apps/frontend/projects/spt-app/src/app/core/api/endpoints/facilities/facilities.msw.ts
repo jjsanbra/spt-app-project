@@ -13,6 +13,7 @@ import type {
 } from 'msw';
 
 import type {
+  FacilityAvailabilityResponseDto,
   FacilityBlockResponseDto,
   FacilityResponseDto
 } from '../../model';
@@ -23,11 +24,24 @@ import {
   getFacilitiesControllerFindAllResponseMock,
   getFacilitiesControllerFindBlocksResponseMock,
   getFacilitiesControllerFindOneResponseMock,
+  getFacilitiesControllerGetAvailabilityResponseMock,
   getFacilitiesControllerUpdateResponseMock
 } from './facilities.faker';
 
-export { getFacilitiesControllerFindAllResponseMock, getFacilitiesControllerCreateResponseMock, getFacilitiesControllerFindOneResponseMock, getFacilitiesControllerUpdateResponseMock, getFacilitiesControllerFindBlocksResponseMock, getFacilitiesControllerCreateBlockResponseMock } from './facilities.faker';
+export { getFacilitiesControllerGetAvailabilityResponseMock, getFacilitiesControllerFindAllResponseMock, getFacilitiesControllerCreateResponseMock, getFacilitiesControllerFindOneResponseMock, getFacilitiesControllerUpdateResponseMock, getFacilitiesControllerFindBlocksResponseMock, getFacilitiesControllerCreateBlockResponseMock } from './facilities.faker';
 
+
+export const getFacilitiesControllerGetAvailabilityMockHandler = (overrideResponse?: FacilityAvailabilityResponseDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FacilityAvailabilityResponseDto[]> | FacilityAvailabilityResponseDto[]), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/facilities/availability', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getFacilitiesControllerGetAvailabilityResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
 
 export const getFacilitiesControllerFindAllMockHandler = (overrideResponse?: FacilityResponseDto[] | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<FacilityResponseDto[]> | FacilityResponseDto[]), options?: RequestHandlerOptions) => {
   return http.get('*/api/v1/facilities', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
@@ -121,6 +135,7 @@ export const getFacilitiesControllerRemoveBlockMockHandler = (overrideResponse?:
   }, options)
 }
 export const getFacilitiesMock = () => [
+  getFacilitiesControllerGetAvailabilityMockHandler(),
   getFacilitiesControllerFindAllMockHandler(),
   getFacilitiesControllerCreateMockHandler(),
   getFacilitiesControllerFindOneMockHandler(),

@@ -1,0 +1,93 @@
+<div class="portal-page-container">
+  <!-- Cabecera de Página -->
+  <div class="page-header">
+    <div class="header-titles">
+      <h1 class="page-title">{{ 'PORTAL.MY_BOOKINGS.TITLE' | translate }}</h1>
+      <p class="page-subtitle">{{ 'PORTAL.MY_BOOKINGS.SUBTITLE' | translate }}</p>
+    </div>
+    <div class="header-actions">
+      <a routerLink="/portal/book">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-plus"
+        >
+          {{ 'PORTAL.MY_BOOKINGS.NEW_BOOKING_BTN' | translate }}
+        </button>
+      </a>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading-state">
+      <i class="pi pi-spin pi-spinner text-primary loading-spinner"></i>
+    </div>
+  } @else if (bookings.length === 0) {
+    <div class="empty-state-card">
+      <i class="pi pi-calendar-times empty-icon"></i>
+      <p>{{ 'PORTAL.MY_BOOKINGS.EMPTY' | translate }}</p>
+      <a routerLink="/portal/book">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-calendar-plus"
+          [outlined]="true"
+        >
+          {{ 'PORTAL.MY_BOOKINGS.NEW_BOOKING_BTN' | translate }}
+        </button>
+      </a>
+    </div>
+  } @else {
+    <div class="bookings-list">
+      @for (booking of bookings; track booking.id) {
+        <div class="booking-card" [class.cancelled]="booking.status === 'CANCELLED'">
+          <div class="booking-card-main">
+            <div class="booking-time-badge">
+              <span class="date">{{ booking.startTime | date: 'dd MMM' }}</span>
+              <span class="hours">{{ booking.startTime | date: 'HH:mm' }}</span>
+            </div>
+
+            <div class="booking-details">
+              <div class="facility-line">
+                <span class="sport-tag">{{ booking.facility.sportType }}</span>
+                <h3 class="facility-name">{{ booking.facility.name }}</h3>
+              </div>
+              <div class="booking-meta text-muted">
+                <span>{{ booking.startTime | date: 'HH:mm' }} - {{ booking.endTime | date: 'HH:mm' }}</span>
+                @if (booking.lightIncluded) {
+                  <span> • <i class="pi pi-sun text-warning"></i> {{ 'PORTAL.BOOKINGS.LIGHT_INCLUDED' | translate }}</span>
+                }
+                @if (booking.notes) {
+                  <span> • "{{ booking.notes }}"</span>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="booking-card-actions">
+            <div class="price-and-status">
+              <span class="booking-price">{{ booking.totalPrice | currency: 'EUR':'symbol':'1.2-2' }}</span>
+              <p-tag
+                [value]="'PORTAL.MY_BOOKINGS.STATUS_' + booking.status | translate"
+                [severity]="getStatusSeverity(booking.status)"
+              ></p-tag>
+            </div>
+
+            @if (isUpcoming(booking)) {
+              <button
+                type="button"
+                pButton
+                [outlined]="true"
+                severity="danger"
+                icon="pi pi-times"
+                (click)="confirmCancelBooking(booking)"
+              >
+                {{ 'PORTAL.MY_BOOKINGS.CANCEL_BTN' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
