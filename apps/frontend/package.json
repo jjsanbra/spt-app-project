@@ -11,7 +11,8 @@
     "build": "ng build",
     "build:all": "ng build spt-admin && ng build spt-portal && ng build spt-users && ng build spt-app",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "test:cov": "ng test --watch=false --coverage"
   },
   "private": true,
   "packageManager": "npm@10.9.8",
