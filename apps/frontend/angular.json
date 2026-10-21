@@ -65,6 +65,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/spt-app/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/spt-app/src/assets",
+                "output": "assets"
               }
             ],
             "styles": ["projects/spt-app/src/styles.scss"],
@@ -170,6 +175,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/spt-admin/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/spt-app/src/assets",
+                "output": "assets"
               }
             ],
             "styles": ["projects/spt-admin/src/styles.scss"],
@@ -275,6 +285,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/spt-portal/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/spt-app/src/assets",
+                "output": "assets"
               }
             ],
             "styles": ["projects/spt-portal/src/styles.scss"],
@@ -380,6 +395,11 @@
               {
                 "glob": "**/*",
                 "input": "projects/spt-users/public"
+              },
+              {
+                "glob": "**/*",
+                "input": "projects/spt-app/src/assets",
+                "output": "assets"
               }
             ],
             "styles": ["projects/spt-users/src/styles.scss"],
