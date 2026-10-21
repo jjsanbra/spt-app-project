@@ -385,5 +385,56 @@ describe('BookingsService', () => {
         service.cancel('club-1', 'user-1', 'non-existent'),
       ).rejects.toThrow(NotFoundException);
     });
+
+    it('debe lanzar BadRequestException si la reserva ya se encontraba cancelada', async () => {
+      mockPrisma.booking.findFirst.mockResolvedValue({
+        ...mockBooking,
+        status: BookingStatus.CANCELLED,
+      });
+
+      await expect(
+        service.cancel('club-1', 'user-1', 'book-1'),
+      ).rejects.toThrow(BadRequestException);
+    });
+  });
+
+  describe('findMyBookings', () => {
+    it('debe listar las reservas del usuario mapeadas correctamente', async () => {
+      mockPrisma.booking.findMany.mockResolvedValue([mockBooking]);
+
+      const result = await service.findMyBookings('club-1', 'user-1');
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(mockBooking.id);
+    });
+  });
+
+  describe('findOpenMatches con filtros', () => {
+    it('debe listar partidas abiertas aplicando filtro de fecha y deporte', async () => {
+      const matchWithParticipants = {
+        ...mockBooking,
+        bookingType: BookingType.OPEN,
+        participants: [
+          {
+            id: 'part-1',
+            userId: 'user-1',
+            isHost: true,
+            status: ParticipantStatus.CONFIRMED,
+            slotNumber: 1,
+            individualPrice: 6.0,
+            user: { firstName: 'Carlos', lastName: 'Martínez', avatarUrl: null },
+          },
+        ],
+      };
+      mockPrisma.booking.findMany.mockResolvedValue([matchWithParticipants]);
+
+      const result = await service.findOpenMatches('club-1', 'user-1', '2026-10-25', SportType.PADEL);
+
+      expect(Array.isArray(result)).toBe(true);
+      expect(result.length).toBe(1);
+      expect(result[0].availableSlots).toBe(3);
+      expect(result[0].isCurrentUserJoined).toBe(true);
+    });
   });
 });

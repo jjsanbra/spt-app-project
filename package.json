@@ -22,6 +22,7 @@
     "test": "npm run test:backend && npm run test:frontend",
     "test:backend": "cd apps/backend && npm test",
     "test:frontend": "cd apps/frontend && npx ng test --watch=false",
+    "test:coverage:diff": "node scripts/check-coverage-diff.js",
     "test:e2e": "cd apps/frontend && npx playwright test",
     "lint": "cd apps/backend && npm run lint",
     "spec:new": "node scripts/spec-new-change.js",
@@ -29,10 +30,12 @@
     "spec:check": "node scripts/validate-specs.js",
     "api:generate": "cd apps/frontend && npx orval",
     "codegraph:sync": "codegraph sync .",
-    "codegraph:status": "codegraph status ."
+    "codegraph:status": "codegraph status .",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "concurrently": "^9.2.5"
+    "concurrently": "^9.2.5",
+    "husky": "^9.1.7"
   },
   "engines": {
     "node": ">=22.0.0",
