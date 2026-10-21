@@ -139,9 +139,41 @@ describe('ClubMembersComponent', () => {
     expect(mockNotify.error).toHaveBeenCalledWith('ADMIN.MEMBERS.ERROR_OWNER_PROTECTED');
   });
 
-  it('debe solicitar confirmación al dar de baja una membresía', () => {
+  it('debe solicitar confirmación al dar de baja una membresía y ejecutar el borrado en onAccept', () => {
+    mockConfirm.confirmDelete.mockImplementation((opts: any) => opts.onAccept());
     component.confirmRemoveMember(mockMember);
 
     expect(mockConfirm.confirmDelete).toHaveBeenCalled();
+    expect(mockMembersService.clubsMembersControllerRemove).toHaveBeenCalledWith(mockMember.id);
+    expect(mockNotify.success).toHaveBeenCalledWith('ADMIN.MEMBERS.SUCCESS_DELETE');
+  });
+
+  it('debe solicitar confirmación al desactivar un miembro y actualizar estado', () => {
+    mockConfirm.confirm.mockImplementation((opts: any) => opts.onAccept());
+    component.toggleMemberStatus({ ...mockMember, isActive: true });
+
+    expect(mockConfirm.confirm).toHaveBeenCalled();
+    expect(mockMembersService.clubsMembersControllerUpdateStatus).toHaveBeenCalledWith(
+      mockMember.id,
+      { isActive: false },
+    );
+  });
+
+  it('debe activar directamente a un miembro inactivo sin confirmación previa', () => {
+    component.toggleMemberStatus({ ...mockMember, isActive: false });
+
+    expect(mockConfirm.confirm).not.toHaveBeenCalled();
+    expect(mockMembersService.clubsMembersControllerUpdateStatus).toHaveBeenCalledWith(
+      mockMember.id,
+      { isActive: true },
+    );
+  });
+
+  it('debe devolver la severidad adecuada según el rol del miembro', () => {
+    expect(component.getRoleSeverity(ClubRole.OWNER)).toBe('danger');
+    expect(component.getRoleSeverity(ClubRole.ADMIN)).toBe('info');
+    expect(component.getRoleSeverity(ClubRole.STAFF)).toBe('warn');
+    expect(component.getRoleSeverity(ClubRole.MEMBER)).toBe('secondary');
   });
 });
+

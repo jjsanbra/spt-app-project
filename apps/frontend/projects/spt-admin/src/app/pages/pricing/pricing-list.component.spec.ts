@@ -126,8 +126,29 @@ describe('PricingListComponent', () => {
     expect(component.displayModal).toBeFalsy();
   });
 
+  it('debe actualizar la regla de tarifa al enviar formulario en modo edición', () => {
+    component.openEditModal(mockRules[0] as any);
+    component.pricingForm.patchValue({ name: 'Tarifa Actualizada' });
+
+    component.onSubmitModal();
+
+    expect(pricingServiceSpy.pricingControllerUpdate).toHaveBeenCalledWith('rule-1', expect.anything());
+    expect(component.displayModal).toBeFalsy();
+  });
+
+  it('no debe enviar el formulario si es inválido', () => {
+    component.openCreateModal();
+    component.pricingForm.patchValue({ name: '' });
+
+    component.onSubmitModal();
+
+    expect(pricingServiceSpy.pricingControllerCreate).not.toHaveBeenCalled();
+    expect(component.pricingForm.get('name')?.touched).toBe(true);
+  });
+
   it('debe eliminar la regla de precio al pulsar eliminar', () => {
     component.onDeleteRule('rule-1');
     expect(pricingServiceSpy.pricingControllerRemove).toHaveBeenCalledWith('rule-1');
   });
 });
+

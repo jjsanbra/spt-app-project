@@ -152,6 +152,48 @@ describe('SuperAdminClubsService', () => {
     });
   });
 
+  describe('updateClub', () => {
+    it('debe actualizar los datos del club si los parámetros son válidos', async () => {
+      mockPrisma.club.findUnique
+        .mockResolvedValueOnce(mockClub) // Para currentClub
+        .mockResolvedValueOnce(null) // Para comprobar conflicto de slug
+        .mockResolvedValueOnce({ ...mockClub, name: 'Club Actualizado' }); // Para findById final
+
+      mockPrisma.club.update.mockResolvedValue({ ...mockClub, name: 'Club Actualizado' });
+
+      const result = await service.updateClub('club-uuid-1', {
+        name: 'Club Actualizado',
+        slug: 'nuevo-slug',
+      });
+
+      expect(mockPrisma.club.update).toHaveBeenCalled();
+      expect(result.name).toBe('Club Actualizado');
+    });
+
+    it('debe lanzar BadRequestException si la hora de apertura es mayor a la de cierre', async () => {
+      mockPrisma.club.findUnique.mockResolvedValueOnce(mockClub);
+
+      await expect(
+        service.updateClub('club-uuid-1', {
+          openingHour: 23,
+          closingHour: 8,
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('debe lanzar ConflictException si el nuevo slug pertenece a otro club', async () => {
+      mockPrisma.club.findUnique
+        .mockResolvedValueOnce(mockClub)
+        .mockResolvedValueOnce({ id: 'otro-club-uuid', slug: 'slug-duplicado' });
+
+      await expect(
+        service.updateClub('club-uuid-1', {
+          slug: 'slug-duplicado',
+        }),
+      ).rejects.toThrow(ConflictException);
+    });
+  });
+
   describe('toggleStatus', () => {
     it('debe alternar el estado isActive del club', async () => {
       mockPrisma.club.findUnique
@@ -170,3 +212,4 @@ describe('SuperAdminClubsService', () => {
     });
   });
 });
+

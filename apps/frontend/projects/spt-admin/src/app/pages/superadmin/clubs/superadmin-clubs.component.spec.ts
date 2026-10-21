@@ -131,9 +131,33 @@ describe('SuperAdminClubsComponent', () => {
     expect(component.displayModal).toBe(false);
   });
 
+  it('debe llamar a superAdminClubsControllerUpdate al editar un club existente', () => {
+    component.openEditModal(mockClubs[0]);
+    component.clubForm.patchValue({ name: 'Club Editado' });
+
+    component.saveClub();
+
+    expect(superAdminServiceSpy.superAdminClubsControllerUpdate).toHaveBeenCalledWith(
+      'club-1',
+      expect.objectContaining({ name: 'Club Editado' }),
+    );
+    expect(component.displayModal).toBe(false);
+  });
+
+  it('no debe enviar el formulario si es inválido', () => {
+    component.openNewModal();
+    component.clubForm.patchValue({ name: '' });
+
+    component.saveClub();
+
+    expect(superAdminServiceSpy.superAdminClubsControllerCreate).not.toHaveBeenCalled();
+    expect(component.clubForm.get('name')?.touched).toBe(true);
+  });
+
   it('debe llamar a toggleClubStatus usando el diálogo de confirmación', () => {
     component.toggleClubStatus(mockClubs[0]);
     expect(confirmDialogServiceMock.confirm).toHaveBeenCalled();
     expect(superAdminServiceSpy.superAdminClubsControllerToggleStatus).toHaveBeenCalledWith('club-1');
   });
 });
+
