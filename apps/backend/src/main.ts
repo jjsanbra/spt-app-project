@@ -4,6 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './core/filters/all-exceptions.filter';
+import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -52,6 +54,10 @@ async function bootstrap() {
       },
     }),
   );
+
+  // ─── Filtro global de excepciones y logging ────────────────
+  app.useGlobalFilters(new AllExceptionsFilter(configService));
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   // ─── Swagger (solo en no-producción) ──────────────────────
   if (nodeEnv !== 'production') {
