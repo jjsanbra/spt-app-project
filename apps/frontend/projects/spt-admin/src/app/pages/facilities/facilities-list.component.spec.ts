@@ -128,8 +128,29 @@ describe('FacilitiesListComponent', () => {
     expect(component.displayModal).toBeFalsy();
   });
 
+  it('debe llamar al endpoint de actualización al enviar formulario en modo edición', () => {
+    component.openEditModal(mockFacilities[0] as any);
+    component.facilityForm.patchValue({ name: 'Pista Editada' });
+
+    component.onSubmitModal();
+
+    expect(facilitiesServiceSpy.facilitiesControllerUpdate).toHaveBeenCalledWith('fac-1', expect.anything());
+    expect(component.displayModal).toBeFalsy();
+  });
+
+  it('no debe enviar el formulario si es inválido', () => {
+    component.openCreateModal();
+    component.facilityForm.patchValue({ name: '' }); // Inválido (requerido)
+
+    component.onSubmitModal();
+
+    expect(facilitiesServiceSpy.facilitiesControllerCreate).not.toHaveBeenCalled();
+    expect(component.facilityForm.get('name')?.touched).toBe(true);
+  });
+
   it('debe desactivar la pista al pulsar eliminar', () => {
     component.onDeleteFacility(mockFacilities[0] as any);
     expect(facilitiesServiceSpy.facilitiesControllerRemove).toHaveBeenCalledWith('fac-1');
   });
 });
+

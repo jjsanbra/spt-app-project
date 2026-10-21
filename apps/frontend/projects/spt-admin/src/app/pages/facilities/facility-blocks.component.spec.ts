@@ -10,7 +10,7 @@ import {
   getFacilitiesControllerFindOneResponseMock,
 } from '@core';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { FacilityBlocksComponent } from './facility-blocks.component';
 
 describe('FacilityBlocksComponent', () => {
@@ -114,11 +114,61 @@ describe('FacilityBlocksComponent', () => {
     expect(component.displayModal).toBeFalsy();
   });
 
-  it('debe levantar o eliminar un bloqueo existente', () => {
+  it('no debe enviar el formulario si es inválido', () => {
+    component.openCreateModal();
+    component.blockForm.patchValue({ title: '' });
+    component.onSubmitBlock();
+
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBlock).not.toHaveBeenCalled();
+    expect(component.blockForm.touched).toBe(true);
+  });
+
+  it('debe mostrar advertencia si startTime es mayor o igual a endTime', () => {
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'warn');
+    component.openCreateModal();
+    component.blockForm.patchValue({
+      title: 'Bloqueo Inválido',
+      startTime: '2026-10-25T14:00',
+      endTime: '2026-10-25T10:00',
+    });
+
+    component.onSubmitBlock();
+
+    expect(notifySpy).toHaveBeenCalledWith('ADMIN.BLOCKS.ERRORS.INVALID_DATES');
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBlock).not.toHaveBeenCalled();
+  });
+
+  it('debe manejar error al crear bloqueo', () => {
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
+    facilitiesServiceSpy.facilitiesControllerCreateBlock.mockReturnValue(
+      throwError(() => new Error('Error al crear')),
+    );
+
+    component.openCreateModal();
+    component.blockForm.patchValue({
+      title: 'Bloqueo Fallido',
+      startTime: '2026-10-25T10:00',
+      endTime: '2026-10-25T12:00',
+    });
+
+    component.onSubmitBlock();
+
+    expect(notifySpy).toHaveBeenCalledWith('ERRORS.GENERIC');
+    expect(component.saving).toBe(false);
+  });
+
+  it('debe levantar o eliminar un bloqueo existente y manejar error', () => {
     component.onRemoveBlock('block-1');
     expect(facilitiesServiceSpy.facilitiesControllerRemoveBlock).toHaveBeenCalledWith(
       'fac-1',
       'block-1',
     );
+
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
+    facilitiesServiceSpy.facilitiesControllerRemoveBlock.mockReturnValue(
+      throwError(() => new Error('Error al borrar')),
+    );
+    component.onRemoveBlock('block-1');
+    expect(notifySpy).toHaveBeenCalledWith('ERRORS.GENERIC');
   });
 });

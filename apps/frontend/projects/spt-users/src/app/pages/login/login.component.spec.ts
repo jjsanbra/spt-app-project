@@ -155,4 +155,30 @@ describe('LoginComponent', () => {
     expect(component.loading).toBeFalsy();
     expect(router.navigate).not.toHaveBeenCalled();
   });
+
+  describe('Acceso Rápido con Usuarios Demo', () => {
+    it('debe contener los 4 perfiles predefinidos del seed de desarrollo', () => {
+      expect(component.quickLoginUsers.length).toBe(4);
+      const emails = component.quickLoginUsers.map((u) => u.email);
+      expect(emails).toContain('superadmin@spt-app.local');
+      expect(emails).toContain('admin@centralpadel.local');
+      expect(emails).toContain('socio@spt-app.local');
+      expect(emails).toContain('invitado@spt-app.local');
+    });
+
+    it('debe autocompletar credenciales y enviar formulario al invocar fillAndLogin', () => {
+      const mockAuthResponse = getAuthControllerLoginResponseMock();
+      authServiceSpy.login.mockReturnValue(of(mockAuthResponse));
+
+      const demoUser = component.quickLoginUsers[0];
+      component.fillAndLogin(demoUser);
+
+      expect(component.loginForm.get('email')?.value).toBe(demoUser.email);
+      expect(component.loginForm.get('password')?.value).toBe(demoUser.password);
+      expect(authServiceSpy.login).toHaveBeenCalledWith({
+        email: demoUser.email,
+        password: demoUser.password,
+      });
+    });
+  });
 });

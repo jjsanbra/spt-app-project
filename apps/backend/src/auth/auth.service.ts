@@ -107,9 +107,15 @@ export class AuthService {
     });
 
     let extraClubs: any[] = [];
-    if (user.isSuperAdmin && (!user.memberships || user.memberships.length === 0)) {
+    if (user.isSuperAdmin) {
+      const existingClubIds = (user.memberships || [])
+        .filter((m: any) => m.club && m.club.isActive)
+        .map((m: any) => m.club.id);
       extraClubs = await this.prisma.club.findMany({
-        where: { isActive: true },
+        where: {
+          isActive: true,
+          ...(existingClubIds.length > 0 ? { id: { notIn: existingClubIds } } : {}),
+        },
         select: { id: true, name: true, slug: true, isActive: true },
       });
     }
@@ -186,9 +192,15 @@ export class AuthService {
     }
 
     let extraClubs: any[] = [];
-    if (user.isSuperAdmin && (!user.memberships || user.memberships.length === 0)) {
+    if (user.isSuperAdmin) {
+      const existingClubIds = (user.memberships || [])
+        .filter((m: any) => m.club && m.club.isActive)
+        .map((m: any) => m.club.id);
       extraClubs = await this.prisma.club.findMany({
-        where: { isActive: true },
+        where: {
+          isActive: true,
+          ...(existingClubIds.length > 0 ? { id: { notIn: existingClubIds } } : {}),
+        },
         select: { id: true, name: true, slug: true, isActive: true },
       });
     }
@@ -232,17 +244,16 @@ export class AuthService {
         walletBalance: Number(m.walletBalance),
       }));
 
-    const memberships =
-      directMemberships.length > 0
-        ? directMemberships
-        : extraClubs.map((c) => ({
-            clubId: c.id,
-            clubName: c.name,
-            clubSlug: c.slug,
-            role: ClubRole.OWNER,
-            memberNumber: 'SUPERADMIN',
-            walletBalance: 0,
-          }));
+    const superAdminAdditionalMemberships = extraClubs.map((c) => ({
+      clubId: c.id,
+      clubName: c.name,
+      clubSlug: c.slug,
+      role: ClubRole.OWNER,
+      memberNumber: 'SUPERADMIN',
+      walletBalance: 0,
+    }));
+
+    const memberships = [...directMemberships, ...superAdminAdditionalMemberships];
 
     return {
       id: user.id,

@@ -24,7 +24,7 @@
       [loading]="loading"
       styleClass="p-datatable-striped"
     >
-      <ng-template pTemplate="header">
+      <ng-template #header pTemplate="header">
         <tr>
           <th>{{ 'ADMIN.PRICING.NAME' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.DAYS' | translate }}</th>
@@ -37,7 +37,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-rule>
+      <ng-template #body let-rule pTemplate="body">
         <tr>
           <td class="font-semibold">
             {{ rule.name }}
@@ -98,7 +98,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="emptymessage">
+      <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
           <td colspan="8" class="text-center p-4 text-muted">
             {{ 'ADMIN.PRICING.EMPTY' | translate }}

@@ -120,6 +120,65 @@ describe('FacilitiesService', () => {
     });
   });
 
+  describe('update', () => {
+    it('debe actualizar las propiedades de la instalación', async () => {
+      const updateDto = {
+        name: 'Pista 1 Modificada',
+        hasLighting: false,
+        defaultSlotMinutes: 60,
+        minPlayers: 2,
+        maxPlayers: 2,
+        isActive: true,
+      };
+
+      const result = await service.update(mockClubId, mockFacilityId, updateDto as any);
+      expect(prismaMock.facility.update).toHaveBeenCalledWith({
+        where: { id: mockFacilityId },
+        data: expect.objectContaining({
+          name: 'Pista 1 Modificada',
+          hasLighting: false,
+          defaultSlotMinutes: 60,
+          minPlayers: 2,
+          maxPlayers: 2,
+          isActive: true,
+        }),
+      });
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe('findBlocks', () => {
+    it('debe listar los bloqueos temporales de una instalación', async () => {
+      prismaMock.facilityBlock.findMany.mockResolvedValue([
+        { id: 'b1', title: 'Torneo', startTime: new Date(), endTime: new Date() },
+      ]);
+
+      const result = await service.findBlocks(mockClubId, mockFacilityId);
+      expect(result).toHaveLength(1);
+      expect(result[0].title).toBe('Torneo');
+    });
+  });
+
+  describe('removeBlock', () => {
+    it('debe lanzar NotFoundException si el bloqueo no existe', async () => {
+      prismaMock.facilityBlock.findFirst.mockResolvedValue(null);
+
+      await expect(
+        service.removeBlock(mockClubId, mockFacilityId, 'block-inexistente'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('debe eliminar el bloqueo si existe y pertenece al club y pista', async () => {
+      prismaMock.facilityBlock.findFirst.mockResolvedValue({ id: 'b1', clubId: mockClubId, facilityId: mockFacilityId });
+
+      const result = await service.removeBlock(mockClubId, mockFacilityId, 'b1');
+      expect(prismaMock.facilityBlock.delete).toHaveBeenCalledWith({
+        where: { id: 'b1' },
+      });
+      expect(result.success).toBe(true);
+    });
+  });
+
   describe('remove', () => {
     it('debe realizar un borrado lógico (isActive = false)', async () => {
       const result = await service.remove(mockClubId, mockFacilityId);
@@ -163,3 +222,4 @@ describe('FacilitiesService', () => {
     });
   });
 });
+

@@ -50,7 +50,7 @@
       [loading]="loading"
       styleClass="p-datatable-striped"
     >
-      <ng-template pTemplate="header">
+      <ng-template #header pTemplate="header">
         <tr>
           <th>{{ 'ADMIN.MEMBERS.COL_MEMBER' | translate }}</th>
           <th>{{ 'ADMIN.MEMBERS.COL_ROLE' | translate }}</th>
@@ -62,7 +62,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-member>
+      <ng-template #body let-member pTemplate="body">
         <tr>
           <!-- Datos del usuario -->
           <td>
@@ -167,7 +167,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="emptymessage">
+      <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
           <td colspan="7" class="text-center py-6 text-muted">
             <div class="empty-state">

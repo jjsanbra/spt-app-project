@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, isDevMode } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -7,13 +7,24 @@ import { AuthService } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DividerModule } from 'primeng/divider';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 export const REMEMBERED_EMAIL_KEY = 'spt_remembered_email';
+
+export interface QuickLoginUser {
+  labelKey: string;
+  roleBadgeKey: string;
+  email: string;
+  password: string;
+  icon: string;
+  severity: 'danger' | 'warn' | 'success' | 'info';
+}
 
 @Component({
   selector: 'app-login',
@@ -29,6 +40,8 @@ export const REMEMBERED_EMAIL_KEY = 'spt_remembered_email';
     CheckboxModule,
     ButtonModule,
     FloatLabelModule,
+    DividerModule,
+    TagModule,
     ToastModule,
   ],
   providers: [MessageService],
@@ -42,6 +55,46 @@ export class LoginComponent implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
 
+  readonly isLocalEnvironment =
+    isDevMode() ||
+    (typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'));
+
+  readonly quickLoginUsers: QuickLoginUser[] = [
+    {
+      labelKey: 'AUTH.DEMO_USERS.SUPERADMIN_NAME',
+      roleBadgeKey: 'AUTH.DEMO_USERS.SUPERADMIN_ROLE',
+      email: 'superadmin@spt-app.local',
+      password: 'SuperAdmin123!',
+      icon: 'pi pi-shield',
+      severity: 'danger',
+    },
+    {
+      labelKey: 'AUTH.DEMO_USERS.ADMIN_NAME',
+      roleBadgeKey: 'AUTH.DEMO_USERS.ADMIN_ROLE',
+      email: 'admin@centralpadel.local',
+      password: 'ClubAdmin123!',
+      icon: 'pi pi-building',
+      severity: 'warn',
+    },
+    {
+      labelKey: 'AUTH.DEMO_USERS.MEMBER_NAME',
+      roleBadgeKey: 'AUTH.DEMO_USERS.MEMBER_ROLE',
+      email: 'socio@spt-app.local',
+      password: 'Player123!',
+      icon: 'pi pi-user',
+      severity: 'success',
+    },
+    {
+      labelKey: 'AUTH.DEMO_USERS.GUEST_NAME',
+      roleBadgeKey: 'AUTH.DEMO_USERS.GUEST_ROLE',
+      email: 'invitado@spt-app.local',
+      password: 'Player123!',
+      icon: 'pi pi-users',
+      severity: 'info',
+    },
+  ];
+
   loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required]],
@@ -49,6 +102,14 @@ export class LoginComponent implements OnInit {
   });
 
   loading = false;
+
+  fillAndLogin(user: QuickLoginUser): void {
+    this.loginForm.patchValue({
+      email: user.email,
+      password: user.password,
+    });
+    this.onSubmit();
+  }
 
   ngOnInit(): void {
     const rememberedEmail = localStorage.getItem(REMEMBERED_EMAIL_KEY);

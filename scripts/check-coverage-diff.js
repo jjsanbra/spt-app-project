@@ -159,7 +159,7 @@ if (activeFrontendProjects.length > 0) {
 
     console.log(`   ⏳ Ejecutando pruebas unitarias de ${proj} con cobertura...`);
     try {
-      execSync(`npx ng test ${proj} --watch=false --coverage --coverage-reporters=json-summary --silent`, {
+      execSync(`npx ng test ${proj} --watch=false --coverage --coverage-reporters=json-summary`, {
         cwd: FRONTEND_DIR,
         stdio: 'ignore',
       });

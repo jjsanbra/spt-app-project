@@ -105,7 +105,31 @@ describe('ClubSettingsComponent', () => {
     expect(mockNotify.error).toHaveBeenCalled();
   });
 
-  it('debe mostrar error si el servidor rechaza la petición', () => {
+  it('debe exponer las opciones de duración, modos de pago y horas', () => {
+    expect(component.slotDurationOptions.length).toBe(4);
+    expect(component.paymentModeOptions.length).toBe(3);
+    expect(component.hourOptions.length).toBe(25);
+    expect(component.hourOptions[0].label).toBe('00:00');
+  });
+
+  it('no debe enviar el formulario si es inválido y debe marcar campos', () => {
+    component.settingsForm.patchValue({ name: '', email: 'invalido' });
+    component.submitSettings();
+
+    expect(mockClubsService.clubsControllerUpdateSettings).not.toHaveBeenCalled();
+    expect(component.settingsForm.touched).toBe(true);
+  });
+
+  it('debe manejar error al cargar los ajustes del club', () => {
+    mockClubsService.clubsControllerGetSettings.mockReturnValue(
+      throwError(() => new Error('Error al cargar')),
+    );
+    component.loadSettings();
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+    expect(component.loading).toBe(false);
+  });
+
+  it('debe mostrar error específico si el servidor rechaza con 400', () => {
     mockClubsService.clubsControllerUpdateSettings.mockReturnValue(
       throwError(() => ({ status: 400, error: { message: 'Error de validación' } })),
     );
@@ -114,5 +138,16 @@ describe('ClubSettingsComponent', () => {
     component.submitSettings();
 
     expect(mockNotify.error).toHaveBeenCalledWith('Error de validación');
+  });
+
+  it('debe mostrar error genérico si el servidor rechaza con código distinto a 400', () => {
+    mockClubsService.clubsControllerUpdateSettings.mockReturnValue(
+      throwError(() => ({ status: 500 })),
+    );
+
+    component.settingsForm.patchValue({ name: 'Nuevo Nombre' });
+    component.submitSettings();
+
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
   });
 });
