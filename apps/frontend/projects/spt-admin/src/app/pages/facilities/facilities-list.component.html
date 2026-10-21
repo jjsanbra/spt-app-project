@@ -24,7 +24,7 @@
       [loading]="loading"
       styleClass="p-datatable-striped"
     >
-      <ng-template pTemplate="header">
+      <ng-template #header pTemplate="header">
         <tr>
           <th>{{ 'ADMIN.FACILITIES.NAME' | translate }}</th>
           <th>{{ 'ADMIN.FACILITIES.SPORT' | translate }}</th>
@@ -37,7 +37,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="body" let-facility>
+      <ng-template #body let-facility pTemplate="body">
         <tr>
           <td class="font-semibold">{{ facility.name }}</td>
           <td>
@@ -101,7 +101,7 @@
         </tr>
       </ng-template>
 
-      <ng-template pTemplate="emptymessage">
+      <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
           <td colspan="8" class="text-center p-4 text-muted">
             {{ 'ADMIN.FACILITIES.EMPTY' | translate }}
