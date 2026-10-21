@@ -57,6 +57,18 @@
       "EMAIL_FORMAT": "Introduce un email válido",
       "PASSWORD_MISMATCH": "Las contraseñas no coinciden",
       "PASSWORD_MIN_LENGTH": "La contraseña debe tener al menos 8 caracteres"
+    },
+    "DEMO_USERS": {
+      "TITLE": "Acceso Rápido (Solo Local)",
+      "SUBTITLE": "Selecciona un usuario de prueba para iniciar sesión con 1 clic:",
+      "SUPERADMIN_NAME": "Superadministrador",
+      "SUPERADMIN_ROLE": "Superadmin",
+      "ADMIN_NAME": "Director de Club",
+      "ADMIN_ROLE": "Admin Club",
+      "MEMBER_NAME": "Socio con saldo",
+      "MEMBER_ROLE": "Socio",
+      "GUEST_NAME": "Usuario Invitado",
+      "GUEST_ROLE": "Invitado"
     }
   },
   "CLUBS": {

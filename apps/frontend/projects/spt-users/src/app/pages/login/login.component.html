@@ -78,6 +78,40 @@
         </div>
       </form>
 
+      @if (isLocalEnvironment) {
+        <p-divider align="center">
+          <span class="quick-login-divider-badge">
+            <i class="pi pi-bolt"></i> {{ 'AUTH.DEMO_USERS.TITLE' | translate }}
+          </span>
+        </p-divider>
+
+        <div class="quick-login-section">
+          <p class="quick-login-subtitle">{{ 'AUTH.DEMO_USERS.SUBTITLE' | translate }}</p>
+          <div class="quick-login-list">
+            @for (user of quickLoginUsers; track user.email) {
+              <button
+                type="button"
+                pButton
+                [outlined]="true"
+                [severity]="user.severity"
+                class="quick-user-card-btn"
+                (click)="fillAndLogin(user)"
+                [disabled]="loading"
+              >
+                <div class="quick-user-info">
+                  <div class="quick-user-top">
+                    <i [class]="user.icon + ' quick-user-icon'"></i>
+                    <strong class="quick-user-title">{{ user.labelKey | translate }}</strong>
+                  </div>
+                  <span class="quick-user-email-text">{{ user.email }}</span>
+                </div>
+                <p-tag [value]="user.roleBadgeKey | translate" [severity]="user.severity"></p-tag>
+              </button>
+            }
+          </div>
+        </div>
+      }
+
       <div class="auth-footer">
         <p class="footer-text">
           <a routerLink="/register" class="auth-link">
