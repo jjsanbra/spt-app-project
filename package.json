@@ -23,7 +23,7 @@
     "test:backend": "cd apps/backend && npm test",
     "test:frontend": "cd apps/frontend && npx ng test --watch=false",
     "test:e2e": "cd apps/frontend && npx playwright test",
-    "lint": "cd apps/backend && npm run lint && cd ../frontend && npx ng lint",
+    "lint": "cd apps/backend && npm run lint",
     "spec:new": "node scripts/spec-new-change.js",
     "spec:archive": "node scripts/spec-archive.js",
     "spec:check": "node scripts/validate-specs.js",

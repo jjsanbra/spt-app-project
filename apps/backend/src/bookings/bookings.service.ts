@@ -11,13 +11,11 @@ import {
   ParticipantStatus,
   PaymentMethod,
   PaymentStatus,
-  SportType,
 } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BookingResponseDto } from './dto/booking-response.dto';
 import { CancelBookingDto, CreateBookingDto } from './dto/create-booking.dto';
-import { OpenMatchResponseDto } from './dto/open-match-response.dto';
 
 @Injectable()
 export class BookingsService {
