@@ -58,6 +58,11 @@ export class BookingsGridComponent implements OnInit {
   readonly minDate: Date = new Date();
   selectedSport: string | null = null;
   viewMode: 'grid' | 'cards' = 'grid';
+  calendarGranularity: 'day' | 'week' | 'month' = 'day';
+
+  selectedWeekStart: Date = this.getMonday(new Date());
+  selectedWeekFacilityId: string | null = null;
+  selectedMonthDate: Date = new Date();
 
   facilitiesAvailability: FacilityAvailabilityResponseDto[] = [];
 
@@ -70,6 +75,14 @@ export class BookingsGridComponent implements OnInit {
     lightIncluded: [false],
     notes: [''],
   });
+
+  get granularityOptions() {
+    return [
+      { label: this.translate.instant('PORTAL.BOOKINGS.GRANULARITY_DAY'), value: 'day', icon: 'pi pi-calendar' },
+      { label: this.translate.instant('PORTAL.BOOKINGS.GRANULARITY_WEEK'), value: 'week', icon: 'pi pi-calendar-plus' },
+      { label: this.translate.instant('PORTAL.BOOKINGS.GRANULARITY_MONTH'), value: 'month', icon: 'pi pi-table' },
+    ];
+  }
 
   get sportFilterOptions() {
     return [
@@ -101,6 +114,87 @@ export class BookingsGridComponent implements OnInit {
       { label: this.translate.instant('PORTAL.BOOKINGS.VIEW_GRID'), value: 'grid', icon: 'pi pi-table' },
       { label: this.translate.instant('PORTAL.BOOKINGS.VIEW_CARDS'), value: 'cards', icon: 'pi pi-list' },
     ];
+  }
+
+  get facilitySelectOptions() {
+    return this.facilitiesAvailability.map((f) => ({
+      label: `${f.facilityName} (${f.sportType})`,
+      value: f.facilityId,
+    }));
+  }
+
+  get activeWeekFacility(): FacilityAvailabilityResponseDto | undefined {
+    if (!this.facilitiesAvailability.length) return undefined;
+    if (this.selectedWeekFacilityId) {
+      const found = this.facilitiesAvailability.find((f) => f.facilityId === this.selectedWeekFacilityId);
+      if (found) return found;
+    }
+    return this.facilitiesAvailability[0];
+  }
+
+  get weekDays(): { date: Date; dateString: string; label: string; isToday: boolean }[] {
+    const days: { date: Date; dateString: string; label: string; isToday: boolean }[] = [];
+    const dayNames = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(this.selectedWeekStart);
+      d.setDate(d.getDate() + i);
+      const dateString = this.formatDate(d);
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      days.push({
+        date: d,
+        dateString,
+        label: `${dayNames[i]} ${dd}/${mm}`,
+        isToday: dateString === this.getTodayDateString(),
+      });
+    }
+    return days;
+  }
+
+  get monthDays(): { date: Date; dateString: string; dayNumber: number; isCurrentMonth: boolean; isToday: boolean }[] {
+    const year = this.selectedMonthDate.getFullYear();
+    const month = this.selectedMonthDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const days: { date: Date; dateString: string; dayNumber: number; isCurrentMonth: boolean; isToday: boolean }[] = [];
+
+    let startOffset = firstDay.getDay() - 1;
+    if (startOffset === -1) startOffset = 6;
+    for (let i = startOffset; i > 0; i--) {
+      const prevDate = new Date(year, month, 1 - i);
+      days.push({
+        date: prevDate,
+        dateString: this.formatDate(prevDate),
+        dayNumber: prevDate.getDate(),
+        isCurrentMonth: false,
+        isToday: this.formatDate(prevDate) === this.getTodayDateString(),
+      });
+    }
+
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+      const currDate = new Date(year, month, d);
+      days.push({
+        date: currDate,
+        dateString: this.formatDate(currDate),
+        dayNumber: d,
+        isCurrentMonth: true,
+        isToday: this.formatDate(currDate) === this.getTodayDateString(),
+      });
+    }
+
+    let extra = 1;
+    while (days.length % 7 !== 0) {
+      const nextDate = new Date(year, month + 1, extra++);
+      days.push({
+        date: nextDate,
+        dateString: this.formatDate(nextDate),
+        dayNumber: nextDate.getDate(),
+        isCurrentMonth: false,
+        isToday: this.formatDate(nextDate) === this.getTodayDateString(),
+      });
+    }
+
+    return days;
   }
 
   get uniqueTimeSlots(): string[] {
@@ -175,8 +269,36 @@ export class BookingsGridComponent implements OnInit {
     this.loadAvailability();
   }
 
-  selectSlot(facility: FacilityAvailabilityResponseDto, slot: TimeSlotAvailabilityDto): void {
+  isSlotBlockedByCutoff(dateStr: string, startHourText: string): boolean {
+    if (!dateStr || !startHourText) return false;
+    const [hours, minutes] = startHourText.split(':').map(Number);
+    const [year, month, day] = dateStr.split('-').map(Number);
+    if (!year || !month || !day || isNaN(hours) || isNaN(minutes)) return false;
+
+    // Fecha y hora del slot a evaluar
+    const slotDateTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
+    // Margen de 2 horas desde el instante actual
+    const cutoffTime = new Date(Date.now() + 2 * 60 * 60 * 1000);
+
+    return slotDateTime.getTime() < cutoffTime.getTime();
+  }
+
+  isSlotBookable(dateStr: string, slot: TimeSlotAvailabilityDto | undefined): boolean {
+    if (!slot || slot.status !== SlotStatus.AVAILABLE) return false;
+    return !this.isSlotBlockedByCutoff(dateStr, slot.startHourText);
+  }
+
+  selectSlot(
+    facility: FacilityAvailabilityResponseDto,
+    slot: TimeSlotAvailabilityDto,
+    targetDate: string = this.selectedDate,
+  ): void {
     if (slot.status !== SlotStatus.AVAILABLE) return;
+
+    if (this.isSlotBlockedByCutoff(targetDate, slot.startHourText)) {
+      this.notify.warn('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      return;
+    }
 
     this.selectedFacility = facility;
     this.selectedSlot = slot;
@@ -260,9 +382,129 @@ export class BookingsGridComponent implements OnInit {
   setTomorrow(): void {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
-    const yyyy = tomorrow.getFullYear();
-    const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
-    const dd = String(tomorrow.getDate()).padStart(2, '0');
-    this.onDateChange(`${yyyy}-${mm}-${dd}`);
+    this.onDateChange(this.formatDate(tomorrow));
+  }
+
+  formatDate(d: Date): string {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  getMonday(d: Date): Date {
+    const date = new Date(d);
+    const day = date.getDay();
+    const diff = date.getDate() - day + (day === 0 ? -6 : 1);
+    date.setDate(diff);
+    date.setHours(0, 0, 0, 0);
+    return date;
+  }
+
+  prevWeek(): void {
+    const d = new Date(this.selectedWeekStart);
+    d.setDate(d.getDate() - 7);
+    this.selectedWeekStart = d;
+    this.cdr.markForCheck();
+  }
+
+  nextWeek(): void {
+    const d = new Date(this.selectedWeekStart);
+    d.setDate(d.getDate() + 7);
+    this.selectedWeekStart = d;
+    this.cdr.markForCheck();
+  }
+
+  currentWeek(): void {
+    this.selectedWeekStart = this.getMonday(new Date());
+    this.cdr.markForCheck();
+  }
+
+  prevMonth(): void {
+    const d = new Date(this.selectedMonthDate);
+    d.setMonth(d.getMonth() - 1);
+    this.selectedMonthDate = d;
+    this.cdr.markForCheck();
+  }
+
+  nextMonth(): void {
+    const d = new Date(this.selectedMonthDate);
+    d.setMonth(d.getMonth() + 1);
+    this.selectedMonthDate = d;
+    this.cdr.markForCheck();
+  }
+
+  currentMonth(): void {
+    this.selectedMonthDate = new Date();
+    this.cdr.markForCheck();
+  }
+
+  goToDayFromMonth(date: Date): void {
+    this.calendarGranularity = 'day';
+    this.onDatePickerChange(date);
+  }
+
+  onEmptySlotClick(
+    facility: FacilityAvailabilityResponseDto,
+    timeRange: string,
+    targetDate: string = this.selectedDate,
+  ): void {
+    const [startHourText] = timeRange.split(' - ');
+    if (!startHourText) return;
+
+    if (this.isSlotBlockedByCutoff(targetDate, startHourText)) {
+      this.notify.warn('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      return;
+    }
+
+    const [hoursStr, minutesStr] = startHourText.split(':');
+    const startHour = parseInt(hoursStr, 10);
+    const startMinute = parseInt(minutesStr, 10);
+    const durationMinutes = facility.defaultSlotMinutes || 60;
+
+    const startMinutesTotal = startHour * 60 + startMinute;
+    let endMinutesTotal = startMinutesTotal + durationMinutes;
+
+    // Controlar que no se exceda el tiempo disponible si hay un slot posterior en esa pista
+    if (facility.slots && facility.slots.length > 0) {
+      for (const existingSlot of facility.slots) {
+        const [eHourStr, eMinStr] = existingSlot.startHourText.split(':');
+        const existingSlotStartTotal = parseInt(eHourStr, 10) * 60 + parseInt(eMinStr, 10);
+        if (existingSlotStartTotal > startMinutesTotal && existingSlotStartTotal < endMinutesTotal) {
+          endMinutesTotal = existingSlotStartTotal;
+        }
+      }
+    }
+
+    // No exceder medianoche (24:00 = 1440 min)
+    if (endMinutesTotal > 1440) {
+      endMinutesTotal = 1440;
+    }
+
+    // Si tras el ajuste la duración es inferior a 30 min, avisar al usuario
+    if (endMinutesTotal - startMinutesTotal < 30) {
+      this.notify.warn('PORTAL.BOOKINGS.TIME_NOT_AVAILABLE');
+      return;
+    }
+
+    const endHour = Math.floor(endMinutesTotal / 60);
+    const endMin = endMinutesTotal % 60;
+    const endHourText = `${String(endHour).padStart(2, '0')}:${String(endMin).padStart(2, '0')}`;
+
+    const startTimeIso = `${targetDate}T${startHourText}:00.000Z`;
+    const endTimeIso = `${targetDate}T${endHourText}:00.000Z`;
+
+    const virtualSlot: TimeSlotAvailabilityDto = {
+      startTime: startTimeIso,
+      endTime: endTimeIso,
+      startHourText,
+      endHourText,
+      status: SlotStatus.AVAILABLE,
+      price: facility.slots?.[0]?.price ?? 16.0,
+      isPeakHour: false,
+      lightSurcharge: facility.slots?.[0]?.lightSurcharge ?? 2.0,
+    };
+
+    this.selectSlot(facility, virtualSlot, targetDate);
   }
 }

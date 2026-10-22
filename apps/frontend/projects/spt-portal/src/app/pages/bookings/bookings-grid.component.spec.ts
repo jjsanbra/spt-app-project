@@ -55,6 +55,8 @@ describe('BookingsGridComponent', () => {
     mockNotify = {
       success: vi.fn(),
       error: vi.fn(),
+      warn: vi.fn(),
+      info: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -72,6 +74,7 @@ describe('BookingsGridComponent', () => {
     fixture = TestBed.createComponent(BookingsGridComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    component.selectedDate = '2099-12-31';
   });
 
   it('debe crearse y cargar disponibilidad al inicializar', () => {
@@ -187,6 +190,7 @@ describe('BookingsGridComponent', () => {
   });
 
   it('debe cerrar la modal de confirmación con closeConfirmModal', () => {
+    component.selectedDate = '2099-12-31';
     const facility = component.facilitiesAvailability[0];
     component.selectSlot(facility, facility.slots[0]);
     expect(component.displayConfirmModal).toBe(true);
@@ -200,6 +204,7 @@ describe('BookingsGridComponent', () => {
   it('debe calcular el precio total del modal con y sin luz', () => {
     expect(component.calculateTotalModalPrice()).toBe(0);
 
+    component.selectedDate = '2099-12-31';
     const facility = component.facilitiesAvailability[0];
     component.selectSlot(facility, facility.slots[0]);
 
@@ -232,12 +237,160 @@ describe('BookingsGridComponent', () => {
     mockBookingsService.bookingsControllerCreate.mockReturnValue(
       throwError(() => ({ status: 500 })),
     );
+    component.selectedDate = '2099-12-31';
     const facility = component.facilitiesAvailability[0];
     component.selectSlot(facility, facility.slots[0]);
     component.confirmBooking();
 
     expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
     expect(component.bookingInProgress).toBe(false);
+  });
+
+  it('debe devolver las opciones de granularidad (día, semana, mes)', () => {
+    expect(component.granularityOptions.length).toBe(3);
+    expect(component.granularityOptions.map((g) => g.value)).toEqual(['day', 'week', 'month']);
+  });
+
+  it('debe navegar por semanas y computar los 7 días correctamente', () => {
+    const initialWeekStart = new Date(component.selectedWeekStart);
+    expect(component.weekDays.length).toBe(7);
+
+    component.nextWeek();
+    expect(component.selectedWeekStart.getTime()).toBeGreaterThan(initialWeekStart.getTime());
+
+    component.prevWeek();
+    expect(component.selectedWeekStart.getTime()).toBe(initialWeekStart.getTime());
+
+    component.currentWeek();
+    expect(component.selectedWeekStart).toBeDefined();
+  });
+
+  it('debe devolver activeWeekFacility y facilitySelectOptions', () => {
+    expect(component.facilitySelectOptions.length).toBe(1);
+    expect(component.activeWeekFacility?.facilityId).toBe('fac-1');
+
+    component.selectedWeekFacilityId = 'fac-1';
+    expect(component.activeWeekFacility?.facilityId).toBe('fac-1');
+
+    component.selectedWeekFacilityId = 'non-existent';
+    expect(component.activeWeekFacility?.facilityId).toBe('fac-1');
+  });
+
+  it('debe navegar por meses y permitir saltar a un día con goToDayFromMonth', () => {
+    const initialMonth = component.selectedMonthDate.getMonth();
+    expect(component.monthDays.length).toBeGreaterThan(27);
+
+    component.nextMonth();
+    expect(component.selectedMonthDate.getMonth()).toBe((initialMonth + 1) % 12);
+
+    component.prevMonth();
+    expect(component.selectedMonthDate.getMonth()).toBe(initialMonth);
+
+    component.currentMonth();
+    expect(component.selectedMonthDate).toBeDefined();
+
+    const targetDate = new Date(2026, 9, 15);
+    component.goToDayFromMonth(targetDate);
+    expect(component.calendarGranularity).toBe('day');
+    expect(component.selectedDate).toBe('2026-10-15');
+  });
+
+  it('debe calcular reserva en slot vacío al llamar a onEmptySlotClick y abrir modal', () => {
+    const facility = component.facilitiesAvailability[0];
+    component.onEmptySlotClick(facility, '14:00 - 15:30', '2099-12-31');
+
+    expect(component.displayConfirmModal).toBe(true);
+    expect(component.selectedSlot).toBeDefined();
+    expect(component.selectedSlot?.startHourText).toBe('14:00');
+    expect(component.selectedSlot?.status).toBe(SlotStatus.AVAILABLE);
+  });
+
+  it('debe advertir si el tiempo disponible antes de otro slot es menor a 30 minutos', () => {
+    const facilityWithNearbySlot: FacilityAvailabilityResponseDto = {
+      facilityId: 'fac-2',
+      facilityName: 'Pista 2',
+      sportType: 'PADEL' as any,
+      courtType: 'INDOOR' as any,
+      surfaceType: 'CRYSTAL' as any,
+      hasLighting: false,
+      defaultSlotMinutes: 90,
+      slots: [
+        {
+          startTime: '2099-12-31T14:15:00.000Z',
+          endTime: '2099-12-31T15:45:00.000Z',
+          startHourText: '14:15',
+          endHourText: '15:45',
+          status: SlotStatus.OCCUPIED,
+          price: 16.0,
+          isPeakHour: false,
+          lightSurcharge: 0,
+        },
+      ],
+    };
+
+    mockNotify.warn = vi.fn();
+    // Inicia a las 14:00 pero hay un slot ocupado a las 14:15 (solo 15 min disponibles)
+    component.onEmptySlotClick(facilityWithNearbySlot, '14:00 - 15:30', '2099-12-31');
+
+    expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.TIME_NOT_AVAILABLE');
+    expect(component.displayConfirmModal).toBe(false);
+  });
+
+  describe('Lógica de bloqueo por antelación de 2 horas y fechas pasadas (isSlotBlockedByCutoff)', () => {
+    it('debe bloquear fechas pasadas', () => {
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = component.formatDate(yesterday);
+
+      expect(component.isSlotBlockedByCutoff(yesterdayStr, '10:00')).toBe(true);
+      expect(component.isSlotBlockedByCutoff(yesterdayStr, '22:00')).toBe(true);
+    });
+
+    it('debe bloquear slots de hoy que estén a menos de 2 horas de la hora actual', () => {
+      const todayStr = component.getTodayDateString();
+      const now = new Date();
+      // 1 hora antes de ahora
+      const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
+      const oneHourAgoStr = `${String(oneHourAgo.getHours()).padStart(2, '0')}:00`;
+
+      expect(component.isSlotBlockedByCutoff(todayStr, oneHourAgoStr)).toBe(true);
+    });
+
+    it('debe permitir slots de fechas futuras o de hoy con más de 2 horas de margen', () => {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrowStr = component.formatDate(tomorrow);
+
+      expect(component.isSlotBlockedByCutoff(tomorrowStr, '10:00')).toBe(false);
+
+      const nextWeek = new Date();
+      nextWeek.setDate(nextWeek.getDate() + 7);
+      const nextWeekStr = component.formatDate(nextWeek);
+      expect(component.isSlotBlockedByCutoff(nextWeekStr, '18:00')).toBe(false);
+    });
+
+    it('debe impedir selectSlot si el slot incumple la antelación mínima de 2 horas', () => {
+      mockNotify.warn = vi.fn();
+      const facility = component.facilitiesAvailability[0];
+      const slot = facility.slots[0];
+
+      // Intentar reservar en fecha pasada
+      component.selectSlot(facility, slot, '2020-01-01');
+
+      expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      expect(component.displayConfirmModal).toBe(false);
+    });
+
+    it('debe impedir onEmptySlotClick si la fecha/hora incumple la antelación de 2 horas', () => {
+      mockNotify.warn = vi.fn();
+      const facility = component.facilitiesAvailability[0];
+
+      // Intentar reservar slot vacío en fecha pasada
+      component.onEmptySlotClick(facility, '10:00 - 11:30', '2020-01-01');
+
+      expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      expect(component.displayConfirmModal).toBe(false);
+    });
   });
 });
 

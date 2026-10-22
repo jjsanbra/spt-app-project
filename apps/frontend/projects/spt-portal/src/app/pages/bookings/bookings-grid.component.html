@@ -20,71 +20,184 @@
     </div>
   </div>
 
-  <!-- Barra de Filtros y Fecha -->
+  <!-- Barra de Filtros y Granularidad -->
   <div class="filter-controls-card">
-    <div class="date-quick-buttons">
-      <button
-        type="button"
-        pButton
-        [severity]="isTodaySelected() ? 'primary' : 'secondary'"
-        [outlined]="!isTodaySelected()"
-        (click)="setToday()"
-      >
-        {{ 'COMMON.TODAY' | translate }}
-      </button>
-      <button
-        type="button"
-        pButton
-        [severity]="!isTodaySelected() ? 'primary' : 'secondary'"
-        [outlined]="isTodaySelected()"
-        (click)="setTomorrow()"
-      >
-        {{ 'COMMON.TOMORROW' | translate }}
-      </button>
-
-      <!-- Selector DatePicker de PrimeNG v18 -->
-      <div class="datepicker-container">
-        <p-datepicker
-          [(ngModel)]="selectedCalendarDate"
-          (ngModelChange)="onDatePickerChange($event)"
-          [showIcon]="true"
-          [iconDisplay]="'input'"
-          dateFormat="dd/mm/yy"
-          [minDate]="minDate"
-          [appendTo]="'body'"
-          inputId="bookings-calendar-date"
-        ></p-datepicker>
-      </div>
-    </div>
-
-    <div class="filter-actions-right">
-      <div class="sport-filter-wrapper">
-        <p-select
-          [options]="sportFilterOptions"
-          [(ngModel)]="selectedSport"
-          (onChange)="onSportChange($event)"
-          optionLabel="label"
-          optionValue="value"
-          inputId="bookings-sport-select"
-          class="sport-select"
-        ></p-select>
-      </div>
-
-      <!-- Selector de Modo de Visualización (Cuadrante Horario vs Vista Pistas) -->
-      <div class="view-mode-toggle">
+    <!-- FILA SUPERIOR: Selector de granularidad y herramientas a la derecha -->
+    <div class="filter-header-row">
+      <div class="granularity-toggle-wrapper">
         <p-selectbutton
-          [options]="viewModeOptions"
-          [(ngModel)]="viewMode"
+          [options]="granularityOptions"
+          [(ngModel)]="calendarGranularity"
+          [allowEmpty]="false"
           optionLabel="label"
           optionValue="value"
-          [allowEmpty]="false"
         >
           <ng-template #item let-item>
             <i [class]="item.icon"></i>
-            <span class="view-mode-label">{{ item.label }}</span>
+            <span class="granularity-label">{{ item.label }}</span>
           </ng-template>
         </p-selectbutton>
       </div>
+
+      <div class="filter-right-tools">
+        @if (calendarGranularity === 'week') {
+          <div class="facility-filter-wrapper">
+            <p-select
+              [options]="facilitySelectOptions"
+              [(ngModel)]="selectedWeekFacilityId"
+              optionLabel="label"
+              optionValue="value"
+              [placeholder]="'PORTAL.BOOKINGS.SELECT_FACILITY_PLACEHOLDER' | translate"
+              class="facility-select"
+            ></p-select>
+          </div>
+        } @else {
+          <div class="sport-filter-wrapper">
+            <p-select
+              [options]="sportFilterOptions"
+              [(ngModel)]="selectedSport"
+              (onChange)="onSportChange($event)"
+              optionLabel="label"
+              optionValue="value"
+              inputId="bookings-sport-select"
+              class="sport-select"
+            ></p-select>
+          </div>
+        }
+
+        @if (calendarGranularity === 'day') {
+          <div class="view-mode-toggle">
+            <p-selectbutton
+              [options]="viewModeOptions"
+              [(ngModel)]="viewMode"
+              optionLabel="label"
+              optionValue="value"
+              [allowEmpty]="false"
+            >
+              <ng-template #item let-item>
+                <i [class]="item.icon"></i>
+                <span class="view-mode-label">{{ item.label }}</span>
+              </ng-template>
+            </p-selectbutton>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- FILA INFERIOR: Barra de Navegación Temporal -->
+    <div class="filter-navigation-row">
+      @if (calendarGranularity === 'day') {
+        <div class="date-quick-buttons">
+          <button
+            type="button"
+            pButton
+            [severity]="isTodaySelected() ? 'primary' : 'secondary'"
+            [outlined]="!isTodaySelected()"
+            (click)="setToday()"
+          >
+            {{ 'COMMON.TODAY' | translate }}
+          </button>
+          <button
+            type="button"
+            pButton
+            [severity]="!isTodaySelected() ? 'primary' : 'secondary'"
+            [outlined]="isTodaySelected()"
+            (click)="setTomorrow()"
+          >
+            {{ 'COMMON.TOMORROW' | translate }}
+          </button>
+
+          <!-- Selector DatePicker de PrimeNG v22 -->
+          <div class="datepicker-container">
+            <p-datepicker
+              [(ngModel)]="selectedCalendarDate"
+              (ngModelChange)="onDatePickerChange($event)"
+              [showIcon]="true"
+              [iconDisplay]="'input'"
+              dateFormat="dd/mm/yy"
+              [minDate]="minDate"
+              [appendTo]="'body'"
+              inputId="bookings-calendar-date"
+            ></p-datepicker>
+          </div>
+        </div>
+      } @else if (calendarGranularity === 'week') {
+        <div class="week-nav-controls">
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            class="nav-icon-btn"
+            (click)="prevWeek()"
+            [title]="'PORTAL.BOOKINGS.PREV_WEEK' | translate"
+          >
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            (click)="currentWeek()"
+          >
+            {{ 'PORTAL.BOOKINGS.CURRENT_WEEK' | translate }}
+          </button>
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            class="nav-icon-btn"
+            (click)="nextWeek()"
+            [title]="'PORTAL.BOOKINGS.NEXT_WEEK' | translate"
+          >
+            <i class="pi pi-chevron-right"></i>
+          </button>
+          <span class="range-display-label">
+            <i class="pi pi-calendar"></i>
+            {{ weekDays[0].label }} — {{ weekDays[6].label }}
+          </span>
+        </div>
+      } @else {
+        <div class="month-nav-controls">
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            class="nav-icon-btn"
+            (click)="prevMonth()"
+            [title]="'PORTAL.BOOKINGS.PREV_MONTH' | translate"
+          >
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            (click)="currentMonth()"
+          >
+            {{ 'PORTAL.BOOKINGS.CURRENT_MONTH' | translate }}
+          </button>
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            class="nav-icon-btn"
+            (click)="nextMonth()"
+            [title]="'PORTAL.BOOKINGS.NEXT_MONTH' | translate"
+          >
+            <i class="pi pi-chevron-right"></i>
+          </button>
+          <span class="range-display-label">
+            <i class="pi pi-calendar"></i>
+            {{ selectedMonthDate | date: 'MMMM yyyy' }}
+          </span>
+        </div>
+      }
     </div>
   </div>
 
@@ -99,145 +212,307 @@
       <p>{{ 'PORTAL.BOOKINGS.EMPTY' | translate }}</p>
     </div>
   } @else {
-    <!-- VISTA CUADRANTE TIPO CALENDARIO (Alternativa C) -->
-    @if (viewMode === 'grid') {
-      <div class="calendar-matrix-wrapper">
-        <div class="calendar-matrix-card">
-          <div class="matrix-table-container">
-            <table class="calendar-matrix-table">
-              <thead>
-                <tr>
-                  <th class="matrix-time-header">
-                    <div class="time-header-content">
-                      <i class="pi pi-clock"></i>
-                      <span>{{ 'PORTAL.BOOKINGS.TIMELINE_HEADER' | translate }}</span>
-                    </div>
-                  </th>
-                  @for (facility of facilitiesAvailability; track facility.facilityId) {
-                    <th class="matrix-court-header">
-                      <div class="court-header-card">
-                        <span class="court-sport-pill">{{ facility.sportType }}</span>
-                        <h4 class="court-title">{{ facility.facilityName }}</h4>
-                        <div class="court-subinfo">
-                          <span>{{ facility.courtType }}</span>
-                          @if (facility.hasLighting) {
-                            <i class="pi pi-sun lighting-mini-icon" title="Luz disponible"></i>
-                          }
+      <!-- 1. VISTA DÍA -->
+      @if (calendarGranularity === 'day') {
+        @if (viewMode === 'grid') {
+          <div class="calendar-matrix-wrapper">
+            <div class="mobile-scroll-hint">
+              <i class="pi pi-arrows-h"></i>
+              <span>{{ 'PORTAL.BOOKINGS.MOBILE_SCROLL_HINT' | translate }}</span>
+            </div>
+            <div class="calendar-matrix-card">
+              <div class="matrix-table-container">
+                <table class="calendar-matrix-table">
+                  <thead>
+                    <tr>
+                      <th class="matrix-time-header">
+                        <div class="time-header-content">
+                          <i class="pi pi-clock"></i>
+                          <span>{{ 'PORTAL.BOOKINGS.TIMELINE_HEADER' | translate }}</span>
                         </div>
+                      </th>
+                      @for (facility of facilitiesAvailability; track facility.facilityId) {
+                        <th class="matrix-court-header">
+                          <div class="court-header-card">
+                            <span class="court-sport-pill">{{ facility.sportType }}</span>
+                            <h4 class="court-title">{{ facility.facilityName }}</h4>
+                            <div class="court-subinfo">
+                              <span>{{ facility.courtType }}</span>
+                              @if (facility.hasLighting) {
+                                <i class="pi pi-sun lighting-mini-icon" title="Luz disponible"></i>
+                              }
+                            </div>
+                          </div>
+                        </th>
+                      }
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (timeRange of uniqueTimeSlots; track timeRange) {
+                      <tr>
+                        <!-- Columna de Franja Horaria -->
+                        <td class="matrix-time-cell">
+                          <span class="time-cell-badge">{{ timeRange }}</span>
+                        </td>
+
+                        <!-- Celdas por cada pista -->
+                        @for (facility of facilitiesAvailability; track facility.facilityId) {
+                          @let slot = getSlotForFacilityAndTime(facility, timeRange);
+                          @let timeStart = timeRange.split(' - ')[0];
+                          @let isCutoff = isSlotBlockedByCutoff(selectedDate, slot ? slot.startHourText : timeStart);
+                          <td class="matrix-slot-cell">
+                            @if (slot) {
+                              <button
+                                type="button"
+                                pButton
+                                [text]="true"
+                                class="matrix-slot-button"
+                                [ngClass]="{
+                                  'matrix-slot-available': slot.status === 'AVAILABLE' && !isCutoff,
+                                  'matrix-slot-cutoff-blocked': isCutoff,
+                                  'matrix-slot-occupied': slot.status === 'OCCUPIED',
+                                  'matrix-slot-blocked': slot.status === 'BLOCKED',
+                                  'matrix-peak-hour': slot.isPeakHour
+                                }"
+                                [disabled]="slot.status !== 'AVAILABLE' || isCutoff"
+                                (click)="selectSlot(facility, slot, selectedDate)"
+                                [title]="isCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
+                              >
+                                @if (isCutoff) {
+                                  <span class="slot-cutoff-text"><i class="pi pi-clock"></i> {{ slot.startHourText }}</span>
+                                } @else if (slot.status === 'AVAILABLE') {
+                                  <span class="slot-price-text">
+                                    {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
+                                  </span>
+                                  @if (slot.isPeakHour) {
+                                    <span class="slot-peak-indicator" title="Hora punta">★</span>
+                                  }
+                                } @else if (slot.status === 'OCCUPIED') {
+                                  <span class="slot-occupied-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
+                                } @else {
+                                  <span class="slot-blocked-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
+                                }
+                              </button>
+                            } @else {
+                              <!-- Slot Vacío interactivo con cálculo automático de reserva o bloqueado por cutoff -->
+                              @if (isCutoff) {
+                                <div
+                                  class="matrix-slot-empty matrix-slot-empty-disabled"
+                                  [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
+                                >
+                                  <span class="empty-dash">—</span>
+                                </div>
+                              } @else {
+                                <div
+                                  class="matrix-slot-empty"
+                                  tabindex="0"
+                                  role="button"
+                                  (click)="onEmptySlotClick(facility, timeRange, selectedDate)"
+                                  [title]="'PORTAL.BOOKINGS.SLOT_EMPTY_HOVER' | translate"
+                                >
+                                  <span class="empty-dash">—</span>
+                                </div>
+                              }
+                            }
+                          </td>
+                        }
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        } @else {
+          <!-- VISTA TARJETAS DÍA -->
+          <div class="facilities-grid">
+            @for (facility of facilitiesAvailability; track facility.facilityId) {
+              <div class="facility-card">
+                <div class="facility-card-header">
+                  <div class="facility-info">
+                    <span class="facility-sport-badge">{{ facility.sportType }}</span>
+                    <h3 class="facility-name">{{ facility.facilityName }}</h3>
+                    <span class="facility-specs text-muted">
+                      {{ facility.courtType }} • {{ facility.surfaceType }} • {{ facility.defaultSlotMinutes }} min
+                    </span>
+                  </div>
+                  @if (facility.hasLighting) {
+                    <div class="lighting-badge" title="Iluminación disponible">
+                      <i class="pi pi-sun"></i>
+                    </div>
+                  }
+                </div>
+
+                <div class="slots-container">
+                  @for (slot of facility.slots; track slot.startTime) {
+                    @let isCardCutoff = isSlotBlockedByCutoff(selectedDate, slot.startHourText);
+                    <button
+                      type="button"
+                      pButton
+                      [text]="true"
+                      class="slot-button"
+                      [ngClass]="{
+                        'slot-available': slot.status === 'AVAILABLE' && !isCardCutoff,
+                        'slot-cutoff-blocked': isCardCutoff,
+                        'slot-occupied': slot.status === 'OCCUPIED',
+                        'slot-blocked': slot.status === 'BLOCKED',
+                        'peak-hour': slot.isPeakHour
+                      }"
+                      [disabled]="slot.status !== 'AVAILABLE' || isCardCutoff"
+                      (click)="selectSlot(facility, slot, selectedDate)"
+                      [title]="isCardCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
+                    >
+                      <span class="slot-time">{{ slot.startHourText }} - {{ slot.endHourText }}</span>
+                      @if (isCardCutoff) {
+                        <span class="slot-status-text cutoff-text"><i class="pi pi-clock"></i> {{ 'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate }}</span>
+                      } @else if (slot.status === 'AVAILABLE') {
+                        <span class="slot-price">{{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}</span>
+                      } @else if (slot.status === 'OCCUPIED') {
+                        <span class="slot-status-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
+                      } @else if (slot.status === 'BLOCKED') {
+                        <span class="slot-status-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
+                      }
+                    </button>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        }
+      }
+
+      <!-- 2. VISTA SEMANA (Cuadrante Semanal Días L-D vs Horas para la pista activa) -->
+      @else if (calendarGranularity === 'week') {
+        @let currentFacility = activeWeekFacility;
+        <div class="calendar-matrix-wrapper">
+          <div class="mobile-scroll-hint">
+            <i class="pi pi-arrows-h"></i>
+            <span>{{ 'PORTAL.BOOKINGS.MOBILE_SCROLL_HINT' | translate }}</span>
+          </div>
+          <div class="calendar-matrix-card">
+            @if (currentFacility) {
+              <div class="week-facility-banner">
+                <span class="court-sport-pill">{{ currentFacility.sportType }}</span>
+                <h3 class="facility-title">{{ currentFacility.facilityName }}</h3>
+                <span class="court-subinfo">{{ currentFacility.courtType }} • {{ currentFacility.surfaceType }}</span>
+              </div>
+            }
+            <div class="matrix-table-container">
+              <table class="calendar-matrix-table">
+                <thead>
+                  <tr>
+                    <th class="matrix-time-header">
+                      <div class="time-header-content">
+                        <i class="pi pi-clock"></i>
+                        <span>Horario</span>
                       </div>
                     </th>
-                  }
-                </tr>
-              </thead>
-              <tbody>
-                @for (timeRange of uniqueTimeSlots; track timeRange) {
-                  <tr>
-                    <!-- Columna de Franja Horaria -->
-                    <td class="matrix-time-cell">
-                      <span class="time-cell-badge">{{ timeRange }}</span>
-                    </td>
-
-                    <!-- Celdas por cada pista -->
-                    @for (facility of facilitiesAvailability; track facility.facilityId) {
-                      @let slot = getSlotForFacilityAndTime(facility, timeRange);
-                      <td class="matrix-slot-cell">
-                        @if (slot) {
-                          <button
-                            type="button"
-                            pButton
-                            class="matrix-slot-button"
-                            [ngClass]="{
-                              'matrix-slot-available': slot.status === 'AVAILABLE',
-                              'matrix-slot-occupied': slot.status === 'OCCUPIED',
-                              'matrix-slot-blocked': slot.status === 'BLOCKED',
-                              'matrix-peak-hour': slot.isPeakHour
-                            }"
-                            [severity]="slot.status === 'AVAILABLE' ? (slot.isPeakHour ? 'warn' : 'primary') : 'secondary'"
-                            [outlined]="slot.status !== 'AVAILABLE'"
-                            [disabled]="slot.status !== 'AVAILABLE'"
-                            (click)="selectSlot(facility, slot)"
-                          >
-                            @if (slot.status === 'AVAILABLE') {
-                              <span class="slot-price-text">
-                                {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
-                              </span>
-                              @if (slot.isPeakHour) {
-                                <span class="slot-peak-indicator" title="Hora punta">★</span>
-                              }
-                            } @else if (slot.status === 'OCCUPIED') {
-                              <span class="slot-occupied-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
-                            } @else {
-                              <span class="slot-blocked-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
-                            }
-                          </button>
-                        } @else {
-                          <div class="matrix-slot-empty">
-                            <span class="empty-dash">—</span>
-                          </div>
-                        }
-                      </td>
+                    @for (day of weekDays; track day.dateString) {
+                      <th class="matrix-court-header" [class.is-today-column]="day.isToday">
+                        <div class="day-header-card">
+                          <span class="day-label">{{ day.label }}</span>
+                          @if (day.isToday) {
+                            <span class="today-indicator-pill">Hoy</span>
+                          }
+                        </div>
+                      </th>
                     }
                   </tr>
-                }
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  @for (timeRange of uniqueTimeSlots; track timeRange) {
+                    <tr>
+                      <td class="matrix-time-cell">
+                        <span class="time-cell-badge">{{ timeRange }}</span>
+                      </td>
+                      @for (day of weekDays; track day.dateString) {
+                        <td class="matrix-slot-cell">
+                          @if (currentFacility) {
+                            @let slot = getSlotForFacilityAndTime(currentFacility, timeRange);
+                            @let timeStart = timeRange.split(' - ')[0];
+                            @let isWeekCutoff = isSlotBlockedByCutoff(day.dateString, timeStart);
+                            @if (isWeekCutoff) {
+                              <div
+                                class="matrix-slot-empty matrix-slot-empty-disabled"
+                                [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
+                              >
+                                <span class="empty-dash"><i class="pi pi-clock"></i></span>
+                              </div>
+                            } @else if (slot) {
+                              <button
+                                type="button"
+                                pButton
+                                [text]="true"
+                                class="matrix-slot-button"
+                                [ngClass]="{
+                                  'matrix-slot-available': slot.status === 'AVAILABLE',
+                                  'matrix-slot-occupied': slot.status === 'OCCUPIED',
+                                  'matrix-slot-blocked': slot.status === 'BLOCKED'
+                                }"
+                                [disabled]="slot.status !== 'AVAILABLE'"
+                                (click)="selectSlot(currentFacility, slot, day.dateString)"
+                              >
+                                @if (slot.status === 'AVAILABLE') {
+                                  <span class="slot-price-text">
+                                    {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
+                                  </span>
+                                } @else {
+                                  <span class="slot-occupied-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
+                                }
+                              </button>
+                            } @else {
+                              <div
+                                class="matrix-slot-empty"
+                                tabindex="0"
+                                role="button"
+                                (click)="onEmptySlotClick(currentFacility, timeRange, day.dateString)"
+                                [title]="'PORTAL.BOOKINGS.SLOT_EMPTY_HOVER' | translate"
+                              >
+                                <span class="empty-dash">—</span>
+                              </div>
+                            }
+                          }
+                        </td>
+                      }
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
-    } @else {
-      <!-- VISTA LISTA / TARJETAS TRADICIONALES (con pButton en slots) -->
-      <div class="facilities-grid">
-        @for (facility of facilitiesAvailability; track facility.facilityId) {
-          <div class="facility-card">
-            <!-- Cabecera de la pista -->
-            <div class="facility-card-header">
-              <div class="facility-info">
-                <span class="facility-sport-badge">{{ facility.sportType }}</span>
-                <h3 class="facility-name">{{ facility.facilityName }}</h3>
-                <span class="facility-specs text-muted">
-                  {{ facility.courtType }} • {{ facility.surfaceType }} • {{ facility.defaultSlotMinutes }} min
-                </span>
-              </div>
-              @if (facility.hasLighting) {
-                <div class="lighting-badge" title="Iluminación disponible">
-                  <i class="pi pi-sun"></i>
+      }
+
+      <!-- 3. VISTA MES (Calendario Mensual Interactivo) -->
+      @else {
+        <div class="calendar-matrix-wrapper">
+          <div class="calendar-matrix-card month-calendar-card">
+            <div class="month-calendar-header">
+              <span>LUN</span><span>MAR</span><span>MIÉ</span><span>JUE</span><span>VIE</span><span>SÁB</span><span>DOM</span>
+            </div>
+            <div class="month-calendar-grid">
+              @for (day of monthDays; track day.dateString) {
+                <div
+                  class="month-day-cell"
+                  [class.other-month]="!day.isCurrentMonth"
+                  [class.is-today]="day.isToday"
+                  (click)="goToDayFromMonth(day.date)"
+                >
+                  <div class="month-day-number">{{ day.dayNumber }}</div>
+                  <div class="month-day-status">
+                    @if (day.isCurrentMonth) {
+                      <span class="available-dot-badge">
+                        <i class="pi pi-check-circle"></i>
+                        {{ facilitiesAvailability.length }} pistas
+                      </span>
+                    }
+                  </div>
                 </div>
               }
             </div>
-
-            <!-- Matriz de Slots Horarios con pButton -->
-            <div class="slots-container">
-              @for (slot of facility.slots; track slot.startTime) {
-                <button
-                  type="button"
-                  pButton
-                  class="slot-button"
-                  [ngClass]="{
-                    'slot-available': slot.status === 'AVAILABLE',
-                    'slot-occupied': slot.status === 'OCCUPIED',
-                    'slot-blocked': slot.status === 'BLOCKED',
-                    'peak-hour': slot.isPeakHour
-                  }"
-                  [severity]="slot.status === 'AVAILABLE' ? (slot.isPeakHour ? 'warn' : 'primary') : 'secondary'"
-                  [outlined]="slot.status !== 'AVAILABLE'"
-                  [disabled]="slot.status !== 'AVAILABLE'"
-                  (click)="selectSlot(facility, slot)"
-                >
-                  <span class="slot-time">{{ slot.startHourText }} - {{ slot.endHourText }}</span>
-                  @if (slot.status === 'AVAILABLE') {
-                    <span class="slot-price">{{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}</span>
-                  } @else if (slot.status === 'OCCUPIED') {
-                    <span class="slot-status-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
-                  } @else if (slot.status === 'BLOCKED') {
-                    <span class="slot-status-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
-                  }
-                </button>
-              }
-            </div>
           </div>
-        }
-      </div>
-    }
+        </div>
+      }
   }
 
   <!-- Modal de Confirmación de Reserva -->

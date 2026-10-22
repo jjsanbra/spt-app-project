@@ -34,46 +34,78 @@
 
 .filter-controls-card {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  gap: var(--spacing-sm);
   padding: var(--spacing-md);
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
 
   @include mobile {
-    flex-direction: column;
-    align-items: stretch;
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
   }
 }
 
-.date-quick-buttons {
+.filter-header-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-
-  .datepicker-container {
-    min-width: 170px;
-
-    @include mobile {
-      width: 100%;
-    }
-  }
-}
-
-.filter-actions-right {
-  display: flex;
-  align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-md);
   flex-wrap: wrap;
 
   @include mobile {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+}
+
+.granularity-toggle-wrapper {
+  display: flex;
+  align-items: center;
+
+  @include mobile {
+    width: 100%;
+    ::ng-deep .p-selectbutton {
+      width: 100%;
+      display: flex;
+      .p-togglebutton {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  }
+
+  .granularity-label {
+    margin-left: var(--spacing-xs);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+.filter-right-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+.facility-filter-wrapper {
+  min-width: 200px;
+
+  @include mobile {
+    width: 100%;
+  }
+
+  .facility-select {
     width: 100%;
   }
 }
@@ -102,6 +134,119 @@
     @include mobile {
       display: none;
     }
+  }
+}
+
+.filter-navigation-row {
+  display: flex;
+  align-items: center;
+  padding-top: var(--spacing-xs);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.date-quick-buttons {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+
+  @include mobile {
+    width: 100%;
+  }
+
+  .datepicker-container {
+    min-width: 160px;
+
+    @include mobile {
+      width: 100%;
+      ::ng-deep .p-datepicker {
+        width: 100%;
+      }
+    }
+  }
+}
+
+.week-nav-controls,
+.month-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+
+  @include mobile {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .range-display-label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2xs);
+    font-family: var(--font-heading);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    margin-left: var(--spacing-xs);
+    white-space: nowrap;
+    text-transform: capitalize;
+
+    i {
+      color: var(--primary-color);
+      font-size: var(--font-size-xs);
+    }
+
+    @include mobile {
+      margin-left: 0;
+      width: 100%;
+      order: -1;
+      justify-content: center;
+      padding: var(--spacing-2xs) 0;
+    }
+  }
+}
+
+.nav-icon-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-full) !important;
+  border: 1px solid var(--border-subtle) !important;
+  background-color: var(--surface-container-low) !important;
+  color: var(--text-color) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: var(--font-size-xs) !important;
+    color: var(--text-color) !important;
+    display: inline-block;
+  }
+
+  &:hover {
+    background-color: var(--surface-card) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+
+    i {
+      color: var(--primary-color) !important;
+    }
+  }
+
+  @include mobile {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
   }
 }
 
@@ -138,6 +283,25 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.mobile-scroll-hint {
+  display: none;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-2xs);
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xs);
+  padding: 0 var(--spacing-2xs);
+
+  i {
+    font-size: var(--font-size-xs);
+    color: var(--primary-color);
+  }
+
+  @include mobile-or-tablet {
+    display: flex;
+  }
+}
+
 .calendar-matrix-card {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
@@ -148,11 +312,13 @@
 
 .matrix-table-container {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
 }
 
 .calendar-matrix-table {
   width: 100%;
+  min-width: 680px;
   border-collapse: separate;
   border-spacing: 0;
 
@@ -260,9 +426,63 @@
   }
 
   .matrix-slot-empty {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 40px;
+    padding: var(--spacing-2xs) var(--spacing-xs);
+    border-radius: var(--radius-full);
+    border: 1px dashed var(--border-subtle);
+    background-color: transparent;
     color: var(--text-dim);
     font-size: var(--font-size-sm);
-    padding: var(--spacing-xs);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    .empty-dash {
+      transition: opacity 0.15s ease;
+    }
+
+    &:hover {
+      background-color: rgba(255, 45, 120, 0.08);
+      border-color: rgba(255, 45, 120, 0.35);
+      color: var(--primary-color);
+      transform: scale(1.02);
+
+      .empty-dash {
+        display: none;
+      }
+
+      &::after {
+        content: '+ Reservar';
+        font-family: var(--font-label);
+        font-size: var(--font-size-2xs);
+        font-weight: var(--font-weight-bold);
+      }
+    }
+
+    &.matrix-slot-empty-disabled {
+      cursor: not-allowed;
+      opacity: 0.35;
+      background-color: rgba(255, 255, 255, 0.01);
+      border-color: rgba(255, 255, 255, 0.05);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.01) !important;
+        border-color: rgba(255, 255, 255, 0.05) !important;
+        color: var(--text-dim) !important;
+        transform: none !important;
+
+        .empty-dash {
+          display: inline !important;
+        }
+
+        &::after {
+          content: '' !important;
+        }
+      }
+    }
   }
 }
 
@@ -326,24 +546,23 @@
   gap: var(--spacing-xs);
 }
 
-/* Clases unificadas para botones de slot (matriz y tarjetas) */
+/* Clases unificadas para botones de slot (matriz y tarjetas) — Estilo Píldora Neón Invertido */
 .slot-button,
 .matrix-slot-button {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full) !important;
   font-family: var(--font-label);
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
 
   .slot-price,
   .slot-price-text {
-    font-size: var(--font-size-2xs);
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-bold);
-    color: var(--secondary-fixed);
-    margin-top: 2px;
+    letter-spacing: 0.02em;
   }
 
   .slot-peak-indicator {
@@ -355,8 +574,7 @@
   .slot-occupied-text,
   .slot-blocked-text {
     font-size: var(--font-size-2xs);
-    color: var(--text-muted);
-    margin-top: 2px;
+    color: var(--text-dim);
     text-align: center;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -364,45 +582,91 @@
     max-width: 100%;
   }
 
+  /* Slot Disponible — Píldora Rosa Translúcida Neón */
   &.slot-available,
   &.matrix-slot-available {
-    background-color: var(--surface-container);
-    border-color: rgba(36, 255, 205, 0.35);
+    background-color: rgba(255, 45, 120, 0.12) !important;
+    border: 1px solid rgba(255, 45, 120, 0.45) !important;
+    color: var(--primary-color) !important;
+    box-shadow: none !important;
+
+    .slot-price,
+    .slot-price-text {
+      color: var(--primary-color) !important;
+    }
 
     &:hover:not(:disabled) {
-      border-color: var(--secondary-fixed);
+      background-color: rgba(255, 45, 120, 0.24) !important;
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 14px rgba(255, 45, 120, 0.35) !important;
       transform: translateY(-2px);
-      box-shadow: var(--shadow-glow-cyan);
     }
 
     &.peak-hour,
     &.matrix-peak-hour {
-      border-left: 3px solid var(--tertiary);
+      background-color: rgba(255, 224, 74, 0.12) !important;
+      border-color: rgba(255, 224, 74, 0.45) !important;
+      .slot-price,
+      .slot-price-text {
+        color: var(--tertiary) !important;
+      }
     }
   }
 
+  /* Slot Ocupado — Atenuado Sutil */
   &.slot-occupied,
   &.matrix-slot-occupied {
-    background-color: var(--surface-container-lowest);
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-dim) !important;
     opacity: 0.55;
     cursor: not-allowed;
   }
 
+  /* Slot Bloqueado */
   &.slot-blocked,
   &.matrix-slot-blocked {
-    background-color: var(--status-disputed-bg);
-    border-color: var(--status-disputed-border);
+    background-color: var(--status-disputed-bg) !important;
+    border: 1px solid var(--status-disputed-border) !important;
+    color: var(--error) !important;
+    opacity: 0.65;
     cursor: not-allowed;
     .slot-status-text,
     .slot-blocked-text {
-      color: var(--error);
+      color: var(--error) !important;
+    }
+  }
+
+  /* Slot Bloqueado por Cutoff (< 2 horas o pasado) */
+  &.slot-cutoff-blocked,
+  &.matrix-slot-cutoff-blocked {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+    border: 1px solid rgba(255, 255, 255, 0.06) !important;
+    color: var(--text-dim) !important;
+    opacity: 0.45;
+    cursor: not-allowed !important;
+
+    .slot-cutoff-text,
+    .cutoff-text {
+      font-size: var(--font-size-2xs);
+      color: var(--text-dim) !important;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    &:hover {
+      transform: none !important;
+      box-shadow: none !important;
+      background-color: rgba(255, 255, 255, 0.02) !important;
+      border-color: rgba(255, 255, 255, 0.06) !important;
     }
   }
 }
 
 .slot-button {
-  padding: var(--spacing-sm) var(--spacing-xs);
-  min-height: 56px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  min-height: 48px;
 
   .slot-time {
     font-size: var(--font-size-xs);
@@ -413,9 +677,131 @@
 
 .matrix-slot-button {
   width: 100%;
-  min-width: 110px;
-  min-height: 48px;
-  padding: var(--spacing-2xs) var(--spacing-xs);
+  min-width: 105px;
+  min-height: 40px;
+  padding: 4px var(--spacing-xs);
+}
+
+/* --------------------------------------------------------------------------
+   Estilos específicos de Vista Semana
+   -------------------------------------------------------------------------- */
+.week-facility-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--surface-muted);
+  border-bottom: 1px solid var(--border-subtle);
+
+  .facility-title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+    margin: 0;
+  }
+}
+
+.day-header-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  .day-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+  }
+
+  .today-indicator-pill {
+    font-size: 0.65rem;
+    font-weight: var(--font-weight-bold);
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    padding: 1px 6px;
+    border-radius: var(--radius-full);
+  }
+}
+
+.is-today-column {
+  background-color: rgba(255, 45, 120, 0.05);
+}
+
+/* --------------------------------------------------------------------------
+   Estilos específicos de Vista Mes
+   -------------------------------------------------------------------------- */
+.month-calendar-card {
+  padding: var(--spacing-md);
+}
+
+.month-calendar-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-muted);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: var(--spacing-xs);
+}
+
+.month-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--spacing-xs);
+}
+
+.month-day-cell {
+  background-color: var(--surface-container);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  .month-day-number {
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+    color: var(--text-color);
+  }
+
+  .month-day-status {
+    .available-dot-badge {
+      font-size: 0.65rem;
+      color: var(--primary-color);
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+
+  &:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(255, 45, 120, 0.15);
+  }
+
+  &.other-month {
+    opacity: 0.35;
+    background-color: transparent;
+  }
+
+  &.is-today {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 45, 120, 0.08);
+
+    .month-day-number {
+      color: var(--primary-color);
+    }
+  }
 }
 
 .booking-dialog-content {
