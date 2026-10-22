@@ -77,7 +77,7 @@
 
 /* Botón Danger / Destructivo */
 .btn-danger,
-.p-button.p-button-danger {
+.p-button.p-button-danger:not(.p-button-text):not(.p-button-outlined) {
   background: var(--status-disputed-bg) !important;
   color: var(--error) !important;
   border: 1px solid var(--status-disputed-border) !important;
@@ -89,6 +89,17 @@
     color: #FFFFFF !important;
     border-color: var(--error) !important;
     transform: translateY(-1px);
+  }
+}
+
+.p-button.p-button-danger.p-button-text {
+  background: transparent !important;
+  color: var(--error) !important;
+  border: 1px solid transparent !important;
+
+  &:hover {
+    background: var(--status-disputed-bg) !important;
+    color: var(--error) !important;
   }
 }
 

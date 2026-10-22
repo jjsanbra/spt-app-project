@@ -1,0 +1,192 @@
+/* ==========================================================================
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — DATEPICKER PRIMENG OVERRIDES
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_datepicker.scss
+   ========================================================================== */
+
+/* Contenedor del Input DatePicker */
+.p-datepicker {
+  display: inline-flex;
+  max-width: 100%;
+
+  .p-datepicker-input {
+    font-family: var(--font-body);
+    font-size: var(--font-size-base);
+    background-color: var(--surface-card) !important;
+    color: var(--text-color) !important;
+    border: 1px solid var(--border-input) !important;
+    border-radius: var(--radius-sm) !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    transition: var(--theme-transition);
+
+    &:hover {
+      border-color: var(--primary-color) !important;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--primary-color) !important;
+      box-shadow: 0 0 0 2px var(--p-focus-ring-color) !important;
+    }
+  }
+
+  .p-datepicker-input-icon-container {
+    color: var(--text-muted);
+  }
+}
+
+/* Panel Emergente / Overlay del Calendario (Fondo 100% Opaco y Elevación) */
+.p-datepicker-panel,
+.p-datepicker-overlay,
+div.p-datepicker:not(.p-datepicker-panel-inline) {
+  background-color: var(--surface-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-tier3) !important;
+  padding: var(--spacing-md) !important;
+  z-index: 1100 !important;
+  min-width: 19rem;
+  font-family: var(--font-body);
+}
+
+/* Cabecera del Calendario */
+.p-datepicker-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-bottom: var(--spacing-sm) !important;
+  margin-bottom: var(--spacing-xs) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  background: transparent !important;
+  color: var(--text-color) !important;
+}
+
+.p-datepicker-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--spacing-xs) !important;
+  font-family: var(--font-heading) !important;
+  font-weight: var(--font-weight-semibold) !important;
+  font-size: var(--font-size-base) !important;
+  color: var(--text-color) !important;
+
+  .p-datepicker-select-month,
+  .p-datepicker-select-year {
+    color: var(--text-color) !important;
+    background: transparent !important;
+    border: none !important;
+    font-weight: var(--font-weight-semibold) !important;
+    cursor: pointer;
+    padding: var(--spacing-2xs) var(--spacing-xs) !important;
+    border-radius: var(--radius-xs) !important;
+    transition: background-color 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background-color: var(--surface-container-high) !important;
+      color: var(--primary-color) !important;
+    }
+  }
+}
+
+.p-datepicker-prev-button,
+.p-datepicker-next-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: var(--radius-full) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  color: var(--text-muted) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: var(--surface-container-high) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-subtle) !important;
+  }
+}
+
+/* Tabla del Calendario de Días */
+.p-datepicker-calendar-container,
+.p-datepicker-calendar {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin-top: var(--spacing-xs) !important;
+
+  thead th,
+  .p-datepicker-weekday-cell {
+    padding: var(--spacing-xs) !important;
+    color: var(--text-dim) !important;
+    font-family: var(--font-label) !important;
+    font-size: var(--font-size-xs) !important;
+    font-weight: var(--font-weight-semibold) !important;
+    text-align: center !important;
+  }
+
+  tbody td,
+  .p-datepicker-day-cell {
+    padding: 2px !important;
+    text-align: center !important;
+  }
+}
+
+/* Celdas / Botones de Día Individual */
+.p-datepicker-day {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-color) !important;
+  background: transparent !important;
+  border: 1px solid transparent !important;
+  font-family: var(--font-body) !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: var(--surface-container-high) !important;
+    color: var(--text-color) !important;
+  }
+
+  &.p-datepicker-today {
+    border-color: var(--primary-color) !important;
+    font-weight: var(--font-weight-bold) !important;
+    color: var(--primary-color) !important;
+  }
+
+  &.p-datepicker-day-selected {
+    background: var(--primary-gradient) !important;
+    color: #FFFFFF !important;
+    font-weight: var(--font-weight-bold) !important;
+    box-shadow: var(--shadow-glow-pink) !important;
+    border: none !important;
+
+    &:hover {
+      background: var(--primary-gradient-hover) !important;
+    }
+  }
+
+  &.p-datepicker-other-month {
+    color: var(--text-dim) !important;
+    opacity: 0.45;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  &:disabled,
+  &.p-disabled {
+    color: var(--text-dim) !important;
+    opacity: 0.3 !important;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+}

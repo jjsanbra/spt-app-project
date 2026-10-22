@@ -245,6 +245,18 @@
   --p-form-field-border-radius: var(--radius-sm);
   --p-form-field-padding-x: var(--spacing-md);
   --p-form-field-padding-y: var(--spacing-sm);
+
+  /* PrimeNG DatePicker Tokens */
+  --p-datepicker-panel-background: var(--surface-card);
+  --p-datepicker-panel-color: var(--text-color);
+  --p-datepicker-panel-border-color: var(--border-subtle);
+  --p-datepicker-panel-shadow: var(--shadow-tier3);
+  --p-datepicker-header-background: transparent;
+  --p-datepicker-header-color: var(--text-color);
+  --p-datepicker-date-color: var(--text-color);
+  --p-datepicker-date-hover-background: var(--surface-container-high);
+  --p-datepicker-date-selected-background: var(--primary-color);
+  --p-datepicker-date-selected-color: #FFFFFF;
 }
 
 /* ==========================================================================
@@ -422,4 +434,16 @@
   --p-form-field-border-radius: var(--radius-sm);
   --p-form-field-padding-x: var(--spacing-md);
   --p-form-field-padding-y: var(--spacing-sm);
+
+  /* PrimeNG DatePicker Tokens */
+  --p-datepicker-panel-background: var(--surface-card);
+  --p-datepicker-panel-color: var(--text-color);
+  --p-datepicker-panel-border-color: var(--border-subtle);
+  --p-datepicker-panel-shadow: var(--shadow-tier3);
+  --p-datepicker-header-background: transparent;
+  --p-datepicker-header-color: var(--text-color);
+  --p-datepicker-date-color: var(--text-color);
+  --p-datepicker-date-hover-background: var(--surface-container-high);
+  --p-datepicker-date-selected-background: var(--primary-color);
+  --p-datepicker-date-selected-color: #FFFFFF;
 }
