@@ -1,16 +1,19 @@
 <p-toast></p-toast>
 <p-confirmdialog></p-confirmdialog>
 
-<!-- Backdrop para drawer móvil -->
-<div
-  class="sidebar-backdrop"
-  [class.is-visible]="sidebarOpen()"
-  (click)="closeSidebar()"
-></div>
+@if (!isAuthPage()) {
+  <!-- Backdrop para drawer móvil -->
+  <div
+    class="sidebar-backdrop"
+    [class.is-visible]="sidebarOpen()"
+    (click)="closeSidebar()"
+  ></div>
+}
 
-<div class="app-layout" [class.sidebar-active]="sidebarOpen()">
-  <!-- Sidebar Lateral Izquierdo (Stitch Layout) -->
-  <aside class="app-sidebar" [class.is-open]="sidebarOpen()">
+<div class="app-layout" [class.auth-layout]="isAuthPage()" [class.sidebar-active]="!isAuthPage() && sidebarOpen()">
+  @if (!isAuthPage()) {
+    <!-- Sidebar Lateral Izquierdo (Stitch Layout) -->
+    <aside class="app-sidebar" [class.is-open]="sidebarOpen()">
     <!-- Header de Marca & Logo -->
     <div class="sidebar-header">
       <a routerLink="/" class="brand-link" (click)="closeSidebar()">
@@ -252,37 +255,57 @@
       </div>
     </div>
   </aside>
+}
 
   <!-- Área Principal de Contenido a la Derecha -->
   <div class="app-main-wrapper">
-    <!-- Topbar Compacto Superior -->
-    <header class="app-topbar">
-      <div class="topbar-left">
+    @if (!isAuthPage()) {
+      <!-- Topbar Compacto Superior -->
+      <header class="app-topbar">
+        <div class="topbar-left">
+          <button
+            type="button"
+            pButton
+            [text]="true"
+            icon="pi pi-bars"
+            class="mobile-menu-trigger"
+            (click)="toggleSidebar()"
+            [attr.aria-label]="'NAV.SIDEBAR_OPEN' | translate"
+          ></button>
+
+          <div class="topbar-context">
+            @if (authService.activeClub()) {
+              <span class="context-club">{{ authService.activeClub()?.clubName }}</span>
+              <span class="context-divider">•</span>
+            }
+            <span class="context-tagline">{{ 'APP.TAGLINE' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          @if (authService.isAuthenticated()) {
+            <app-notification-bell></app-notification-bell>
+          }
+        </div>
+      </header>
+    } @else {
+      <!-- Selector de Tema Flotante en Pantallas de Acceso -->
+      <div class="auth-theme-floating" [attr.aria-label]="'THEME.TOGGLE_THEME' | translate">
         <button
           type="button"
           pButton
           [text]="true"
-          icon="pi pi-bars"
-          class="mobile-menu-trigger"
-          (click)="toggleSidebar()"
-          [attr.aria-label]="'NAV.SIDEBAR_OPEN' | translate"
-        ></button>
-
-        <div class="topbar-context">
-          @if (authService.activeClub()) {
-            <span class="context-club">{{ authService.activeClub()?.clubName }}</span>
-            <span class="context-divider">•</span>
-          }
-          <span class="context-tagline">{{ 'APP.TAGLINE' | translate }}</span>
-        </div>
+          [rounded]="true"
+          size="small"
+          (click)="themeService.toggleTheme()"
+          [pTooltip]="(themeService.currentTheme() === 'dark' ? 'THEME.TOGGLE_LIGHT' : 'THEME.TOGGLE_DARK') | translate"
+          tooltipPosition="left"
+          class="theme-toggle-btn"
+        >
+          <i [class]="themeService.currentTheme() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"></i>
+        </button>
       </div>
-
-      <div class="topbar-right">
-        @if (authService.isAuthenticated()) {
-          <app-notification-bell></app-notification-bell>
-        }
-      </div>
-    </header>
+    }
 
     <!-- Contenedor de Vistas (<router-outlet>) -->
     <main class="app-main">

@@ -36,6 +36,13 @@ export class App {
   private readonly router = inject(Router);
 
   readonly sidebarOpen = signal<boolean>(false);
+  readonly currentUrl = signal<string>(this.router.url || '');
+
+  readonly isAuthPage = computed(() => {
+    const url = this.currentUrl();
+    const cleanUrl = url.split('?')[0].split('#')[0];
+    return cleanUrl === '/login' || cleanUrl === '/register';
+  });
 
   readonly hasAdminRole = computed(() => {
     const user = this.authService.currentUser();
@@ -48,9 +55,10 @@ export class App {
 
   constructor() {
     this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
+      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+      .subscribe((event) => {
         this.sidebarOpen.set(false);
+        this.currentUrl.set(event.urlAfterRedirects || event.url);
       });
   }
 

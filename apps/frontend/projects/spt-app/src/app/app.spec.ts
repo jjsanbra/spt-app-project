@@ -214,4 +214,50 @@ describe('App', () => {
       expect(el.querySelector('app-notification-bell')).toBeFalsy();
     });
   });
+
+  describe('isAuthPage and layout chrome visibility', () => {
+    it('should hide sidebar and topbar on /login and show floating theme toggle', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.currentUrl.set('/login');
+      fixture.detectChanges();
+
+      expect(app.isAuthPage()).toBe(true);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.querySelector('.app-sidebar')).toBeFalsy();
+      expect(el.querySelector('.app-topbar')).toBeFalsy();
+      expect(el.querySelector('.auth-theme-floating')).toBeTruthy();
+      expect(el.querySelector('.auth-layout')).toBeTruthy();
+      expect(el.querySelector('router-outlet')).toBeTruthy();
+    });
+
+    it('should hide sidebar and topbar on /register and with query params', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.currentUrl.set('/register?plan=pro');
+      fixture.detectChanges();
+
+      expect(app.isAuthPage()).toBe(true);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.querySelector('.app-sidebar')).toBeFalsy();
+      expect(el.querySelector('.app-topbar')).toBeFalsy();
+      expect(el.querySelector('.auth-theme-floating')).toBeTruthy();
+    });
+
+    it('should show sidebar and topbar on regular authenticated routes', () => {
+      authServiceMock.isAuthenticated.set(true);
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.currentUrl.set('/portal');
+      fixture.detectChanges();
+
+      expect(app.isAuthPage()).toBe(false);
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.querySelector('.app-sidebar')).toBeTruthy();
+      expect(el.querySelector('.app-topbar')).toBeTruthy();
+      expect(el.querySelector('.auth-theme-floating')).toBeFalsy();
+      expect(el.querySelector('.auth-layout')).toBeFalsy();
+    });
+  });
 });
+
