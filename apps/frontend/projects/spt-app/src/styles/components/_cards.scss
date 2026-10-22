@@ -1,19 +1,22 @@
 /* ==========================================================================
-   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — CONTAINERS & CARDS
-   Ruta: projects/rpm-app/src/styles/components/_cards.scss
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — CONTAINERS & CARDS
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_cards.scss
    ========================================================================== */
 
 .container {
-  max-width: 1240px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 var(--spacing-lg);
 }
 
-.surface-card {
-  background: var(--surface-pure);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-tier1);
+.surface-card,
+.p-card {
+  background: var(--surface-card) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: var(--theme-transition);
 }
 
 .glass-panel {
@@ -30,6 +33,49 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-tier2);
+    box-shadow: var(--shadow-tier3);
+    border-color: var(--primary);
+  }
+}
+
+/* Stat & KPI Cards */
+.stat-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+  transition: var(--theme-transition), transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
+
+  .stat-label {
+    font-family: var(--font-label);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-value {
+    font-family: var(--font-heading);
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+    margin: var(--spacing-xs) 0;
+  }
+
+  .stat-subtext {
+    font-family: var(--font-label);
+    font-size: var(--font-size-2xs);
+    color: var(--text-dim);
   }
 }

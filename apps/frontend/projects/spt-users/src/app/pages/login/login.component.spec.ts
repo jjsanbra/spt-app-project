@@ -2,21 +2,27 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
-import { AuthService, getAuthControllerLoginResponseMock } from '@core';
+import { AuthService, NotificationService, getAuthControllerLoginResponseMock } from '@core';
 import { LoginComponent, REMEMBERED_EMAIL_KEY } from './login.component';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
   let authServiceSpy: any;
+  let notifySpy: any;
   let router: Router;
 
   beforeEach(async () => {
     localStorage.clear();
     authServiceSpy = {
       login: vi.fn(),
+    };
+    notifySpy = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      info: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -25,7 +31,7 @@ describe('LoginComponent', () => {
         provideHttpClient(),
         provideRouter([]),
         provideTranslateService({ lang: 'es' }),
-        MessageService,
+        { provide: NotificationService, useValue: notifySpy },
         { provide: AuthService, useValue: authServiceSpy },
       ],
     }).compileComponents();
@@ -135,6 +141,7 @@ describe('LoginComponent', () => {
       password: 'Password123!',
     });
     expect(component.loading).toBeFalsy();
+    expect(notifySpy.success).toHaveBeenCalled();
     expect(router.navigate).toHaveBeenCalledWith(['/admin']);
   });
 
@@ -152,6 +159,10 @@ describe('LoginComponent', () => {
     component.onSubmit();
 
     expect(authServiceSpy.login).toHaveBeenCalled();
+    expect(notifySpy.error).toHaveBeenCalledWith(
+      'AUTH.ERRORS.INVALID_CREDENTIALS',
+      'ERRORS.UNAUTHORIZED'
+    );
     expect(component.loading).toBeFalsy();
     expect(router.navigate).not.toHaveBeenCalled();
   });

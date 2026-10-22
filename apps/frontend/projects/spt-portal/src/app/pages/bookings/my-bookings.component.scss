@@ -1,9 +1,9 @@
 @use "base/responsive" as *;
 
 .portal-page-container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
 
   @include mobile {
     padding: var(--spacing-md) var(--spacing-sm);
@@ -20,13 +20,16 @@
 }
 
 .page-title {
+  font-family: var(--font-heading);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-color);
+  letter-spacing: -0.02em;
   margin: 0 0 var(--spacing-2xs) 0;
 }
 
 .page-subtitle {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--text-muted);
   margin: 0;
@@ -39,6 +42,7 @@
 
   .loading-spinner {
     font-size: var(--font-size-2xl);
+    color: var(--primary);
   }
 }
 
@@ -51,10 +55,12 @@
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   color: var(--text-muted);
 
   .empty-icon {
     font-size: var(--font-size-2xl);
+    color: var(--text-dim);
   }
 }
 
@@ -72,13 +78,18 @@
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-card);
   gap: var(--spacing-md);
   flex-wrap: wrap;
+  transition: var(--theme-transition), transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+  }
 
   &.cancelled {
-    opacity: 0.65;
-    background-color: var(--surface-muted);
+    opacity: 0.6;
+    background-color: var(--surface-container-low);
   }
 
   @include mobile {
@@ -100,18 +111,21 @@
   justify-content: center;
   width: 60px;
   height: 60px;
-  background-color: rgba(16, 185, 129, 0.1);
+  background: var(--primary-gradient);
   border-radius: var(--radius-md);
-  color: var(--primary-color);
+  color: #FFFFFF;
+  box-shadow: var(--shadow-glow-pink);
   flex-shrink: 0;
 
   .date {
+    font-family: var(--font-label);
     font-size: var(--font-size-2xs);
     font-weight: var(--font-weight-semibold);
     text-transform: uppercase;
   }
 
   .hours {
+    font-family: var(--font-heading);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
   }
@@ -120,7 +134,7 @@
 .booking-details {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-2xs);
 
   .facility-line {
     display: flex;
@@ -128,13 +142,15 @@
     gap: var(--spacing-xs);
 
     .sport-tag {
+      font-family: var(--font-label);
       font-size: var(--font-size-2xs);
       font-weight: var(--font-weight-bold);
-      color: var(--primary-color);
+      color: var(--secondary-fixed);
       text-transform: uppercase;
     }
 
     .facility-name {
+      font-family: var(--font-heading);
       font-size: var(--font-size-md);
       font-weight: var(--font-weight-bold);
       color: var(--text-color);
@@ -144,6 +160,7 @@
 
   .booking-meta {
     font-size: var(--font-size-xs);
+    color: var(--text-muted);
   }
 }
 
@@ -165,13 +182,14 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--spacing-3xs);
+  gap: var(--spacing-2xs);
 
   @include mobile {
     align-items: flex-start;
   }
 
   .booking-price {
+    font-family: var(--font-heading);
     font-size: var(--font-size-md);
     font-weight: var(--font-weight-bold);
     color: var(--text-color);

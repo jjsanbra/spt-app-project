@@ -1,5 +1,3 @@
-<p-toast></p-toast>
-
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-card-wrapper">
@@ -19,6 +17,7 @@
               pInputText
               class="w-full"
               formControlName="firstName"
+              [invalid]="(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) ?? false"
               [placeholder]="'AUTH.FIRST_NAME' | translate"
             />
             @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors) {
@@ -36,6 +35,7 @@
               pInputText
               class="w-full"
               formControlName="lastName"
+              [invalid]="(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) ?? false"
               [placeholder]="'AUTH.LAST_NAME' | translate"
             />
             @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors) {
@@ -55,6 +55,7 @@
             pInputText
             class="w-full"
             formControlName="email"
+            [invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) ?? false"
             [placeholder]="'AUTH.EMAIL' | translate"
           />
           @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
@@ -88,8 +89,8 @@
             id="register-password"
             formControlName="password"
             [toggleMask]="true"
-            styleClass="w-full"
-            inputStyleClass="w-full"
+            [fluid]="true"
+            [invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) ?? false"
             [placeholder]="'AUTH.PASSWORD' | translate"
           ></p-password>
           @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
@@ -111,8 +112,8 @@
             formControlName="confirmPassword"
             [feedback]="false"
             [toggleMask]="true"
-            styleClass="w-full"
-            inputStyleClass="w-full"
+            [fluid]="true"
+            [invalid]="((registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) || (registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordMismatch'))) ?? false"
             [placeholder]="'AUTH.CONFIRM_PASSWORD' | translate"
           ></p-password>
           @if (registerForm.get('confirmPassword')?.touched && (registerForm.get('confirmPassword')?.errors || registerForm.hasError('passwordMismatch'))) {

@@ -6,7 +6,9 @@
   justify-content: center;
   min-height: 100vh;
   padding: var(--spacing-xl) var(--spacing-md);
-  background-color: var(--surface-pure);
+  background-color: var(--bg-canvas);
+  color: var(--text-color);
+  transition: var(--theme-transition);
 
   @include mobile {
     padding: var(--spacing-md) var(--spacing-sm);
@@ -23,7 +25,8 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: var(--shadow-card);
+  transition: var(--theme-transition);
 
   @include mobile {
     padding: var(--spacing-lg) var(--spacing-md);
@@ -36,13 +39,16 @@
 }
 
 .auth-title {
+  font-family: var(--font-heading);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-color);
+  letter-spacing: -0.02em;
   margin: 0 0 var(--spacing-xs) 0;
 }
 
 .auth-subtitle {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--text-muted);
   margin: 0;

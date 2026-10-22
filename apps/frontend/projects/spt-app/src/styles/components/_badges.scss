@@ -1,6 +1,6 @@
 /* ==========================================================================
-   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — BADGES & PODIUM MEDALS
-   Ruta: projects/rpm-app/src/styles/components/_badges.scss
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — BADGES & PRIMENG TAGS
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_badges.scss
    ========================================================================== */
 
 .badge {
@@ -8,6 +8,7 @@
   align-items: center;
   gap: 0.35rem;
   padding: var(--spacing-xs) var(--spacing-md);
+  font-family: var(--font-label);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
@@ -17,19 +18,64 @@
 
 .badge-confirmed {
   background: var(--status-confirmed-bg);
-  color: var(--status-confirmed-text)
+  color: var(--status-confirmed-text);
+  border: 1px solid var(--status-confirmed-border);
 }
 
 .badge-pending,
 .badge-pending-confirmation,
 .badge-pending-result {
   background: var(--status-pending-bg);
-  color: var(--status-pending-text)
+  color: var(--status-pending-text);
+  border: 1px solid var(--status-pending-border);
 }
 
 .badge-disputed {
   background: var(--status-disputed-bg);
-  color: var(--status-disputed-text)
+  color: var(--status-disputed-text);
+  border: 1px solid var(--status-disputed-border);
+}
+
+/* PrimeNG p-tag Overrides (Stitch Pill Style) */
+.p-tag {
+  font-family: var(--font-label) !important;
+  font-size: var(--font-size-2xs) !important;
+  font-weight: var(--font-weight-bold) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-radius: var(--radius-full) !important;
+  padding: 0.2rem 0.65rem !important;
+
+  &.p-tag-success {
+    background: var(--status-confirmed-bg) !important;
+    color: var(--status-confirmed-text) !important;
+    border: 1px solid var(--status-confirmed-border) !important;
+  }
+
+  &.p-tag-info {
+    background: rgba(36, 255, 205, 0.12) !important;
+    color: var(--secondary-fixed) !important;
+    border: 1px solid rgba(36, 255, 205, 0.25) !important;
+  }
+
+  &.p-tag-warn,
+  &.p-tag-warning {
+    background: var(--status-pending-bg) !important;
+    color: var(--status-pending-text) !important;
+    border: 1px solid var(--status-pending-border) !important;
+  }
+
+  &.p-tag-danger {
+    background: var(--status-disputed-bg) !important;
+    color: var(--status-disputed-text) !important;
+    border: 1px solid var(--status-disputed-border) !important;
+  }
+
+  &.p-tag-secondary {
+    background: var(--surface-container-high) !important;
+    color: var(--text-muted) !important;
+    border: 1px solid var(--border-subtle) !important;
+  }
 }
 
 /* Podium circles */
@@ -43,7 +89,7 @@
   font-family: var(--font-heading);
   font-weight: var(--font-weight-extrabold);
   font-size: var(--font-size-base);
-  color: var(--surface-pure);
+  color: #FFFFFF;
 
   &.gold {
     background: var(--podium-gold);
@@ -58,10 +104,5 @@
   &.bronze {
     background: var(--podium-bronze);
     box-shadow: 0 2px 8px rgba(180, 83, 9, 0.35);
-  }
-
-  &.standard {
-    background: var(--surface-muted);
-    color: var(--text-muted);
   }
 }

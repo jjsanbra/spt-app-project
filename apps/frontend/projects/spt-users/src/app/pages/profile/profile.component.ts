@@ -5,16 +5,14 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   AuthService,
   ClubMembershipSummaryDto,
+  NotificationService,
   UsersService,
   UserSummaryDto,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
 import { DividerModule } from 'primeng/divider';
-import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-profile',
@@ -23,14 +21,11 @@ import { MessageService } from 'primeng/api';
     CommonModule,
     ReactiveFormsModule,
     TranslatePipe,
-    CardModule,
     InputTextModule,
     ButtonModule,
     TagModule,
-    ToastModule,
     DividerModule,
   ],
-  providers: [MessageService],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
@@ -38,7 +33,7 @@ export class ProfileComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   readonly authService = inject(AuthService);
   private readonly usersService = inject(UsersService);
-  private readonly messageService = inject(MessageService);
+  private readonly notify = inject(NotificationService);
   private readonly translate = inject(TranslateService);
   private readonly cdr = inject(ChangeDetectorRef);
 
@@ -69,11 +64,7 @@ export class ProfileComponent implements OnInit {
 
   onSelectActiveClub(club: ClubMembershipSummaryDto): void {
     this.authService.setActiveClub(club);
-    this.messageService.add({
-      severity: 'info',
-      summary: this.translate.instant('USERS.ACTIVE_CLUB'),
-      detail: club.clubName,
-    });
+    this.notify.info(club.clubName, 'USERS.ACTIVE_CLUB');
   }
 
   onSubmit(): void {
@@ -96,20 +87,12 @@ export class ProfileComponent implements OnInit {
         next: (updatedUser) => {
           this.loading = false;
           this.authService.setCurrentUser(updatedUser);
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('USERS.UPDATE_SUCCESS'),
-          });
+          this.notify.success('USERS.UPDATE_SUCCESS', 'APP.NAME');
           this.cdr.markForCheck();
         },
         error: () => {
           this.loading = false;
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail: this.translate.instant('ERRORS.GENERIC'),
-          });
+          this.notify.error('ERRORS.GENERIC', 'ERRORS.GENERIC');
           this.cdr.markForCheck();
         },
       });

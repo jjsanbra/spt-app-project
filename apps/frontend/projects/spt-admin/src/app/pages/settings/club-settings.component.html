@@ -138,24 +138,24 @@
           <div class="form-group flex-1">
             <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
             <p-select
-              id="openingHour"
+              inputId="openingHour"
               [options]="hourOptions"
               formControlName="openingHour"
               optionLabel="label"
               optionValue="value"
-              styleClass="w-full"
+              [fluid]="true"
             ></p-select>
           </div>
 
           <div class="form-group flex-1">
             <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
             <p-select
-              id="closingHour"
+              inputId="closingHour"
               [options]="hourOptions"
               formControlName="closingHour"
               optionLabel="label"
               optionValue="value"
-              styleClass="w-full"
+              [fluid]="true"
             ></p-select>
           </div>
         </div>
@@ -164,24 +164,23 @@
           <div class="form-group flex-1">
             <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
             <p-select
-              id="slotDuration"
+              inputId="slotDuration"
               [options]="slotDurationOptions"
               formControlName="slotDurationMinutes"
               optionLabel="label"
               optionValue="value"
-              styleClass="w-full"
+              [fluid]="true"
             ></p-select>
           </div>
 
           <div class="form-group flex-1">
             <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }}) *</label>
             <p-inputnumber
-              id="minNotice"
+              inputId="minNotice"
               formControlName="openGameMinNoticeHours"
               [min]="1"
               [max]="72"
-              styleClass="w-full"
-              inputStyleClass="w-full"
+              [fluid]="true"
             ></p-inputnumber>
           </div>
         </div>
@@ -204,12 +203,12 @@
         <div class="form-group">
           <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
           <p-select
-            id="paymentMode"
+            inputId="paymentMode"
             [options]="paymentModeOptions"
             formControlName="paymentMode"
             optionLabel="label"
             optionValue="value"
-            styleClass="w-full"
+            [fluid]="true"
           ></p-select>
         </div>
 

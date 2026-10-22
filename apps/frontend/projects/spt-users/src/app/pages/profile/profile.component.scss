@@ -1,9 +1,11 @@
 @use "base/responsive" as *;
 
 .profile-page {
-  padding: var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-lg);
   min-height: calc(100vh - 64px);
-  background-color: var(--surface-pure);
+  background-color: var(--bg-canvas);
+  color: var(--text-color);
+  transition: var(--theme-transition);
 
   @include mobile {
     padding: var(--spacing-md) var(--spacing-sm);
@@ -11,7 +13,7 @@
 }
 
 .profile-container {
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -24,6 +26,8 @@
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: var(--theme-transition);
 
   @include mobile {
     flex-direction: column;
@@ -36,10 +40,11 @@
   width: 72px;
   height: 72px;
   border-radius: var(--radius-full);
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-glow));
+  background: var(--primary-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: var(--shadow-glow-pink);
   flex-shrink: 0;
 
   .avatar-icon {
@@ -59,13 +64,16 @@
 }
 
 .user-fullname {
+  font-family: var(--font-heading);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--text-color);
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
 .user-email {
+  font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--text-muted);
   margin: 0;
@@ -95,6 +103,8 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
+  box-shadow: var(--shadow-card);
+  transition: var(--theme-transition);
 
   @include mobile {
     padding: var(--spacing-md);
@@ -102,6 +112,7 @@
 }
 
 .card-title {
+  font-family: var(--font-heading);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--text-color);

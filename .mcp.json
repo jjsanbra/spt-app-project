@@ -8,6 +8,14 @@
         "--mcp"
       ],
       "alwaysLoad": true
+    },
+    "primeng": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@primeng/mcp"
+      ]
     }
   }
 }

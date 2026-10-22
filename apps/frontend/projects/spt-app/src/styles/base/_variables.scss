@@ -1,34 +1,11 @@
 /* ==========================================================================
-   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — VARIABLES & TOKENS (:root)
-   Ruta: projects/rpm-app/src/styles/base/_variables.scss
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — DUAL TOKENS (:root / [data-theme])
+   Ruta: apps/frontend/projects/spt-app/src/styles/base/_variables.scss
    ========================================================================== */
 
 :root {
   /* --------------------------------------------------------------------------
-     1. Surface & Canvas System
-     -------------------------------------------------------------------------- */
-  --bg-canvas: #F8FAFC;
-  --surface-pure: #FFFFFF;
-  --surface-card: rgba(255, 255, 255, 0.95);
-  --surface-glass: rgba(255, 255, 255, 0.15);
-  --surface-muted: #F1F5F9;
-
-  /* Table & Matrix Surfaces */
-  --surface-table-th: #F4F6FB;
-  --surface-table-th-hover: #EAEDFA;
-  --surface-table-row-hover: #F8FAFC;
-
-  /* --------------------------------------------------------------------------
-     2. Borders & Dividers
-     -------------------------------------------------------------------------- */
-  --border-subtle: #E2E8F0;
-  --border-input: #CBD5E1;
-  --border-glass: rgba(226, 232, 240, 0.8);
-  --border-table-row: #F1F5F9;
-  --border-table-header: #E2E8F0;
-
-  /* --------------------------------------------------------------------------
-     3. Spacing System (Margins & Paddings)
+     1. Spacing System (Margins & Paddings - Fluid 8px Rhythm)
      -------------------------------------------------------------------------- */
   --spacing-2xs: 0.125rem;   /* 2px */
   --spacing-xs: 0.25rem;     /* 4px */
@@ -40,8 +17,17 @@
   --spacing-2xl: 2rem;       /* 32px */
   --spacing-3xl: 2.5rem;     /* 40px */
 
+  /* Stitch Specific Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --gutter: 1rem;
+  --margin: 1.5rem;
+
   /* --------------------------------------------------------------------------
-     4. Border Radii
+     2. Border Radii (Stitch Soft Geometric Shapes)
      -------------------------------------------------------------------------- */
   --radius-xs: 0.25rem;      /* 4px */
   --radius-sm: 0.5rem;       /* 8px */
@@ -51,137 +37,11 @@
   --radius-full: 9999px;     /* Pills & Badges */
 
   /* --------------------------------------------------------------------------
-     5. Primary Brand & Athletic Gradients
+     3. Typography Hierarchy (Stitch: Sora, Inter, Space Grotesk)
      -------------------------------------------------------------------------- */
-  --primary: #059669;
-  --primary-color: #059669;
-  --primary-hover: #047857;
-  --primary-turf: #059669;
-  --primary-glow: #10B981;
-  --primary-contrast: #FFFFFF;
-  --primary-gradient: linear-gradient(135deg, #10B981 0%, #06B6D4 100%);
-  --primary-gradient-hover: linear-gradient(135deg, #059669 0%, #0891B2 100%);
-  --text-color: #0F172A;
-  --cyan-pulse: #0891B2;
-  --court-blue: #2563EB;
-  --accent-purple: #7C3AED;
-
-  /* KPI Metric Cards Semantics (Negative Gradients: 65% solid to 35% lighter) */
-  --kpi-blue-color: var(--court-blue);
-  --kpi-blue-gradient: linear-gradient(135deg, #1D4ED8 0%, #2563EB 65%, #60A5FA 100%);
-  --kpi-blue-glow: rgba(37, 99, 235, 0.28);
-
-  --kpi-amber-color: var(--status-pending);
-  --kpi-amber-gradient: linear-gradient(135deg, #B45309 0%, #D97706 65%, #FBBF24 100%);
-  --kpi-amber-glow: rgba(245, 158, 11, 0.28);
-
-  --kpi-purple-color: var(--accent-purple);
-  --kpi-purple-gradient: linear-gradient(135deg, #6D28D9 0%, #7C3AED 65%, #A78BFA 100%);
-  --kpi-purple-glow: rgba(124, 58, 237, 0.28);
-
-  --kpi-emerald-color: var(--primary);
-  --kpi-emerald-gradient: linear-gradient(135deg, #047857 0%, #059669 65%, #10B981 100%);
-  --kpi-emerald-glow: rgba(5, 150, 105, 0.28);
-
-  --kpi-text-subtle-white: rgba(255, 255, 255, 0.88);
-
-  /* Figma Athletic Luxury Admin Dashboard */
-  --admin-primary: #006948;
-  --admin-primary-hover: #005137;
-  --admin-pill-active: #85F8C4;
-  --admin-pill-active-text: #002114;
-  --admin-pill-inactive: #EAEDFF;
-  --admin-pill-inactive-text: #003EA8;
-  --admin-surface-low: #F2F3FF;
-  --admin-sidebar-w: 280px;
-
-  /* --------------------------------------------------------------------------
-     6. Semantic Lifecycle & Match States
-     -------------------------------------------------------------------------- */
-  --status-confirmed: #10B981;
-  --status-confirmed-bg: rgba(16, 185, 129, 0.12);
-  --status-confirmed-border: rgba(16, 185, 129, 0.25);
-  --status-confirmed-text: #047857;
-
-  --status-pending: #D97706;
-  --status-pending-bg: rgba(245, 158, 11, 0.12);
-  --status-pending-border: rgba(245, 158, 11, 0.25);
-  --status-pending-text: #B45309;
-
-  --status-disputed: #DC2626;
-  --status-disputed-bg: rgba(239, 68, 68, 0.12);
-  --status-disputed-border: rgba(239, 68, 68, 0.25);
-  --status-disputed-text: #B91C1C;
-
-  --status-cancelled: #64748B;
-  --status-cancelled-bg: rgba(100, 116, 139, 0.12);
-  --status-cancelled-border: rgba(100, 116, 139, 0.25);
-  --status-cancelled-text: #475569;
-
-  /* Status Pills */
-  --pill-active-bg: #ECFDF5;
-  --pill-active-text: #006948;
-  --pill-active-border: rgba(16, 185, 129, 0.25);
-
-  --pill-inactive-bg: #F1F5F9;
-  --pill-inactive-text: #64748B;
-  --pill-inactive-border: #CBD5E1;
-
-  --pill-pending-bg: #FEF3C7;
-  --pill-pending-text: #B45309;
-  --pill-pending-border: #FDE68A;
-
-  --pill-disputed-bg: #FEF2F2;
-  --pill-disputed-text: #DC2626;
-  --pill-disputed-border: #FECACA;
-
-  /* --------------------------------------------------------------------------
-     7. Compact Action Buttons (34px)
-     -------------------------------------------------------------------------- */
-  --action-btn-size: 34px;
-  --action-btn-radius: 8px;
-  --action-btn-border: #E2E8F0;
-  --action-btn-bg: #FFFFFF;
-
-  --action-btn-edit-color: #D97706;
-  --action-btn-edit-hover-bg: #FFFBEB;
-  --action-btn-edit-hover-border: #FCD34D;
-
-  --action-btn-toggle-color: #64748B;
-  --action-btn-toggle-hover-bg: #F1F5F9;
-  --action-btn-toggle-hover-border: #CBD5E1;
-
-  --action-btn-resend-color: #2563EB;
-  --action-btn-resend-hover-bg: #EFF6FF;
-  --action-btn-resend-hover-border: #BFDBFE;
-
-  --action-btn-delete-color: #DC2626;
-  --action-btn-delete-hover-bg: #FEF2F2;
-  --action-btn-delete-hover-border: #FECACA;
-
-  /* --------------------------------------------------------------------------
-     8. Paginator Tokens
-     -------------------------------------------------------------------------- */
-  --paginator-bg: #F4F6FB;
-  --paginator-border: #E2E8F0;
-  --paginator-btn-size: 32px;
-  --paginator-btn-radius: 6px;
-  --paginator-btn-active-bg: var(--admin-primary);
-  --paginator-btn-active-text: #FFFFFF;
-  --paginator-btn-hover: #E2E8F0;
-
-  /* --------------------------------------------------------------------------
-     9. Podium Rank Medals
-     -------------------------------------------------------------------------- */
-  --podium-gold: linear-gradient(135deg, #F59E0B, #D97706);
-  --podium-silver: linear-gradient(135deg, #94A3B8, #64748B);
-  --podium-bronze: linear-gradient(135deg, #B45309, #78350F);
-
-  /* --------------------------------------------------------------------------
-     10. Typography System (Scale & Weights)
-     -------------------------------------------------------------------------- */
-  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-label: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Font Sizes */
   --font-size-2xs: 0.6875rem; /* 11px */
@@ -202,66 +62,364 @@
   --font-weight-bold: 700;
   --font-weight-extrabold: 800;
 
+  /* Layout Dimensions */
+  --admin-sidebar-w: 280px;
+  --topbar-height: 64px;
+
+  /* Transitions */
+  --theme-transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* ==========================================================================
+   4. MODO CLARO (Default / [data-theme="light"])
+   ========================================================================== */
+:root, [data-theme="light"] {
+  color-scheme: light;
+
+  /* Canvas & Superficies */
+  --bg-canvas: #F8FAFC;
+  --surface-pure: #FFFFFF;
+  --surface-sidebar: #FFFFFF;
+  --surface-card: #FFFFFF;
+  --surface-glass: rgba(255, 255, 255, 0.85);
+  --surface-muted: #F1F5F9;
+
+  /* Tonal Surface Layers */
+  --surface-container-lowest: #FFFFFF;
+  --surface-container-low: #F8FAFC;
+  --surface-container: #FFFFFF;
+  --surface-container-high: #F1F5F9;
+  --surface-container-highest: #E2E8F0;
+
+  /* Table & Matrix Surfaces */
+  --surface-table-th: #F8FAFC;
+  --surface-table-th-hover: #F1F5F9;
+  --surface-table-row-hover: #F8FAFC;
+  --border-table-row: #F1F5F9;
+  --border-table-header: #E2E8F0;
+
+  /* Bordes & Divisores */
+  --border-subtle: #E2E8F0;
+  --border-input: #CBD5E1;
+  --border-glass: rgba(226, 232, 240, 0.8);
+
+  /* Textos */
+  --text-color: #0F172A;
   --text-slate: #0F172A;
   --text-main: #0F172A;
-  --text-secondary: #1E293B;
-  --text-muted: #475569;
-  --text-dim: #64748B;
-  --text-subtle: #94A3B8;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --text-dim: #94A3B8;
+  --text-subtle: #CBD5E1;
 
-  /* --------------------------------------------------------------------------
-     11. 4-Tier Elevation & Shadow System
-     -------------------------------------------------------------------------- */
+  /* Colores de Marca y Acentos (Stitch) */
+  --primary: #FF2D78;
+  --primary-color: #FF2D78;
+  --primary-hover: #E11D48;
+  --primary-turf: #FF2D78;
+  --primary-glow: rgba(255, 45, 120, 0.25);
+  --primary-contrast: #FFFFFF;
+  --primary-gradient: linear-gradient(135deg, #FF2D78 0%, #FF4C83 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #E11D48 0%, #FF2D78 100%);
+
+  /* Secundarios y Acentos Deportivos */
+  --secondary: #0F172A;
+  --secondary-fixed: #059669;
+  --secondary-fixed-dim: #047857;
+  --tertiary: #D97706;
+  --tertiary-fixed: #D97706;
+  --tertiary-fixed-dim: #B45309;
+  --error: #DC2626;
+
+  --cyan-pulse: #0284C7;
+  --court-blue: #2563EB;
+  --accent-purple: #7C3AED;
+
+  /* Admin & Dashboard Tokens */
+  --admin-primary: #FF2D78;
+  --admin-primary-hover: #E11D48;
+  --admin-pill-active: #ECFDF5;
+  --admin-pill-active-text: #065F46;
+  --admin-pill-inactive: #F1F5F9;
+  --admin-pill-inactive-text: #475569;
+  --admin-surface-low: #F8FAFC;
+
+  /* Semántica de Estados */
+  --status-confirmed: #059669;
+  --status-confirmed-bg: rgba(5, 150, 105, 0.10);
+  --status-confirmed-border: rgba(5, 150, 105, 0.25);
+  --status-confirmed-text: #065F46;
+
+  --status-pending: #D97706;
+  --status-pending-bg: rgba(217, 119, 6, 0.10);
+  --status-pending-border: rgba(217, 119, 6, 0.25);
+  --status-pending-text: #92400E;
+
+  --status-disputed: #DC2626;
+  --status-disputed-bg: rgba(220, 38, 38, 0.10);
+  --status-disputed-border: rgba(220, 38, 38, 0.25);
+  --status-disputed-text: #991B1B;
+
+  --status-cancelled: #64748B;
+  --status-cancelled-bg: rgba(100, 116, 139, 0.10);
+  --status-cancelled-border: rgba(100, 116, 139, 0.25);
+  --status-cancelled-text: #334155;
+
+  /* Pills */
+  --pill-active-bg: #ECFDF5;
+  --pill-active-text: #065F46;
+  --pill-active-border: rgba(5, 150, 105, 0.25);
+  --pill-inactive-bg: #F1F5F9;
+  --pill-inactive-text: #64748B;
+  --pill-inactive-border: #CBD5E1;
+  --pill-pending-bg: #FFFBEB;
+  --pill-pending-text: #B45309;
+  --pill-pending-border: #FDE68A;
+  --pill-disputed-bg: #FEF2F2;
+  --pill-disputed-text: #DC2626;
+  --pill-disputed-border: #FECACA;
+
+  /* Action Buttons */
+  --action-btn-size: 34px;
+  --action-btn-radius: 8px;
+  --action-btn-border: #E2E8F0;
+  --action-btn-bg: #FFFFFF;
+  --action-btn-edit-color: #D97706;
+  --action-btn-edit-hover-bg: #FFFBEB;
+  --action-btn-edit-hover-border: #FCD34D;
+  --action-btn-toggle-color: #64748B;
+  --action-btn-toggle-hover-bg: #F1F5F9;
+  --action-btn-toggle-hover-border: #CBD5E1;
+  --action-btn-resend-color: #2563EB;
+  --action-btn-resend-hover-bg: #EFF6FF;
+  --action-btn-resend-hover-border: #BFDBFE;
+  --action-btn-delete-color: #DC2626;
+  --action-btn-delete-hover-bg: #FEF2F2;
+  --action-btn-delete-hover-border: #FECACA;
+
+  /* Paginator */
+  --paginator-bg: #F8FAFC;
+  --paginator-border: #E2E8F0;
+  --paginator-btn-size: 32px;
+  --paginator-btn-radius: 6px;
+  --paginator-btn-active-bg: var(--primary-color);
+  --paginator-btn-active-text: #FFFFFF;
+  --paginator-btn-hover: #E2E8F0;
+
+  /* KPIs */
+  --kpi-blue-color: #2563EB;
+  --kpi-blue-gradient: linear-gradient(135deg, #1D4ED8 0%, #2563EB 65%, #60A5FA 100%);
+  --kpi-blue-glow: rgba(37, 99, 235, 0.20);
+  --kpi-amber-color: #D97706;
+  --kpi-amber-gradient: linear-gradient(135deg, #B45309 0%, #D97706 65%, #FBBF24 100%);
+  --kpi-amber-glow: rgba(217, 119, 6, 0.20);
+  --kpi-purple-color: #7C3AED;
+  --kpi-purple-gradient: linear-gradient(135deg, #6D28D9 0%, #7C3AED 65%, #A78BFA 100%);
+  --kpi-purple-glow: rgba(124, 58, 237, 0.20);
+  --kpi-emerald-color: #059669;
+  --kpi-emerald-gradient: linear-gradient(135deg, #047857 0%, #059669 65%, #10B981 100%);
+  --kpi-emerald-glow: rgba(5, 150, 105, 0.20);
+  --kpi-text-subtle-white: rgba(255, 255, 255, 0.90);
+
+  /* Sombras y Elevación */
+  --shadow-sidebar: 2px 0 16px rgba(15, 23, 42, 0.04);
+  --shadow-card: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --shadow-table: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
   --shadow-tier1: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 4px 12px 0 rgba(15, 23, 42, 0.03);
   --shadow-tier2: 0 8px 24px -4px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
   --shadow-tier3: 0 12px 32px -4px rgba(15, 23, 42, 0.08);
   --shadow-tier4: 0 20px 40px -8px rgba(15, 23, 42, 0.16);
-  --shadow-table: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
-  --shadow-glow-emerald: 0 0 20px rgba(16, 185, 129, 0.20);
-  --shadow-glow-ball: 0 0 14px rgba(16, 185, 129, 0.50);
+  --shadow-glow-pink: 0 0 20px rgba(255, 45, 120, 0.25);
+  --shadow-glow-cyan: 0 0 16px rgba(5, 150, 105, 0.20);
 
-  /* --------------------------------------------------------------------------
-     12. PrimeNG Theme Tokens & Form Overrides
-     -------------------------------------------------------------------------- */
-  --p-primary-color: var(--primary-turf);
+  /* PrimeNG Theme Tokens */
+  --p-primary-color: var(--primary-color);
   --p-primary-hover-color: var(--primary-hover);
-  --p-focus-ring-color: rgba(16, 185, 129, 0.20);
-
-  /* Form Fields Base */
+  --p-focus-ring-color: rgba(255, 45, 120, 0.20);
   --p-form-field-background: var(--surface-pure);
   --p-form-field-border-color: var(--border-input);
-  --p-form-field-hover-border-color: var(--primary-turf);
-  --p-form-field-focus-border-color: var(--primary-turf);
+  --p-form-field-hover-border-color: var(--primary-color);
+  --p-form-field-focus-border-color: var(--primary-color);
   --p-form-field-color: var(--text-main);
-  --p-form-field-placeholder-color: var(--text-subtle);
+  --p-form-field-placeholder-color: var(--text-dim);
   --p-form-field-border-radius: var(--radius-sm);
   --p-form-field-padding-x: var(--spacing-md);
   --p-form-field-padding-y: var(--spacing-sm);
-
-  /* InputText */
-  --p-inputtext-background: var(--surface-pure);
-  --p-inputtext-border-color: var(--border-input);
-  --p-inputtext-hover-border-color: var(--primary-turf);
-  --p-inputtext-focus-border-color: var(--primary-turf);
-  --p-inputtext-color: var(--text-main);
-  --p-inputtext-placeholder-color: var(--text-subtle);
-  --p-inputtext-border-radius: var(--radius-sm);
-
-  /* Select / Dropdown */
-  --p-select-background: var(--surface-pure);
-  --p-select-border-color: var(--border-input);
-  --p-select-hover-border-color: var(--primary-turf);
-  --p-select-focus-border-color: var(--primary-turf);
-  --p-select-color: var(--text-main);
-  --p-select-placeholder-color: var(--text-subtle);
-  --p-select-border-radius: var(--radius-sm);
-
-  /* Checkbox */
-  --p-checkbox-background: var(--surface-pure);
-  --p-checkbox-border-color: var(--border-input);
-  --p-checkbox-hover-border-color: var(--primary-turf);
-  --p-checkbox-checked-background: var(--primary-turf);
-  --p-checkbox-checked-border-color: var(--primary-turf);
-  --p-checkbox-icon-color: #FFFFFF;
 }
 
+/* ==========================================================================
+   5. MODO OSCURO ([data-theme="dark"] — STITCH VIBRANT NEON DARK)
+   ========================================================================== */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Canvas & Superficies Oscuras */
+  --bg-canvas: #111126;
+  --surface-pure: #111126;
+  --surface-sidebar: #0C0C21;
+  --surface-card: #1D1D33;
+  --surface-glass: rgba(29, 29, 51, 0.85);
+  --surface-muted: #19192F;
+
+  /* Tonal Surface Layers (Stitch) */
+  --surface-container-lowest: #0C0C21;
+  --surface-container-low: #19192F;
+  --surface-container: #1D1D33;
+  --surface-container-high: #28283E;
+  --surface-container-highest: #333349;
+
+  /* Table & Matrix Surfaces */
+  --surface-table-th: #19192F;
+  --surface-table-th-hover: #28283E;
+  --surface-table-row-hover: #28283E;
+  --border-table-row: #28283E;
+  --border-table-header: #333349;
+
+  /* Bordes & Divisores */
+  --border-subtle: rgba(171, 136, 142, 0.18);
+  --border-input: #333349;
+  --border-glass: rgba(51, 51, 73, 0.8);
+
+  /* Textos */
+  --text-color: #E2E0FD;
+  --text-slate: #E2E0FD;
+  --text-main: #E2E0FD;
+  --text-secondary: #E4BDC3;
+  --text-muted: #A5A3C8;
+  --text-dim: #7B799E;
+  --text-subtle: #5B597C;
+
+  /* Colores de Marca y Acentos Neón (Stitch) */
+  --primary: #FF2D78;
+  --primary-color: #FF2D78;
+  --primary-hover: #FF4C83;
+  --primary-turf: #FF2D78;
+  --primary-glow: rgba(255, 45, 120, 0.40);
+  --primary-contrast: #FFFFFF;
+  --primary-gradient: linear-gradient(135deg, #FF2D78 0%, #FF4C83 100%);
+  --primary-gradient-hover: linear-gradient(135deg, #FF4C83 0%, #FF2D78 100%);
+
+  /* Secundarios y Acentos Deportivos Neón */
+  --secondary: #FFFFFF;
+  --secondary-fixed: #24FFCD;
+  --secondary-fixed-dim: #00E0B3;
+  --tertiary: #FFE04A;
+  --tertiary-fixed: #FFE04A;
+  --tertiary-fixed-dim: #E3C530;
+  --error: #FF4D4D;
+
+  --cyan-pulse: #24FFCD;
+  --court-blue: #38BDF8;
+  --accent-purple: #C084FC;
+
+  /* Admin & Dashboard Tokens */
+  --admin-primary: #FF2D78;
+  --admin-primary-hover: #FF4C83;
+  --admin-pill-active: rgba(36, 255, 205, 0.15);
+  --admin-pill-active-text: #24FFCD;
+  --admin-pill-inactive: rgba(226, 224, 253, 0.08);
+  --admin-pill-inactive-text: #A5A3C8;
+  --admin-surface-low: #19192F;
+
+  /* Semántica de Estados */
+  --status-confirmed: #24FFCD;
+  --status-confirmed-bg: rgba(36, 255, 205, 0.12);
+  --status-confirmed-border: rgba(36, 255, 205, 0.28);
+  --status-confirmed-text: #24FFCD;
+
+  --status-pending: #FFE04A;
+  --status-pending-bg: rgba(255, 224, 74, 0.12);
+  --status-pending-border: rgba(255, 224, 74, 0.28);
+  --status-pending-text: #FFE04A;
+
+  --status-disputed: #FF4D4D;
+  --status-disputed-bg: rgba(255, 77, 77, 0.15);
+  --status-disputed-border: rgba(255, 77, 77, 0.30);
+  --status-disputed-text: #FF4D4D;
+
+  --status-cancelled: #A5A3C8;
+  --status-cancelled-bg: rgba(165, 163, 200, 0.10);
+  --status-cancelled-border: rgba(165, 163, 200, 0.25);
+  --status-cancelled-text: #A5A3C8;
+
+  /* Pills */
+  --pill-active-bg: rgba(36, 255, 205, 0.15);
+  --pill-active-text: #24FFCD;
+  --pill-active-border: rgba(36, 255, 205, 0.30);
+  --pill-inactive-bg: rgba(255, 255, 255, 0.06);
+  --pill-inactive-text: #A5A3C8;
+  --pill-inactive-border: #333349;
+  --pill-pending-bg: rgba(255, 224, 74, 0.15);
+  --pill-pending-text: #FFE04A;
+  --pill-pending-border: rgba(255, 224, 74, 0.30);
+  --pill-disputed-bg: rgba(255, 77, 77, 0.15);
+  --pill-disputed-text: #FF4D4D;
+  --pill-disputed-border: rgba(255, 77, 77, 0.30);
+
+  /* Action Buttons */
+  --action-btn-size: 34px;
+  --action-btn-radius: 8px;
+  --action-btn-border: #333349;
+  --action-btn-bg: #1D1D33;
+  --action-btn-edit-color: #FFE04A;
+  --action-btn-edit-hover-bg: rgba(255, 224, 74, 0.15);
+  --action-btn-edit-hover-border: #FFE04A;
+  --action-btn-toggle-color: #A5A3C8;
+  --action-btn-toggle-hover-bg: #28283E;
+  --action-btn-toggle-hover-border: #5B3F44;
+  --action-btn-resend-color: #38BDF8;
+  --action-btn-resend-hover-bg: rgba(56, 189, 248, 0.15);
+  --action-btn-resend-hover-border: #38BDF8;
+  --action-btn-delete-color: #FF4D4D;
+  --action-btn-delete-hover-bg: rgba(255, 77, 77, 0.15);
+  --action-btn-delete-hover-border: #FF4D4D;
+
+  /* Paginator */
+  --paginator-bg: #1D1D33;
+  --paginator-border: #333349;
+  --paginator-btn-size: 32px;
+  --paginator-btn-radius: 6px;
+  --paginator-btn-active-bg: var(--primary-color);
+  --paginator-btn-active-text: #FFFFFF;
+  --paginator-btn-hover: #28283E;
+
+  /* KPIs */
+  --kpi-blue-color: #38BDF8;
+  --kpi-blue-gradient: linear-gradient(135deg, #0284C7 0%, #0369A1 65%, #38BDF8 100%);
+  --kpi-blue-glow: rgba(56, 189, 248, 0.25);
+  --kpi-amber-color: #FFE04A;
+  --kpi-amber-gradient: linear-gradient(135deg, #B45309 0%, #D97706 65%, #FFE04A 100%);
+  --kpi-amber-glow: rgba(255, 224, 74, 0.25);
+  --kpi-purple-color: #C084FC;
+  --kpi-purple-gradient: linear-gradient(135deg, #6D28D9 0%, #7C3AED 65%, #C084FC 100%);
+  --kpi-purple-glow: rgba(192, 132, 252, 0.25);
+  --kpi-emerald-color: #24FFCD;
+  --kpi-emerald-gradient: linear-gradient(135deg, #00513F 0%, #00725A 65%, #24FFCD 100%);
+  --kpi-emerald-glow: rgba(36, 255, 205, 0.25);
+  --kpi-text-subtle-white: rgba(226, 224, 253, 0.90);
+
+  /* Sombras y Elevación Oscura */
+  --shadow-sidebar: 4px 0 24px rgba(0, 0, 0, 0.50);
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.40);
+  --shadow-table: 0 8px 32px 0 rgba(0, 0, 0, 0.40);
+  --shadow-tier1: 0 2px 8px 0 rgba(0, 0, 0, 0.30);
+  --shadow-tier2: 0 8px 24px -4px rgba(0, 0, 0, 0.50);
+  --shadow-tier3: 0 12px 32px -4px rgba(0, 0, 0, 0.60);
+  --shadow-tier4: 0 20px 40px -8px rgba(0, 0, 0, 0.70);
+  --shadow-glow-pink: 0 0 24px rgba(255, 45, 120, 0.40);
+  --shadow-glow-cyan: 0 0 20px rgba(36, 255, 205, 0.35);
+
+  /* PrimeNG Theme Tokens */
+  --p-primary-color: var(--primary-color);
+  --p-primary-hover-color: var(--primary-hover);
+  --p-focus-ring-color: rgba(255, 45, 120, 0.35);
+  --p-form-field-background: var(--surface-container-low);
+  --p-form-field-border-color: var(--border-input);
+  --p-form-field-hover-border-color: var(--primary-color);
+  --p-form-field-focus-border-color: var(--primary-color);
+  --p-form-field-color: var(--text-main);
+  --p-form-field-placeholder-color: var(--text-dim);
+  --p-form-field-border-radius: var(--radius-sm);
+  --p-form-field-padding-x: var(--spacing-md);
+  --p-form-field-padding-y: var(--spacing-sm);
+}

@@ -187,10 +187,11 @@ p-inputnumber.w-full {
 /* Overlay de Opciones Desplegables (p-select-overlay) */
 .p-select-overlay,
 .p-dropdown-panel {
-  background: var(--surface-pure) !important;
+  background: var(--surface-card) !important;
+  color: var(--text-color) !important;
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-tier2, 0 10px 25px -5px rgba(15, 23, 42, 0.15)) !important;
+  box-shadow: var(--shadow-tier3) !important;
   z-index: 1250 !important;
   overflow: visible !important;
   max-height: none !important;
@@ -219,17 +220,17 @@ p-inputnumber.w-full {
     touch-action: pan-y !important;
     pointer-events: auto !important;
     scrollbar-width: thin !important;
-    scrollbar-color: rgba(5, 150, 105, 0.45) #f1f5f9 !important;
+    scrollbar-color: var(--primary) var(--surface-container-high) !important;
 
     &::-webkit-scrollbar {
       width: 6px !important;
       display: block !important;
     }
     &::-webkit-scrollbar-track {
-      background: #f1f5f9 !important;
+      background: var(--surface-container-high) !important;
     }
     &::-webkit-scrollbar-thumb {
-      background-color: rgba(5, 150, 105, 0.45) !important;
+      background-color: var(--primary) !important;
       border-radius: 4px !important;
     }
   }
@@ -246,18 +247,19 @@ p-inputnumber.w-full {
     font-size: var(--font-size-base) !important;
     cursor: pointer !important;
     pointer-events: auto !important;
+    color: var(--text-color) !important;
     transition: background 0.15s ease, color 0.15s ease;
 
     &.p-select-option-selected,
     &.p-highlight {
-      background: rgba(16, 185, 129, 0.12) !important;
-      color: var(--primary-turf, #059669) !important;
+      background: var(--primary-glow) !important;
+      color: var(--primary) !important;
       font-weight: var(--font-weight-semibold) !important;
     }
 
     &:not(.p-select-option-selected):not(.p-highlight):hover {
-      background: var(--surface-muted) !important;
-      color: var(--text-slate) !important;
+      background: var(--surface-container-high) !important;
+      color: var(--text-color) !important;
     }
   }
 

@@ -2,21 +2,27 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, Router } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
-import { AuthService, getAuthControllerRegisterResponseMock } from '@core';
+import { AuthService, NotificationService, getAuthControllerRegisterResponseMock } from '@core';
 import { RegisterComponent } from './register.component';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;
   let fixture: ComponentFixture<RegisterComponent>;
   let authServiceSpy: any;
+  let notifySpy: any;
   let router: Router;
 
   beforeEach(async () => {
     vi.useFakeTimers();
     authServiceSpy = {
       register: vi.fn(),
+    };
+    notifySpy = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      info: vi.fn(),
     };
 
     await TestBed.configureTestingModule({
@@ -25,7 +31,7 @@ describe('RegisterComponent', () => {
         provideHttpClient(),
         provideRouter([]),
         provideTranslateService({ lang: 'es' }),
-        MessageService,
+        { provide: NotificationService, useValue: notifySpy },
         { provide: AuthService, useValue: authServiceSpy },
       ],
     }).compileComponents();
@@ -103,6 +109,7 @@ describe('RegisterComponent', () => {
       password: 'Password123!',
     });
 
+    expect(notifySpy.success).toHaveBeenCalledWith('AUTH.REGISTER_SUCCESS', 'APP.NAME');
     vi.advanceTimersByTime(1100);
     expect(router.navigate).toHaveBeenCalledWith(['/portal']);
   });
@@ -124,6 +131,7 @@ describe('RegisterComponent', () => {
     component.onSubmit();
 
     expect(authServiceSpy.register).toHaveBeenCalled();
+    expect(notifySpy.error).toHaveBeenCalledWith('AUTH.ERRORS.EMAIL_EXISTS', 'ERRORS.GENERIC');
     expect(component.loading).toBeFalsy();
     expect(router.navigate).not.toHaveBeenCalled();
   });

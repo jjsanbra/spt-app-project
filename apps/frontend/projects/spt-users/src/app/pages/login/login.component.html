@@ -1,5 +1,3 @@
-<p-toast></p-toast>
-
 <div class="auth-page">
   <div class="auth-container">
     <div class="auth-card-wrapper">
@@ -18,6 +16,7 @@
             pInputText
             class="w-full"
             formControlName="email"
+            [invalid]="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) ?? false"
             [placeholder]="'AUTH.EMAIL' | translate"
           />
           @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
@@ -39,8 +38,8 @@
             formControlName="password"
             [feedback]="false"
             [toggleMask]="true"
-            styleClass="w-full"
-            inputStyleClass="w-full"
+            [fluid]="true"
+            [invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) ?? false"
             [placeholder]="'AUTH.PASSWORD' | translate"
           ></p-password>
           @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {

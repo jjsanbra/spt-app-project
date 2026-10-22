@@ -48,7 +48,7 @@
     <p-table
       [value]="members"
       [loading]="loading"
-      styleClass="p-datatable-striped"
+      [stripedRows]="true"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -207,12 +207,12 @@
       <div class="form-group">
         <label for="memberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
         <p-select
-          id="memberRole"
+          inputId="memberRole"
           [options]="roleOptions"
           formControlName="role"
           optionLabel="label"
           optionValue="value"
-          styleClass="w-full"
+          [fluid]="true"
         ></p-select>
       </div>
 
@@ -271,12 +271,12 @@
       <div class="form-group">
         <label for="editMemberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
         <p-select
-          id="editMemberRole"
+          inputId="editMemberRole"
           [options]="roleOptions"
           formControlName="role"
           optionLabel="label"
           optionValue="value"
-          styleClass="w-full"
+          [fluid]="true"
         ></p-select>
       </div>
 

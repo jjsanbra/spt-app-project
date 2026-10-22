@@ -10,12 +10,13 @@
    1. Contenedor Card de Tabla
    -------------------------------------------------------------------------- */
 .table-container,
-.admin-table-card {
-  background: var(--surface-pure);
+.admin-table-card,
+.table-card {
+  background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-table);
-  overflow: visible;
+  overflow: hidden;
   padding: 0 !important;
   width: 100%;
   max-width: 100%;
@@ -45,11 +46,11 @@ p-table,
     width: 100%;
   }
 
-  /* Cabecera Lavanda */
+  /* Cabecera Stitch */
   .p-datatable-thead > tr > th {
     background: var(--surface-table-th) !important;
     color: var(--text-dim) !important;
-    font-family: var(--font-body) !important;
+    font-family: var(--font-label) !important;
     font-size: var(--font-size-xs) !important;
     font-weight: var(--font-weight-bold) !important;
     text-transform: uppercase !important;

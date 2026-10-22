@@ -68,6 +68,9 @@
   - NUNCA utilices etiquetas `<button>` nativas sin las directivas `pButton`, `pInputText`, `pCard`, `pDialog`, `pDataTable`, `pBadge`, `pDropdown`, `pCalendar`, etc. de PrimeNG.
   - Todos los botones en cualquier plantilla de Angular (`apps/frontend/projects/`) deben incluir obligatoriamente el atributo directiva `pButton` (ej: `<button type="button" pButton ...>`), configurando sus atributos semánticos (`severity`, `[text]="true"`, `[outlined]="true"`, `size`, etc.) e importando `ButtonModule` desde `'primeng/button'` en el componente standalone.
   - Esta directiva es obligatoria para todos los desarrollos presentes y futuros.
+- **CONSULTA OBLIGATORIA DEL SERVIDOR MCP DE PRIMENG (`@primeng/mcp`):**
+  - El servidor MCP oficial de PrimeNG está configurado en el workspace (`.mcp.json`).
+  - Ante dudas de sintaxis, directivas `pXxxxxx`, atributos, eventos, slots o ejemplos en PrimeNG v18+, el agente debe consultar la documentación oficial a través del MCP (`get_component`, `search`, `get_example`, `validate_usage`) para garantizar un código fidedigno y actualizado.
 
 ---
 

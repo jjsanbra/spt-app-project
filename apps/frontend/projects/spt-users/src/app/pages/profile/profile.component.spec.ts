@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
 import { of, throwError } from 'rxjs';
 import {
   AuthService,
   ClubMembershipSummaryDto,
+  NotificationService,
   UsersService,
   UserSummaryDto,
   getAuthControllerGetMeResponseMock,
@@ -19,6 +19,7 @@ describe('ProfileComponent', () => {
   let fixture: ComponentFixture<ProfileComponent>;
   let authServiceMock: any;
   let usersServiceSpy: any;
+  let notifySpy: any;
 
   const mockUser: UserSummaryDto = getAuthControllerGetMeResponseMock({
     id: 'user-profile-1',
@@ -58,12 +59,19 @@ describe('ProfileComponent', () => {
       usersControllerUpdateProfile: vi.fn(),
     };
 
+    notifySpy = {
+      success: vi.fn(),
+      error: vi.fn(),
+      warn: vi.fn(),
+      info: vi.fn(),
+    };
+
     await TestBed.configureTestingModule({
       imports: [ProfileComponent],
       providers: [
         provideHttpClient(),
         provideTranslateService({ lang: 'es' }),
-        MessageService,
+        { provide: NotificationService, useValue: notifySpy },
         { provide: AuthService, useValue: authServiceMock },
         { provide: UsersService, useValue: usersServiceSpy },
       ],
@@ -95,6 +103,7 @@ describe('ProfileComponent', () => {
 
     expect(authServiceMock.setActiveClub).toHaveBeenCalledWith(nuevoClub);
     expect(authServiceMock.activeClub()).toEqual(nuevoClub);
+    expect(notifySpy.info).toHaveBeenCalledWith(nuevoClub.clubName, 'USERS.ACTIVE_CLUB');
   });
 
   it('debe actualizar el perfil con éxito usando el mock de Orval', () => {
@@ -122,6 +131,7 @@ describe('ProfileComponent', () => {
       phone: '+34699887766',
     });
     expect(authServiceMock.setCurrentUser).toHaveBeenCalledWith(updatedUserMock);
+    expect(notifySpy.success).toHaveBeenCalledWith('USERS.UPDATE_SUCCESS', 'APP.NAME');
     expect(component.loading).toBeFalsy();
   });
 
@@ -138,6 +148,7 @@ describe('ProfileComponent', () => {
     component.onSubmit();
 
     expect(usersServiceSpy.usersControllerUpdateProfile).toHaveBeenCalled();
+    expect(notifySpy.error).toHaveBeenCalledWith('ERRORS.GENERIC', 'ERRORS.GENERIC');
     expect(component.loading).toBeFalsy();
   });
 });

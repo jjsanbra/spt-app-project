@@ -22,7 +22,7 @@
     <p-table
       [value]="pricingRules"
       [loading]="loading"
-      styleClass="p-datatable-striped"
+      [stripedRows]="true"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -163,27 +163,25 @@
       <div class="form-group flex-1">
         <label for="pricing-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
         <p-inputnumber
-          id="pricing-member-price"
+          inputId="pricing-member-price"
           formControlName="memberPrice"
           [min]="0"
           mode="currency"
           currency="EUR"
           locale="es-ES"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
       <div class="form-group flex-1">
         <label for="pricing-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
         <p-inputnumber
-          id="pricing-guest-price"
+          inputId="pricing-guest-price"
           formControlName="guestPrice"
           [min]="0"
           mode="currency"
           currency="EUR"
           locale="es-ES"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
     </div>
@@ -193,25 +191,23 @@
       <div class="form-group flex-1">
         <label for="pricing-light-surcharge" class="form-label">{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</label>
         <p-inputnumber
-          id="pricing-light-surcharge"
+          inputId="pricing-light-surcharge"
           formControlName="lightSurcharge"
           [min]="0"
           mode="currency"
           currency="EUR"
           locale="es-ES"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
       <div class="form-group flex-1">
         <label for="pricing-priority" class="form-label">{{ 'ADMIN.PRICING.PRIORITY' | translate }}</label>
         <p-inputnumber
-          id="pricing-priority"
+          inputId="pricing-priority"
           formControlName="priority"
           [min]="1"
           [max]="100"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
     </div>

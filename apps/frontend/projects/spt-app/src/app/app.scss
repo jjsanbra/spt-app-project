@@ -1,173 +1,409 @@
 @use "base/responsive" as *;
 
+/* ==========================================================================
+   APP SHELL LAYOUT — STITCH SIDEBAR IZQUIERDO & CONTENIDO DERECHO
+   ========================================================================== */
+
 .app-layout {
+  display: flex;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--surface-pure);
+  width: 100%;
+  background-color: var(--bg-canvas);
+  color: var(--text-color);
+  transition: var(--theme-transition);
 }
 
-.app-navbar {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background-color: var(--surface-card);
-  border-bottom: 1px solid var(--border-subtle);
-  backdrop-filter: blur(12px);
-}
+/* --------------------------------------------------------------------------
+   1. Backdrop para Drawer Móvil
+   -------------------------------------------------------------------------- */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(12, 12, 33, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 1040;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease-in-out;
 
-.navbar-container {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-lg);
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  &.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
 
-  @include mobile {
-    padding: 0 var(--spacing-sm);
-    height: auto;
-    min-height: 56px;
-    flex-wrap: wrap;
-    padding-top: var(--spacing-xs);
-    padding-bottom: var(--spacing-xs);
+  @include desktop {
+    display: none;
   }
 }
 
-.navbar-brand {
+/* --------------------------------------------------------------------------
+   2. Sidebar Lateral Izquierdo
+   -------------------------------------------------------------------------- */
+.app-sidebar {
+  width: var(--admin-sidebar-w);
+  min-width: var(--admin-sidebar-w);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--surface-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-sidebar);
+  z-index: 1050;
+  transition: var(--theme-transition), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include mobile-or-tablet {
+    position: fixed;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-tier4);
+
+    &.is-open {
+      transform: translateX(0);
+    }
+  }
+}
+
+/* Header de Marca */
+.sidebar-header {
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  justify-content: space-between;
 }
 
 .brand-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   text-decoration: none;
   color: var(--text-color);
 }
 
 .brand-icon {
-  width: 34px;
-  height: 34px;
-  border-radius: var(--radius-sm);
-  background: linear-gradient(135deg, var(--primary-color), var(--primary-glow));
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-md);
+  background: var(--primary-gradient);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-contrast);
-  font-size: var(--font-size-md);
+  color: #FFFFFF;
+  font-size: 1.15rem;
+  box-shadow: var(--shadow-glow-pink);
+}
+
+.brand-text {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
 }
 
 .brand-name {
+  font-family: var(--font-heading);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.02em;
 }
 
-.active-club-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  background-color: var(--surface-pure);
+.brand-badge {
+  font-family: var(--font-label);
+  font-size: 0.65rem;
+  font-weight: var(--font-weight-extrabold);
+  letter-spacing: 0.05em;
+  padding: 1px 5px;
+  border-radius: var(--radius-xs);
+  background: var(--primary-glow);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.mobile-close-btn {
+  display: none;
+
+  @include mobile-or-tablet {
+    display: inline-flex;
+    color: var(--text-muted) !important;
+  }
+}
+
+/* Tarjeta Club Activo */
+.sidebar-club-card {
+  margin: 0 var(--spacing-md) var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--surface-container-low);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-full);
-  font-size: var(--font-size-xs);
-  color: var(--text-color);
-
-  i {
-    color: var(--primary-color);
-  }
-
-  .club-title {
-    font-weight: var(--font-weight-medium);
-  }
-
-  @include mobile {
-    display: none;
-  }
-}
-
-.navbar-nav {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-
-  @include mobile {
-    order: 3;
-    width: 100%;
-    justify-content: space-around;
-    padding-top: var(--spacing-2xs);
-    border-top: 1px solid var(--border-subtle);
-  }
-}
-
-.nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-sm);
-  color: var(--text-muted);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  transition: all 0.2s ease;
-
-  &:hover {
-    color: var(--text-color);
-    background-color: var(--surface-pure);
-  }
-
-  &.active-nav-link {
-    color: var(--primary-color);
-    background-color: rgba(0, 245, 160, 0.08);
-  }
-}
-
-.navbar-actions {
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
 
-  @include mobile {
-    gap: var(--spacing-2xs);
+  .club-card-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background-color: var(--surface-container-high);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-fixed);
+    font-size: 0.85rem;
+  }
+
+  .club-card-details {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .club-card-name {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 170px;
+  }
+
+  .club-role-tag {
+    font-size: 0.65rem;
+    padding: 0 4px;
+    align-self: flex-start;
   }
 }
 
-.user-info {
+/* Navegación */
+.sidebar-nav {
+  flex: 1;
+  padding: 0 var(--spacing-md);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
   gap: 2px;
-  margin-right: var(--spacing-xs);
+}
+
+.nav-section-title {
+  font-family: var(--font-label);
+  font-size: 0.6875rem;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-xs);
+}
+
+.sidebar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 0.65rem var(--spacing-md);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  font-family: var(--font-label);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  i {
+    font-size: 1rem;
+    transition: transform 0.2s ease;
+  }
+
+  &:hover {
+    color: var(--text-color);
+    background-color: var(--surface-container-high);
+    transform: translateX(2px);
+
+    i {
+      color: var(--primary);
+    }
+  }
+
+  &.active-nav-link {
+    color: #FFFFFF;
+    background: var(--primary-gradient);
+    font-weight: var(--font-weight-semibold);
+    box-shadow: var(--shadow-glow-pink);
+
+    i {
+      color: #FFFFFF;
+    }
+  }
+}
+
+/* Footer del Sidebar */
+.sidebar-footer {
+  margin-top: auto;
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--surface-container-lowest);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.user-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+
+  .user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-full);
+    background: var(--surface-container-high);
+    color: var(--secondary-fixed);
+    border: 2px solid var(--secondary-fixed);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-weight: var(--font-weight-bold);
+    font-size: 0.85rem;
+  }
+
+  .user-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .user-name {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 175px;
+  }
+
+  .user-wallet-pill {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--secondary-fixed);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+}
+
+.footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  padding-top: var(--spacing-xs);
+}
+
+.theme-toggle-btn {
+  color: var(--text-color) !important;
+  background-color: var(--surface-container-high) !important;
+  border: 1px solid var(--border-subtle) !important;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+
+  &:hover {
+    transform: rotate(15deg);
+    background-color: var(--surface-container-highest) !important;
+  }
+}
+
+.logout-btn {
+  color: var(--error) !important;
+
+  &:hover {
+    background-color: rgba(220, 38, 38, 0.12) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Área Principal de Contenido a la Derecha
+   -------------------------------------------------------------------------- */
+.app-main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* Topbar Compacto Superior */
+.app-topbar {
+  height: var(--topbar-height);
+  min-height: var(--topbar-height);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--spacing-xl);
+  background-color: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: var(--theme-transition);
+
+  @include mobile {
+    padding: 0 var(--spacing-md);
+  }
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.mobile-menu-trigger {
+  display: none;
+  color: var(--text-color) !important;
+
+  @include mobile-or-tablet {
+    display: inline-flex;
+  }
+}
+
+.topbar-context {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs);
+
+  .context-club {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+  }
+
+  .context-divider {
+    color: var(--text-dim);
+  }
+
+  .context-tagline {
+    color: var(--text-muted);
+  }
 
   @include mobile {
     display: none;
   }
 }
 
-.user-greeting {
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-color);
-}
-
-.user-wallet {
-  font-size: var(--font-size-2xs);
-  color: var(--primary-color);
-  font-weight: var(--font-weight-medium);
-  display: inline-flex;
+.topbar-right {
+  display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--spacing-sm);
 }
 
+/* Contenedor Principal (<router-outlet>) */
 .app-main {
   flex: 1;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }

@@ -10,13 +10,10 @@ import {
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { AuthService } from '@core';
+import { AuthService, NotificationService } from '@core';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 
 function passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
   const password = control.get('password')?.value;
@@ -34,13 +31,10 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
-    CardModule,
     InputTextModule,
     PasswordModule,
     ButtonModule,
-    ToastModule,
   ],
-  providers: [MessageService],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
@@ -48,7 +42,7 @@ export class RegisterComponent {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
-  private readonly messageService = inject(MessageService);
+  private readonly notify = inject(NotificationService);
   private readonly translate = inject(TranslateService);
 
   registerForm: FormGroup = this.fb.group(
@@ -85,11 +79,7 @@ export class RegisterComponent {
       .subscribe({
         next: () => {
           this.loading = false;
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant('APP.NAME'),
-            detail: this.translate.instant('AUTH.REGISTER_SUCCESS'),
-          });
+          this.notify.success('AUTH.REGISTER_SUCCESS', 'APP.NAME');
 
           // Redirigir al portal o panel
           setTimeout(() => {
@@ -98,16 +88,12 @@ export class RegisterComponent {
         },
         error: (err) => {
           this.loading = false;
-          const detail =
+          const detailKey =
             err.status === 409
-              ? this.translate.instant('AUTH.ERRORS.EMAIL_EXISTS')
-              : this.translate.instant('ERRORS.GENERIC');
+              ? 'AUTH.ERRORS.EMAIL_EXISTS'
+              : 'ERRORS.GENERIC';
 
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant('ERRORS.GENERIC'),
-            detail,
-          });
+          this.notify.error(detailKey, 'ERRORS.GENERIC');
         },
       });
   }

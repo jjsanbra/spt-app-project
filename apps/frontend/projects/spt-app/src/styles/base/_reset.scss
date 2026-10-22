@@ -1,6 +1,6 @@
 /* ==========================================================================
-   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — RESETS & BASE TYPOGRAPHY
-   Ruta: projects/rpm-app/src/styles/base/_reset.scss
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — RESETS & BASE TYPOGRAPHY
+   Ruta: apps/frontend/projects/spt-app/src/styles/base/_reset.scss
    ========================================================================== */
 
 *, *::before, *::after {
@@ -11,6 +11,7 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: 16px;
 }
 
 [id] {
@@ -20,27 +21,42 @@ html {
 body {
   font-family: var(--font-body);
   background-color: var(--bg-canvas);
-  color: var(--text-main);
+  color: var(--text-color);
   min-height: 100vh;
   line-height: 1.6;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(8, 145, 178, 0.05) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, rgba(16, 185, 129, 0.06) 0px, transparent 50%),
-    radial-gradient(at 50% 100%, rgba(124, 58, 237, 0.03) 0px, transparent 50%);
   background-attachment: fixed;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: var(--theme-transition);
+}
+
+:root, [data-theme="light"] {
+  body {
+    background-image: 
+      radial-gradient(at 100% 0%, rgba(255, 45, 120, 0.03) 0px, transparent 50%),
+      radial-gradient(at 0% 50%, rgba(5, 150, 105, 0.04) 0px, transparent 50%);
+  }
+}
+
+[data-theme="dark"] {
+  body {
+    background-image: 
+      radial-gradient(at 100% 0%, rgba(255, 45, 120, 0.08) 0px, transparent 60%),
+      radial-gradient(at 0% 40%, rgba(36, 255, 205, 0.06) 0px, transparent 50%),
+      radial-gradient(at 50% 100%, rgba(255, 224, 74, 0.04) 0px, transparent 50%);
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
   font-weight: 700;
-  color: var(--text-slate);
+  color: var(--text-color);
   letter-spacing: -0.02em;
 }
 
 a {
-  color: var(--primary-turf);
+  color: var(--primary);
   text-decoration: none;
   transition: color 0.2s ease;
 }

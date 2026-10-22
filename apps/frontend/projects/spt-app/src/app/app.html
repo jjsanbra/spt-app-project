@@ -1,135 +1,292 @@
 <p-toast></p-toast>
 <p-confirmdialog></p-confirmdialog>
 
-<div class="app-layout">
-  <!-- Navbar Global Superior -->
-  <header class="app-navbar">
-    <div class="navbar-container">
-      <!-- Logo y Marca -->
-      <div class="navbar-brand">
-        <a routerLink="/" class="brand-link">
-          <div class="brand-icon">
-            <i class="pi pi-bolt"></i>
-          </div>
+<!-- Backdrop para drawer móvil -->
+<div
+  class="sidebar-backdrop"
+  [class.is-visible]="sidebarOpen()"
+  (click)="closeSidebar()"
+></div>
+
+<div class="app-layout" [class.sidebar-active]="sidebarOpen()">
+  <!-- Sidebar Lateral Izquierdo (Stitch Layout) -->
+  <aside class="app-sidebar" [class.is-open]="sidebarOpen()">
+    <!-- Header de Marca & Logo -->
+    <div class="sidebar-header">
+      <a routerLink="/" class="brand-link" (click)="closeSidebar()">
+        <div class="brand-icon">
+          <i class="pi pi-bolt"></i>
+        </div>
+        <div class="brand-text">
           <span class="brand-name">{{ 'APP.NAME' | translate }}</span>
+          <span class="brand-badge">PRO</span>
+        </div>
+      </a>
+
+      <!-- Botón cerrar móvil -->
+      <button
+        type="button"
+        pButton
+        [text]="true"
+        [rounded]="true"
+        size="small"
+        icon="pi pi-times"
+        class="mobile-close-btn"
+        (click)="closeSidebar()"
+        [attr.aria-label]="'NAV.SIDEBAR_CLOSE' | translate"
+      ></button>
+    </div>
+
+    <!-- Badge Club Activo (Multi-tenant) -->
+    @if (authService.isAuthenticated() && authService.activeClub()) {
+      <div class="sidebar-club-card active-club-badge" [title]="'USERS.ACTIVE_CLUB' | translate">
+        <div class="club-card-icon">
+          <i class="pi pi-building"></i>
+        </div>
+        <div class="club-card-details">
+          <span class="club-card-name">{{ authService.activeClub()?.clubName }}</span>
+          <p-tag
+            [value]="authService.activeClub()?.role"
+            severity="secondary"
+            class="club-role-tag"
+          ></p-tag>
+        </div>
+      </div>
+    }
+
+    <!-- Navegación Principal Categorizada -->
+    <nav class="sidebar-nav">
+      @if (authService.isAuthenticated()) {
+        <!-- Sección Portal Jugador -->
+        <div class="nav-section-title">{{ 'NAV.PORTAL_SECTION' | translate }}</div>
+
+        <a
+          routerLink="/portal"
+          [routerLinkActiveOptions]="{ exact: true }"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-calendar"></i>
+          <span>{{ 'NAV.PORTAL' | translate }}</span>
         </a>
 
-        <!-- Badge de Club Activo (Multi-tenancy) -->
-        @if (authService.isAuthenticated() && authService.activeClub()) {
-          <div class="active-club-badge" [title]="'USERS.ACTIVE_CLUB' | translate">
-            <i class="pi pi-building"></i>
-            <span class="club-title">{{ authService.activeClub()?.clubName }}</span>
-            <p-tag
-              [value]="authService.activeClub()?.role"
-              severity="secondary"
-              class="club-role-tag"
-            ></p-tag>
+        <a
+          routerLink="/portal/matches"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-flag"></i>
+          <span>{{ 'NAV.MATCHES' | translate }}</span>
+        </a>
+
+        <a
+          routerLink="/profile"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-user"></i>
+          <span>{{ 'NAV.PROFILE' | translate }}</span>
+        </a>
+
+        <!-- Sección Gestión Club (Admin) -->
+        @if (hasAdminRole()) {
+          <div class="nav-section-title">{{ 'NAV.ADMIN_SECTION' | translate }}</div>
+
+          <a
+            routerLink="/admin"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-chart-bar"></i>
+            <span>{{ 'NAV.DASHBOARD' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/facilities"
+            [routerLinkActiveOptions]="{ exact: true }"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-th-large"></i>
+            <span>{{ 'NAV.FACILITIES' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/facilities/blocks"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-ban"></i>
+            <span>{{ 'NAV.FACILITY_BLOCKS' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/pricing"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-tag"></i>
+            <span>{{ 'NAV.PRICING' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/members"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-users"></i>
+            <span>{{ 'NAV.MEMBERS' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/settings"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-cog"></i>
+            <span>{{ 'NAV.SETTINGS' | translate }}</span>
+          </a>
+        }
+
+        <!-- Sección Superadmin -->
+        @if (authService.isSuperAdmin()) {
+          <div class="nav-section-title">{{ 'NAV.SUPERADMIN_SECTION' | translate }}</div>
+
+          <a
+            routerLink="/admin/superadmin/clubs"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-globe"></i>
+            <span>{{ 'SUPERADMIN.NAV_LINK' | translate }}</span>
+          </a>
+        }
+      } @else {
+        <!-- Enlaces Invitado -->
+        <a
+          routerLink="/login"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-sign-in"></i>
+          <span>{{ 'AUTH.LOGIN' | translate }}</span>
+        </a>
+
+        <a
+          routerLink="/register"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-user-plus"></i>
+          <span>{{ 'AUTH.REGISTER' | translate }}</span>
+        </a>
+      }
+    </nav>
+
+    <!-- Footer del Sidebar: Perfil, Wallet, Toggle Tema y Logout -->
+    <div class="sidebar-footer">
+      @if (authService.isAuthenticated()) {
+        <div class="user-profile-badge">
+          <div class="user-avatar">
+            {{ (authService.currentUser()?.firstName || 'U')[0] }}
           </div>
-        }
-      </div>
-
-      <!-- Links de Navegación -->
-      <nav class="navbar-nav">
-        @if (authService.isAuthenticated()) {
-          <a
-            routerLink="/portal"
-            routerLinkActive="active-nav-link"
-            class="nav-link"
-          >
-            <i class="pi pi-calendar"></i>
-            <span>{{ 'NAV.PORTAL' | translate }}</span>
-          </a>
-
-          @if (hasAdminRole()) {
-            <a
-              routerLink="/admin"
-              routerLinkActive="active-nav-link"
-              class="nav-link"
-            >
-              <i class="pi pi-shield"></i>
-              <span>{{ 'NAV.ADMIN' | translate }}</span>
-            </a>
-          }
-
-          @if (authService.isSuperAdmin()) {
-            <a
-              routerLink="/admin/superadmin/clubs"
-              routerLinkActive="active-nav-link"
-              class="nav-link"
-            >
-              <i class="pi pi-globe"></i>
-              <span>{{ 'SUPERADMIN.NAV_LINK' | translate }}</span>
-            </a>
-          }
-
-          <a
-            routerLink="/profile"
-            routerLinkActive="active-nav-link"
-            class="nav-link"
-          >
-            <i class="pi pi-user"></i>
-            <span>{{ 'NAV.PROFILE' | translate }}</span>
-          </a>
-        }
-      </nav>
-
-      <!-- Acciones de Usuario -->
-      <div class="navbar-actions">
-        @if (authService.isAuthenticated()) {
-          <div class="user-info">
-            <span class="user-greeting">
-              {{ authService.currentUser()?.firstName }}
+          <div class="user-meta">
+            <span class="user-name">
+              {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
             </span>
             @if (authService.activeClub()) {
-              <span class="user-wallet">
+              <span class="user-wallet-pill user-wallet">
                 <i class="pi pi-wallet"></i>
                 {{ authService.activeClub()?.walletBalance }} €
               </span>
             }
           </div>
+        </div>
+      }
 
-          <app-notification-bell></app-notification-bell>
+      <div class="footer-actions">
+        <!-- Selector de Tema (Dark / Light) -->
+        <button
+          type="button"
+          pButton
+          [text]="true"
+          [rounded]="true"
+          size="small"
+          (click)="themeService.toggleTheme()"
+          [pTooltip]="(themeService.currentTheme() === 'dark' ? 'THEME.TOGGLE_LIGHT' : 'THEME.TOGGLE_DARK') | translate"
+          tooltipPosition="top"
+          class="theme-toggle-btn"
+        >
+          <i [class]="themeService.currentTheme() === 'dark' ? 'pi pi-sun' : 'pi pi-moon'"></i>
+        </button>
 
+        @if (authService.isAuthenticated()) {
+          <!-- Botón de Logout -->
           <button
             type="button"
             pButton
             [text]="true"
-            severity="danger"
+            [rounded]="true"
             size="small"
+            severity="danger"
             icon="pi pi-sign-out"
             (click)="onLogout()"
-          >
-            {{ 'NAV.LOGOUT' | translate }}
-          </button>
-        } @else {
-          <a routerLink="/login">
-            <button
-              type="button"
-              pButton
-              [text]="true"
-              size="small"
-              icon="pi pi-sign-in"
-            >
-              {{ 'AUTH.LOGIN' | translate }}
-            </button>
-          </a>
-          <a routerLink="/register">
-            <button
-              type="button"
-              pButton
-              size="small"
-              icon="pi pi-user-plus"
-            >
-              {{ 'AUTH.REGISTER' | translate }}
-            </button>
-          </a>
+            [pTooltip]="'NAV.LOGOUT' | translate"
+            tooltipPosition="top"
+            class="logout-btn"
+          ></button>
         }
       </div>
     </div>
-  </header>
+  </aside>
 
-  <!-- Contenedor Principal de Vistas -->
-  <main class="app-main">
-    <router-outlet></router-outlet>
-  </main>
+  <!-- Área Principal de Contenido a la Derecha -->
+  <div class="app-main-wrapper">
+    <!-- Topbar Compacto Superior -->
+    <header class="app-topbar">
+      <div class="topbar-left">
+        <button
+          type="button"
+          pButton
+          [text]="true"
+          icon="pi pi-bars"
+          class="mobile-menu-trigger"
+          (click)="toggleSidebar()"
+          [attr.aria-label]="'NAV.SIDEBAR_OPEN' | translate"
+        ></button>
+
+        <div class="topbar-context">
+          @if (authService.activeClub()) {
+            <span class="context-club">{{ authService.activeClub()?.clubName }}</span>
+            <span class="context-divider">•</span>
+          }
+          <span class="context-tagline">{{ 'APP.TAGLINE' | translate }}</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        @if (authService.isAuthenticated()) {
+          <app-notification-bell></app-notification-bell>
+        }
+      </div>
+    </header>
+
+    <!-- Contenedor de Vistas (<router-outlet>) -->
+    <main class="app-main">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
 </div>

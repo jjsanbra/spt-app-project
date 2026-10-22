@@ -1,6 +1,6 @@
 /* ==========================================================================
-   PADEL COURT ATHLETIC LUXURY DESIGN SYSTEM — BUTTONS & PRIMENG OVERRIDES
-   Ruta: projects/rpm-app/src/styles/components/_buttons.scss
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — BUTTONS & PRIMENG OVERRIDES
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_buttons.scss
    ========================================================================== */
 
 .btn {
@@ -8,10 +8,10 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  font-family: var(--font-body);
+  font-family: var(--font-label);
   font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-md);
-  padding: 0.65rem 1.35rem;
+  font-size: var(--font-size-sm);
+  padding: 0.65rem 1.25rem;
   border-radius: var(--radius-sm);
   border: none;
   cursor: pointer;
@@ -23,51 +23,94 @@
   }
 }
 
+/* Botón Primario (Stitch Neon Pink) */
 .btn-primary,
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-danger):not(.p-button-success):not(.p-button-warning):not(.p-button-info),
 .p-button.p-button-primary:not(.p-button-outlined):not(.p-button-text) {
   background: var(--primary-gradient) !important;
-  color: var(--surface-pure) !important;
+  color: var(--primary-contrast) !important;
+  font-family: var(--font-label) !important;
   font-weight: var(--font-weight-bold) !important;
   border: none !important;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25) !important;
+  box-shadow: var(--shadow-glow-pink) !important;
+  border-radius: var(--radius-sm) !important;
+  transition: all 0.2s ease !important;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 6px 18px rgba(16, 185, 129, 0.35) !important;
+    box-shadow: 0 0 26px var(--primary-glow) !important;
     background: var(--primary-gradient-hover) !important;
+    opacity: 0.95;
   }
 }
 
+/* Botón Secundario / Outlined */
 .btn-secondary,
-.p-button.p-button-secondary.p-button-outlined {
-  background: var(--surface-pure) !important;
-  color: #334155 !important;
+.p-button.p-button-secondary.p-button-outlined,
+.p-button.p-button-outlined:not(.p-button-danger):not(.p-button-success) {
+  background: var(--surface-container) !important;
+  color: var(--text-color) !important;
+  font-family: var(--font-label) !important;
   border: 1px solid var(--border-subtle) !important;
   box-shadow: var(--shadow-tier1) !important;
+  border-radius: var(--radius-sm) !important;
 
   &:hover {
-    background: var(--surface-muted) !important;
-    color: var(--text-slate) !important;
+    background: var(--surface-container-high) !important;
+    color: var(--text-color) !important;
+    border-color: var(--border-input) !important;
     transform: translateY(-1px);
   }
 }
 
-.btn-danger,
-.p-button.p-button-danger {
-  background: rgba(239, 68, 68, 0.10) !important;
-  color: #dc2626 !important;
-  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+/* Botón de Texto Simple */
+.p-button.p-button-text:not(.p-button-danger) {
+  background: transparent !important;
+  color: var(--text-muted) !important;
+  font-family: var(--font-label) !important;
 
   &:hover {
-    background: #dc2626 !important;
-    color: var(--surface-pure) !important;
+    background: var(--surface-container-high) !important;
+    color: var(--text-color) !important;
   }
 }
 
+/* Botón Danger / Destructivo */
+.btn-danger,
+.p-button.p-button-danger {
+  background: var(--status-disputed-bg) !important;
+  color: var(--error) !important;
+  border: 1px solid var(--status-disputed-border) !important;
+  font-family: var(--font-label) !important;
+  border-radius: var(--radius-sm) !important;
+
+  &:hover {
+    background: var(--error) !important;
+    color: #FFFFFF !important;
+    border-color: var(--error) !important;
+    transform: translateY(-1px);
+  }
+}
+
+/* Botón Success (Neon Cyan / Mint) */
+.btn-success,
+.p-button.p-button-success {
+  background: rgba(36, 255, 205, 0.15) !important;
+  color: var(--secondary-fixed) !important;
+  border: 1px solid rgba(36, 255, 205, 0.35) !important;
+  font-family: var(--font-label) !important;
+
+  &:hover {
+    background: var(--secondary-fixed) !important;
+    color: #002118 !important;
+  }
+}
+
+/* Tamaños de Botón */
 .btn-sm,
 .p-button.p-button-sm {
-  padding: 0.4rem 0.85rem;
-  font-size: var(--font-size-base);
+  padding: 0.4rem 0.85rem !important;
+  font-size: var(--font-size-xs) !important;
 }
 
 .btn-lg,
@@ -77,4 +120,16 @@
   font-weight: var(--font-weight-bold) !important;
   border-radius: var(--radius-md) !important;
   gap: var(--spacing-sm) !important;
+}
+
+/* Botones de Icono Compactos (Acciones de Fila de Tabla) */
+.action-btn-compact,
+.p-button.p-button-icon-only.p-button-sm {
+  width: var(--action-btn-size) !important;
+  height: var(--action-btn-size) !important;
+  padding: 0 !important;
+  border-radius: var(--action-btn-radius) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }

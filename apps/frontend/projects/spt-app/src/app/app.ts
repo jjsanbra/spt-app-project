@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService } from '@core';
+import { AuthService, ThemeService } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { TooltipModule } from 'primeng/tooltip';
+import { filter } from 'rxjs/operators';
 import { NotificationBellComponent } from './layout/notification-bell/notification-bell.component';
 
 @Component({
@@ -22,6 +24,7 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
     TagModule,
     ToastModule,
     ConfirmDialogModule,
+    TooltipModule,
     NotificationBellComponent,
   ],
   templateUrl: './app.html',
@@ -29,7 +32,10 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
 })
 export class App {
   readonly authService = inject(AuthService);
+  readonly themeService = inject(ThemeService);
   private readonly router = inject(Router);
+
+  readonly sidebarOpen = signal<boolean>(false);
 
   readonly hasAdminRole = computed(() => {
     const user = this.authService.currentUser();
@@ -39,6 +45,22 @@ export class App {
       (m) => m.role === 'ADMIN' || m.role === 'OWNER' || m.role === 'STAFF',
     ) ?? false;
   });
+
+  constructor() {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.sidebarOpen.set(false);
+      });
+  }
+
+  toggleSidebar(): void {
+    this.sidebarOpen.update((open) => !open);
+  }
+
+  closeSidebar(): void {
+    this.sidebarOpen.set(false);
+  }
 
   onLogout(): void {
     this.authService.logout();

@@ -144,8 +144,8 @@
     width: 32px;
     height: 32px;
     border-radius: var(--radius-full);
-    background-color: rgba(245, 158, 11, 0.1);
-    color: #f59e0b;
+    background-color: rgba(255, 224, 74, 0.15);
+    color: var(--tertiary);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,25 +167,28 @@
   padding: var(--spacing-sm) var(--spacing-xs);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
-  background-color: var(--surface-muted);
+  background-color: var(--surface-container-low);
   cursor: pointer;
   transition: all 0.2s ease;
   min-height: 56px;
 
   .slot-time {
+    font-family: var(--font-label);
     font-size: var(--font-size-xs);
     font-weight: var(--font-weight-semibold);
     color: var(--text-color);
   }
 
   .slot-price {
+    font-family: var(--font-label);
     font-size: var(--font-size-2xs);
     font-weight: var(--font-weight-bold);
-    color: var(--primary-color);
+    color: var(--secondary-fixed);
     margin-top: 2px;
   }
 
   .slot-status-text {
+    font-family: var(--font-label);
     font-size: var(--font-size-2xs);
     color: var(--text-muted);
     margin-top: 2px;
@@ -197,32 +200,32 @@
   }
 
   &.slot-available {
-    background-color: var(--surface-card);
-    border-color: rgba(16, 185, 129, 0.3);
+    background-color: var(--surface-container);
+    border-color: rgba(36, 255, 205, 0.35);
 
     &:hover {
-      border-color: var(--primary-color);
+      border-color: var(--secondary-fixed);
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+      box-shadow: var(--shadow-glow-cyan);
     }
 
     &.peak-hour {
-      border-left: 3px solid #f59e0b;
+      border-left: 3px solid var(--tertiary);
     }
   }
 
   &.slot-occupied {
-    background-color: var(--surface-muted);
-    opacity: 0.6;
+    background-color: var(--surface-container-lowest);
+    opacity: 0.55;
     cursor: not-allowed;
   }
 
   &.slot-blocked {
-    background-color: rgba(239, 68, 68, 0.05);
-    border-color: rgba(239, 68, 68, 0.2);
+    background-color: var(--status-disputed-bg);
+    border-color: var(--status-disputed-border);
     cursor: not-allowed;
     .slot-status-text {
-      color: #ef4444;
+      color: var(--error);
     }
   }
 }

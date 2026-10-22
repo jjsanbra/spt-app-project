@@ -21,6 +21,7 @@ export * from './services/auth.service';
 export * from './services/notification.service';
 export * from './services/confirm-dialog.service';
 export * from './services/realtime-notifications.service';
+export * from './services/theme.service';
 
 // Interceptores y Guards
 export * from './interceptors/auth.interceptor';

@@ -30,7 +30,25 @@
     "ADMIN": "Administración",
     "PORTAL": "Reservas",
     "PROFILE": "Mi Perfil",
-    "LOGOUT": "Cerrar sesión"
+    "LOGOUT": "Cerrar sesión",
+    "SIDEBAR_OPEN": "Abrir menú de navegación",
+    "SIDEBAR_CLOSE": "Cerrar menú de navegación",
+    "PORTAL_SECTION": "Jugador & Portal",
+    "ADMIN_SECTION": "Gestión del Club",
+    "SUPERADMIN_SECTION": "Superadministración",
+    "DASHBOARD": "Panel General",
+    "FACILITIES": "Pistas e Instalaciones",
+    "FACILITY_BLOCKS": "Bloqueos y Mantenimiento",
+    "PRICING": "Tarifas y Precios",
+    "MEMBERS": "Socios y Miembros",
+    "SETTINGS": "Configuración del Club",
+    "MATCHES": "Mis Partidos"
+  },
+  "THEME": {
+    "TOGGLE_DARK": "Cambiar a modo oscuro",
+    "TOGGLE_LIGHT": "Cambiar a modo claro",
+    "DARK": "Modo Oscuro",
+    "LIGHT": "Modo Claro"
   },
   "AUTH": {
     "LOGIN": "Iniciar sesión",

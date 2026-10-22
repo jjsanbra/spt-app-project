@@ -22,7 +22,7 @@
     <p-table
       [value]="facilities"
       [loading]="loading"
-      styleClass="p-datatable-striped"
+      [stripedRows]="true"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -131,6 +131,7 @@
         pInputText
         class="w-full"
         formControlName="name"
+        [invalid]="(facilityForm.get('name')?.invalid && facilityForm.get('name')?.touched) ?? false"
         placeholder="Ej. Pista 1 Central"
       />
     </div>
@@ -140,10 +141,10 @@
       <div class="form-group flex-1">
         <label for="facility-sport" class="form-label">{{ 'ADMIN.FACILITIES.SPORT' | translate }}</label>
         <p-select
-          id="facility-sport"
+          inputId="facility-sport"
           [options]="sportOptions"
           formControlName="sportType"
-          styleClass="w-full"
+          [fluid]="true"
           optionLabel="label"
           optionValue="value"
         ></p-select>
@@ -151,10 +152,10 @@
       <div class="form-group flex-1">
         <label for="facility-court" class="form-label">{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</label>
         <p-select
-          id="facility-court"
+          inputId="facility-court"
           [options]="courtOptions"
           formControlName="courtType"
-          styleClass="w-full"
+          [fluid]="true"
           optionLabel="label"
           optionValue="value"
         ></p-select>
@@ -166,10 +167,10 @@
       <div class="form-group flex-1">
         <label for="facility-surface" class="form-label">{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</label>
         <p-select
-          id="facility-surface"
+          inputId="facility-surface"
           [options]="surfaceOptions"
           formControlName="surfaceType"
-          styleClass="w-full"
+          [fluid]="true"
           optionLabel="label"
           optionValue="value"
         ></p-select>
@@ -177,10 +178,10 @@
       <div class="form-group flex-1">
         <label for="facility-slot" class="form-label">{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</label>
         <p-select
-          id="facility-slot"
+          inputId="facility-slot"
           [options]="slotOptions"
           formControlName="defaultSlotMinutes"
-          styleClass="w-full"
+          [fluid]="true"
           optionLabel="label"
           optionValue="value"
         ></p-select>
@@ -192,23 +193,21 @@
       <div class="form-group flex-1">
         <label for="facility-min-players" class="form-label">Min Jugadores</label>
         <p-inputnumber
-          id="facility-min-players"
+          inputId="facility-min-players"
           formControlName="minPlayers"
           [min]="1"
           [max]="50"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
       <div class="form-group flex-1">
         <label for="facility-max-players" class="form-label">Max Jugadores</label>
         <p-inputnumber
-          id="facility-max-players"
+          inputId="facility-max-players"
           formControlName="maxPlayers"
           [min]="1"
           [max]="50"
-          styleClass="w-full"
-          inputStyleClass="w-full"
+          [fluid]="true"
         ></p-inputnumber>
       </div>
     </div>
