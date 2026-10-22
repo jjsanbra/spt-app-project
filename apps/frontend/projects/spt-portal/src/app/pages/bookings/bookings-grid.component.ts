@@ -13,9 +13,11 @@ import {
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 
 @Component({
@@ -34,6 +36,8 @@ import { TagModule } from 'primeng/tag';
     InputTextModule,
     CheckboxModule,
     TagModule,
+    DatePickerModule,
+    SelectButtonModule,
   ],
   templateUrl: './bookings-grid.component.html',
   styleUrls: ['./bookings-grid.component.scss'],
@@ -50,7 +54,10 @@ export class BookingsGridComponent implements OnInit {
   loading = false;
   bookingInProgress = false;
   selectedDate: string = this.getTodayDateString();
+  selectedCalendarDate: Date = new Date();
+  readonly minDate: Date = new Date();
   selectedSport: string | null = null;
+  viewMode: 'grid' | 'cards' = 'grid';
 
   facilitiesAvailability: FacilityAvailabilityResponseDto[] = [];
 
@@ -89,7 +96,36 @@ export class BookingsGridComponent implements OnInit {
     ];
   }
 
+  get viewModeOptions() {
+    return [
+      { label: this.translate.instant('PORTAL.BOOKINGS.VIEW_GRID'), value: 'grid', icon: 'pi pi-table' },
+      { label: this.translate.instant('PORTAL.BOOKINGS.VIEW_CARDS'), value: 'cards', icon: 'pi pi-list' },
+    ];
+  }
+
+  get uniqueTimeSlots(): string[] {
+    const slotsSet = new Set<string>();
+    for (const facility of this.facilitiesAvailability) {
+      if (facility.slots) {
+        for (const slot of facility.slots) {
+          slotsSet.add(`${slot.startHourText} - ${slot.endHourText}`);
+        }
+      }
+    }
+    return Array.from(slotsSet).sort((a, b) => a.localeCompare(b));
+  }
+
+  getSlotForFacilityAndTime(
+    facility: FacilityAvailabilityResponseDto,
+    timeRange: string,
+  ): TimeSlotAvailabilityDto | undefined {
+    return facility.slots?.find(
+      (slot) => `${slot.startHourText} - ${slot.endHourText}` === timeRange,
+    );
+  }
+
   ngOnInit(): void {
+    this.minDate.setHours(0, 0, 0, 0);
     this.loadAvailability();
   }
 
@@ -115,8 +151,22 @@ export class BookingsGridComponent implements OnInit {
       });
   }
 
+  onDatePickerChange(date: Date | null): void {
+    if (!date) return;
+    this.selectedCalendarDate = date;
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    this.selectedDate = `${yyyy}-${mm}-${dd}`;
+    this.loadAvailability();
+  }
+
   onDateChange(newDate: string): void {
     this.selectedDate = newDate;
+    const [y, m, d] = newDate.split('-').map(Number);
+    if (y && m && d) {
+      this.selectedCalendarDate = new Date(y, m - 1, d);
+    }
     this.loadAvailability();
   }
 

@@ -143,6 +143,8 @@
     "FILTER": "Filtrar",
     "LOADING": "Cargando...",
     "NO_RESULTS": "Sin resultados",
+    "TODAY": "Hoy",
+    "TOMORROW": "Mañana",
     "YES": "Sí",
     "NO": "No",
     "CLOSE": "Cerrar",
@@ -380,7 +382,11 @@
       "PAYMENT_NOTICE": "Modalidad de Pago: Abonarás la reserva en recepción al llegar al centro.",
       "CONFIRM_BTN": "Confirmar Reserva",
       "SUCCESS_CREATE": "¡Reserva confirmada con éxito!",
-      "VIEW_MY_BOOKINGS": "Ver mis reservas"
+      "VIEW_MY_BOOKINGS": "Ver mis reservas",
+      "VIEW_GRID": "Cuadrante Horario",
+      "VIEW_CARDS": "Vista Pistas",
+      "TIMELINE_HEADER": "Horario / Pistas",
+      "DATE_PICKER_LABEL": "Seleccionar fecha"
     },
     "MY_BOOKINGS": {
       "TITLE": "Mis Reservas",

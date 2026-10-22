@@ -70,7 +70,7 @@
   - Esta directiva es obligatoria para todos los desarrollos presentes y futuros.
 - **CONSULTA OBLIGATORIA DEL SERVIDOR MCP DE PRIMENG (`@primeng/mcp`):**
   - El servidor MCP oficial de PrimeNG está configurado en el workspace (`.mcp.json`).
-  - Ante dudas de sintaxis, directivas `pXxxxxx`, atributos, eventos, slots o ejemplos en PrimeNG v18+, el agente debe consultar la documentación oficial a través del MCP (`get_component`, `search`, `get_example`, `validate_usage`) para garantizar un código fidedigno y actualizado.
+  - Ante dudas de sintaxis, directivas `pXxxxxx`, atributos, eventos, slots o ejemplos en PrimeNG v22.1+, el agente debe consultar la documentación oficial a través del MCP (`get_component`, `search`, `get_example`, `validate_usage`) para garantizar un código fidedigno y actualizado.
 
 ---
 
