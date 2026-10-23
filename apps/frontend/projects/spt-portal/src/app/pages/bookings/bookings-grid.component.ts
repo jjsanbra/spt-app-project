@@ -20,6 +20,15 @@ import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
 
+export interface SportGridGroup {
+  sportType: string;
+  sportLabel: string;
+  defaultSlotMinutes: number;
+  facilities: FacilityAvailabilityResponseDto[];
+  timeSlots: string[];
+  peakHoursRange: string | null;
+}
+
 @Component({
   selector: 'app-bookings-grid',
   standalone: true,
@@ -195,6 +204,60 @@ export class BookingsGridComponent implements OnInit {
     }
 
     return days;
+  }
+
+
+  get sportGridGroups(): SportGridGroup[] {
+    if (!this.facilitiesAvailability.length) return [];
+
+    const groupsMap = new Map<string, FacilityAvailabilityResponseDto[]>();
+    for (const facility of this.facilitiesAvailability) {
+      const sport = facility.sportType;
+      if (!groupsMap.has(sport)) {
+        groupsMap.set(sport, []);
+      }
+      groupsMap.get(sport)!.push(facility);
+    }
+
+    const result: SportGridGroup[] = [];
+    for (const [sportType, facilities] of groupsMap.entries()) {
+      const slotsSet = new Set<string>();
+      for (const f of facilities) {
+        if (f.slots) {
+          for (const s of f.slots) {
+            slotsSet.add(`${s.startHourText} - ${s.endHourText}`);
+          }
+        }
+      }
+      const timeSlots = Array.from(slotsSet).sort((a, b) => a.localeCompare(b));
+      const sportOption = this.sportFilterOptions.find((o) => o.value === sportType);
+      const defaultSlotMinutes = facilities[0]?.defaultSlotMinutes || 60;
+
+      // Calcular rango de horas punta a partir de los slots configurados
+      const peakSlots = facilities
+        .flatMap((f) => f.slots || [])
+        .filter((s) => s.isPeakHour);
+
+      let peakHoursRange: string | null = null;
+      if (peakSlots.length > 0) {
+        const startTimes = Array.from(new Set(peakSlots.map((s) => s.startHourText))).sort();
+        const endTimes = Array.from(new Set(peakSlots.map((s) => s.endHourText))).sort();
+        const earliestStart = startTimes[0];
+        const latestEnd = endTimes[endTimes.length - 1];
+        peakHoursRange = `${earliestStart} - ${latestEnd}`;
+      }
+
+      result.push({
+        sportType,
+        sportLabel: sportOption ? sportOption.label : sportType,
+        defaultSlotMinutes,
+        facilities,
+        timeSlots,
+        peakHoursRange,
+      });
+    }
+
+    return result;
   }
 
   get uniqueTimeSlots(): string[] {

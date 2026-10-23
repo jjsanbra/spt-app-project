@@ -7,6 +7,7 @@ import {
   ClubSettingsResponseDtoPaymentMode as PaymentMode,
   ClubsSettingsService,
   NotificationService,
+  getClubsControllerGetSettingsResponseMock,
 } from '@core';
 import { of, throwError } from 'rxjs';
 import { ClubSettingsComponent } from './club-settings.component';
@@ -17,7 +18,7 @@ describe('ClubSettingsComponent', () => {
   let mockClubsService: any;
   let mockNotify: any;
 
-  const mockSettings: ClubSettingsResponseDto = {
+  const mockSettings: ClubSettingsResponseDto = getClubsControllerGetSettingsResponseMock({
     id: 'club-1',
     name: 'Padel Club Madrid',
     slug: 'padel-club-madrid',
@@ -33,9 +34,7 @@ describe('ClubSettingsComponent', () => {
     openGameMinNoticeHours: 2,
     paymentMode: PaymentMode.PRESENTIAL,
     isActive: true,
-    createdAt: '2026-10-20T10:00:00.000Z',
-    updatedAt: '2026-10-20T10:00:00.000Z',
-  };
+  });
 
   beforeEach(async () => {
     mockClubsService = {

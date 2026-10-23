@@ -214,7 +214,8 @@ p-inputnumber.w-full {
   .p-dropdown-items-wrapper {
     overflow-y: auto !important;
     overflow-x: hidden !important;
-    max-height: 240px !important;
+    max-height: 320px !important;
+    scroll-behavior: auto !important;
     overscroll-behavior: contain !important;
     -webkit-overflow-scrolling: touch !important;
     touch-action: pan-y !important;
@@ -248,6 +249,7 @@ p-inputnumber.w-full {
     cursor: pointer !important;
     pointer-events: auto !important;
     color: var(--text-color) !important;
+    user-select: none !important;
     transition: background 0.15s ease, color 0.15s ease;
 
     &.p-select-option-selected,
@@ -270,8 +272,9 @@ p-inputnumber.w-full {
 
     .p-select-list-container,
     .p-dropdown-items-wrapper {
-      max-height: min(42vh, 230px) !important;
+      max-height: min(50vh, 320px) !important;
       overflow-y: auto !important;
+      scroll-behavior: auto !important;
       -webkit-overflow-scrolling: touch !important;
     }
 

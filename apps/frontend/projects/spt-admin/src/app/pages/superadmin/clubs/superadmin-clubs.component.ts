@@ -19,6 +19,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-superadmin-clubs',
@@ -36,6 +37,7 @@ import { TagModule } from 'primeng/tag';
     InputTextModule,
     InputNumberModule,
     SelectModule,
+    TooltipModule,
   ],
   templateUrl: './superadmin-clubs.component.html',
   styleUrls: ['./superadmin-clubs.component.scss'],

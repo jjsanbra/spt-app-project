@@ -7,6 +7,7 @@ import {
   NotificationService,
   PricingRuleResponseDto,
   PricingService,
+  getPricingControllerCreateResponseMock,
 } from '@core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -19,7 +20,7 @@ describe('PricingListComponent', () => {
   let confirmDialogServiceMock: any;
 
   const mockRules: PricingRuleResponseDto[] = [
-    {
+    getPricingControllerCreateResponseMock({
       id: 'rule-1',
       clubId: 'club-1',
       name: 'Tarifa Mañanas',
@@ -31,10 +32,8 @@ describe('PricingListComponent', () => {
       guestPrice: 24.0,
       lightSurcharge: 0.0,
       priority: 1,
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
-    {
+    }),
+    getPricingControllerCreateResponseMock({
       id: 'rule-2',
       clubId: 'club-1',
       name: 'Tarifa Tardes Punta',
@@ -46,9 +45,7 @@ describe('PricingListComponent', () => {
       guestPrice: 32.0,
       lightSurcharge: 4.0,
       priority: 2,
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
+    }),
   ];
 
   beforeEach(async () => {

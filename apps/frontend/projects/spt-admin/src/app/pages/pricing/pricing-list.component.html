@@ -33,7 +33,7 @@
           <th>{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.PRIORITY' | translate }}</th>
-          <th class="text-right"></th>
+          <th style="width: 6rem" class="text-right"></th>
         </tr>
       </ng-template>
 
@@ -56,7 +56,7 @@
             @if (rule.startTime && rule.endTime) {
               {{ rule.startTime }} - {{ rule.endTime }}
             } @else {
-              <span class="text-muted">Todo el día</span>
+              <span class="text-muted">{{ 'ADMIN.PRICING.ALL_DAY' | translate }}</span>
             }
           </td>
           <td class="price-value">{{ rule.memberPrice | currency: 'EUR' }}</td>
@@ -71,29 +71,35 @@
           <td>
             <p-tag [value]="'P' + rule.priority" severity="info"></p-tag>
           </td>
-          <td class="text-right actions-cell">
-            <button
-              type="button"
-              pButton
-              icon="pi pi-pencil"
-              severity="secondary"
-              [text]="true"
-              size="small"
-              (click)="openEditModal(rule)"
-            >
-              {{ 'ADMIN.PRICING.EDIT_BUTTON' | translate }}
-            </button>
-            <button
-              type="button"
-              pButton
-              icon="pi pi-trash"
-              severity="danger"
-              [text]="true"
-              size="small"
-              (click)="onDeleteRule(rule.id)"
-            >
-              {{ 'ADMIN.PRICING.DELETE_BUTTON' | translate }}
-            </button>
+          <td class="text-right">
+            <div class="table-actions">
+              <button
+                type="button"
+                pButton
+                iconOnly
+                rounded
+                variant="text"
+                icon="pi pi-pencil"
+                severity="secondary"
+                (click)="openEditModal(rule)"
+                [pTooltip]="'ADMIN.PRICING.EDIT_BUTTON' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
+              ></button>
+              <button
+                type="button"
+                pButton
+                iconOnly
+                rounded
+                variant="text"
+                icon="pi pi-trash"
+                severity="danger"
+                (click)="onDeleteRule(rule.id)"
+                [pTooltip]="'ADMIN.PRICING.DELETE_BUTTON' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
+              ></button>
+            </div>
           </td>
         </tr>
       </ng-template>

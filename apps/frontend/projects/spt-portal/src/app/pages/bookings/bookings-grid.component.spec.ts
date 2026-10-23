@@ -8,6 +8,7 @@ import {
   FacilityAvailabilityResponseDto,
   NotificationService,
   TimeSlotAvailabilityDtoStatus as SlotStatus,
+  getBookingsControllerCreateResponseMock,
 } from '@core';
 import { of, throwError } from 'rxjs';
 import { BookingsGridComponent } from './bookings-grid.component';
@@ -49,7 +50,7 @@ describe('BookingsGridComponent', () => {
     };
 
     mockBookingsService = {
-      bookingsControllerCreate: vi.fn().mockReturnValue(of({ id: 'book-1' })),
+      bookingsControllerCreate: vi.fn().mockReturnValue(of(getBookingsControllerCreateResponseMock({ id: 'book-1' }))),
     };
 
     mockNotify = {
@@ -390,6 +391,97 @@ describe('BookingsGridComponent', () => {
 
       expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
       expect(component.displayConfirmModal).toBe(false);
+    });
+  });
+
+  describe('sportGridGroups (agrupación por deporte sin solapamiento de slots)', () => {
+    it('debe devolver un array vacío si no hay disponibilidad', () => {
+      component.facilitiesAvailability = [];
+      expect(component.sportGridGroups).toEqual([]);
+    });
+
+    it('debe agrupar pistas por deporte y calcular franjas horarias independientes', () => {
+      component.facilitiesAvailability = [
+        {
+          facilityId: 'padel-1',
+          facilityName: 'Pádel 1',
+          sportType: 'PADEL' as any,
+          courtType: 'INDOOR' as any,
+          surfaceType: 'CRYSTAL' as any,
+          hasLighting: true,
+          defaultSlotMinutes: 90,
+          slots: [
+            { startTime: 'T09:00:00Z', endTime: 'T10:30:00Z', startHourText: '09:00', endHourText: '10:30', status: SlotStatus.AVAILABLE, price: 16, isPeakHour: false, lightSurcharge: 0 },
+            { startTime: 'T10:30:00Z', endTime: 'T12:00:00Z', startHourText: '10:30', endHourText: '12:00', status: SlotStatus.AVAILABLE, price: 16, isPeakHour: false, lightSurcharge: 0 },
+          ],
+        },
+        {
+          facilityId: 'padel-2',
+          facilityName: 'Pádel 2',
+          sportType: 'PADEL' as any,
+          courtType: 'INDOOR' as any,
+          surfaceType: 'CRYSTAL' as any,
+          hasLighting: true,
+          defaultSlotMinutes: 90,
+          slots: [
+            { startTime: 'T09:00:00Z', endTime: 'T10:30:00Z', startHourText: '09:00', endHourText: '10:30', status: SlotStatus.AVAILABLE, price: 16, isPeakHour: false, lightSurcharge: 0 },
+          ],
+        },
+        {
+          facilityId: 'tennis-1',
+          facilityName: 'Tenis 1',
+          sportType: 'TENNIS' as any,
+          courtType: 'OUTDOOR' as any,
+          surfaceType: 'CLAY' as any,
+          hasLighting: true,
+          defaultSlotMinutes: 60,
+          slots: [
+            { startTime: 'T09:00:00Z', endTime: 'T10:00:00Z', startHourText: '09:00', endHourText: '10:00', status: SlotStatus.AVAILABLE, price: 12, isPeakHour: false, lightSurcharge: 0 },
+            { startTime: 'T10:00:00Z', endTime: 'T11:00:00Z', startHourText: '10:00', endHourText: '11:00', status: SlotStatus.AVAILABLE, price: 12, isPeakHour: false, lightSurcharge: 0 },
+          ],
+        },
+      ];
+
+      const groups = component.sportGridGroups;
+      expect(groups.length).toBe(2);
+
+      // Grupo Pádel
+      const padelGroup = groups.find((g) => g.sportType === 'PADEL');
+      expect(padelGroup).toBeDefined();
+      expect(padelGroup?.facilities.length).toBe(2);
+      expect(padelGroup?.defaultSlotMinutes).toBe(90);
+      expect(padelGroup?.timeSlots).toEqual(['09:00 - 10:30', '10:30 - 12:00']);
+      expect(padelGroup?.peakHoursRange).toBeNull();
+
+      // Grupo Tenis
+      const tennisGroup = groups.find((g) => g.sportType === 'TENNIS');
+      expect(tennisGroup).toBeDefined();
+      expect(tennisGroup?.facilities.length).toBe(1);
+      expect(tennisGroup?.defaultSlotMinutes).toBe(60);
+      expect(tennisGroup?.timeSlots).toEqual(['09:00 - 10:00', '10:00 - 11:00']);
+      expect(tennisGroup?.peakHoursRange).toBeNull();
+    });
+
+    it('debe calcular peakHoursRange correctamente cuando hay slots punta', () => {
+      component.facilitiesAvailability = [
+        {
+          facilityId: 'padel-1',
+          facilityName: 'Pádel 1',
+          sportType: 'PADEL' as any,
+          courtType: 'INDOOR' as any,
+          surfaceType: 'CRYSTAL' as any,
+          hasLighting: true,
+          defaultSlotMinutes: 90,
+          slots: [
+            { startTime: 'T17:00:00Z', endTime: 'T18:30:00Z', startHourText: '17:00', endHourText: '18:30', status: SlotStatus.AVAILABLE, price: 24, isPeakHour: true, lightSurcharge: 2 },
+            { startTime: 'T18:30:00Z', endTime: 'T20:00:00Z', startHourText: '18:30', endHourText: '20:00', status: SlotStatus.AVAILABLE, price: 24, isPeakHour: true, lightSurcharge: 2 },
+            { startTime: 'T20:00:00Z', endTime: 'T21:30:00Z', startHourText: '20:00', endHourText: '21:30', status: SlotStatus.AVAILABLE, price: 24, isPeakHour: true, lightSurcharge: 2 },
+          ],
+        },
+      ];
+
+      const groups = component.sportGridGroups;
+      expect(groups[0].peakHoursRange).toBe('17:00 - 21:30');
     });
   });
 });

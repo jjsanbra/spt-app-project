@@ -20,6 +20,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-facilities-list',
@@ -37,6 +38,7 @@ import { TagModule } from 'primeng/tag';
     InputNumberModule,
     SelectModule,
     CheckboxModule,
+    TooltipModule,
   ],
   templateUrl: './facilities-list.component.html',
   styleUrls: ['./facilities-list.component.scss'],
@@ -91,20 +93,36 @@ export class FacilitiesListComponent implements OnInit {
     ];
   }
 
-  readonly courtOptions = [
-    { label: 'Indoor (Cubierta)', value: CourtType.INDOOR },
-    { label: 'Outdoor (Exterior)', value: CourtType.OUTDOOR },
-    { label: 'Cubierta / Techada', value: CourtType.COVERED },
-  ];
+  get courtOptions() {
+    return [
+      { label: this.translate.instant('ADMIN.FACILITIES.COURT_TYPE_INDOOR'), value: CourtType.INDOOR },
+      { label: this.translate.instant('ADMIN.FACILITIES.COURT_TYPE_OUTDOOR'), value: CourtType.OUTDOOR },
+      { label: this.translate.instant('ADMIN.FACILITIES.COURT_TYPE_COVERED'), value: CourtType.COVERED },
+    ];
+  }
 
-  readonly surfaceOptions = [
-    { label: 'Cristal / Césped Pro', value: SurfaceType.CRYSTAL },
-    { label: 'Césped Artificial', value: SurfaceType.SYNTHETIC_GRASS },
-    { label: 'Tierra Batida (Clay)', value: SurfaceType.CLAY },
-    { label: 'Hormigón / Cemento', value: SurfaceType.CONCRETE },
-    { label: 'Resina', value: SurfaceType.RESIN },
-    { label: 'Parquet', value: SurfaceType.PARQUET },
-  ];
+  get surfaceOptions() {
+    return [
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_CRYSTAL'), value: SurfaceType.CRYSTAL },
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_SYNTHETIC_GRASS'), value: SurfaceType.SYNTHETIC_GRASS },
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_CLAY'), value: SurfaceType.CLAY },
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_CONCRETE'), value: SurfaceType.CONCRETE },
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_RESIN'), value: SurfaceType.RESIN },
+      { label: this.translate.instant('ADMIN.FACILITIES.SURFACE_PARQUET'), value: SurfaceType.PARQUET },
+    ];
+  }
+
+  getCourtTypeLabel(courtType: string): string {
+    const key = `ADMIN.FACILITIES.COURT_TYPE_${courtType}`;
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : courtType;
+  }
+
+  getSurfaceTypeLabel(surfaceType: string): string {
+    const key = `ADMIN.FACILITIES.SURFACE_${surfaceType}`;
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : surfaceType;
+  }
 
   readonly slotOptions = [
     { label: '30 minutos', value: 30 },
@@ -113,7 +131,37 @@ export class FacilitiesListComponent implements OnInit {
     { label: '120 minutos', value: 120 },
   ];
 
+  static readonly SPORT_DEFAULT_SLOT_MINUTES: Record<string, number> = {
+    [SportType.PADEL]: 90,
+    [SportType.TENNIS]: 60,
+    [SportType.FOOTBALL_7]: 60,
+    [SportType.FOOTBALL_11]: 60,
+    [SportType.FUTSAL]: 60,
+    [SportType.BASKETBALL]: 60,
+    [SportType.PICKLEBALL]: 60,
+    [SportType.SQUASH]: 60,
+    [SportType.BADMINTON]: 60,
+    [SportType.VOLLEYBALL]: 60,
+    [SportType.BEACH_VOLLEY]: 60,
+    [SportType.FRONTON]: 60,
+    [SportType.INDOOR_FRONTON]: 60,
+    [SportType.HANDBALL]: 60,
+    [SportType.TABLE_TENNIS]: 60,
+    [SportType.ATHLETICS_TRACK]: 60,
+    [SportType.SWIMMING_LANE]: 60,
+    [SportType.CLIMBING_WALL]: 60,
+    [SportType.MULTI_SPORT]: 60,
+  };
+
   ngOnInit(): void {
+    this.facilityForm.get('sportType')?.valueChanges.subscribe((sport: SportType) => {
+      if (sport && FacilitiesListComponent.SPORT_DEFAULT_SLOT_MINUTES[sport]) {
+        this.facilityForm.patchValue(
+          { defaultSlotMinutes: FacilitiesListComponent.SPORT_DEFAULT_SLOT_MINUTES[sport] },
+          { emitEvent: false },
+        );
+      }
+    });
     this.loadFacilities();
   }
 

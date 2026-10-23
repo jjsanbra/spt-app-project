@@ -214,7 +214,16 @@
       "SUCCESS_DELETE": "Pista desactivada con éxito",
       "CONFIRM_DELETE_TITLE": "Confirmar desactivación",
       "CONFIRM_DELETE_MSG": "¿Estás seguro de que deseas desactivar esta pista? Las reservas existentes se mantendrán.",
-      "EMPTY": "No hay pistas configuradas para este club."
+      "EMPTY": "No hay pistas configuradas para este club.",
+      "COURT_TYPE_INDOOR": "Indoor (Cubierta)",
+      "COURT_TYPE_OUTDOOR": "Outdoor (Exterior)",
+      "COURT_TYPE_COVERED": "Cubierta / Techada",
+      "SURFACE_CRYSTAL": "Cristal / Césped Pro",
+      "SURFACE_SYNTHETIC_GRASS": "Césped Artificial",
+      "SURFACE_CLAY": "Tierra Batida (Clay)",
+      "SURFACE_CONCRETE": "Hormigón / Cemento",
+      "SURFACE_RESIN": "Resina",
+      "SURFACE_PARQUET": "Parquet"
     },
     "BLOCKS": {
       "TITLE": "Bloqueos Temporales de Pista",
@@ -222,6 +231,7 @@
       "ADD_BUTTON": "Programar Bloqueo",
       "DELETE_BUTTON": "Levantar Bloqueo",
       "BLOCK_TITLE": "Concepto / Título",
+      "PLACEHOLDER_TITLE": "Ej. Torneo Primavera / Mantenimiento focos",
       "REASON": "Motivo detallado",
       "START_TIME": "Fecha y hora de inicio",
       "END_TIME": "Fecha y hora de finalización",
@@ -244,6 +254,7 @@
       "NAME": "Nombre de tarifa",
       "DAYS": "Días aplicables",
       "HOURS": "Horario (Valle / Punta)",
+      "ALL_DAY": "Todo el día",
       "MEMBER_PRICE": "Precio Socio (€)",
       "GUEST_PRICE": "Precio Invitado (€)",
       "LIGHT_SURCHARGE": "Suplemento Luz (€)",
@@ -403,7 +414,11 @@
       "MOBILE_SCROLL_HINT": "Desliza horizontalmente para ver todas las columnas",
       "CURRENT_MONTH": "Mes actual",
       "PREV_MONTH": "Mes anterior",
-      "NEXT_MONTH": "Mes siguiente"
+      "NEXT_MONTH": "Mes siguiente",
+      "SLOT_UNIT": "turno",
+      "COURT_SINGULAR": "pista",
+      "COURTS_PLURAL": "pistas",
+      "MINUTES_UNIT": "min"
     },
     "MY_BOOKINGS": {
       "TITLE": "Mis Reservas",

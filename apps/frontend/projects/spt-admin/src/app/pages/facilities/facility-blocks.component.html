@@ -40,7 +40,7 @@
           <th>{{ 'ADMIN.BLOCKS.REASON' | translate }}</th>
           <th>{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</th>
           <th>{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</th>
-          <th class="text-right"></th>
+          <th style="width: 5rem" class="text-right"></th>
         </tr>
       </ng-template>
 
@@ -51,17 +51,21 @@
           <td>{{ block.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ block.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td class="text-right">
-            <button
-              type="button"
-              pButton
-              icon="pi pi-trash"
-              severity="danger"
-              [text]="true"
-              size="small"
-              (click)="onRemoveBlock(block.id)"
-            >
-              {{ 'ADMIN.BLOCKS.DELETE_BUTTON' | translate }}
-            </button>
+            <div class="table-actions">
+              <button
+                type="button"
+                pButton
+                iconOnly
+                rounded
+                variant="text"
+                icon="pi pi-trash"
+                severity="danger"
+                (click)="onRemoveBlock(block.id)"
+                [pTooltip]="'ADMIN.BLOCKS.DELETE_BUTTON' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
+              ></button>
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -96,7 +100,7 @@
         pInputText
         class="w-full"
         formControlName="title"
-        placeholder="Ej. Torneo Primavera / Mantenimiento focos"
+        [placeholder]="'ADMIN.BLOCKS.PLACEHOLDER_TITLE' | translate"
       />
     </div>
 

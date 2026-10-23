@@ -7,6 +7,7 @@ import {
   FacilitiesService,
   FacilityBlockResponseDto,
   NotificationService,
+  getFacilitiesControllerCreateBlockResponseMock,
   getFacilitiesControllerFindOneResponseMock,
 } from '@core';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -25,7 +26,7 @@ describe('FacilityBlocksComponent', () => {
   });
 
   const mockBlocks: FacilityBlockResponseDto[] = [
-    {
+    getFacilitiesControllerCreateBlockResponseMock({
       id: 'block-1',
       clubId: 'club-1',
       facilityId: 'fac-1',
@@ -33,9 +34,7 @@ describe('FacilityBlocksComponent', () => {
       reason: 'Sustitución de anclaje',
       startTime: '2026-10-25T10:00:00.000Z',
       endTime: '2026-10-25T14:00:00.000Z',
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
+    }),
   ];
 
   beforeEach(async () => {

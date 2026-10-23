@@ -595,3 +595,16 @@ p-paginator,
   }
 }
 
+/* --------------------------------------------------------------------------
+   4. Botones de Acción Estilizados en Tablas
+   -------------------------------------------------------------------------- */
+.table-actions,
+.actions-cell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+

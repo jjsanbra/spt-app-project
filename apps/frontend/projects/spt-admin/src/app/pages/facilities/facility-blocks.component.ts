@@ -13,6 +13,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-facility-blocks',
@@ -26,6 +27,7 @@ import { TableModule } from 'primeng/table';
     ButtonModule,
     DialogModule,
     InputTextModule,
+    TooltipModule,
   ],
   templateUrl: './facility-blocks.component.html',
   styleUrls: ['./facility-blocks.component.scss'],

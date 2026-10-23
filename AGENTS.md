@@ -60,6 +60,20 @@
       facilityName: string;
     }
     ```
+- **USO OBLIGATORIO DE GENERADORES MOCK DE ORVAL EN TESTS (`*.spec.ts`):**
+  - NUNCA crees objetos literales manuales incompletos para simular entidades o respuestas de la API en los tests unitarios.
+  - Orval genera funciones mock basadas en Faker (`get<Controller><Endpoint>ResponseMock`) que se exportan centralizadamente desde `@core`.
+  - En todos los archivos `.spec.ts` (`spt-admin`, `spt-portal`, `spt-users`, `spt-app`), utiliza SIEMPRE estos generadores pasando únicamente las propiedades específicas necesarias para el test (`overrideResponse`):
+    ```typescript
+    import { getFacilitiesControllerCreateResponseMock, CreateFacilityDtoSportType as SportType } from '@core';
+
+    const mockFacility = getFacilitiesControllerCreateResponseMock({
+      name: 'Pista 1 Central',
+      sportType: SportType.PADEL,
+      defaultSlotMinutes: 90,
+    });
+    ```
+  - Esto previene la fragilidad en tests, asegura que los campos requeridos por OpenAPI se inicialicen válidamente y evita errores de compilación (`TS2741`) ante futuros evolutivos de la base de datos o DTOs.
 
 ---
 

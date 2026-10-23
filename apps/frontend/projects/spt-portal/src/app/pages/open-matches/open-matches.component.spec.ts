@@ -9,6 +9,7 @@ import {
   OpenMatchParticipantDtoStatus,
   OpenMatchResponseDto,
   OpenMatchResponseDtoSportType as SportType,
+  getBookingsControllerJoinOpenMatchResponseMock,
 } from '@core';
 import { of, throwError } from 'rxjs';
 import { OpenMatchesComponent } from './open-matches.component';
@@ -21,7 +22,7 @@ describe('OpenMatchesComponent', () => {
   let mockConfirmService: any;
 
   const mockOpenMatches: OpenMatchResponseDto[] = [
-    {
+    getBookingsControllerJoinOpenMatchResponseMock({
       id: 'open-1',
       clubId: 'club-1',
       facilityId: 'fac-1',
@@ -58,7 +59,7 @@ describe('OpenMatchesComponent', () => {
           joinedAt: '2026-10-20T11:00:00.000Z' as any,
         },
       ],
-    },
+    }),
   ];
 
   beforeEach(async () => {

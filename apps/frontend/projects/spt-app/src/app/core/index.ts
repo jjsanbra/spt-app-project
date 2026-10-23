@@ -35,3 +35,5 @@ export * from './api/endpoints/pricing/pricing.faker';
 export * from './api/endpoints/bookings/bookings.faker';
 export * from './api/endpoints/notifications/notifications.faker';
 export * from './api/endpoints/superadmin-clubs/superadmin-clubs.faker';
+export * from './api/endpoints/clubs-members/clubs-members.faker';
+export * from './api/endpoints/clubs-settings/clubs-settings.faker';

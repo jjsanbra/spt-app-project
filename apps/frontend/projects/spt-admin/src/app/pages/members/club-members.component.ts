@@ -15,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-club-members',
@@ -30,6 +31,7 @@ import { TagModule } from 'primeng/tag';
     DialogModule,
     InputTextModule,
     SelectModule,
+    TooltipModule,
   ],
   templateUrl: './club-members.component.html',
   styleUrls: ['./club-members.component.scss'],

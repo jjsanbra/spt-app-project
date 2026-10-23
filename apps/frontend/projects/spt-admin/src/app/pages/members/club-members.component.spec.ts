@@ -8,6 +8,7 @@ import {
   ClubsMembersService,
   ConfirmDialogService,
   NotificationService,
+  getClubsMembersControllerInviteResponseMock,
 } from '@core';
 import { of, throwError } from 'rxjs';
 import { ClubMembersComponent } from './club-members.component';
@@ -19,7 +20,7 @@ describe('ClubMembersComponent', () => {
   let mockNotify: any;
   let mockConfirm: any;
 
-  const mockMember: ClubMemberResponseDto = {
+  const mockMember: ClubMemberResponseDto = getClubsMembersControllerInviteResponseMock({
     id: 'mem-1',
     userId: 'user-1',
     clubId: 'club-1',
@@ -27,8 +28,6 @@ describe('ClubMembersComponent', () => {
     walletBalance: 25.0,
     memberNumber: 'SOC-001' as any,
     isActive: true,
-    createdAt: '2026-10-20T10:00:00.000Z',
-    updatedAt: '2026-10-20T10:00:00.000Z',
     user: {
       id: 'user-1',
       email: 'socio@club.com',
@@ -37,7 +36,7 @@ describe('ClubMembersComponent', () => {
       phone: null,
       avatarUrl: null,
     },
-  };
+  });
 
   beforeEach(async () => {
     mockMembersService = {

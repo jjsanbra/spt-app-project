@@ -39,6 +39,10 @@
         optionLabel="label"
         optionValue="value"
         styleClass="role-select"
+        [appendTo]="'body'"
+        [focusOnHover]="false"
+        [autoOptionFocus]="false"
+        scrollHeight="320px"
       ></p-select>
     </div>
   </div>
@@ -58,7 +62,7 @@
           <th>{{ 'ADMIN.MEMBERS.COL_WALLET' | translate }}</th>
           <th>{{ 'ADMIN.MEMBERS.COL_STATUS' | translate }}</th>
           <th>{{ 'ADMIN.MEMBERS.COL_JOINED' | translate }}</th>
-          <th class="text-right">{{ 'ADMIN.MEMBERS.COL_ACTIONS' | translate }}</th>
+          <th style="width: 8rem" class="text-right">{{ 'ADMIN.MEMBERS.COL_ACTIONS' | translate }}</th>
         </tr>
       </ng-template>
 
@@ -117,16 +121,20 @@
 
           <!-- Acciones -->
           <td class="text-right">
-            <div class="actions-cell">
+            <div class="table-actions">
               <!-- Cambiar Rol -->
               <button
                 type="button"
                 pButton
+                iconOnly
+                rounded
+                variant="text"
                 icon="pi pi-user-edit"
-                [text]="true"
                 severity="info"
                 (click)="openRoleModal(member)"
-                [title]="'ADMIN.MEMBERS.DIALOG_ROLE_TITLE' | translate"
+                [pTooltip]="'ADMIN.MEMBERS.DIALOG_ROLE_TITLE' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
               ></button>
 
               <!-- Pausar / Activar -->
@@ -134,21 +142,29 @@
                 <button
                   type="button"
                   pButton
+                  iconOnly
+                  rounded
+                  variant="text"
                   icon="pi pi-ban"
-                  [text]="true"
                   severity="warn"
                   (click)="toggleMemberStatus(member)"
-                  [title]="'ADMIN.MEMBERS.CONFIRM_DEACTIVATE_TITLE' | translate"
+                  [pTooltip]="'ADMIN.MEMBERS.CONFIRM_DEACTIVATE_TITLE' | translate"
+                  tooltipPosition="top"
+                  [showDelay]="1500"
                 ></button>
               } @else {
                 <button
                   type="button"
                   pButton
+                  iconOnly
+                  rounded
+                  variant="text"
                   icon="pi pi-check"
-                  [text]="true"
                   severity="success"
                   (click)="toggleMemberStatus(member)"
-                  [title]="'ADMIN.MEMBERS.STATUS_ACTIVE' | translate"
+                  [pTooltip]="'ADMIN.MEMBERS.STATUS_ACTIVE' | translate"
+                  tooltipPosition="top"
+                  [showDelay]="1500"
                 ></button>
               }
 
@@ -156,11 +172,15 @@
               <button
                 type="button"
                 pButton
+                iconOnly
+                rounded
+                variant="text"
                 icon="pi pi-trash"
-                [text]="true"
                 severity="danger"
                 (click)="confirmRemoveMember(member)"
-                [title]="'COMMON.DELETE' | translate"
+                [pTooltip]="'COMMON.DELETE' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
               ></button>
             </div>
           </td>
@@ -213,6 +233,10 @@
           optionLabel="label"
           optionValue="value"
           [fluid]="true"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
 
@@ -277,6 +301,10 @@
           optionLabel="label"
           optionValue="value"
           [fluid]="true"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
 

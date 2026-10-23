@@ -15,6 +15,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'app-pricing-list',
@@ -30,6 +31,7 @@ import { TagModule } from 'primeng/tag';
     InputTextModule,
     InputNumberModule,
     CheckboxModule,
+    TooltipModule,
   ],
   templateUrl: './pricing-list.component.html',
   styleUrls: ['./pricing-list.component.scss'],

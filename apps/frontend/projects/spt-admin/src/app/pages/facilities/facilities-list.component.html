@@ -33,7 +33,7 @@
           <th>{{ 'ADMIN.FACILITIES.LIGHTING' | translate }}</th>
           <th>{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</th>
           <th>{{ 'ADMIN.FACILITIES.STATUS' | translate }}</th>
-          <th class="text-right"></th>
+          <th style="width: 8rem" class="text-right"></th>
         </tr>
       </ng-template>
 
@@ -41,10 +41,10 @@
         <tr>
           <td class="font-semibold">{{ facility.name }}</td>
           <td>
-            <p-tag [value]="facility.sportType" severity="info"></p-tag>
+            <p-tag [value]="'SPORTS.' + facility.sportType | translate" severity="info"></p-tag>
           </td>
-          <td>{{ facility.courtType }}</td>
-          <td>{{ facility.surfaceType }}</td>
+          <td>{{ getCourtTypeLabel(facility.courtType) }}</td>
+          <td>{{ getSurfaceTypeLabel(facility.surfaceType) }}</td>
           <td>
             @if (facility.hasLighting) {
               <i class="pi pi-check text-success"></i>
@@ -60,43 +60,51 @@
               <p-tag [value]="'ADMIN.FACILITIES.INACTIVE' | translate" severity="secondary"></p-tag>
             }
           </td>
-          <td class="text-right actions-cell">
-            <a [routerLink]="['/admin/facilities', facility.id, 'blocks']">
+          <td class="text-right">
+            <div class="table-actions">
+              <a [routerLink]="['/admin/facilities', facility.id, 'blocks']">
+                <button
+                  type="button"
+                  pButton
+                  iconOnly
+                  rounded
+                  variant="text"
+                  icon="pi pi-ban"
+                  severity="warn"
+                  [pTooltip]="'ADMIN.FACILITIES.BLOCKS_BUTTON' | translate"
+                  tooltipPosition="top"
+                  [showDelay]="1500"
+                ></button>
+              </a>
               <button
                 type="button"
                 pButton
-                icon="pi pi-ban"
-                severity="warn"
-                [text]="true"
-                size="small"
-              >
-                {{ 'ADMIN.FACILITIES.BLOCKS_BUTTON' | translate }}
-              </button>
-            </a>
-            <button
-              type="button"
-              pButton
-              icon="pi pi-pencil"
-              severity="secondary"
-              [text]="true"
-              size="small"
-              (click)="openEditModal(facility)"
-            >
-              {{ 'ADMIN.FACILITIES.EDIT_BUTTON' | translate }}
-            </button>
-            @if (facility.isActive) {
-              <button
-                type="button"
-                pButton
-                icon="pi pi-trash"
-                severity="danger"
-                [text]="true"
-                size="small"
-                (click)="onDeleteFacility(facility)"
-              >
-                {{ 'ADMIN.FACILITIES.DELETE_BUTTON' | translate }}
-              </button>
-            }
+                iconOnly
+                rounded
+                variant="text"
+                icon="pi pi-pencil"
+                severity="secondary"
+                (click)="openEditModal(facility)"
+                [pTooltip]="'ADMIN.FACILITIES.EDIT_BUTTON' | translate"
+                tooltipPosition="top"
+                [showDelay]="1500"
+              ></button>
+              @if (facility.isActive) {
+                <button
+                  type="button"
+                  pButton
+                  iconOnly
+                  rounded
+                  variant="text"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  (click)="onDeleteFacility(facility)"
+                  [pTooltip]="'ADMIN.FACILITIES.DELETE_BUTTON' | translate"
+                  tooltipPosition="top"
+                  [showDelay]="1500"
+                ></button>
+              }
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -147,6 +155,10 @@
           [fluid]="true"
           optionLabel="label"
           optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
       <div class="form-group flex-1">
@@ -158,6 +170,10 @@
           [fluid]="true"
           optionLabel="label"
           optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
     </div>
@@ -173,6 +189,10 @@
           [fluid]="true"
           optionLabel="label"
           optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
       <div class="form-group flex-1">
@@ -184,6 +204,10 @@
           [fluid]="true"
           optionLabel="label"
           optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
         ></p-select>
       </div>
     </div>

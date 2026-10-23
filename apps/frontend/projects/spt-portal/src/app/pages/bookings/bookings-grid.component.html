@@ -49,6 +49,10 @@
               optionValue="value"
               [placeholder]="'PORTAL.BOOKINGS.SELECT_FACILITY_PLACEHOLDER' | translate"
               class="facility-select"
+              [appendTo]="'body'"
+              [focusOnHover]="false"
+              [autoOptionFocus]="false"
+              scrollHeight="320px"
             ></p-select>
           </div>
         } @else {
@@ -61,6 +65,10 @@
               optionValue="value"
               inputId="bookings-sport-select"
               class="sport-select"
+              [appendTo]="'body'"
+              [focusOnHover]="false"
+              [autoOptionFocus]="false"
+              scrollHeight="320px"
             ></p-select>
           </div>
         }
@@ -220,108 +228,134 @@
               <i class="pi pi-arrows-h"></i>
               <span>{{ 'PORTAL.BOOKINGS.MOBILE_SCROLL_HINT' | translate }}</span>
             </div>
-            <div class="calendar-matrix-card">
-              <div class="matrix-table-container">
-                <table class="calendar-matrix-table">
-                  <thead>
-                    <tr>
-                      <th class="matrix-time-header">
-                        <div class="time-header-content">
-                          <i class="pi pi-clock"></i>
-                          <span>{{ 'PORTAL.BOOKINGS.TIMELINE_HEADER' | translate }}</span>
-                        </div>
-                      </th>
-                      @for (facility of facilitiesAvailability; track facility.facilityId) {
-                        <th class="matrix-court-header">
-                          <div class="court-header-card">
-                            <span class="court-sport-pill">{{ facility.sportType }}</span>
-                            <h4 class="court-title">{{ facility.facilityName }}</h4>
-                            <div class="court-subinfo">
-                              <span>{{ facility.courtType }}</span>
-                              @if (facility.hasLighting) {
-                                <i class="pi pi-sun lighting-mini-icon" title="Luz disponible"></i>
-                              }
-                            </div>
-                          </div>
-                        </th>
-                      }
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (timeRange of uniqueTimeSlots; track timeRange) {
-                      <tr>
-                        <!-- Columna de Franja Horaria -->
-                        <td class="matrix-time-cell">
-                          <span class="time-cell-badge">{{ timeRange }}</span>
-                        </td>
 
-                        <!-- Celdas por cada pista -->
-                        @for (facility of facilitiesAvailability; track facility.facilityId) {
-                          @let slot = getSlotForFacilityAndTime(facility, timeRange);
-                          @let timeStart = timeRange.split(' - ')[0];
-                          @let isCutoff = isSlotBlockedByCutoff(selectedDate, slot ? slot.startHourText : timeStart);
-                          <td class="matrix-slot-cell">
-                            @if (slot) {
-                              <button
-                                type="button"
-                                pButton
-                                [text]="true"
-                                class="matrix-slot-button"
-                                [ngClass]="{
-                                  'matrix-slot-available': slot.status === 'AVAILABLE' && !isCutoff,
-                                  'matrix-slot-cutoff-blocked': isCutoff,
-                                  'matrix-slot-occupied': slot.status === 'OCCUPIED',
-                                  'matrix-slot-blocked': slot.status === 'BLOCKED',
-                                  'matrix-peak-hour': slot.isPeakHour
-                                }"
-                                [disabled]="slot.status !== 'AVAILABLE' || isCutoff"
-                                (click)="selectSlot(facility, slot, selectedDate)"
-                                [title]="isCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
-                              >
-                                @if (isCutoff) {
-                                  <span class="slot-cutoff-text"><i class="pi pi-clock"></i> {{ slot.startHourText }}</span>
-                                } @else if (slot.status === 'AVAILABLE') {
-                                  <span class="slot-price-text">
-                                    {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
-                                  </span>
-                                  @if (slot.isPeakHour) {
-                                    <span class="slot-peak-indicator" title="Hora punta">★</span>
+            @for (group of sportGridGroups; track group.sportType) {
+              <div class="sport-group-section">
+                @if (sportGridGroups.length > 0) {
+                  <div class="sport-group-header">
+                    <div class="sport-group-title">
+                      <span class="sport-group-badge">{{ group.sportLabel }}</span>
+                      <span class="sport-group-duration-tag">
+                        <i class="pi pi-clock"></i>
+                        {{ group.defaultSlotMinutes }} {{ 'PORTAL.BOOKINGS.MINUTES_UNIT' | translate }} / {{ 'PORTAL.BOOKINGS.SLOT_UNIT' | translate }}
+                      </span>
+                      @if (group.peakHoursRange) {
+                        <span class="sport-group-peak-tag">
+                          <span class="peak-star">★</span>
+                          {{ 'PORTAL.BOOKINGS.PEAK_HOUR' | translate }}: {{ group.peakHoursRange }}
+                        </span>
+                      }
+                    </div>
+                    <span class="sport-group-courts-count">
+                      {{ group.facilities.length }} {{ (group.facilities.length === 1 ? 'PORTAL.BOOKINGS.COURT_SINGULAR' : 'PORTAL.BOOKINGS.COURTS_PLURAL') | translate }}
+                    </span>
+                  </div>
+                }
+
+                <div class="calendar-matrix-card">
+                  <div class="matrix-table-container">
+                    <table class="calendar-matrix-table">
+                      <thead>
+                        <tr>
+                          <th class="matrix-time-header">
+                            <div class="time-header-content">
+                              <i class="pi pi-clock"></i>
+                              <span>{{ 'PORTAL.BOOKINGS.TIMELINE_HEADER' | translate }}</span>
+                            </div>
+                          </th>
+                          @for (facility of group.facilities; track facility.facilityId) {
+                            <th class="matrix-court-header">
+                              <div class="court-header-card">
+                                <span class="court-sport-pill">{{ facility.sportType }}</span>
+                                <h4 class="court-title">{{ facility.facilityName }}</h4>
+                                <div class="court-subinfo">
+                                  <span>{{ facility.courtType }}</span>
+                                  @if (facility.hasLighting) {
+                                    <i class="pi pi-sun lighting-mini-icon" title="Luz disponible"></i>
                                   }
-                                } @else if (slot.status === 'OCCUPIED') {
-                                  <span class="slot-occupied-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
+                                </div>
+                              </div>
+                            </th>
+                          }
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (timeRange of group.timeSlots; track timeRange) {
+                          <tr>
+                            <!-- Columna de Franja Horaria -->
+                            <td class="matrix-time-cell">
+                              <span class="time-cell-badge">{{ timeRange }}</span>
+                            </td>
+
+                            <!-- Celdas por cada pista del grupo de deporte -->
+                            @for (facility of group.facilities; track facility.facilityId) {
+                              @let slot = getSlotForFacilityAndTime(facility, timeRange);
+                              @let timeStart = timeRange.split(' - ')[0];
+                              @let isCutoff = isSlotBlockedByCutoff(selectedDate, slot ? slot.startHourText : timeStart);
+                              <td class="matrix-slot-cell">
+                                @if (slot) {
+                                  <button
+                                    type="button"
+                                    pButton
+                                    [text]="true"
+                                    class="matrix-slot-button"
+                                    [ngClass]="{
+                                      'matrix-slot-available': slot.status === 'AVAILABLE' && !isCutoff,
+                                      'matrix-slot-cutoff-blocked': isCutoff,
+                                      'matrix-slot-occupied': slot.status === 'OCCUPIED',
+                                      'matrix-slot-blocked': slot.status === 'BLOCKED',
+                                      'matrix-peak-hour': slot.isPeakHour
+                                    }"
+                                    [disabled]="slot.status !== 'AVAILABLE' || isCutoff"
+                                    (click)="selectSlot(facility, slot, selectedDate)"
+                                    [title]="isCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
+                                  >
+                                    @if (isCutoff) {
+                                      <span class="slot-cutoff-text"><i class="pi pi-clock"></i> {{ slot.startHourText }}</span>
+                                    } @else if (slot.status === 'AVAILABLE') {
+                                      <span class="slot-price-text">
+                                        {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
+                                        @if (slot.isPeakHour) {
+                                          <span class="slot-peak-indicator" title="Hora punta">★</span>
+                                        }
+                                      </span>
+                                    } @else if (slot.status === 'OCCUPIED') {
+                                      <span class="slot-occupied-text">{{ 'PORTAL.BOOKINGS.SLOT_OCCUPIED' | translate }}</span>
+                                    } @else {
+                                      <span class="slot-blocked-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
+                                    }
+                                  </button>
                                 } @else {
-                                  <span class="slot-blocked-text">{{ slot.blockedReason || ('PORTAL.BOOKINGS.SLOT_BLOCKED' | translate) }}</span>
+                                  <!-- Slot Vacío interactivo con cálculo automático de reserva o bloqueado por cutoff -->
+                                  @if (isCutoff) {
+                                    <div
+                                      class="matrix-slot-empty matrix-slot-empty-disabled"
+                                      [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
+                                    >
+                                      <span class="empty-dash">—</span>
+                                    </div>
+                                  } @else {
+                                    <div
+                                      class="matrix-slot-empty"
+                                      tabindex="0"
+                                      role="button"
+                                      (click)="onEmptySlotClick(facility, timeRange, selectedDate)"
+                                      [title]="'PORTAL.BOOKINGS.SLOT_EMPTY_HOVER' | translate"
+                                    >
+                                      <span class="empty-dash">—</span>
+                                    </div>
+                                  }
                                 }
-                              </button>
-                            } @else {
-                              <!-- Slot Vacío interactivo con cálculo automático de reserva o bloqueado por cutoff -->
-                              @if (isCutoff) {
-                                <div
-                                  class="matrix-slot-empty matrix-slot-empty-disabled"
-                                  [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
-                                >
-                                  <span class="empty-dash">—</span>
-                                </div>
-                              } @else {
-                                <div
-                                  class="matrix-slot-empty"
-                                  tabindex="0"
-                                  role="button"
-                                  (click)="onEmptySlotClick(facility, timeRange, selectedDate)"
-                                  [title]="'PORTAL.BOOKINGS.SLOT_EMPTY_HOVER' | translate"
-                                >
-                                  <span class="empty-dash">—</span>
-                                </div>
-                              }
+                              </td>
                             }
-                          </td>
+                          </tr>
                         }
-                      </tr>
-                    }
-                  </tbody>
-                </table>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
-            </div>
+            }
           </div>
         } @else {
           <!-- VISTA TARJETAS DÍA -->
@@ -404,7 +438,7 @@
                     <th class="matrix-time-header">
                       <div class="time-header-content">
                         <i class="pi pi-clock"></i>
-                        <span>Horario</span>
+                        <span>{{ 'PORTAL.BOOKINGS.TIMELINE_HEADER' | translate }}</span>
                       </div>
                     </th>
                     @for (day of weekDays; track day.dateString) {
@@ -412,7 +446,7 @@
                         <div class="day-header-card">
                           <span class="day-label">{{ day.label }}</span>
                           @if (day.isToday) {
-                            <span class="today-indicator-pill">Hoy</span>
+                            <span class="today-indicator-pill">{{ 'PORTAL.BOOKINGS.TODAY' | translate }}</span>
                           }
                         </div>
                       </th>

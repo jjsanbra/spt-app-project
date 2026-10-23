@@ -9,6 +9,7 @@ import {
   BookingsService,
   ConfirmDialogService,
   NotificationService,
+  getBookingsControllerCreateResponseMock,
 } from '@core';
 import { of, throwError } from 'rxjs';
 import { MyBookingsComponent } from './my-bookings.component';
@@ -21,7 +22,7 @@ describe('MyBookingsComponent', () => {
   let mockConfirmService: any;
 
   const mockBookings: BookingResponseDto[] = [
-    {
+    getBookingsControllerCreateResponseMock({
       id: 'book-1',
       clubId: 'club-1',
       facilityId: 'fac-1',
@@ -32,14 +33,13 @@ describe('MyBookingsComponent', () => {
       totalPrice: 18.0,
       lightIncluded: true,
       status: BookingStatus.CONFIRMED,
-      createdAt: new Date().toISOString() as any,
       facility: {
         id: 'fac-1',
         name: 'Pista 1 Central',
         sportType: 'PADEL' as any,
       },
-    },
-    {
+    }),
+    getBookingsControllerCreateResponseMock({
       id: 'book-2',
       clubId: 'club-1',
       facilityId: 'fac-2',
@@ -50,13 +50,12 @@ describe('MyBookingsComponent', () => {
       totalPrice: 20.0,
       lightIncluded: false,
       status: BookingStatus.CANCELLED,
-      createdAt: new Date().toISOString() as any,
       facility: {
         id: 'fac-2',
         name: 'Pista 2 Tenis',
         sportType: 'TENNIS' as any,
       },
-    },
+    }),
   ];
 
   beforeEach(async () => {

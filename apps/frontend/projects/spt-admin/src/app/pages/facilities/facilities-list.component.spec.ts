@@ -10,6 +10,7 @@ import {
   FacilitiesService,
   FacilityResponseDto,
   NotificationService,
+  getFacilitiesControllerCreateResponseMock,
 } from '@core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -22,7 +23,7 @@ describe('FacilitiesListComponent', () => {
   let confirmDialogServiceMock: any;
 
   const mockFacilities: FacilityResponseDto[] = [
-    {
+    getFacilitiesControllerCreateResponseMock({
       id: 'fac-1',
       clubId: 'club-1',
       name: 'Pista 1 - Cristal Pádel',
@@ -34,10 +35,8 @@ describe('FacilitiesListComponent', () => {
       minPlayers: 4,
       maxPlayers: 4,
       isActive: true,
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
-    {
+    }),
+    getFacilitiesControllerCreateResponseMock({
       id: 'fac-2',
       clubId: 'club-1',
       name: 'Pista 2 - Tenis Clay',
@@ -49,9 +48,7 @@ describe('FacilitiesListComponent', () => {
       minPlayers: 2,
       maxPlayers: 4,
       isActive: true,
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
+    }),
   ];
 
   beforeEach(async () => {
@@ -151,6 +148,21 @@ describe('FacilitiesListComponent', () => {
   it('debe desactivar la pista al pulsar eliminar', () => {
     component.onDeleteFacility(mockFacilities[0] as any);
     expect(facilitiesServiceSpy.facilitiesControllerRemove).toHaveBeenCalledWith('fac-1');
+  });
+
+  it('debe actualizar reactivamente defaultSlotMinutes al cambiar sportType en el formulario', () => {
+    component.openCreateModal();
+    const sportControl = component.facilityForm.get('sportType');
+    const slotControl = component.facilityForm.get('defaultSlotMinutes');
+
+    sportControl?.setValue(SportType.TENNIS);
+    expect(slotControl?.value).toBe(60);
+
+    sportControl?.setValue(SportType.PADEL);
+    expect(slotControl?.value).toBe(90);
+
+    sportControl?.setValue(SportType.FOOTBALL_7);
+    expect(slotControl?.value).toBe(60);
   });
 });
 

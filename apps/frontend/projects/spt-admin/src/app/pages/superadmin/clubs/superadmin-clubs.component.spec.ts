@@ -7,6 +7,7 @@ import {
   NotificationService,
   SuperAdminClubResponseDto,
   SuperadminClubsService,
+  getSuperAdminClubsControllerCreateResponseMock,
 } from '@core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { of } from 'rxjs';
@@ -19,7 +20,7 @@ describe('SuperAdminClubsComponent', () => {
   let confirmDialogServiceMock: any;
 
   const mockClubs: SuperAdminClubResponseDto[] = [
-    {
+    getSuperAdminClubsControllerCreateResponseMock({
       id: 'club-1',
       name: 'Club Las Rozas',
       slug: 'las-rozas-padel',
@@ -37,9 +38,7 @@ describe('SuperAdminClubsComponent', () => {
       isActive: true,
       facilitiesCount: 6,
       membersCount: 45,
-      createdAt: '2026-10-20T10:00:00.000Z',
-      updatedAt: '2026-10-20T10:00:00.000Z',
-    },
+    }),
   ];
 
   beforeEach(async () => {
