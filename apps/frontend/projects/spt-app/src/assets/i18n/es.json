@@ -155,7 +155,8 @@
     "INFO": "Información",
     "CONFIRM_TITLE": "Confirmación",
     "CONFIRM_DELETE_TITLE": "¿Eliminar elemento?",
-    "CONFIRM_DELETE_MSG": "Esta acción no se puede deshacer. ¿Deseas continuar?"
+    "CONFIRM_DELETE_MSG": "Esta acción no se puede deshacer. ¿Deseas continuar?",
+    "PAGE_REPORT": "{first} - {last} de {totalRecords}"
   },
   "USERS": {
     "PROFILE_TITLE": "Mi Perfil",

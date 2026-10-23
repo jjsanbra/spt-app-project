@@ -23,6 +23,11 @@
       [value]="pricingRules"
       [loading]="loading"
       [stripedRows]="true"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -79,26 +84,28 @@
                 iconOnly
                 rounded
                 variant="text"
-                icon="pi pi-pencil"
                 severity="secondary"
                 (click)="openEditModal(rule)"
                 [pTooltip]="'ADMIN.PRICING.EDIT_BUTTON' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
-              ></button>
+              >
+                <i class="pi pi-pencil"></i>
+              </button>
               <button
                 type="button"
                 pButton
                 iconOnly
                 rounded
                 variant="text"
-                icon="pi pi-trash"
                 severity="danger"
                 (click)="onDeleteRule(rule.id)"
                 [pTooltip]="'ADMIN.PRICING.DELETE_BUTTON' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
-              ></button>
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </td>
         </tr>

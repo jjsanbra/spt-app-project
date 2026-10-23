@@ -55,9 +55,12 @@
     <p-table
       [value]="clubs"
       [loading]="loading"
+      [stripedRows]="true"
       [paginator]="true"
       [rows]="10"
-      [stripedRows]="true"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -106,13 +109,14 @@
                 iconOnly
                 rounded
                 variant="text"
-                icon="pi pi-pencil"
                 severity="secondary"
                 (click)="openEditModal(club)"
                 [pTooltip]="'SUPERADMIN.CLUBS.MODAL.TITLE_EDIT' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
-              ></button>
+              >
+                <i class="pi pi-pencil"></i>
+              </button>
 
               @if (club.isActive) {
                 <button
@@ -121,13 +125,14 @@
                   iconOnly
                   rounded
                   variant="text"
-                  icon="pi pi-ban"
                   severity="danger"
                   (click)="toggleClubStatus(club)"
                   [pTooltip]="'SUPERADMIN.CLUBS.TOOLTIP_DEACTIVATE' | translate"
                   tooltipPosition="top"
                   [showDelay]="1500"
-                ></button>
+                >
+                  <i class="pi pi-ban"></i>
+                </button>
               } @else {
                 <button
                   type="button"
@@ -135,13 +140,14 @@
                   iconOnly
                   rounded
                   variant="text"
-                  icon="pi pi-check"
                   severity="success"
                   (click)="toggleClubStatus(club)"
                   [pTooltip]="'SUPERADMIN.CLUBS.TOOLTIP_ACTIVATE' | translate"
                   tooltipPosition="top"
                   [showDelay]="1500"
-                ></button>
+                >
+                  <i class="pi pi-check"></i>
+                </button>
               }
             </div>
           </td>

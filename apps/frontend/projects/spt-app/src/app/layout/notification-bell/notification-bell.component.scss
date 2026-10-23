@@ -2,13 +2,11 @@
 
 
 .notification-bell-container {
-  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   .bell-button {
-    position: relative;
     width: 2.5rem;
     height: 2.5rem;
     padding: 0;
@@ -30,12 +28,6 @@
 
     .bell-icon {
       font-size: var(--font-size-lg);
-    }
-
-    .bell-badge {
-      position: absolute;
-      top: -0.15rem;
-      right: -0.15rem;
     }
   }
 }

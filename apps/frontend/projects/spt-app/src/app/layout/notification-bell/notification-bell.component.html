@@ -1,25 +1,36 @@
 <div class="notification-bell-container">
-  <!-- Botón de Campana con Badge -->
-  <button
-    type="button"
-    pButton
-    [text]="true"
-    [rounded]="true"
-    severity="secondary"
-    class="bell-button"
-    (click)="op.toggle($event)"
-    [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
-  >
-    <i class="pi pi-bell bell-icon"></i>
-    @if (unreadCount() > 0) {
-      <p-badge
-        class="bell-badge"
-        [value]="unreadCount().toString()"
-        severity="danger"
-        size="small"
-      ></p-badge>
-    }
-  </button>
+  <!-- Botón de Campana con OverlayBadge Oficial PrimeNG -->
+  @if (unreadCount() > 0) {
+    <p-overlay-badge [value]="unreadCount().toString()" severity="danger" size="small">
+      <button
+        type="button"
+        pButton
+        iconOnly
+        [text]="true"
+        [rounded]="true"
+        severity="secondary"
+        class="bell-button"
+        (click)="op.toggle($event)"
+        [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+      >
+        <i class="pi pi-bell bell-icon"></i>
+      </button>
+    </p-overlay-badge>
+  } @else {
+    <button
+      type="button"
+      pButton
+      iconOnly
+      [text]="true"
+      [rounded]="true"
+      severity="secondary"
+      class="bell-button"
+      (click)="op.toggle($event)"
+      [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+    >
+      <i class="pi pi-bell bell-icon"></i>
+    </button>
+  }
 
   <!-- Panel Desplegable (Popover) -->
   <p-popover #op styleClass="notification-popover">

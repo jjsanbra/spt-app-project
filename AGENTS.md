@@ -82,9 +82,16 @@
   - NUNCA utilices etiquetas `<button>` nativas sin las directivas `pButton`, `pInputText`, `pCard`, `pDialog`, `pDataTable`, `pBadge`, `pDropdown`, `pCalendar`, etc. de PrimeNG.
   - Todos los botones en cualquier plantilla de Angular (`apps/frontend/projects/`) deben incluir obligatoriamente el atributo directiva `pButton` (ej: `<button type="button" pButton ...>`), configurando sus atributos semánticos (`severity`, `[text]="true"`, `[outlined]="true"`, `size`, etc.) e importando `ButtonModule` desde `'primeng/button'` en el componente standalone.
   - Esta directiva es obligatoria para todos los desarrollos presentes y futuros.
-- **CONSULTA OBLIGATORIA DEL SERVIDOR MCP DE PRIMENG (`@primeng/mcp`):**
-  - El servidor MCP oficial de PrimeNG está configurado en el workspace (`.mcp.json`).
-  - Ante dudas de sintaxis, directivas `pXxxxxx`, atributos, eventos, slots o ejemplos en PrimeNG v22.1+, el agente debe consultar la documentación oficial a través del MCP (`get_component`, `search`, `get_example`, `validate_usage`) para garantizar un código fidedigno y actualizado.
+- **CONSULTA PREVIA Y OBLIGATORIA DEL SERVIDOR MCP DE PRIMENG EN LA VERSIÓN INSTALADA EN EL PROYECTO (`@primeng/mcp`):**
+  - **REGLA CRÍTICA:** ANTES de implementar, refactorizar o corregir cualquier componente de PrimeNG (`Button`, `Table`, `Badge`, `OverlayBadge`, `Dialog`, `Select`, `Tag`, `Popover`, `Tooltip`, etc.), es OBLIGATORIO consultar previamente la documentación oficial y ejemplos mediante el servidor MCP oficial (`@primeng/mcp`) configurado en `.mcp.json` (`get_component`, `get_example`, `search`).
+  - PROHIBIDO asumir, extrapolar o adivinar sintaxis, selectores, inputs o estructuras de plantillas sin verificar el ejemplo canónico en la documentación de la librería.
+  - **Patrones clave consolidados:**
+    - `ButtonDirective` (`pButton`): Aplica directivas de estilo (`iconOnly`, `rounded`, `variant="text"`). Los iconos deben declararse como hijos explícitos (`<button pButton ...><i class="pi pi-..."></i></button>`).
+    - `OverlayBadge` (`p-overlay-badge` de `OverlayBadgeModule`): Debe encapsular al elemento host (`<p-overlay-badge [value]="..."><button ...></button></p-overlay-badge>`) para evitar recortes por `overflow: hidden` en botones.
+    - `Table` (`p-table`): Paginación estándar con `[paginator]="true" [rows]="10" [rowsPerPageOptions]="[5, 10, 20, 50]" [showCurrentPageReport]="true" [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"`.
+- **PRIORIDAD ABSOLUTA DE COMPONENTES OFICIALES DE LA LIBRERÍA PRIMENG:**
+  - En cada desarrollo, vista o refactorización del frontend, **PRIMA SIEMPRE el uso de componentes y directivas oficiales de PrimeNG** frente a soluciones ad-hoc o maquetaciones manuales.
+  - Si para un caso de uso específico **no existiese un componente o patrón en la librería** que se ajuste a los requerimientos, es **OBLIGATORIO consultar previamente al usuario** exponiendo la situación antes de implementar cualquier solución personalizada o manual.
 
 ---
 

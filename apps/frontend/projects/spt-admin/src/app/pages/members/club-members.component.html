@@ -53,6 +53,11 @@
       [value]="members"
       [loading]="loading"
       [stripedRows]="true"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
     >
       <ng-template #header pTemplate="header">
         <tr>
@@ -129,13 +134,14 @@
                 iconOnly
                 rounded
                 variant="text"
-                icon="pi pi-user-edit"
                 severity="info"
                 (click)="openRoleModal(member)"
                 [pTooltip]="'ADMIN.MEMBERS.DIALOG_ROLE_TITLE' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
-              ></button>
+              >
+                <i class="pi pi-user-edit"></i>
+              </button>
 
               <!-- Pausar / Activar -->
               @if (member.isActive) {
@@ -145,13 +151,14 @@
                   iconOnly
                   rounded
                   variant="text"
-                  icon="pi pi-ban"
                   severity="warn"
                   (click)="toggleMemberStatus(member)"
                   [pTooltip]="'ADMIN.MEMBERS.CONFIRM_DEACTIVATE_TITLE' | translate"
                   tooltipPosition="top"
                   [showDelay]="1500"
-                ></button>
+                >
+                  <i class="pi pi-ban"></i>
+                </button>
               } @else {
                 <button
                   type="button"
@@ -159,13 +166,14 @@
                   iconOnly
                   rounded
                   variant="text"
-                  icon="pi pi-check"
                   severity="success"
                   (click)="toggleMemberStatus(member)"
                   [pTooltip]="'ADMIN.MEMBERS.STATUS_ACTIVE' | translate"
                   tooltipPosition="top"
                   [showDelay]="1500"
-                ></button>
+                >
+                  <i class="pi pi-check"></i>
+                </button>
               }
 
               <!-- Eliminar membresía -->
@@ -175,13 +183,14 @@
                 iconOnly
                 rounded
                 variant="text"
-                icon="pi pi-trash"
                 severity="danger"
                 (click)="confirmRemoveMember(member)"
                 [pTooltip]="'COMMON.DELETE' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
-              ></button>
+              >
+                <i class="pi pi-trash"></i>
+              </button>
             </div>
           </td>
         </tr>

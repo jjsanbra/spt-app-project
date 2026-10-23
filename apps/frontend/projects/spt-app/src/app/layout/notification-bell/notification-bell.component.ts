@@ -3,6 +3,7 @@ import { Component, inject } from '@angular/core';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 import { PopoverModule } from 'primeng/popover';
 import { RealtimeNotificationsService } from '../../core';
 import { NotificationResponseDto } from '../../core/api/model';
@@ -15,6 +16,7 @@ import { NotificationResponseDto } from '../../core/api/model';
     TranslatePipe,
     ButtonModule,
     BadgeModule,
+    OverlayBadgeModule,
     PopoverModule,
   ],
   templateUrl: './notification-bell.component.html',
