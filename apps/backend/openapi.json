@@ -2682,6 +2682,12 @@
             "nullable": true,
             "example": "fac-816b62-92d3-4a9d-86df-87d547e457ec"
           },
+          "facilityName": {
+            "type": "string",
+            "nullable": true,
+            "example": "Pista 1 Central",
+            "description": "Nombre de la pista asociada si la tarifa es de ámbito pista"
+          },
           "sportType": {
             "type": "string",
             "enum": [
@@ -2791,7 +2797,8 @@
           "facilityId": {
             "type": "string",
             "example": "ba916b62-92d3-4a9d-86df-87d547e457ea",
-            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)"
+            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)",
+            "nullable": true
           },
           "sportType": {
             "type": "string",
@@ -2817,7 +2824,8 @@
               "MULTI_SPORT"
             ],
             "example": "PADEL",
-            "description": "Deporte al que aplica la regla tarifaria (null = todos)"
+            "description": "Deporte al que aplica la regla tarifaria (null = todos)",
+            "nullable": true
           },
           "isPeakHour": {
             "type": "boolean",
@@ -2890,7 +2898,8 @@
           "facilityId": {
             "type": "string",
             "example": "ba916b62-92d3-4a9d-86df-87d547e457ea",
-            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)"
+            "description": "ID de instalación específica a la que aplica la tarifa (null = todas)",
+            "nullable": true
           },
           "sportType": {
             "type": "string",
@@ -2916,7 +2925,8 @@
               "MULTI_SPORT"
             ],
             "example": "PADEL",
-            "description": "Deporte al que aplica la regla tarifaria (null = todos)"
+            "description": "Deporte al que aplica la regla tarifaria (null = todos)",
+            "nullable": true
           },
           "isPeakHour": {
             "type": "boolean",

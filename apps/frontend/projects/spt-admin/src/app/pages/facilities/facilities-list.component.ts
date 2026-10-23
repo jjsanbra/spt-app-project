@@ -5,12 +5,18 @@ import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   ConfirmDialogService,
+  CreateFacilityDto,
   CreateFacilityDtoCourtType as CourtType,
   CreateFacilityDtoSportType as SportType,
   CreateFacilityDtoSurfaceType as SurfaceType,
+  CreatePricingRuleDto,
   FacilitiesService,
   FacilityResponseDto,
   NotificationService,
+  PricingRuleResponseDto,
+  PricingService,
+  UpdateFacilityDto,
+  UpdatePricingRuleDto,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -21,6 +27,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
+
+export interface ResolvedBasePrice {
+  memberPrice: number;
+  guestPrice: number;
+  source: 'FACILITY' | 'SPORT' | 'GLOBAL' | 'DEFAULT';
+  sourceLabel: string;
+  severity: 'warn' | 'info' | 'secondary' | 'contrast';
+}
 
 @Component({
   selector: 'app-facilities-list',
@@ -46,12 +60,14 @@ import { TooltipModule } from 'primeng/tooltip';
 export class FacilitiesListComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly facilitiesService = inject(FacilitiesService);
+  private readonly pricingService = inject(PricingService);
   private readonly notify = inject(NotificationService);
   private readonly confirmService = inject(ConfirmDialogService);
   private readonly translate = inject(TranslateService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   facilities: FacilityResponseDto[] = [];
+  pricingRules: PricingRuleResponseDto[] = [];
   loading = false;
   saving = false;
   displayModal = false;
@@ -67,6 +83,10 @@ export class FacilitiesListComponent implements OnInit {
     defaultSlotMinutes: [90, [Validators.required]],
     minPlayers: [4, [Validators.required, Validators.min(1)]],
     maxPlayers: [4, [Validators.required, Validators.min(1)]],
+    customPricing: [false],
+    customMemberPrice: [16, [Validators.min(0)]],
+    customGuestPrice: [24, [Validators.min(0)]],
+    existingPricingRuleId: [null],
   });
 
   get sportOptions() {
@@ -163,6 +183,7 @@ export class FacilitiesListComponent implements OnInit {
       }
     });
     this.loadFacilities();
+    this.loadPricingRules();
   }
 
   loadFacilities(): void {
@@ -182,6 +203,67 @@ export class FacilitiesListComponent implements OnInit {
     });
   }
 
+  loadPricingRules(): void {
+    this.pricingService.pricingControllerFindAll().subscribe({
+      next: (rules) => {
+        this.pricingRules = rules;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        // Silencioso
+      },
+    });
+  }
+
+  resolveBasePrice(facility: FacilityResponseDto): ResolvedBasePrice {
+    // 1. Regla específica de la pista
+    const facilityRule = this.pricingRules.find((r) => r.facilityId === facility.id);
+    if (facilityRule) {
+      return {
+        memberPrice: facilityRule.memberPrice,
+        guestPrice: facilityRule.guestPrice,
+        source: 'FACILITY',
+        sourceLabel: this.translate.instant('ADMIN.PRICING.SOURCE_FACILITY'),
+        severity: 'warn',
+      };
+    }
+
+    // 2. Regla específica del deporte
+    const sportRule = this.pricingRules.find(
+      (r) => !r.facilityId && r.sportType === facility.sportType,
+    );
+    if (sportRule) {
+      return {
+        memberPrice: sportRule.memberPrice,
+        guestPrice: sportRule.guestPrice,
+        source: 'SPORT',
+        sourceLabel: this.translate.instant('ADMIN.PRICING.SOURCE_SPORT'),
+        severity: 'info',
+      };
+    }
+
+    // 3. Regla global del club
+    const globalRule = this.pricingRules.find((r) => !r.facilityId && !r.sportType);
+    if (globalRule) {
+      return {
+        memberPrice: globalRule.memberPrice,
+        guestPrice: globalRule.guestPrice,
+        source: 'GLOBAL',
+        sourceLabel: this.translate.instant('ADMIN.PRICING.SOURCE_GLOBAL'),
+        severity: 'secondary',
+      };
+    }
+
+    // 4. Fallback por defecto si no hay tarifas creadas en el club
+    return {
+      memberPrice: 16.0,
+      guestPrice: 22.0,
+      source: 'DEFAULT',
+      sourceLabel: this.translate.instant('ADMIN.PRICING.SOURCE_DEFAULT'),
+      severity: 'contrast',
+    };
+  }
+
   openCreateModal(): void {
     this.isEditing = false;
     this.selectedFacilityId = null;
@@ -194,6 +276,10 @@ export class FacilitiesListComponent implements OnInit {
       defaultSlotMinutes: 90,
       minPlayers: 4,
       maxPlayers: 4,
+      customPricing: false,
+      customMemberPrice: 16,
+      customGuestPrice: 24,
+      existingPricingRuleId: null,
     });
     this.displayModal = true;
     this.cdr.markForCheck();
@@ -202,6 +288,10 @@ export class FacilitiesListComponent implements OnInit {
   openEditModal(facility: FacilityResponseDto): void {
     this.isEditing = true;
     this.selectedFacilityId = facility.id;
+
+    const existingRule = this.pricingRules.find((r) => r.facilityId === facility.id);
+    const resolved = this.resolveBasePrice(facility);
+
     this.facilityForm.patchValue({
       name: facility.name,
       sportType: facility.sportType,
@@ -211,6 +301,10 @@ export class FacilitiesListComponent implements OnInit {
       defaultSlotMinutes: facility.defaultSlotMinutes,
       minPlayers: facility.minPlayers,
       maxPlayers: facility.maxPlayers,
+      customPricing: !!existingRule,
+      customMemberPrice: existingRule ? existingRule.memberPrice : resolved.memberPrice,
+      customGuestPrice: existingRule ? existingRule.guestPrice : resolved.guestPrice,
+      existingPricingRuleId: existingRule ? existingRule.id : null,
     });
     this.displayModal = true;
     this.cdr.markForCheck();
@@ -226,11 +320,63 @@ export class FacilitiesListComponent implements OnInit {
     this.cdr.markForCheck();
     const formValue = this.facilityForm.value;
 
+    const facilityPayload: CreateFacilityDto = {
+      name: formValue.name,
+      sportType: formValue.sportType,
+      courtType: formValue.courtType,
+      surfaceType: formValue.surfaceType,
+      hasLighting: formValue.hasLighting,
+      defaultSlotMinutes: formValue.defaultSlotMinutes,
+      minPlayers: formValue.minPlayers,
+      maxPlayers: formValue.maxPlayers,
+    };
+
+    const handlePricingSync = (facilityId: string) => {
+      if (formValue.customPricing) {
+        if (formValue.existingPricingRuleId) {
+          const updatePricingDto: UpdatePricingRuleDto = {
+            name: `Tarifa ${formValue.name}`,
+            memberPrice: formValue.customMemberPrice,
+            guestPrice: formValue.customGuestPrice,
+          };
+          this.pricingService
+            .pricingControllerUpdate(formValue.existingPricingRuleId, updatePricingDto)
+            .subscribe({
+              next: () => this.loadPricingRules(),
+            });
+        } else {
+          const createPricingDto: CreatePricingRuleDto = {
+            name: `Tarifa ${formValue.name}`,
+            facilityId,
+            sportType: formValue.sportType,
+            memberPrice: formValue.customMemberPrice,
+            guestPrice: formValue.customGuestPrice,
+            daysOfWeek: [1, 2, 3, 4, 5, 6, 0],
+            isPeakHour: false,
+            priority: 1,
+          };
+          this.pricingService
+            .pricingControllerCreate(createPricingDto)
+            .subscribe({
+              next: () => this.loadPricingRules(),
+            });
+        }
+      } else if (formValue.existingPricingRuleId) {
+        this.pricingService
+          .pricingControllerRemove(formValue.existingPricingRuleId)
+          .subscribe({
+            next: () => this.loadPricingRules(),
+          });
+      }
+    };
+
     if (this.isEditing && this.selectedFacilityId) {
+      const updateFacilityPayload: UpdateFacilityDto = facilityPayload;
       this.facilitiesService
-        .facilitiesControllerUpdate(this.selectedFacilityId, formValue)
+        .facilitiesControllerUpdate(this.selectedFacilityId, updateFacilityPayload)
         .subscribe({
           next: () => {
+            handlePricingSync(this.selectedFacilityId!);
             this.saving = false;
             this.displayModal = false;
             this.notify.success('ADMIN.FACILITIES.SUCCESS_UPDATE');
@@ -244,8 +390,9 @@ export class FacilitiesListComponent implements OnInit {
           },
         });
     } else {
-      this.facilitiesService.facilitiesControllerCreate(formValue).subscribe({
-        next: () => {
+      this.facilitiesService.facilitiesControllerCreate(facilityPayload).subscribe({
+        next: (createdFacility) => {
+          handlePricingSync(createdFacility.id);
           this.saving = false;
           this.displayModal = false;
           this.notify.success('ADMIN.FACILITIES.SUCCESS_CREATE');

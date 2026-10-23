@@ -184,24 +184,39 @@ export class FacilitiesAvailabilityService {
     endHour: string,
     isMember: boolean,
   ): { price: number; isPeakHour: boolean; lightSurcharge: number } {
-    for (const rule of rules) {
-      // 1. Coincidencia de instalación o deporte
-      if (rule.facilityId && rule.facilityId !== facilityId) continue;
-      if (rule.sportType && rule.sportType !== sportType) continue;
+    const applicableRules = rules
+      .filter((rule) => {
+        // 1. Coincidencia de instalación o deporte
+        if (rule.facilityId && rule.facilityId !== facilityId) return false;
+        if (rule.sportType && rule.sportType !== sportType) return false;
 
-      // 2. Coincidencia de día de la semana
-      if (rule.daysOfWeek && rule.daysOfWeek.length > 0) {
-        if (!rule.daysOfWeek.includes(dayOfWeek)) continue;
-      }
-
-      // 3. Coincidencia horaria
-      if (rule.startTime && rule.endTime) {
-        if (startHour < rule.startTime || startHour >= rule.endTime) {
-          continue;
+        // 2. Coincidencia de día de la semana
+        if (rule.daysOfWeek && rule.daysOfWeek.length > 0) {
+          if (!rule.daysOfWeek.includes(dayOfWeek)) return false;
         }
-      }
 
-      // Regla encontrada
+        // 3. Coincidencia horaria
+        if (rule.startTime && rule.endTime) {
+          if (startHour < rule.startTime || startHour >= rule.endTime) {
+            return false;
+          }
+        }
+
+        return true;
+      })
+      .sort((a, b) => {
+        const getScopeWeight = (r: typeof a) => {
+          if (r.facilityId) return 3;
+          if (r.sportType) return 2;
+          return 1;
+        };
+        const weightDiff = getScopeWeight(b) - getScopeWeight(a);
+        if (weightDiff !== 0) return weightDiff;
+        return (b.priority ?? 1) - (a.priority ?? 1);
+      });
+
+    if (applicableRules.length > 0) {
+      const rule = applicableRules[0];
       const price = isMember ? Number(rule.memberPrice) : Number(rule.guestPrice);
       return {
         price,

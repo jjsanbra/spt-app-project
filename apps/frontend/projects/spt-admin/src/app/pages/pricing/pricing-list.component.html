@@ -32,6 +32,7 @@
       <ng-template #header pTemplate="header">
         <tr>
           <th>{{ 'ADMIN.PRICING.NAME' | translate }}</th>
+          <th>{{ 'ADMIN.PRICING.COL_SCOPE' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.DAYS' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.HOURS' | translate }}</th>
           <th>{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</th>
@@ -49,6 +50,10 @@
             @if (rule.isPeakHour) {
               <p-tag [value]="'ADMIN.PRICING.PEAK_HOUR' | translate" severity="danger" class="ml-2"></p-tag>
             }
+          </td>
+          <td>
+            @let badge = getScopeBadge(rule);
+            <p-tag [value]="badge.label" [severity]="badge.severity" [icon]="badge.icon"></p-tag>
           </td>
           <td>
             <div class="days-badges">
@@ -113,7 +118,7 @@
 
       <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
-          <td colspan="8" class="text-center p-4 text-muted">
+          <td colspan="9" class="text-center p-4 text-muted">
             {{ 'ADMIN.PRICING.EMPTY' | translate }}
           </td>
         </tr>
@@ -144,6 +149,57 @@
         placeholder="Ej. Tarifa Fines de Semana Punta"
       />
     </div>
+
+    <!-- Ámbito de la tarifa -->
+    <div class="form-group">
+      <label for="pricing-scope" class="form-label">{{ 'ADMIN.PRICING.FIELD_SCOPE' | translate }}</label>
+      <p-select
+        inputId="pricing-scope"
+        [options]="scopeOptions"
+        formControlName="scope"
+        [fluid]="true"
+        optionLabel="label"
+        optionValue="value"
+        [appendTo]="'body'"
+        scrollHeight="200px"
+      ></p-select>
+    </div>
+
+    <!-- Selector de deporte condicional -->
+    @if (pricingForm.get('scope')?.value === 'SPORT') {
+      <div class="form-group">
+        <label for="pricing-sport" class="form-label">{{ 'ADMIN.PRICING.FIELD_SPORT' | translate }}</label>
+        <p-select
+          inputId="pricing-sport"
+          [options]="sportOptions"
+          formControlName="sportType"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          scrollHeight="240px"
+          [placeholder]="'ADMIN.PRICING.FIELD_SPORT_PLACEHOLDER' | translate"
+        ></p-select>
+      </div>
+    }
+
+    <!-- Selector de pista condicional -->
+    @if (pricingForm.get('scope')?.value === 'FACILITY') {
+      <div class="form-group">
+        <label for="pricing-facility" class="form-label">{{ 'ADMIN.PRICING.FIELD_FACILITY' | translate }}</label>
+        <p-select
+          inputId="pricing-facility"
+          [options]="facilityOptions"
+          formControlName="facilityId"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          scrollHeight="240px"
+          [placeholder]="'ADMIN.PRICING.FIELD_FACILITY_PLACEHOLDER' | translate"
+        ></p-select>
+      </div>
+    }
 
     <!-- Horas Inicio / Fin -->
     <div class="form-row">

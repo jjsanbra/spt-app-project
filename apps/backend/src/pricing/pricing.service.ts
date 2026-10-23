@@ -14,6 +14,9 @@ export class PricingService {
         clubId,
         ...(facilityId && { facilityId }),
       },
+      include: {
+        facility: { select: { name: true } },
+      },
       orderBy: [{ priority: 'desc' }, { createdAt: 'desc' }],
     });
 
@@ -23,6 +26,9 @@ export class PricingService {
   async findOne(clubId: string, id: string): Promise<PricingRuleResponseDto> {
     const rule = await this.prisma.pricingRule.findFirst({
       where: { id, clubId },
+      include: {
+        facility: { select: { name: true } },
+      },
     });
 
     if (!rule) {
@@ -47,6 +53,9 @@ export class PricingService {
         guestPrice: dto.guestPrice,
         lightSurcharge: dto.lightSurcharge ?? 0.0,
         priority: dto.priority ?? 1,
+      },
+      include: {
+        facility: { select: { name: true } },
       },
     });
 
@@ -75,6 +84,9 @@ export class PricingService {
         ...(dto.lightSurcharge !== undefined && { lightSurcharge: dto.lightSurcharge }),
         ...(dto.priority !== undefined && { priority: dto.priority }),
       },
+      include: {
+        facility: { select: { name: true } },
+      },
     });
 
     return this.mapPricingRule(rule);
@@ -98,6 +110,7 @@ export class PricingService {
       id: rule.id,
       clubId: rule.clubId,
       facilityId: rule.facilityId,
+      facilityName: rule.facility?.name ?? null,
       sportType: rule.sportType,
       name: rule.name,
       isPeakHour: rule.isPeakHour,

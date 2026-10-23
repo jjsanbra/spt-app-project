@@ -30,21 +30,24 @@ export class CreatePricingRuleDto {
   name: string;
 
   @ApiPropertyOptional({
+    type: String,
     example: 'ba916b62-92d3-4a9d-86df-87d547e457ea',
     description: 'ID de instalación específica a la que aplica la tarifa (null = todas)',
+    nullable: true,
   })
   @IsUUID('4', { message: 'facilityId debe ser un UUID válido' })
   @IsOptional()
-  facilityId?: string;
+  facilityId?: string | null;
 
   @ApiPropertyOptional({
     enum: SportType,
     example: SportType.PADEL,
     description: 'Deporte al que aplica la regla tarifaria (null = todos)',
+    nullable: true,
   })
   @IsEnum(SportType, { message: 'El deporte no es válido' })
   @IsOptional()
-  sportType?: SportType;
+  sportType?: SportType | null;
 
   @ApiPropertyOptional({
     example: false,

@@ -15,6 +15,14 @@ export class PricingRuleResponseDto {
   })
   facilityId?: string | null;
 
+  @ApiPropertyOptional({
+    type: String,
+    nullable: true,
+    example: 'Pista 1 Central',
+    description: 'Nombre de la pista asociada si la tarifa es de ámbito pista',
+  })
+  facilityName?: string | null;
+
   @ApiPropertyOptional({ enum: SportType, example: SportType.PADEL, nullable: true })
   sportType?: SportType | null;
 

@@ -60,6 +60,10 @@
       facilityName: string;
     }
     ```
+- **PROHIBICIÓN ESTRICTA DE TIPOS `any` EN PAYLOADS Y RESPUESTAS (TIPADO RIGUROSO CON DTOs DE ORVAL):**
+  - NUNCA utilices `: any` ni aserciones de tipo laxas (`as any`) para construir payloads de petición (`const payload: any = ...`), capturar respuestas de API o declarar entidades de dominio.
+  - Toda petición de creación o actualización enviada a un servicio de la API (`facilitiesService`, `pricingService`, `bookingsService`, `clubsMembersService`, etc.) debe estar tipada obligatoria y explícitamente con su DTO generado por Orval e importado desde `@core` (`CreateFacilityDto`, `UpdateFacilityDto`, `CreatePricingRuleDto`, `UpdatePricingRuleDto`, `CreateBookingDto`, etc.).
+  - Si un payload requiere enviar campos anulables (ej: `facilityId: null` para desvincular una pista o indicar ámbito global), declara obligatoriamente `nullable: true` en el decorador `@ApiPropertyOptional` del backend NestJS para que Orval genere el tipo exacto (`string | null`) y nunca sea necesario recurrir a `any`.
 - **USO OBLIGATORIO DE GENERADORES MOCK DE ORVAL EN TESTS (`*.spec.ts`):**
   - NUNCA crees objetos literales manuales incompletos para simular entidades o respuestas de la API en los tests unitarios.
   - Orval genera funciones mock basadas en Faker (`get<Controller><Endpoint>ResponseMock`) que se exportan centralizadamente desde `@core`.

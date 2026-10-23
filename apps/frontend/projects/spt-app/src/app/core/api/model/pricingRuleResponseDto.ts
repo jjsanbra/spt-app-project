@@ -12,6 +12,11 @@ export interface PricingRuleResponseDto {
   clubId: string;
   /** @nullable */
   facilityId?: string | null;
+  /**
+     * Nombre de la pista asociada si la tarifa es de ámbito pista
+     * @nullable
+     */
+  facilityName?: string | null;
   /** @nullable */
   sportType?: PricingRuleResponseDtoSportType;
   name: string;

@@ -224,7 +224,12 @@
       "SURFACE_CLAY": "Tierra Batida (Clay)",
       "SURFACE_CONCRETE": "Hormigón / Cemento",
       "SURFACE_RESIN": "Resina",
-      "SURFACE_PARQUET": "Parquet"
+      "COURT_TYPE_PARQUET": "Parquet",
+      "COL_BASE_PRICE": "Tarifa Base",
+      "PRICE_MEMBER_GUEST": "{{member}}€ / {{guest}}€",
+      "CUSTOM_PRICE_ENABLED": "Establecer tarifa base específica para esta pista",
+      "CUSTOM_PRICE_HINT": "Si se desmarca, la pista heredará automáticamente la tarifa de su deporte o la tarifa global del club.",
+      "CUSTOM_PRICE_CREATED": "Tarifa específica de pista configurada correctamente"
     },
     "BLOCKS": {
       "TITLE": "Bloqueos Temporales de Pista",
@@ -270,6 +275,19 @@
       "SUCCESS_CREATE": "Tarifa creada con éxito",
       "SUCCESS_UPDATE": "Tarifa actualizada con éxito",
       "SUCCESS_DELETE": "Tarifa eliminada con éxito",
+      "COL_SCOPE": "Aplica a",
+      "FIELD_SCOPE": "Ámbito de la Tarifa",
+      "SCOPE_GLOBAL": "Todo el Club (Global)",
+      "SCOPE_SPORT": "Por Deporte",
+      "SCOPE_FACILITY": "Pista Específica",
+      "FIELD_SPORT": "Deporte Asociado",
+      "FIELD_SPORT_PLACEHOLDER": "Selecciona el deporte",
+      "FIELD_FACILITY": "Pista Asociada",
+      "FIELD_FACILITY_PLACEHOLDER": "Selecciona la pista",
+      "SOURCE_FACILITY": "Pista",
+      "SOURCE_SPORT": "Deporte",
+      "SOURCE_GLOBAL": "Club",
+      "SOURCE_DEFAULT": "Base",
       "DAYS_OF_WEEK": {
         "1": "Lunes",
         "2": "Martes",

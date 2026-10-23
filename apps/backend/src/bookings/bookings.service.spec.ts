@@ -105,6 +105,61 @@ describe('BookingsService', () => {
       expect(mockPrisma.$transaction).toHaveBeenCalled();
     });
 
+    it('debe dar precedencia a la tarifa específica de pista sobre la regla global', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+
+      const globalRule = {
+        id: 'rule-global',
+        clubId: 'club-1',
+        facilityId: null,
+        sportType: null,
+        daysOfWeek: [],
+        memberPrice: 10.0,
+        guestPrice: 15.0,
+        priority: 5, // Prioridad más alta, pero ámbito global
+      };
+
+      const facilityRule = {
+        id: 'rule-facility',
+        clubId: 'club-1',
+        facilityId: 'fac-1',
+        sportType: SportType.PADEL,
+        daysOfWeek: [],
+        memberPrice: 30.0,
+        guestPrice: 40.0,
+        priority: 1, // Prioridad menor, pero ámbito pista
+      };
+
+      let createdBookingData: any = null;
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        const txMock = {
+          booking: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockImplementation(({ data }) => {
+              createdBookingData = data;
+              return Promise.resolve({ ...mockBooking, totalPrice: data.totalPrice });
+            }),
+          },
+          // Devolvemos la global primero en el array
+          pricingRule: { findMany: jest.fn().mockResolvedValue([globalRule, facilityRule]) },
+          clubMembership: { findFirst: jest.fn().mockResolvedValue({ id: 'mem-1', isActive: true }) }, // Socio
+          payment: { create: jest.fn().mockResolvedValue({ id: 'pay-1' }) },
+        };
+        return callback(txMock);
+      });
+
+      await service.create('club-1', 'user-1', {
+        facilityId: 'fac-1',
+        startTime: '2026-10-25T10:00:00.000Z',
+        endTime: '2026-10-25T11:30:00.000Z',
+        lightIncluded: false,
+      });
+
+      // Debe haber tomado 30.0 de la regla de pista (no los 10.0 de la global)
+      expect(createdBookingData.totalPrice).toBe(30.0);
+    });
+
     it('debe crear una partida abierta (OPEN) registrando al anfitrión en slot 1 y su pago individual', async () => {
       mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
       mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);

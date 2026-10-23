@@ -8,8 +8,9 @@
 
 /**
  * Deporte al que aplica la regla tarifaria (null = todos)
+ * @nullable
  */
-export type CreatePricingRuleDtoSportType = typeof CreatePricingRuleDtoSportType[keyof typeof CreatePricingRuleDtoSportType];
+export type CreatePricingRuleDtoSportType = typeof CreatePricingRuleDtoSportType[keyof typeof CreatePricingRuleDtoSportType] | null;
 
 
 export const CreatePricingRuleDtoSportType = {

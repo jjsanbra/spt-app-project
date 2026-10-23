@@ -10,9 +10,15 @@ import type { CreatePricingRuleDtoSportType } from './createPricingRuleDtoSportT
 export interface CreatePricingRuleDto {
   /** Nombre descriptivo de la regla tarifaria */
   name: string;
-  /** ID de instalación específica a la que aplica la tarifa (null = todas) */
-  facilityId?: string;
-  /** Deporte al que aplica la regla tarifaria (null = todos) */
+  /**
+     * ID de instalación específica a la que aplica la tarifa (null = todas)
+     * @nullable
+     */
+  facilityId?: string | null;
+  /**
+     * Deporte al que aplica la regla tarifaria (null = todos)
+     * @nullable
+     */
   sportType?: CreatePricingRuleDtoSportType;
   /** Indica si se considera hora punta (alta demanda) */
   isPeakHour?: boolean;

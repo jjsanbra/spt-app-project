@@ -96,19 +96,33 @@ export class BookingsService {
       let basePrice = isMember ? 16.0 : 22.0;
       let lightSurcharge = 0;
 
-      for (const rule of pricingRules) {
-        if (rule.facilityId && rule.facilityId !== facility.id) continue;
-        if (rule.sportType && rule.sportType !== facility.sportType) continue;
-        if (rule.daysOfWeek && rule.daysOfWeek.length > 0 && !rule.daysOfWeek.includes(dayOfWeek)) continue;
-        if (rule.startTime && rule.endTime) {
-          if (startHour < rule.startTime || startHour >= rule.endTime) continue;
-        }
+      const applicableRules = pricingRules
+        .filter((rule) => {
+          if (rule.facilityId && rule.facilityId !== facility.id) return false;
+          if (rule.sportType && rule.sportType !== facility.sportType) return false;
+          if (rule.daysOfWeek && rule.daysOfWeek.length > 0 && !rule.daysOfWeek.includes(dayOfWeek)) return false;
+          if (rule.startTime && rule.endTime) {
+            if (startHour < rule.startTime || startHour >= rule.endTime) return false;
+          }
+          return true;
+        })
+        .sort((a, b) => {
+          const getScopeWeight = (r: typeof a) => {
+            if (r.facilityId) return 3;
+            if (r.sportType) return 2;
+            return 1;
+          };
+          const weightDiff = getScopeWeight(b) - getScopeWeight(a);
+          if (weightDiff !== 0) return weightDiff;
+          return (b.priority ?? 1) - (a.priority ?? 1);
+        });
 
-        basePrice = isMember ? Number(rule.memberPrice) : Number(rule.guestPrice);
+      if (applicableRules.length > 0) {
+        const matchedRule = applicableRules[0];
+        basePrice = isMember ? Number(matchedRule.memberPrice) : Number(matchedRule.guestPrice);
         if (dto.lightIncluded && facility.hasLighting) {
-          lightSurcharge = Number(rule.lightSurcharge || 0);
+          lightSurcharge = Number(matchedRule.lightSurcharge || 0);
         }
-        break;
       }
 
       const totalPrice = basePrice + lightSurcharge;
