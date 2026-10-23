@@ -174,5 +174,91 @@ describe('ClubMembersComponent', () => {
     expect(component.getRoleSeverity(ClubRole.STAFF)).toBe('warn');
     expect(component.getRoleSeverity(ClubRole.MEMBER)).toBe('secondary');
   });
+
+  it('debe filtrar por búsqueda y por rol', () => {
+    component.searchTerm = 'Laura';
+    component.onSearchChange();
+    expect(mockMembersService.clubsMembersControllerFindAll).toHaveBeenCalledWith({
+      role: undefined,
+      search: 'Laura',
+    });
+
+    component.onRoleFilterChange({ value: ClubRole.ADMIN });
+    expect(component.selectedRoleFilter).toBe(ClubRole.ADMIN);
+    expect(mockMembersService.clubsMembersControllerFindAll).toHaveBeenCalledWith({
+      role: ClubRole.ADMIN,
+      search: 'Laura',
+    });
+
+    expect(component.filterRoleOptions.length).toBeGreaterThan(0);
+  });
+
+  it('debe manejar error al cargar miembros', () => {
+    mockMembersService.clubsMembersControllerFindAll.mockReturnValue(throwError(() => new Error('Error')));
+    component.loadMembers();
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+    expect(component.loading).toBe(false);
+  });
+
+  it('no debe enviar invitación si el formulario es inválido', () => {
+    component.inviteForm.setValue({ email: '', role: null, memberNumber: '' });
+    component.submitInvite();
+    expect(mockMembersService.clubsMembersControllerInvite).not.toHaveBeenCalled();
+  });
+
+  it('debe manejar errores 409 y 500 al invitar', () => {
+    mockMembersService.clubsMembersControllerInvite.mockReturnValue(throwError(() => ({ status: 409 })));
+    component.inviteForm.setValue({ email: 'duplicado@club.com', role: ClubRole.MEMBER, memberNumber: '' });
+    component.submitInvite();
+    expect(mockNotify.error).toHaveBeenCalledWith('El usuario ya pertenece a este club');
+
+    mockMembersService.clubsMembersControllerInvite.mockReturnValue(throwError(() => ({ status: 500 })));
+    component.submitInvite();
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+  });
+
+  it('debe cerrar la modal de rol limpiando la selección', () => {
+    component.openRoleModal(mockMember);
+    expect(component.displayRoleModal).toBe(true);
+    component.closeRoleModal();
+    expect(component.displayRoleModal).toBe(false);
+    expect(component.selectedMember).toBeNull();
+  });
+
+  it('no debe enviar cambio de rol si no hay miembro seleccionado o form inválido', () => {
+    component.selectedMember = null;
+    component.submitRoleChange();
+    expect(mockMembersService.clubsMembersControllerUpdateRole).not.toHaveBeenCalled();
+  });
+
+  it('debe manejar error 500 al actualizar rol', () => {
+    mockMembersService.clubsMembersControllerUpdateRole.mockReturnValue(throwError(() => ({ status: 500 })));
+    component.openRoleModal(mockMember);
+    component.roleForm.patchValue({ role: ClubRole.ADMIN });
+    component.submitRoleChange();
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+  });
+
+  it('debe manejar errores 400 y 500 al cambiar estado', () => {
+    mockMembersService.clubsMembersControllerUpdateStatus.mockReturnValue(throwError(() => ({ status: 400 })));
+    component.toggleMemberStatus({ ...mockMember, isActive: false });
+    expect(mockNotify.error).toHaveBeenCalledWith('ADMIN.MEMBERS.ERROR_OWNER_PROTECTED');
+
+    mockMembersService.clubsMembersControllerUpdateStatus.mockReturnValue(throwError(() => ({ status: 500 })));
+    component.toggleMemberStatus({ ...mockMember, isActive: false });
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+  });
+
+  it('debe manejar errores 400 y 500 al dar de baja miembro', () => {
+    mockConfirm.confirmDelete.mockImplementation((opts: any) => opts.onAccept());
+
+    mockMembersService.clubsMembersControllerRemove.mockReturnValue(throwError(() => ({ status: 400 })));
+    component.confirmRemoveMember(mockMember);
+    expect(mockNotify.error).toHaveBeenCalledWith('ADMIN.MEMBERS.ERROR_OWNER_PROTECTED');
+
+    mockMembersService.clubsMembersControllerRemove.mockReturnValue(throwError(() => ({ status: 500 })));
+    component.confirmRemoveMember(mockMember);
+    expect(mockNotify.error).toHaveBeenCalledWith('ERRORS.SERVER_ERROR');
+  });
 });
 
