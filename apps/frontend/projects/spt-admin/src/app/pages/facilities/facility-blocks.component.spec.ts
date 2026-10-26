@@ -39,6 +39,7 @@ describe('FacilityBlocksComponent', () => {
 
   beforeEach(async () => {
     facilitiesServiceSpy = {
+      facilitiesControllerFindAll: vi.fn().mockReturnValue(of([mockFacility])),
       facilitiesControllerFindOne: vi.fn().mockReturnValue(of(mockFacility)),
       facilitiesControllerFindBlocks: vi.fn().mockReturnValue(of(mockBlocks)),
       facilitiesControllerCreateBlock: vi.fn().mockReturnValue(of(mockBlocks[0])),
@@ -81,7 +82,7 @@ describe('FacilityBlocksComponent', () => {
 
   it('debe crear el componente y cargar la información de la pista y bloqueos', () => {
     expect(component).toBeTruthy();
-    expect(facilitiesServiceSpy.facilitiesControllerFindOne).toHaveBeenCalledWith('fac-1');
+    expect(facilitiesServiceSpy.facilitiesControllerFindAll).toHaveBeenCalled();
     expect(facilitiesServiceSpy.facilitiesControllerFindBlocks).toHaveBeenCalledWith('fac-1');
     expect(component.facilityName).toBe('Pista 1 Central');
     expect(component.blocks).toHaveLength(1);
@@ -169,5 +170,85 @@ describe('FacilityBlocksComponent', () => {
     );
     component.onRemoveBlock('block-1');
     expect(notifySpy).toHaveBeenCalledWith('ERRORS.GENERIC');
+  });
+
+  it('debe permitir cambiar de pista seleccionada y recargar los bloqueos asociados', () => {
+    const secondFacility = { ...mockFacility, id: 'fac-2', name: 'Pista 2 Cristal' };
+    component.facilities = [mockFacility, secondFacility];
+
+    component.onFacilityChange('fac-2');
+
+    expect(component.facilityId).toBe('fac-2');
+    expect(component.facilityName).toBe('Pista 2 Cristal');
+    expect(facilitiesServiceSpy.facilitiesControllerFindBlocks).toHaveBeenCalledWith('fac-2');
+
+    // Early returns
+    component.onFacilityChange('fac-2'); // Mismo id
+    component.onFacilityChange(''); // Id vacío
+  });
+
+  it('debe cargar la primera pista por defecto cuando no hay id en la ruta', () => {
+    const route = TestBed.inject(ActivatedRoute);
+    vi.spyOn(route.snapshot.paramMap, 'get').mockReturnValue(null);
+
+    component.ngOnInit();
+
+    expect(component.facilityId).toBe('fac-1');
+    expect(component.facilityName).toBe('Pista 1 Central');
+  });
+
+  it('debe gestionar lista vacía de pistas cuando no hay id en la ruta', () => {
+    const route = TestBed.inject(ActivatedRoute);
+    vi.spyOn(route.snapshot.paramMap, 'get').mockReturnValue(null);
+    facilitiesServiceSpy.facilitiesControllerFindAll.mockReturnValue(of([]));
+
+    component.ngOnInit();
+
+    expect(component.facilityId).toBe('');
+    expect(component.loading).toBe(false);
+  });
+
+  it('debe manejar error al cargar pistas en ngOnInit', () => {
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
+    facilitiesServiceSpy.facilitiesControllerFindAll.mockReturnValue(
+      throwError(() => new Error('Error al cargar pistas')),
+    );
+
+    component.ngOnInit();
+
+    expect(notifySpy).toHaveBeenCalledWith('ERRORS.NETWORK');
+    expect(component.loading).toBe(false);
+  });
+
+  it('debe llamar a loadFacilityInfo y actualizar el nombre de la pista', () => {
+    component.facilityId = 'fac-1';
+    component.loadFacilityInfo();
+
+    expect(facilitiesServiceSpy.facilitiesControllerFindOne).toHaveBeenCalledWith('fac-1');
+    expect(component.facilityName).toBe('Pista 1 Central');
+
+    component.facilityId = '';
+    component.loadFacilityInfo(); // early return si no hay facilityId
+  });
+
+  it('debe vaciar bloques si facilityId está vacío en loadBlocks', () => {
+    component.facilityId = '';
+    component.loadBlocks();
+
+    expect(component.blocks).toEqual([]);
+    expect(component.loading).toBe(false);
+  });
+
+  it('debe manejar error al cargar bloques en loadBlocks', () => {
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
+    facilitiesServiceSpy.facilitiesControllerFindBlocks.mockReturnValue(
+      throwError(() => new Error('Error al cargar bloques')),
+    );
+
+    component.facilityId = 'fac-1';
+    component.loadBlocks();
+
+    expect(notifySpy).toHaveBeenCalledWith('ERRORS.NETWORK');
+    expect(component.loading).toBe(false);
   });
 });

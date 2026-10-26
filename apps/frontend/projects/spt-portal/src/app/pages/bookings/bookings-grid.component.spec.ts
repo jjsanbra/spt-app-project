@@ -1,8 +1,10 @@
+import { signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
+  AuthService,
   BookingsService,
   FacilitiesService,
   FacilityAvailabilityResponseDto,
@@ -19,6 +21,11 @@ describe('BookingsGridComponent', () => {
   let mockFacilitiesService: any;
   let mockBookingsService: any;
   let mockNotify: any;
+  let mockAuthService: {
+    isOwnerOrSuperAdmin: ReturnType<typeof signal<boolean>>;
+    activeClub: ReturnType<typeof signal<any>>;
+    currentUser: ReturnType<typeof signal<any>>;
+  };
 
   const mockAvailability: FacilityAvailabilityResponseDto[] = [
     {
@@ -60,6 +67,12 @@ describe('BookingsGridComponent', () => {
       info: vi.fn(),
     };
 
+    mockAuthService = {
+      isOwnerOrSuperAdmin: signal(false),
+      activeClub: signal({ clubId: 'club-1', role: 'MEMBER' }),
+      currentUser: signal({ id: 'u1', isSuperAdmin: false }),
+    };
+
     await TestBed.configureTestingModule({
       imports: [BookingsGridComponent],
       providers: [
@@ -69,6 +82,7 @@ describe('BookingsGridComponent', () => {
         { provide: FacilitiesService, useValue: mockFacilitiesService },
         { provide: BookingsService, useValue: mockBookingsService },
         { provide: NotificationService, useValue: mockNotify },
+        { provide: AuthService, useValue: mockAuthService },
       ],
     }).compileComponents();
 
@@ -391,6 +405,48 @@ describe('BookingsGridComponent', () => {
 
       expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
       expect(component.displayConfirmModal).toBe(false);
+    });
+
+    it('para OWNER o SUPER_ADMIN, debe permitir reservar con menos de 2 horas de antelación si no está en el pasado', () => {
+      mockAuthService.isOwnerOrSuperAdmin.set(true);
+      const todayStr = component.getTodayDateString();
+      const now = new Date();
+      // Franja que empieza dentro de 30 minutos (menos de 2 horas)
+      const inThirtyMin = new Date(now.getTime() + 30 * 60 * 1000);
+      const inThirtyMinStr = `${String(inThirtyMin.getHours()).padStart(2, '0')}:${String(inThirtyMin.getMinutes()).padStart(2, '0')}`;
+
+      expect(component.isSlotBlockedByCutoff(todayStr, inThirtyMinStr)).toBe(false);
+    });
+
+    it('para OWNER o SUPER_ADMIN, debe bloquear si el slot está en el pasado y notificar ERR_PAST_DATE en selectSlot', () => {
+      mockAuthService.isOwnerOrSuperAdmin.set(true);
+      mockNotify.warn = vi.fn();
+      const facility = component.facilitiesAvailability[0];
+      const slot = facility.slots[0];
+
+      // Fecha pasada
+      expect(component.isSlotBlockedByCutoff('2020-01-01', '10:00')).toBe(true);
+
+      component.selectSlot(facility, slot, '2020-01-01');
+      expect(mockNotify.warn).toHaveBeenCalledWith('PORTAL.BOOKINGS.ERR_PAST_DATE');
+      expect(component.displayConfirmModal).toBe(false);
+    });
+
+    it('para OWNER o SUPER_ADMIN, calculateTotalModalPrice debe ser siempre 0.00 (exento)', () => {
+      mockAuthService.isOwnerOrSuperAdmin.set(true);
+      component.selectedSlot = component.facilitiesAvailability[0].slots[0];
+      component.selectedFacility = component.facilitiesAvailability[0];
+      component.bookingForm.patchValue({ lightIncluded: true });
+
+      expect(component.calculateTotalModalPrice()).toBe(0);
+    });
+
+    it('debe devolver tooltip adecuado en getCutoffTooltip segun privilegios del usuario', () => {
+      mockAuthService.isOwnerOrSuperAdmin.set(false);
+      expect(component.getCutoffTooltip()).toContain('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP');
+
+      mockAuthService.isOwnerOrSuperAdmin.set(true);
+      expect(component.getCutoffTooltip()).toContain('PORTAL.BOOKINGS.SLOT_PAST_TOOLTIP');
     });
   });
 

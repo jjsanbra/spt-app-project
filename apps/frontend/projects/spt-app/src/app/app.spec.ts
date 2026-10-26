@@ -14,6 +14,7 @@ describe('App', () => {
     activeClub: ReturnType<typeof signal<any>>;
     isAuthenticated: ReturnType<typeof signal<boolean>>;
     isSuperAdmin: ReturnType<typeof signal<boolean>>;
+    isOwnerOrSuperAdmin: ReturnType<typeof signal<boolean>>;
     getAccessToken: ReturnType<typeof vi.fn>;
     logout: ReturnType<typeof vi.fn>;
   };
@@ -35,6 +36,7 @@ describe('App', () => {
       activeClub: signal<any>(null),
       isAuthenticated: signal<boolean>(false),
       isSuperAdmin: signal<boolean>(false),
+      isOwnerOrSuperAdmin: signal<boolean>(false),
       getAccessToken: vi.fn().mockReturnValue('mock-token'),
       logout: vi.fn(),
     };
@@ -175,22 +177,23 @@ describe('App', () => {
   });
 
   describe('Template rendering authenticated vs guest', () => {
-    it('should render active club badge, wallet, notification bell and logout when authenticated', () => {
+    it('should render active club badge, wallet, notification bell and logout when authenticated as regular member', () => {
       authServiceMock.isAuthenticated.set(true);
       authServiceMock.currentUser.set({
         id: 'u1',
         email: 'user@spt.com',
         firstName: 'Carlos',
         lastName: 'Pérez',
-        isSuperAdmin: true,
+        isSuperAdmin: false,
       } as UserSummaryDto);
       authServiceMock.activeClub.set({
         clubId: 'c1',
         clubName: 'Club Central',
-        role: 'OWNER',
+        role: 'MEMBER',
         walletBalance: 45.5,
       });
-      authServiceMock.isSuperAdmin.set(true);
+      authServiceMock.isSuperAdmin.set(false);
+      authServiceMock.isOwnerOrSuperAdmin.set(false);
 
       const fixture = TestBed.createComponent(App);
       fixture.detectChanges();
@@ -199,6 +202,32 @@ describe('App', () => {
       expect(el.querySelector('.active-club-badge')).toBeTruthy();
       expect(el.querySelector('.user-wallet')?.textContent).toContain('45.5');
       expect(el.querySelector('app-notification-bell')).toBeTruthy();
+    });
+
+    it('should hide user-wallet in sidebar when authenticated as OWNER or SUPER_ADMIN', () => {
+      authServiceMock.isAuthenticated.set(true);
+      authServiceMock.currentUser.set({
+        id: 'u-owner',
+        email: 'owner@spt.com',
+        firstName: 'Propietario',
+        lastName: 'Club',
+        isSuperAdmin: false,
+      } as UserSummaryDto);
+      authServiceMock.activeClub.set({
+        clubId: 'c1',
+        clubName: 'Club Central',
+        role: 'OWNER',
+        walletBalance: 0.0,
+      });
+      authServiceMock.isSuperAdmin.set(false);
+      authServiceMock.isOwnerOrSuperAdmin.set(true);
+
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+
+      const el = fixture.nativeElement as HTMLElement;
+      expect(el.querySelector('.active-club-badge')).toBeTruthy();
+      expect(el.querySelector('.user-wallet')).toBeFalsy();
     });
 
     it('should render login and register buttons when not authenticated', () => {

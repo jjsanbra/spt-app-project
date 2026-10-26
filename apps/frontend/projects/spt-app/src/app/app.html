@@ -210,7 +210,7 @@
             <span class="user-name">
               {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
             </span>
-            @if (authService.activeClub()) {
+            @if (authService.activeClub() && !authService.isOwnerOrSuperAdmin()) {
               <span class="user-wallet-pill user-wallet">
                 <i class="pi pi-wallet"></i>
                 {{ authService.activeClub()?.walletBalance }} €

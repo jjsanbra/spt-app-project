@@ -16,6 +16,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'facilities/blocks',
+    loadComponent: () =>
+      import('./pages/facilities/facility-blocks.component').then(
+        (m) => m.FacilityBlocksComponent,
+      ),
+  },
+  {
     path: 'facilities/:id/blocks',
     loadComponent: () =>
       import('./pages/facilities/facility-blocks.component').then(

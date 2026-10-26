@@ -16,10 +16,22 @@
       <p class="page-subtitle">{{ 'ADMIN.BLOCKS.SUBTITLE' | translate }}</p>
     </div>
     <div class="header-actions">
+      @if (facilities.length > 1) {
+        <p-select
+          [options]="facilities"
+          [(ngModel)]="facilityId"
+          optionLabel="name"
+          optionValue="id"
+          (onChange)="onFacilityChange($event.value)"
+          [placeholder]="'ADMIN.BLOCKS.SELECT_FACILITY' | translate"
+          class="facility-select-control"
+        ></p-select>
+      }
       <button
         type="button"
         pButton
         icon="pi pi-plus"
+        [disabled]="!facilityId"
         (click)="openCreateModal()"
       >
         {{ 'ADMIN.BLOCKS.ADD_BUTTON' | translate }}
@@ -79,7 +91,11 @@
       <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
           <td colspan="5" class="text-center p-4 text-muted">
-            {{ 'ADMIN.BLOCKS.EMPTY' | translate }}
+            @if (facilities.length === 0) {
+              {{ 'ADMIN.BLOCKS.NO_FACILITIES' | translate }}
+            } @else {
+              {{ 'ADMIN.BLOCKS.EMPTY' | translate }}
+            }
           </td>
         </tr>
       </ng-template>

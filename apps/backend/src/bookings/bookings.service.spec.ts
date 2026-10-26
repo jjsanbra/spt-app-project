@@ -1,6 +1,13 @@
 import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { BookingStatus, BookingType, ParticipantStatus, SportType } from '@prisma/client';
+import {
+  BookingStatus,
+  BookingType,
+  ClubRole,
+  ParticipantStatus,
+  PaymentStatus,
+  SportType,
+} from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BookingsService } from './bookings.service';
@@ -62,6 +69,7 @@ describe('BookingsService', () => {
   };
 
   beforeEach(async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-10-25T08:00:00.000Z'));
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BookingsService,
@@ -73,6 +81,10 @@ describe('BookingsService', () => {
     service = module.get<BookingsService>(BookingsService);
     prisma = module.get(PrismaService);
     jest.clearAllMocks();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
   });
 
   describe('create', () => {
@@ -245,6 +257,108 @@ describe('BookingsService', () => {
           endTime: '2026-10-25T11:30:00.000Z',
         }),
       ).rejects.toThrow(ConflictException);
+    });
+    it('debe rechazar con BadRequestException si se intenta reservar en fecha u hora pasada', async () => {
+      // Recordar que el tiempo simulado está fijado a 2026-10-25T08:00:00.000Z
+      await expect(
+        service.create('club-1', 'user-1', {
+          facilityId: 'fac-1',
+          startTime: '2026-10-25T07:00:00.000Z', // 1 hora antes de la hora simulada
+          endTime: '2026-10-25T08:30:00.000Z',
+        }),
+      ).rejects.toThrow(BadRequestException);
+    });
+
+    it('debe crear la reserva con precio 0.00 y pago COMPLETED si el usuario es OWNER del club', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+
+      let createdBookingData: any = null;
+      let createdPaymentData: any = null;
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        const txMock = {
+          booking: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockImplementation(({ data }) => {
+              createdBookingData = data;
+              return Promise.resolve({ ...mockBooking, totalPrice: data.totalPrice });
+            }),
+          },
+          user: {
+            findUnique: jest.fn().mockResolvedValue({ id: 'user-owner', isSuperAdmin: false }),
+          },
+          clubMembership: {
+            findFirst: jest.fn().mockResolvedValue({ id: 'mem-owner', role: ClubRole.OWNER, isActive: true }),
+          },
+          pricingRule: { findMany: jest.fn().mockResolvedValue([]) },
+          payment: {
+            create: jest.fn().mockImplementation(({ data }) => {
+              createdPaymentData = data;
+              return Promise.resolve({ id: 'pay-owner', ...data });
+            }),
+          },
+        };
+        return callback(txMock);
+      });
+
+      const result = await service.create('club-1', 'user-owner', {
+        facilityId: 'fac-1',
+        startTime: '2026-10-25T10:00:00.000Z',
+        endTime: '2026-10-25T11:30:00.000Z',
+        lightIncluded: true,
+      });
+
+      expect(createdBookingData.totalPrice).toBe(0);
+      expect(createdPaymentData.amount).toBe(0);
+      expect(createdPaymentData.status).toBe(PaymentStatus.COMPLETED);
+      expect(result.totalPrice).toBe(0);
+    });
+
+    it('debe crear la reserva con precio 0.00 y pago COMPLETED si el usuario es SUPER_ADMIN', async () => {
+      mockPrisma.facility.findFirst.mockResolvedValue(mockFacility);
+      mockPrisma.facilityBlock.findFirst.mockResolvedValue(null);
+
+      let createdBookingData: any = null;
+      let createdPaymentData: any = null;
+
+      mockPrisma.$transaction.mockImplementation(async (callback: any) => {
+        const txMock = {
+          booking: {
+            findFirst: jest.fn().mockResolvedValue(null),
+            create: jest.fn().mockImplementation(({ data }) => {
+              createdBookingData = data;
+              return Promise.resolve({ ...mockBooking, totalPrice: data.totalPrice });
+            }),
+          },
+          user: {
+            findUnique: jest.fn().mockResolvedValue({ id: 'user-superadmin', isSuperAdmin: true }),
+          },
+          clubMembership: {
+            findFirst: jest.fn().mockResolvedValue(null), // Sin membresía explícita o rol regular
+          },
+          pricingRule: { findMany: jest.fn().mockResolvedValue([]) },
+          payment: {
+            create: jest.fn().mockImplementation(({ data }) => {
+              createdPaymentData = data;
+              return Promise.resolve({ id: 'pay-sa', ...data });
+            }),
+          },
+        };
+        return callback(txMock);
+      });
+
+      const result = await service.create('club-1', 'user-superadmin', {
+        facilityId: 'fac-1',
+        startTime: '2026-10-25T10:00:00.000Z',
+        endTime: '2026-10-25T11:30:00.000Z',
+        lightIncluded: false,
+      });
+
+      expect(createdBookingData.totalPrice).toBe(0);
+      expect(createdPaymentData.amount).toBe(0);
+      expect(createdPaymentData.status).toBe(PaymentStatus.COMPLETED);
+      expect(result.totalPrice).toBe(0);
     });
   });
 

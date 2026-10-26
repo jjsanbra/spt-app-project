@@ -7,6 +7,7 @@ import {
 import {
   BookingStatus,
   BookingType,
+  ClubRole,
   NotificationType,
   ParticipantStatus,
   PaymentMethod,
@@ -37,6 +38,10 @@ export class BookingsService {
 
     if (start >= end) {
       throw new BadRequestException('La fecha de inicio debe ser anterior a la fecha de fin');
+    }
+
+    if (start < new Date()) {
+      throw new BadRequestException('No se puede reservar en fechas pasadas');
     }
 
     // 1. Verificar que la instalación existe y pertenece al club
@@ -83,49 +88,59 @@ export class BookingsService {
       const dayOfWeek = start.getUTCDay();
       const startHour = `${start.getUTCHours().toString().padStart(2, '0')}:${start.getUTCMinutes().toString().padStart(2, '0')}`;
 
-      const pricingRules = await tx.pricingRule.findMany({
-        where: { clubId },
-        orderBy: { priority: 'desc' },
+      const user = await tx.user?.findUnique({
+        where: { id: userId },
+        select: { id: true, isSuperAdmin: true },
       });
 
       const membership = await tx.clubMembership.findFirst({
         where: { clubId, userId, isActive: true },
       });
       const isMember = !!membership;
+      const isPrivileged = !!(user?.isSuperAdmin || membership?.role === ClubRole.OWNER);
 
-      let basePrice = isMember ? 16.0 : 22.0;
-      let lightSurcharge = 0;
+      let totalPrice = 0;
 
-      const applicableRules = pricingRules
-        .filter((rule) => {
-          if (rule.facilityId && rule.facilityId !== facility.id) return false;
-          if (rule.sportType && rule.sportType !== facility.sportType) return false;
-          if (rule.daysOfWeek && rule.daysOfWeek.length > 0 && !rule.daysOfWeek.includes(dayOfWeek)) return false;
-          if (rule.startTime && rule.endTime) {
-            if (startHour < rule.startTime || startHour >= rule.endTime) return false;
-          }
-          return true;
-        })
-        .sort((a, b) => {
-          const getScopeWeight = (r: typeof a) => {
-            if (r.facilityId) return 3;
-            if (r.sportType) return 2;
-            return 1;
-          };
-          const weightDiff = getScopeWeight(b) - getScopeWeight(a);
-          if (weightDiff !== 0) return weightDiff;
-          return (b.priority ?? 1) - (a.priority ?? 1);
+      if (!isPrivileged) {
+        const pricingRules = await tx.pricingRule.findMany({
+          where: { clubId },
+          orderBy: { priority: 'desc' },
         });
 
-      if (applicableRules.length > 0) {
-        const matchedRule = applicableRules[0];
-        basePrice = isMember ? Number(matchedRule.memberPrice) : Number(matchedRule.guestPrice);
-        if (dto.lightIncluded && facility.hasLighting) {
-          lightSurcharge = Number(matchedRule.lightSurcharge || 0);
-        }
-      }
+        let basePrice = isMember ? 16.0 : 22.0;
+        let lightSurcharge = 0;
 
-      const totalPrice = basePrice + lightSurcharge;
+        const applicableRules = pricingRules
+          .filter((rule) => {
+            if (rule.facilityId && rule.facilityId !== facility.id) return false;
+            if (rule.sportType && rule.sportType !== facility.sportType) return false;
+            if (rule.daysOfWeek && rule.daysOfWeek.length > 0 && !rule.daysOfWeek.includes(dayOfWeek)) return false;
+            if (rule.startTime && rule.endTime) {
+              if (startHour < rule.startTime || startHour >= rule.endTime) return false;
+            }
+            return true;
+          })
+          .sort((a, b) => {
+            const getScopeWeight = (r: typeof a) => {
+              if (r.facilityId) return 3;
+              if (r.sportType) return 2;
+              return 1;
+            };
+            const weightDiff = getScopeWeight(b) - getScopeWeight(a);
+            if (weightDiff !== 0) return weightDiff;
+            return (b.priority ?? 1) - (a.priority ?? 1);
+          });
+
+        if (applicableRules.length > 0) {
+          const matchedRule = applicableRules[0];
+          basePrice = isMember ? Number(matchedRule.memberPrice) : Number(matchedRule.guestPrice);
+          if (dto.lightIncluded && facility.hasLighting) {
+            lightSurcharge = Number(matchedRule.lightSurcharge || 0);
+          }
+        }
+
+        totalPrice = basePrice + lightSurcharge;
+      }
 
       // 5. Crear la reserva
       const bookingType = dto.bookingType ?? BookingType.FULL;
@@ -153,9 +168,13 @@ export class BookingsService {
       });
 
       // 6. Generar registro de pago y participantes según tipo de reserva
+      const paymentStatus = isPrivileged ? PaymentStatus.COMPLETED : PaymentStatus.PENDING;
+
       if (bookingType === BookingType.OPEN) {
         const maxPlayers = facility.maxPlayers || 4;
-        const individualPrice = Math.round((totalPrice / maxPlayers) * 100) / 100;
+        const individualPrice = isPrivileged
+          ? 0
+          : Math.round((totalPrice / maxPlayers) * 100) / 100;
 
         // Registrar al creador como anfitrión (slot 1)
         const hostParticipant = await tx.bookingParticipant.create({
@@ -178,7 +197,7 @@ export class BookingsService {
             participantId: hostParticipant.id,
             amount: individualPrice,
             method: PaymentMethod.PRESENTIAL_CASH,
-            status: PaymentStatus.PENDING,
+            status: paymentStatus,
           },
         });
       } else {
@@ -190,7 +209,7 @@ export class BookingsService {
             userId,
             amount: totalPrice,
             method: PaymentMethod.PRESENTIAL_CASH,
-            status: PaymentStatus.PENDING,
+            status: paymentStatus,
           },
         });
       }

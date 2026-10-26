@@ -28,6 +28,8 @@ export class AuthService {
 
   readonly isAuthenticated = computed(() => !!this.currentUser());
   readonly isSuperAdmin = computed(() => !!this.currentUser()?.isSuperAdmin);
+  readonly isOwner = computed(() => this.activeClub()?.role === 'OWNER');
+  readonly isOwnerOrSuperAdmin = computed(() => this.isSuperAdmin() || this.isOwner());
   readonly userMemberships = computed(() => this.currentUser()?.memberships || []);
 
   constructor() {

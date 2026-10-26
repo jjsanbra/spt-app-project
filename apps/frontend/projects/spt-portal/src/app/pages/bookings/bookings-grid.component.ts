@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
+  AuthService,
   BookingsService,
   FacilitiesService,
   FacilityAvailabilityResponseDto,
@@ -59,6 +60,7 @@ export class BookingsGridComponent implements OnInit {
   private readonly translate = inject(TranslateService);
   private readonly router = inject(Router);
   private readonly cdr = inject(ChangeDetectorRef);
+  readonly authService = inject(AuthService);
 
   loading = false;
   bookingInProgress = false;
@@ -340,10 +342,21 @@ export class BookingsGridComponent implements OnInit {
 
     // Fecha y hora del slot a evaluar
     const slotDateTime = new Date(year, month - 1, day, hours, minutes, 0, 0);
-    // Margen de 2 horas desde el instante actual
-    const cutoffTime = new Date(Date.now() + 2 * 60 * 60 * 1000);
 
+    // Para roles privilegiados (OWNER o SUPER_ADMIN): la única restricción es que no pueden reservar a pasado
+    if (this.authService.isOwnerOrSuperAdmin()) {
+      return slotDateTime.getTime() < Date.now();
+    }
+
+    // Para otros roles: margen de 2 horas desde el instante actual
+    const cutoffTime = new Date(Date.now() + 2 * 60 * 60 * 1000);
     return slotDateTime.getTime() < cutoffTime.getTime();
+  }
+
+  getCutoffTooltip(): string {
+    return this.authService.isOwnerOrSuperAdmin()
+      ? this.translate.instant('PORTAL.BOOKINGS.SLOT_PAST_TOOLTIP')
+      : this.translate.instant('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP');
   }
 
   isSlotBookable(dateStr: string, slot: TimeSlotAvailabilityDto | undefined): boolean {
@@ -359,7 +372,11 @@ export class BookingsGridComponent implements OnInit {
     if (slot.status !== SlotStatus.AVAILABLE) return;
 
     if (this.isSlotBlockedByCutoff(targetDate, slot.startHourText)) {
-      this.notify.warn('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      if (this.authService.isOwnerOrSuperAdmin()) {
+        this.notify.warn('PORTAL.BOOKINGS.ERR_PAST_DATE');
+      } else {
+        this.notify.warn('PORTAL.BOOKINGS.ERR_CUTOFF_LIMIT');
+      }
       return;
     }
 
@@ -419,6 +436,7 @@ export class BookingsGridComponent implements OnInit {
 
   calculateTotalModalPrice(): number {
     if (!this.selectedSlot) return 0;
+    if (this.authService.isOwnerOrSuperAdmin()) return 0;
     let total = this.selectedSlot.price;
     if (this.bookingForm.get('lightIncluded')?.value && this.selectedFacility?.hasLighting) {
       total += this.selectedSlot.lightSurcharge;

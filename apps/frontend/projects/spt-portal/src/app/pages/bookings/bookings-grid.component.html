@@ -308,7 +308,7 @@
                                     }"
                                     [disabled]="slot.status !== 'AVAILABLE' || isCutoff"
                                     (click)="selectSlot(facility, slot, selectedDate)"
-                                    [title]="isCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
+                                    [title]="isCutoff ? getCutoffTooltip() : ''"
                                   >
                                     @if (isCutoff) {
                                       <span class="slot-cutoff-text"><i class="pi pi-clock"></i> {{ slot.startHourText }}</span>
@@ -330,7 +330,7 @@
                                   @if (isCutoff) {
                                     <div
                                       class="matrix-slot-empty matrix-slot-empty-disabled"
-                                      [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
+                                      [title]="getCutoffTooltip()"
                                     >
                                       <span class="empty-dash">—</span>
                                     </div>
@@ -394,11 +394,11 @@
                       }"
                       [disabled]="slot.status !== 'AVAILABLE' || isCardCutoff"
                       (click)="selectSlot(facility, slot, selectedDate)"
-                      [title]="isCardCutoff ? ('PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate) : ''"
+                      [title]="isCardCutoff ? getCutoffTooltip() : ''"
                     >
                       <span class="slot-time">{{ slot.startHourText }} - {{ slot.endHourText }}</span>
                       @if (isCardCutoff) {
-                        <span class="slot-status-text cutoff-text"><i class="pi pi-clock"></i> {{ 'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate }}</span>
+                        <span class="slot-status-text cutoff-text"><i class="pi pi-clock"></i> {{ getCutoffTooltip() }}</span>
                       } @else if (slot.status === 'AVAILABLE') {
                         <span class="slot-price">{{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}</span>
                       } @else if (slot.status === 'OCCUPIED') {
@@ -468,7 +468,7 @@
                             @if (isWeekCutoff) {
                               <div
                                 class="matrix-slot-empty matrix-slot-empty-disabled"
-                                [title]="'PORTAL.BOOKINGS.SLOT_CUTOFF_TOOLTIP' | translate"
+                                [title]="getCutoffTooltip()"
                               >
                                 <span class="empty-dash"><i class="pi pi-clock"></i></span>
                               </div>
@@ -578,7 +578,12 @@
           </div>
           <div class="summary-item total-row">
             <span class="label">{{ 'PORTAL.BOOKINGS.FIELD_PRICE' | translate }}:</span>
-            <span class="value total-price">{{ calculateTotalModalPrice() | currency: 'EUR':'symbol':'1.2-2' }}</span>
+            <span class="value total-price">
+              {{ calculateTotalModalPrice() | currency: 'EUR':'symbol':'1.2-2' }}
+              @if (authService.isOwnerOrSuperAdmin()) {
+                <p-tag [value]="'PORTAL.BOOKINGS.PRIVILEGED_EXEMPT_LABEL' | translate" severity="success" class="ml-2"></p-tag>
+              }
+            </span>
           </div>
         </div>
 
@@ -610,10 +615,16 @@
             />
           </div>
 
-          <!-- Aviso de pago presencial -->
+          <!-- Aviso de pago presencial o exención -->
           <div class="payment-notice-box">
             <i class="pi pi-info-circle"></i>
-            <p>{{ 'PORTAL.BOOKINGS.PAYMENT_NOTICE' | translate }}</p>
+            <p>
+              @if (authService.isOwnerOrSuperAdmin()) {
+                {{ 'PORTAL.BOOKINGS.PRIVILEGED_PAYMENT_NOTICE' | translate }}
+              } @else {
+                {{ 'PORTAL.BOOKINGS.PAYMENT_NOTICE' | translate }}
+              }
+            </p>
           </div>
 
           <!-- Acciones de modal -->

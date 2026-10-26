@@ -165,4 +165,24 @@ describe('AuthService (Frontend)', () => {
     expect(localStorage.getItem('spt_access_token')).toBeNull();
     expect(service.currentUser()).toBeNull();
   });
+
+  it('debe calcular correctamente isOwner e isOwnerOrSuperAdmin segun rol y privilegios', () => {
+    // mockUser tiene isSuperAdmin: true y activeClub club-1 con role 'OWNER'
+    service.setCurrentUser(mockUser);
+    expect(service.isOwner()).toBe(true);
+    expect(service.isSuperAdmin()).toBe(true);
+    expect(service.isOwnerOrSuperAdmin()).toBe(true);
+
+    // Usuario regular no superadmin con activeClub rol MEMBER
+    const regularUser: UserSummaryDto = {
+      ...mockUser,
+      isSuperAdmin: false,
+    };
+    service.setCurrentUser(regularUser);
+    service.setActiveClub(mockUser.memberships[1]); // role: 'MEMBER'
+
+    expect(service.isOwner()).toBe(false);
+    expect(service.isSuperAdmin()).toBe(false);
+    expect(service.isOwnerOrSuperAdmin()).toBe(false);
+  });
 });
