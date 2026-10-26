@@ -2,6 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SportType } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { PricingService } from './pricing.service';
 
 describe('PricingService', () => {
@@ -53,6 +54,10 @@ describe('PricingService', () => {
       providers: [
         PricingService,
         { provide: PrismaService, useValue: prismaMock },
+        {
+          provide: ActivityLogsService,
+          useValue: { log: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 

@@ -2,6 +2,7 @@ import { BadRequestException, ConflictException, NotFoundException } from '@nest
 import { Test, TestingModule } from '@nestjs/testing';
 import { ClubRole } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { ClubsMembersService } from './clubs-members.service';
 
 describe('ClubsMembersService', () => {
@@ -31,6 +32,10 @@ describe('ClubsMembersService', () => {
         {
           provide: PrismaService,
           useValue: mockPrisma,
+        },
+        {
+          provide: ActivityLogsService,
+          useValue: { log: jest.fn().mockResolvedValue(undefined) },
         },
       ],
     }).compile();

@@ -85,6 +85,16 @@
         </a>
 
         <a
+          routerLink="/portal/activity"
+          routerLinkActive="active-nav-link"
+          class="sidebar-nav-link"
+          (click)="closeSidebar()"
+        >
+          <i class="pi pi-history"></i>
+          <span>{{ 'NAV.MY_ACTIVITY' | translate }}</span>
+        </a>
+
+        <a
           routerLink="/profile"
           routerLinkActive="active-nav-link"
           class="sidebar-nav-link"
@@ -148,6 +158,16 @@
           >
             <i class="pi pi-users"></i>
             <span>{{ 'NAV.MEMBERS' | translate }}</span>
+          </a>
+
+          <a
+            routerLink="/admin/activity-logs"
+            routerLinkActive="active-nav-link"
+            class="sidebar-nav-link"
+            (click)="closeSidebar()"
+          >
+            <i class="pi pi-history"></i>
+            <span>{{ 'NAV.ACTIVITY_LOGS' | translate }}</span>
           </a>
 
           <a

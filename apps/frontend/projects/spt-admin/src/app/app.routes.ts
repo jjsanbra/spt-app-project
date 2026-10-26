@@ -51,6 +51,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'activity-logs',
+    loadComponent: () =>
+      import('./pages/activity-logs/activity-logs.component').then(
+        (m) => m.ActivityLogsComponent,
+      ),
+  },
+  {
     path: 'superadmin/clubs',
     loadComponent: () =>
       import('./pages/superadmin/clubs/superadmin-clubs.component').then(

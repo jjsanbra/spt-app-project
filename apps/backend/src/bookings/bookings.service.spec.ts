@@ -10,6 +10,7 @@ import {
 } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { BookingsService } from './bookings.service';
 
 describe('BookingsService', () => {
@@ -68,6 +69,10 @@ describe('BookingsService', () => {
     createNotification: jest.fn().mockResolvedValue({ id: 'notif-1' }),
   };
 
+  const mockActivityLogsService = {
+    log: jest.fn().mockResolvedValue(undefined),
+  };
+
   beforeEach(async () => {
     jest.useFakeTimers().setSystemTime(new Date('2026-10-25T08:00:00.000Z'));
     const module: TestingModule = await Test.createTestingModule({
@@ -75,6 +80,7 @@ describe('BookingsService', () => {
         BookingsService,
         { provide: PrismaService, useValue: mockPrisma },
         { provide: NotificationsService, useValue: mockNotificationsService },
+        { provide: ActivityLogsService, useValue: mockActivityLogsService },
       ],
     }).compile();
 

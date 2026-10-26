@@ -4,9 +4,10 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { ClubRole } from '@prisma/client';
+import { ActivityAction, ClubRole } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { ClubMemberResponseDto } from './dto/club-member-response.dto';
 import { InviteMemberDto } from './dto/invite-member.dto';
 import { UpdateMemberRoleDto } from './dto/update-member-role.dto';
@@ -14,7 +15,10 @@ import { UpdateMemberStatusDto } from './dto/update-member-status.dto';
 
 @Injectable()
 export class ClubsMembersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLogsService: ActivityLogsService,
+  ) {}
 
   /**
    * Listar todos los miembros pertenecientes a un club
@@ -127,6 +131,15 @@ export class ClubsMembersService {
       },
     });
 
+    this.activityLogsService.log({
+      clubId,
+      action: ActivityAction.MEMBER_ROLE_CHANGED,
+      entityType: 'ClubMembership',
+      entityId: membership.id,
+      summary: `Nuevo socio invitado/asociado: ${membership.user.email} con rol ${membership.role}`,
+      metadata: { email: membership.user.email, role: membership.role },
+    });
+
     return this.mapToResponse(membership);
   }
 
@@ -159,6 +172,19 @@ export class ClubsMembersService {
             avatarUrl: true,
           },
         },
+      },
+    });
+
+    this.activityLogsService.log({
+      clubId,
+      action: ActivityAction.MEMBER_ROLE_CHANGED,
+      entityType: 'ClubMembership',
+      entityId: updated.id,
+      summary: `Rol de socio ${updated.user.email} actualizado de ${membership.role} a ${updated.role}`,
+      metadata: {
+        previousRole: membership.role,
+        newRole: updated.role,
+        memberEmail: updated.user.email,
       },
     });
 
@@ -196,6 +222,15 @@ export class ClubsMembersService {
       },
     });
 
+    this.activityLogsService.log({
+      clubId,
+      action: ActivityAction.MEMBER_STATUS_CHANGED,
+      entityType: 'ClubMembership',
+      entityId: updated.id,
+      summary: `Estado de membresía para ${updated.user.email}: ${updated.isActive ? 'Activo' : 'Inactivo'}`,
+      metadata: { isActive: updated.isActive, memberEmail: updated.user.email },
+    });
+
     return this.mapToResponse(updated);
   }
 
@@ -211,6 +246,14 @@ export class ClubsMembersService {
 
     await this.prisma.clubMembership.delete({
       where: { id: membership.id },
+    });
+
+    this.activityLogsService.log({
+      clubId,
+      action: ActivityAction.MEMBER_STATUS_CHANGED,
+      entityType: 'ClubMembership',
+      entityId: membershipId,
+      summary: `Membresía eliminada para el usuario ${membership.userId}`,
     });
 
     return {

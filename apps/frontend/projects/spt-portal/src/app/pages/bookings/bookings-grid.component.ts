@@ -20,6 +20,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
+import { TooltipModule } from 'primeng/tooltip';
 
 export interface SportGridGroup {
   sportType: string;
@@ -48,6 +49,7 @@ export interface SportGridGroup {
     TagModule,
     DatePickerModule,
     SelectButtonModule,
+    TooltipModule,
   ],
   templateUrl: './bookings-grid.component.html',
   styleUrls: ['./bookings-grid.component.scss'],

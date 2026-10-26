@@ -12,9 +12,11 @@ import {
   ParticipantStatus,
   PaymentMethod,
   PaymentStatus,
+  ActivityAction,
 } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { BookingResponseDto } from './dto/booking-response.dto';
 import { CancelBookingDto, CreateBookingDto } from './dto/create-booking.dto';
 
@@ -23,6 +25,7 @@ export class BookingsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly notificationsService: NotificationsService,
+    private readonly activityLogsService: ActivityLogsService,
   ) {}
 
   /**
@@ -231,6 +234,24 @@ export class BookingsService {
         userEmail: booking.user?.email,
       })
       .catch(() => null);
+
+    // Registro de auditoría
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.BOOKING_CREATED,
+      entityType: 'Booking',
+      entityId: booking.id,
+      summary: `Reserva creada en ${booking.facility.name} (${start.toLocaleDateString('es-ES')})`,
+      metadata: {
+        bookingId: booking.id,
+        facilityName: booking.facility.name,
+        bookingType: booking.bookingType,
+        totalPrice: Number(booking.totalPrice),
+        startTime: booking.startTime,
+        endTime: booking.endTime,
+      },
+    });
 
     return this.mapToResponse(booking);
   }
@@ -620,6 +641,22 @@ export class BookingsService {
         metadata: { bookingId: booking.id },
       })
       .catch(() => null);
+
+    // Registro de auditoría
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.BOOKING_CANCELLED,
+      entityType: 'Booking',
+      entityId: updated.id,
+      summary: `Reserva cancelada en ${booking.facility.name}. Motivo: ${updated.cancellationReason}`,
+      metadata: {
+        bookingId: updated.id,
+        facilityName: booking.facility.name,
+        cancellationReason: updated.cancellationReason,
+        startTime: updated.startTime,
+      },
+    });
 
     return this.mapToResponse(updated);
   }

@@ -92,8 +92,8 @@ describe('FacilitiesController', () => {
     const dto = { name: 'Pista 1' };
     facilitiesService.create.mockResolvedValue({ id: facilityId, name: 'Pista 1' });
 
-    const result = await controller.create(clubId, dto as any);
-    expect(facilitiesService.create).toHaveBeenCalledWith(clubId, dto);
+    const result = await controller.create(clubId, dto as any, 'user-1');
+    expect(facilitiesService.create).toHaveBeenCalledWith(clubId, dto, 'user-1');
     expect(result.name).toBe('Pista 1');
   });
 
@@ -101,16 +101,16 @@ describe('FacilitiesController', () => {
     const dto = { name: 'Pista Modificada' };
     facilitiesService.update.mockResolvedValue({ id: facilityId, name: 'Pista Modificada' });
 
-    const result = await controller.update(clubId, facilityId, dto as any);
-    expect(facilitiesService.update).toHaveBeenCalledWith(clubId, facilityId, dto);
+    const result = await controller.update(clubId, facilityId, dto as any, 'user-1');
+    expect(facilitiesService.update).toHaveBeenCalledWith(clubId, facilityId, dto, 'user-1');
     expect(result.name).toBe('Pista Modificada');
   });
 
   it('remove debe delegar en facilitiesService.remove', async () => {
     facilitiesService.remove.mockResolvedValue({ success: true, message: 'Desactivada' });
 
-    const result = await controller.remove(clubId, facilityId);
-    expect(facilitiesService.remove).toHaveBeenCalledWith(clubId, facilityId);
+    const result = await controller.remove(clubId, facilityId, 'user-1');
+    expect(facilitiesService.remove).toHaveBeenCalledWith(clubId, facilityId, 'user-1');
     expect(result.success).toBe(true);
   });
 
@@ -126,16 +126,16 @@ describe('FacilitiesController', () => {
     const dto = { title: 'Mantenimiento', startTime: '2026-10-25T10:00:00Z', endTime: '2026-10-25T12:00:00Z' };
     facilitiesService.createBlock.mockResolvedValue({ id: 'block-1', title: 'Mantenimiento' });
 
-    const result = await controller.createBlock(clubId, facilityId, dto as any);
-    expect(facilitiesService.createBlock).toHaveBeenCalledWith(clubId, facilityId, dto);
+    const result = await controller.createBlock(clubId, facilityId, dto as any, 'user-1');
+    expect(facilitiesService.createBlock).toHaveBeenCalledWith(clubId, facilityId, dto, 'user-1');
     expect(result.id).toBe('block-1');
   });
 
   it('removeBlock debe delegar en facilitiesService.removeBlock', async () => {
     facilitiesService.removeBlock.mockResolvedValue({ success: true });
 
-    const result = await controller.removeBlock(clubId, facilityId, 'block-1');
-    expect(facilitiesService.removeBlock).toHaveBeenCalledWith(clubId, facilityId, 'block-1');
+    const result = await controller.removeBlock(clubId, facilityId, 'block-1', 'user-1');
+    expect(facilitiesService.removeBlock).toHaveBeenCalledWith(clubId, facilityId, 'block-1', 'user-1');
     expect(result.success).toBe(true);
   });
 });

@@ -42,6 +42,8 @@
     "PRICING": "Tarifas y Precios",
     "MEMBERS": "Socios y Miembros",
     "SETTINGS": "Configuración del Club",
+    "ACTIVITY_LOGS": "Registro de Actividad",
+    "MY_ACTIVITY": "Mi Actividad",
     "MATCHES": "Mis Partidos"
   },
   "THEME": {
@@ -373,6 +375,41 @@
       "SAVE_BTN": "Guardar Configuración",
       "MINUTES": "minutos",
       "HOURS": "horas"
+    },
+    "LOGS": {
+      "TITLE": "Registro de Actividad y Auditoría",
+      "SUBTITLE": "Supervisa y rastrea todas las acciones realizadas en el centro deportivo",
+      "EXPORT_CSV": "Exportar CSV",
+      "SEARCH_PLACEHOLDER": "Buscar por resumen o palabra clave...",
+      "CATEGORY_ALL": "Todas las Categorías",
+      "CATEGORY_BOOKINGS": "Reservas",
+      "CATEGORY_FACILITIES": "Pistas y Bloqueos",
+      "CATEGORY_PRICING": "Tarifas y Precios",
+      "CATEGORY_MEMBERS": "Socios y Miembros",
+      "CATEGORY_AUTH": "Seguridad y Accesos",
+      "DATE_RANGE": "Rango de fechas",
+      "CLEAR_FILTERS": "Limpiar filtros",
+      "DATE": "Fecha y Hora",
+      "USER": "Usuario",
+      "ACTION": "Acción",
+      "ENTITY": "Entidad",
+      "SUMMARY": "Resumen del Evento",
+      "ACTIONS": "Detalles",
+      "INSPECT_TOOLTIP": "Inspeccionar detalle del evento",
+      "EMPTY": "No se encontraron eventos de actividad registrados para los filtros seleccionados.",
+      "SYSTEM_USER": "Sistema",
+      "DIALOG_TITLE": "Detalle del Evento de Auditoría",
+      "EVENT_ID": "Identificador único",
+      "IP_ADDRESS": "Dirección IP",
+      "USER_AGENT": "Navegador / Cliente",
+      "DIFF_TITLE": "Comparativa de Cambios",
+      "FIELD": "Campo",
+      "PREVIOUS_VALUE": "Valor Previo",
+      "NEW_VALUE": "Valor Nuevo",
+      "RAW_JSON": "Datos JSON Estructurados",
+      "COPY_JSON": "Copiar JSON",
+      "COPIED": "JSON copiado al portapapeles",
+      "CLOSE": "Cerrar"
     }
   },
   "PORTAL": {
@@ -389,6 +426,19 @@
       "MY_BOOKINGS_CARD_TITLE": "Mis Reservas",
       "MY_BOOKINGS_CARD_DESC": "Consulta y gestiona tus reservas confirmadas"
     },
+    "ACTIVITY": {
+      "TITLE": "Mi Actividad",
+      "SUBTITLE": "Historial de tus reservas, consumos y movimientos en el club",
+      "SEARCH_PLACEHOLDER": "Buscar en mis actividades...",
+      "FILTER_ALL": "Todos los movimientos",
+      "FILTER_BOOKINGS": "Reservas",
+      "FILTER_WALLET": "Monedero",
+      "FILTER_SECURITY": "Seguridad",
+      "EMPTY": "No tienes actividades registradas aún.",
+      "DATE": "Fecha",
+      "SUMMARY": "Descripción",
+      "STATUS": "Estado"
+    },
     "BOOKINGS": {
       "TITLE": "Reserva de Pistas y Disponibilidad",
       "SUBTITLE": "Selecciona fecha y deporte para comprobar franjas libres y reservar al instante",
@@ -399,6 +449,7 @@
       "PEAK_HOUR": "Hora Punta",
       "LIGHT_INCLUDED": "Incluye Luz",
       "LIGHT_EXTRA": "Suplemento Luz",
+      "LIGHTING_AVAILABLE": "Iluminación disponible",
       "SLOT_AVAILABLE": "Libre",
       "SLOT_OCCUPIED": "Ocupado",
       "SLOT_BLOCKED": "Bloqueado",

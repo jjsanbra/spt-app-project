@@ -29,4 +29,11 @@ export const routes: Routes = [
         (m) => m.OpenMatchesComponent,
       ),
   },
+  {
+    path: 'activity',
+    loadComponent: () =>
+      import('./pages/activity/user-activity.component').then(
+        (m) => m.UserActivityComponent,
+      ),
+  },
 ];

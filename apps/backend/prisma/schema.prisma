@@ -111,6 +111,31 @@ enum NotificationType {
   SYSTEM
 }
 
+enum ActivityAction {
+  BOOKING_CREATED
+  BOOKING_CANCELLED
+  BOOKING_MODIFIED
+  BOOKING_COMPLETED
+  FACILITY_CREATED
+  FACILITY_UPDATED
+  FACILITY_DELETED
+  FACILITY_BLOCK_CREATED
+  FACILITY_BLOCK_DELETED
+  PRICING_RULE_CREATED
+  PRICING_RULE_UPDATED
+  PRICING_RULE_DELETED
+  MEMBER_ROLE_CHANGED
+  MEMBER_WALLET_TOPUP
+  MEMBER_WALLET_ADJUSTED
+  MEMBER_STATUS_CHANGED
+  AUTH_LOGIN_SUCCESS
+  AUTH_PASSWORD_CHANGED
+  AUTH_FAILED_ATTEMPT
+  CLUB_CREATED
+  CLUB_UPDATED
+  CLUB_STATUS_TOGGLED
+}
+
 // =============================================================================
 // MODELOS
 // =============================================================================
@@ -141,6 +166,7 @@ model Club {
   bookings       Booking[]
   payments       Payment[]
   notifications  Notification[]
+  activityLogs   ActivityLog[]
 
   @@map("clubs")
 }
@@ -164,6 +190,7 @@ model User {
   paymentsMade      Payment[]            @relation("PaymentsMade")
   paymentsProcessed Payment[]            @relation("PaymentsProcessed")
   notifications     Notification[]
+  activityLogs      ActivityLog[]
 
   @@map("users")
 }
@@ -345,4 +372,26 @@ model Notification {
 
   @@index([userId, isRead])
   @@map("notifications")
+}
+
+model ActivityLog {
+  id         String         @id @default(uuid())
+  clubId     String?        @map("club_id")
+  userId     String?        @map("user_id")
+  action     ActivityAction
+  entityType String         @map("entity_type") @db.VarChar(50)
+  entityId   String?        @map("entity_id") @db.VarChar(100)
+  summary    String         @db.VarChar(255)
+  metadata   Json?          @db.JsonB
+  ipAddress  String?        @map("ip_address") @db.VarChar(45)
+  userAgent  String?        @map("user_agent") @db.VarChar(255)
+  createdAt  DateTime       @default(now()) @map("created_at")
+
+  club Club? @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([clubId, createdAt])
+  @@index([clubId, entityType, entityId])
+  @@index([userId, createdAt])
+  @@map("activity_logs")
 }

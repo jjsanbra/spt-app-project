@@ -66,8 +66,8 @@ describe('PricingController', () => {
     const dto = { memberPrice: 20, guestPrice: 30 };
     pricingService.create.mockResolvedValue({ id: ruleId, memberPrice: 20 });
 
-    const result = await controller.create(clubId, dto as any);
-    expect(pricingService.create).toHaveBeenCalledWith(clubId, dto);
+    const result = await controller.create(clubId, dto as any, 'user-1');
+    expect(pricingService.create).toHaveBeenCalledWith(clubId, dto, 'user-1');
     expect(result.id).toBe(ruleId);
   });
 
@@ -75,16 +75,16 @@ describe('PricingController', () => {
     const dto = { memberPrice: 25 };
     pricingService.update.mockResolvedValue({ id: ruleId, memberPrice: 25 });
 
-    const result = await controller.update(clubId, ruleId, dto as any);
-    expect(pricingService.update).toHaveBeenCalledWith(clubId, ruleId, dto);
+    const result = await controller.update(clubId, ruleId, dto as any, 'user-1');
+    expect(pricingService.update).toHaveBeenCalledWith(clubId, ruleId, dto, 'user-1');
     expect(result.memberPrice).toBe(25);
   });
 
   it('remove debe delegar en pricingService.remove', async () => {
     pricingService.remove.mockResolvedValue({ success: true, message: 'Eliminada' });
 
-    const result = await controller.remove(clubId, ruleId);
-    expect(pricingService.remove).toHaveBeenCalledWith(clubId, ruleId);
+    const result = await controller.remove(clubId, ruleId, 'user-1');
+    expect(pricingService.remove).toHaveBeenCalledWith(clubId, ruleId, 'user-1');
     expect(result.success).toBe(true);
   });
 });

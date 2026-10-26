@@ -3,8 +3,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { SportType } from '@prisma/client';
+import { ActivityAction, SportType } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { CreateFacilityBlockDto } from './dto/create-facility-block.dto';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { FacilityBlockResponseDto } from './dto/facility-block-response.dto';
@@ -13,7 +14,10 @@ import { UpdateFacilityDto } from './dto/update-facility.dto';
 
 @Injectable()
 export class FacilitiesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLogsService: ActivityLogsService,
+  ) {}
 
   // ─── Pistas / Instalaciones Deportivas ─────────────────────
 
@@ -44,8 +48,8 @@ export class FacilitiesService {
     return facility;
   }
 
-  async create(clubId: string, dto: CreateFacilityDto): Promise<FacilityResponseDto> {
-    return this.prisma.facility.create({
+  async create(clubId: string, dto: CreateFacilityDto, userId?: string): Promise<FacilityResponseDto> {
+    const facility = await this.prisma.facility.create({
       data: {
         clubId,
         name: dto.name,
@@ -59,16 +63,34 @@ export class FacilitiesService {
         isActive: true,
       },
     });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.FACILITY_CREATED,
+      entityType: 'Facility',
+      entityId: facility.id,
+      summary: `Pista "${facility.name}" creada (${facility.sportType})`,
+      metadata: {
+        name: facility.name,
+        sportType: facility.sportType,
+        courtType: facility.courtType,
+        defaultSlotMinutes: facility.defaultSlotMinutes,
+      },
+    });
+
+    return facility;
   }
 
   async update(
     clubId: string,
     id: string,
     dto: UpdateFacilityDto,
+    userId?: string,
   ): Promise<FacilityResponseDto> {
     await this.findOne(clubId, id);
 
-    return this.prisma.facility.update({
+    const updated = await this.prisma.facility.update({
       where: { id },
       data: {
         ...(dto.name && { name: dto.name }),
@@ -82,15 +104,36 @@ export class FacilitiesService {
         ...(dto.isActive !== undefined && { isActive: dto.isActive }),
       },
     });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.FACILITY_UPDATED,
+      entityType: 'Facility',
+      entityId: updated.id,
+      summary: `Pista "${updated.name}" actualizada`,
+      metadata: { ...dto },
+    });
+
+    return updated;
   }
 
-  async remove(clubId: string, id: string): Promise<{ success: boolean; message: string }> {
-    await this.findOne(clubId, id);
+  async remove(clubId: string, id: string, userId?: string): Promise<{ success: boolean; message: string }> {
+    const existing = await this.findOne(clubId, id);
 
     // Borrado lógico para preservar integridad de reservas históricas
     await this.prisma.facility.update({
       where: { id },
       data: { isActive: false },
+    });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.FACILITY_DELETED,
+      entityType: 'Facility',
+      entityId: id,
+      summary: `Pista "${existing.name}" desactivada/eliminada`,
     });
 
     return {
@@ -117,8 +160,9 @@ export class FacilitiesService {
     clubId: string,
     facilityId: string,
     dto: CreateFacilityBlockDto,
+    userId?: string,
   ): Promise<FacilityBlockResponseDto> {
-    await this.findOne(clubId, facilityId);
+    const facility = await this.findOne(clubId, facilityId);
 
     const start = new Date(dto.startTime);
     const end = new Date(dto.endTime);
@@ -127,7 +171,7 @@ export class FacilitiesService {
       throw new BadRequestException('La fecha y hora de fin debe ser posterior a la de inicio');
     }
 
-    return this.prisma.facilityBlock.create({
+    const block = await this.prisma.facilityBlock.create({
       data: {
         clubId,
         facilityId,
@@ -137,14 +181,34 @@ export class FacilitiesService {
         endTime: end,
       },
     });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.FACILITY_BLOCK_CREATED,
+      entityType: 'FacilityBlock',
+      entityId: block.id,
+      summary: `Bloqueo "${block.title}" programado en "${facility.name}"`,
+      metadata: {
+        facilityId,
+        facilityName: facility.name,
+        title: block.title,
+        reason: block.reason,
+        startTime: block.startTime,
+        endTime: block.endTime,
+      },
+    });
+
+    return block;
   }
 
   async removeBlock(
     clubId: string,
     facilityId: string,
     blockId: string,
+    userId?: string,
   ): Promise<{ success: boolean }> {
-    await this.findOne(clubId, facilityId);
+    const facility = await this.findOne(clubId, facilityId);
 
     const block = await this.prisma.facilityBlock.findFirst({
       where: { id: blockId, clubId, facilityId },
@@ -156,6 +220,20 @@ export class FacilitiesService {
 
     await this.prisma.facilityBlock.delete({
       where: { id: blockId },
+    });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.FACILITY_BLOCK_DELETED,
+      entityType: 'FacilityBlock',
+      entityId: blockId,
+      summary: `Bloqueo "${block.title}" eliminado en "${facility.name}"`,
+      metadata: {
+        facilityId,
+        facilityName: facility.name,
+        title: block.title,
+      },
     });
 
     return { success: true };

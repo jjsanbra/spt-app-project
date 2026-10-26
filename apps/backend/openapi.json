@@ -1860,6 +1860,401 @@
           }
         ]
       }
+    },
+    "/api/v1/clubs/{clubId}/activity-logs": {
+      "get": {
+        "operationId": "ActivityLogsController_findClubLogs",
+        "summary": "Obtener logs de auditoría del club con filtros y paginación",
+        "parameters": [
+          {
+            "name": "clubId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página (1-indexed)",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Cantidad de registros por página",
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por acción específica",
+            "schema": {
+              "enum": [
+                "BOOKING_CREATED",
+                "BOOKING_CANCELLED",
+                "BOOKING_MODIFIED",
+                "BOOKING_COMPLETED",
+                "FACILITY_CREATED",
+                "FACILITY_UPDATED",
+                "FACILITY_DELETED",
+                "FACILITY_BLOCK_CREATED",
+                "FACILITY_BLOCK_DELETED",
+                "PRICING_RULE_CREATED",
+                "PRICING_RULE_UPDATED",
+                "PRICING_RULE_DELETED",
+                "MEMBER_ROLE_CHANGED",
+                "MEMBER_WALLET_TOPUP",
+                "MEMBER_WALLET_ADJUSTED",
+                "MEMBER_STATUS_CHANGED",
+                "AUTH_LOGIN_SUCCESS",
+                "AUTH_PASSWORD_CHANGED",
+                "AUTH_FAILED_ATTEMPT",
+                "CLUB_CREATED",
+                "CLUB_UPDATED",
+                "CLUB_STATUS_TOGGLED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por tipo de entidad (ej: Booking, Facility, PricingRule)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por ID de usuario ejecutor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de inicio (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de fin (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Búsqueda por texto en el resumen",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityLogsPaginatedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ActivityLogs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/me/activity-logs": {
+      "get": {
+        "operationId": "ActivityLogsController_findMyLogs",
+        "summary": "Obtener historial de actividades propio del usuario autenticado",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página (1-indexed)",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Cantidad de registros por página",
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por acción específica",
+            "schema": {
+              "enum": [
+                "BOOKING_CREATED",
+                "BOOKING_CANCELLED",
+                "BOOKING_MODIFIED",
+                "BOOKING_COMPLETED",
+                "FACILITY_CREATED",
+                "FACILITY_UPDATED",
+                "FACILITY_DELETED",
+                "FACILITY_BLOCK_CREATED",
+                "FACILITY_BLOCK_DELETED",
+                "PRICING_RULE_CREATED",
+                "PRICING_RULE_UPDATED",
+                "PRICING_RULE_DELETED",
+                "MEMBER_ROLE_CHANGED",
+                "MEMBER_WALLET_TOPUP",
+                "MEMBER_WALLET_ADJUSTED",
+                "MEMBER_STATUS_CHANGED",
+                "AUTH_LOGIN_SUCCESS",
+                "AUTH_PASSWORD_CHANGED",
+                "AUTH_FAILED_ATTEMPT",
+                "CLUB_CREATED",
+                "CLUB_UPDATED",
+                "CLUB_STATUS_TOGGLED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por tipo de entidad (ej: Booking, Facility, PricingRule)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por ID de usuario ejecutor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de inicio (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de fin (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Búsqueda por texto en el resumen",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityLogsPaginatedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ActivityLogs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/superadmin/activity-logs": {
+      "get": {
+        "operationId": "ActivityLogsController_findSuperAdminLogs",
+        "summary": "Obtener historial global de auditoría transversal de la plataforma (SuperAdmin)",
+        "parameters": [
+          {
+            "name": "page",
+            "required": false,
+            "in": "query",
+            "description": "Número de página (1-indexed)",
+            "schema": {
+              "default": 1,
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Cantidad de registros por página",
+            "schema": {
+              "default": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "action",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por acción específica",
+            "schema": {
+              "enum": [
+                "BOOKING_CREATED",
+                "BOOKING_CANCELLED",
+                "BOOKING_MODIFIED",
+                "BOOKING_COMPLETED",
+                "FACILITY_CREATED",
+                "FACILITY_UPDATED",
+                "FACILITY_DELETED",
+                "FACILITY_BLOCK_CREATED",
+                "FACILITY_BLOCK_DELETED",
+                "PRICING_RULE_CREATED",
+                "PRICING_RULE_UPDATED",
+                "PRICING_RULE_DELETED",
+                "MEMBER_ROLE_CHANGED",
+                "MEMBER_WALLET_TOPUP",
+                "MEMBER_WALLET_ADJUSTED",
+                "MEMBER_STATUS_CHANGED",
+                "AUTH_LOGIN_SUCCESS",
+                "AUTH_PASSWORD_CHANGED",
+                "AUTH_FAILED_ATTEMPT",
+                "CLUB_CREATED",
+                "CLUB_UPDATED",
+                "CLUB_STATUS_TOGGLED"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "entityType",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por tipo de entidad (ej: Booking, Facility, PricingRule)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "userId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por ID de usuario ejecutor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "startDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de inicio (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "endDate",
+            "required": false,
+            "in": "query",
+            "description": "Fecha de fin (ISO 8601)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Búsqueda por texto en el resumen",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivityLogsPaginatedResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "ActivityLogs"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
     }
   },
   "info": {
@@ -4067,6 +4462,163 @@
             "description": "Estado activo o pausado del centro deportivo"
           }
         }
+      },
+      "ActivityLogUserSummaryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID del usuario"
+          },
+          "fullName": {
+            "type": "string",
+            "description": "Nombre completo del usuario"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email del usuario"
+          },
+          "avatarUrl": {
+            "type": "object",
+            "description": "Avatar del usuario",
+            "nullable": true
+          }
+        },
+        "required": [
+          "id",
+          "fullName",
+          "email"
+        ]
+      },
+      "ActivityLogItemDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID único del registro de auditoría"
+          },
+          "clubId": {
+            "type": "string",
+            "description": "ID del club asociado",
+            "nullable": true
+          },
+          "userId": {
+            "type": "string",
+            "description": "ID del usuario que ejecutó la acción",
+            "nullable": true
+          },
+          "user": {
+            "description": "Detalle del usuario ejecutor",
+            "nullable": true,
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ActivityLogUserSummaryDto"
+              }
+            ]
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "BOOKING_CREATED",
+              "BOOKING_CANCELLED",
+              "BOOKING_MODIFIED",
+              "BOOKING_COMPLETED",
+              "FACILITY_CREATED",
+              "FACILITY_UPDATED",
+              "FACILITY_DELETED",
+              "FACILITY_BLOCK_CREATED",
+              "FACILITY_BLOCK_DELETED",
+              "PRICING_RULE_CREATED",
+              "PRICING_RULE_UPDATED",
+              "PRICING_RULE_DELETED",
+              "MEMBER_ROLE_CHANGED",
+              "MEMBER_WALLET_TOPUP",
+              "MEMBER_WALLET_ADJUSTED",
+              "MEMBER_STATUS_CHANGED",
+              "AUTH_LOGIN_SUCCESS",
+              "AUTH_PASSWORD_CHANGED",
+              "AUTH_FAILED_ATTEMPT",
+              "CLUB_CREATED",
+              "CLUB_UPDATED",
+              "CLUB_STATUS_TOGGLED"
+            ],
+            "description": "Tipo de acción ejecutada"
+          },
+          "entityType": {
+            "type": "string",
+            "description": "Tipo de entidad afectada"
+          },
+          "entityId": {
+            "type": "string",
+            "description": "ID del recurso afectado",
+            "nullable": true
+          },
+          "summary": {
+            "type": "string",
+            "description": "Resumen amigable de la acción"
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Metadatos adicionales y diferencias en formato JSON",
+            "nullable": true
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "Dirección IP de origen",
+            "nullable": true
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "Navegador o User-Agent del cliente",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Fecha y hora de creación"
+          }
+        },
+        "required": [
+          "id",
+          "action",
+          "entityType",
+          "summary",
+          "createdAt"
+        ]
+      },
+      "ActivityLogsPaginatedResponseDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "description": "Lista de eventos de auditoría",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ActivityLogItemDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total de registros que coinciden con los filtros"
+          },
+          "page": {
+            "type": "number",
+            "description": "Página actual"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Registros por página"
+          },
+          "totalPages": {
+            "type": "number",
+            "description": "Total de páginas disponibles"
+          }
+        },
+        "required": [
+          "data",
+          "total",
+          "page",
+          "limit",
+          "totalPages"
+        ]
       }
     }
   }

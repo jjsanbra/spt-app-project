@@ -1,3 +1,4 @@
+export * from './activity-logs/activity-logs.service';
 export * from './auth/auth.service';
 export * from './bookings/bookings.service';
 export * from './clubs-members/clubs-members.service';

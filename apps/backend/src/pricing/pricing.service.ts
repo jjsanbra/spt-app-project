@@ -1,12 +1,17 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { ActivityAction } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { CreatePricingRuleDto } from './dto/create-pricing-rule.dto';
 import { PricingRuleResponseDto } from './dto/pricing-rule-response.dto';
 import { UpdatePricingRuleDto } from './dto/update-pricing-rule.dto';
 
 @Injectable()
 export class PricingService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly activityLogsService: ActivityLogsService,
+  ) {}
 
   async findAll(clubId: string, facilityId?: string): Promise<PricingRuleResponseDto[]> {
     const rules = await this.prisma.pricingRule.findMany({
@@ -38,7 +43,7 @@ export class PricingService {
     return this.mapPricingRule(rule);
   }
 
-  async create(clubId: string, dto: CreatePricingRuleDto): Promise<PricingRuleResponseDto> {
+  async create(clubId: string, dto: CreatePricingRuleDto, userId?: string): Promise<PricingRuleResponseDto> {
     const rule = await this.prisma.pricingRule.create({
       data: {
         clubId,
@@ -59,6 +64,21 @@ export class PricingService {
       },
     });
 
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.PRICING_RULE_CREATED,
+      entityType: 'PricingRule',
+      entityId: rule.id,
+      summary: `Tarifa "${rule.name}" creada (Socio: ${rule.memberPrice}€ / No socio: ${rule.guestPrice}€)`,
+      metadata: {
+        name: rule.name,
+        facilityId: rule.facilityId,
+        memberPrice: Number(rule.memberPrice),
+        guestPrice: Number(rule.guestPrice),
+      },
+    });
+
     return this.mapPricingRule(rule);
   }
 
@@ -66,8 +86,9 @@ export class PricingService {
     clubId: string,
     id: string,
     dto: UpdatePricingRuleDto,
+    userId?: string,
   ): Promise<PricingRuleResponseDto> {
-    await this.findOne(clubId, id);
+    const existing = await this.findOne(clubId, id);
 
     const rule = await this.prisma.pricingRule.update({
       where: { id },
@@ -89,14 +110,39 @@ export class PricingService {
       },
     });
 
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.PRICING_RULE_UPDATED,
+      entityType: 'PricingRule',
+      entityId: rule.id,
+      summary: `Tarifa "${rule.name}" actualizada`,
+      metadata: {
+        previous: {
+          memberPrice: existing.memberPrice,
+          guestPrice: existing.guestPrice,
+        },
+        new: { ...dto },
+      },
+    });
+
     return this.mapPricingRule(rule);
   }
 
-  async remove(clubId: string, id: string): Promise<{ success: boolean; message: string }> {
-    await this.findOne(clubId, id);
+  async remove(clubId: string, id: string, userId?: string): Promise<{ success: boolean; message: string }> {
+    const existing = await this.findOne(clubId, id);
 
     await this.prisma.pricingRule.delete({
       where: { id },
+    });
+
+    this.activityLogsService.log({
+      clubId,
+      userId,
+      action: ActivityAction.PRICING_RULE_DELETED,
+      entityType: 'PricingRule',
+      entityId: id,
+      summary: `Tarifa "${existing.name}" eliminada`,
     });
 
     return {

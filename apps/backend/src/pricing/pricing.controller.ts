@@ -19,6 +19,7 @@ import {
 } from '@nestjs/swagger';
 import { ClubRole } from '@prisma/client';
 import { CurrentTenant } from '../auth/decorators/current-tenant.decorator';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -68,8 +69,9 @@ export class PricingController {
   async create(
     @CurrentTenant('clubId') clubId: string,
     @Body() dto: CreatePricingRuleDto,
+    @CurrentUser('id') userId?: string,
   ): Promise<PricingRuleResponseDto> {
-    return this.pricingService.create(clubId, dto);
+    return this.pricingService.create(clubId, dto, userId);
   }
 
   @Put(':id')
@@ -80,8 +82,9 @@ export class PricingController {
     @CurrentTenant('clubId') clubId: string,
     @Param('id') id: string,
     @Body() dto: UpdatePricingRuleDto,
+    @CurrentUser('id') userId?: string,
   ): Promise<PricingRuleResponseDto> {
-    return this.pricingService.update(clubId, id, dto);
+    return this.pricingService.update(clubId, id, dto, userId);
   }
 
   @Delete(':id')
@@ -91,7 +94,8 @@ export class PricingController {
   async remove(
     @CurrentTenant('clubId') clubId: string,
     @Param('id') id: string,
+    @CurrentUser('id') userId?: string,
   ): Promise<{ success: boolean; message: string }> {
-    return this.pricingService.remove(clubId, id);
+    return this.pricingService.remove(clubId, id, userId);
   }
 }

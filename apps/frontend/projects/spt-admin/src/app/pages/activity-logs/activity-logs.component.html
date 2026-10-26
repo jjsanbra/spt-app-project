@@ -1,0 +1,255 @@
+<div class="activity-logs-container">
+  <p-card>
+    <ng-template #title>
+      <div class="flex items-center gap-2">
+        <i class="pi pi-history text-primary"></i>
+        <span>{{ 'ADMIN.LOGS.TITLE' | translate }}</span>
+      </div>
+    </ng-template>
+    <ng-template #subtitle>
+      <span>{{ 'ADMIN.LOGS.SUBTITLE' | translate }}</span>
+    </ng-template>
+
+    <!-- Toolbar oficial de PrimeNG para agrupar filtros y acciones -->
+    <p-toolbar class="mb-4">
+      <ng-template #start>
+        <div class="flex items-center gap-3 flex-wrap">
+          <p-iconfield>
+            <p-inputicon class="pi pi-search" />
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="searchTerm"
+              (keyup.enter)="onFilterChange()"
+              [placeholder]="'ADMIN.LOGS.SEARCH_PLACEHOLDER' | translate"
+              class="w-64"
+            />
+          </p-iconfield>
+
+          <p-select
+            [options]="categoryOptions"
+            [(ngModel)]="selectedCategory"
+            optionLabel="label"
+            optionValue="value"
+            (onChange)="onFilterChange()"
+            [appendTo]="'body'"
+            class="w-56"
+          ></p-select>
+
+          <p-datepicker
+            [(ngModel)]="dateRange"
+            selectionMode="range"
+            [readonlyInput]="true"
+            [showIcon]="true"
+            dateFormat="dd/mm/yy"
+            (onSelect)="onFilterChange()"
+            [placeholder]="'ADMIN.LOGS.DATE_RANGE' | translate"
+            [appendTo]="'body'"
+            class="w-60"
+          ></p-datepicker>
+
+          <button
+            type="button"
+            pButton
+            iconOnly
+            variant="text"
+            severity="secondary"
+            (click)="clearFilters()"
+            [pTooltip]="'ADMIN.LOGS.CLEAR_FILTERS' | translate"
+            tooltipPosition="top"
+          >
+            <i class="pi pi-filter-slash"></i>
+          </button>
+        </div>
+      </ng-template>
+
+      <ng-template #end>
+        <button
+          type="button"
+          pButton
+          severity="secondary"
+          variant="outlined"
+          [disabled]="logs.length === 0"
+          (click)="exportCsv()"
+        >
+          <i class="pi pi-download mr-2"></i>
+          <span>{{ 'ADMIN.LOGS.EXPORT_CSV' | translate }}</span>
+        </button>
+      </ng-template>
+    </p-toolbar>
+
+    <!-- Tabla oficial de PrimeNG -->
+    <p-table
+      [value]="logs"
+      [lazy]="true"
+      (onLazyLoad)="loadLogs($event)"
+      [paginator]="true"
+      [rows]="rows"
+      [totalRecords]="totalRecords"
+      [loading]="loading"
+      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [stripedRows]="true"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
+      [scrollable]="true"
+    >
+      <ng-template #header>
+        <tr>
+          <th style="width: 170px">{{ 'ADMIN.LOGS.DATE' | translate }}</th>
+          <th style="width: 200px">{{ 'ADMIN.LOGS.USER' | translate }}</th>
+          <th style="width: 160px">{{ 'ADMIN.LOGS.ACTION' | translate }}</th>
+          <th style="width: 140px">{{ 'ADMIN.LOGS.ENTITY' | translate }}</th>
+          <th>{{ 'ADMIN.LOGS.SUMMARY' | translate }}</th>
+          <th style="width: 90px; text-align: center">{{ 'ADMIN.LOGS.ACTIONS' | translate }}</th>
+        </tr>
+      </ng-template>
+
+      <ng-template #body let-log>
+        <tr>
+          <td class="date-cell">
+            <span class="font-medium">{{ log.createdAt | date: 'dd/MM/yyyy HH:mm' }}</span>
+          </td>
+          <td class="user-cell">
+            @if (log.user) {
+              <div class="user-info">
+                <span class="user-name">{{ log.user.fullName }}</span>
+                <span class="user-email text-muted">{{ log.user.email }}</span>
+              </div>
+            } @else {
+              <span class="system-badge text-muted">
+                <i class="pi pi-server mr-1"></i>
+                {{ 'ADMIN.LOGS.SYSTEM_USER' | translate }}
+              </span>
+            }
+          </td>
+          <td>
+            <p-tag
+              [value]="log.action"
+              [severity]="getActionSeverity(log.action)"
+            ></p-tag>
+          </td>
+          <td>
+            <span class="entity-badge">{{ log.entityType }}</span>
+          </td>
+          <td class="summary-cell">
+            <span>{{ log.summary }}</span>
+          </td>
+          <td style="text-align: center">
+            <button
+              type="button"
+              pButton
+              iconOnly
+              rounded
+              variant="text"
+              severity="secondary"
+              (click)="openDetail(log)"
+              [pTooltip]="'ADMIN.LOGS.INSPECT_TOOLTIP' | translate"
+              tooltipPosition="top"
+            >
+              <i class="pi pi-eye"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="6" class="empty-state-cell">
+            <div class="empty-state">
+              <i class="pi pi-history empty-icon"></i>
+              <p>{{ 'ADMIN.LOGS.EMPTY' | translate }}</p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-card>
+
+  <!-- Diálogo Modal de Inspección Detallada -->
+  <p-dialog
+    [(visible)]="displayModal"
+    [modal]="true"
+    [header]="'ADMIN.LOGS.DIALOG_TITLE' | translate"
+    [style]="{ width: '90vw', maxWidth: '680px' }"
+    [draggable]="false"
+    [resizable]="false"
+  >
+    @if (selectedLog) {
+      <div class="modal-content">
+        <!-- Resumen del evento -->
+        <div class="event-summary-box">
+          <div class="summary-header">
+            <p-tag
+              [value]="selectedLog.action"
+              [severity]="getActionSeverity(selectedLog.action)"
+            ></p-tag>
+            <span class="event-date text-muted">
+              {{ selectedLog.createdAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+            </span>
+          </div>
+          <p class="summary-text">{{ selectedLog.summary }}</p>
+        </div>
+
+        <p-divider />
+
+        <!-- Metadatos de red y ejecución -->
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span class="meta-label">{{ 'ADMIN.LOGS.USER' | translate }}:</span>
+            <span class="meta-value">
+              {{ selectedLog.user?.fullName || ('ADMIN.LOGS.SYSTEM_USER' | translate) }}
+              @if (selectedLog.user?.email) {
+                ({{ selectedLog.user?.email }})
+              }
+            </span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">{{ 'ADMIN.LOGS.ENTITY' | translate }}:</span>
+            <span class="meta-value">{{ selectedLog.entityType }} ({{ selectedLog.entityId || '-' }})</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">{{ 'ADMIN.LOGS.IP_ADDRESS' | translate }}:</span>
+            <span class="meta-value">{{ selectedLog.ipAddress || '-' }}</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">{{ 'ADMIN.LOGS.EVENT_ID' | translate }}:</span>
+            <span class="meta-value code-snippet">{{ selectedLog.id }}</span>
+          </div>
+        </div>
+
+        <!-- JSON estructurado de metadatos -->
+        @if (selectedLog.metadata) {
+          <p-divider />
+          <div class="json-viewer-section">
+            <div class="json-header">
+              <span class="json-title">{{ 'ADMIN.LOGS.RAW_JSON' | translate }}</span>
+              <button
+                type="button"
+                pButton
+                variant="text"
+                size="small"
+                (click)="copyJson()"
+              >
+                <i class="pi pi-copy mr-1"></i>
+                <span>{{ 'ADMIN.LOGS.COPY_JSON' | translate }}</span>
+              </button>
+            </div>
+            <pre class="json-pre"><code>{{ selectedLog.metadata | json }}</code></pre>
+          </div>
+        }
+      </div>
+    }
+
+    <ng-template #footer>
+      <button
+        type="button"
+        pButton
+        severity="secondary"
+        variant="outlined"
+        (click)="displayModal = false"
+      >
+        <span>{{ 'ADMIN.LOGS.CLOSE' | translate }}</span>
+      </button>
+    </ng-template>
+  </p-dialog>
+</div>

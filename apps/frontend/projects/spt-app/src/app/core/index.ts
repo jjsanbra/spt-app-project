@@ -11,6 +11,7 @@ export { ClubsMembersService } from './api/endpoints/clubs-members/clubs-members
 export { ClubsSettingsService } from './api/endpoints/clubs-settings/clubs-settings.service';
 export { BookingsService } from './api/endpoints/bookings/bookings.service';
 export { NotificationsService } from './api/endpoints/notifications/notifications.service';
+export { ActivityLogsService } from './api/endpoints/activity-logs/activity-logs.service';
 export {
   SuperadminClubsService,
   SuperadminClubsService as SuperAdminClubsService,
@@ -37,3 +38,4 @@ export * from './api/endpoints/notifications/notifications.faker';
 export * from './api/endpoints/superadmin-clubs/superadmin-clubs.faker';
 export * from './api/endpoints/clubs-members/clubs-members.faker';
 export * from './api/endpoints/clubs-settings/clubs-settings.faker';
+export * from './api/endpoints/activity-logs/activity-logs.faker';

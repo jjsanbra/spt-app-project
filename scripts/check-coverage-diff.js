@@ -128,6 +128,10 @@ const FRONTEND_EXCLUDED = [
   /bootstrap\.ts$/,
   /main\.ts$/,
   /\.d\.ts$/,
+  /\.msw\.ts$/,
+  /\.faker\.ts$/,
+  /\/core\/api\//,
+  /\/core\/index\.ts$/,
 ];
 
 // Agrupar archivos modificados por proyecto de microfrontend

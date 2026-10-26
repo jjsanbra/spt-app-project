@@ -8,8 +8,9 @@ import {
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { ClubRole } from '@prisma/client';
+import { ActivityAction, ClubRole } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { AuthResponseDto, TokenResponseDto, UserSummaryDto } from './dto/auth-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
@@ -23,6 +24,7 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly activityLogsService: ActivityLogsService,
   ) {}
 
   async register(dto: RegisterDto): Promise<AuthResponseDto> {
@@ -87,16 +89,36 @@ export class AuthService {
     });
 
     if (!user) {
+      this.activityLogsService.log({
+        action: ActivityAction.AUTH_FAILED_ATTEMPT,
+        entityType: 'User',
+        summary: `Intento fallido de inicio de sesión: ${dto.email}`,
+        metadata: { email: dto.email },
+      });
       throw new UnauthorizedException('Correo electrónico o contraseña incorrectos');
     }
 
     if (!user.isActive) {
+      this.activityLogsService.log({
+        userId: user.id,
+        action: ActivityAction.AUTH_FAILED_ATTEMPT,
+        entityType: 'User',
+        summary: `Intento de acceso con cuenta desactivada: ${user.email}`,
+        metadata: { email: user.email },
+      });
       throw new UnauthorizedException('Tu cuenta ha sido desactivada. Contacta con soporte.');
     }
 
     const passwordValid = await bcrypt.compare(dto.password, user.password);
 
     if (!passwordValid) {
+      this.activityLogsService.log({
+        userId: user.id,
+        action: ActivityAction.AUTH_FAILED_ATTEMPT,
+        entityType: 'User',
+        summary: `Contraseña incorrecta para el usuario: ${user.email}`,
+        metadata: { email: user.email },
+      });
       throw new UnauthorizedException('Correo electrónico o contraseña incorrectos');
     }
 
@@ -119,6 +141,15 @@ export class AuthService {
         select: { id: true, name: true, slug: true, isActive: true },
       });
     }
+
+    this.activityLogsService.log({
+      userId: user.id,
+      action: ActivityAction.AUTH_LOGIN_SUCCESS,
+      entityType: 'User',
+      entityId: user.id,
+      summary: `Inicio de sesión exitoso: ${user.email}`,
+      metadata: { email: user.email, isSuperAdmin: user.isSuperAdmin },
+    });
 
     return {
       accessToken: tokens.accessToken,

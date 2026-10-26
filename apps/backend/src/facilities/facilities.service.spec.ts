@@ -2,6 +2,7 @@ import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CourtType, SportType, SurfaceType } from '@prisma/client';
 import { PrismaService } from '../core/database/prisma.service';
+import { ActivityLogsService } from '../activity-logs/activity-logs.service';
 import { FacilitiesService } from './facilities.service';
 
 describe('FacilitiesService', () => {
@@ -58,6 +59,10 @@ describe('FacilitiesService', () => {
       providers: [
         FacilitiesService,
         { provide: PrismaService, useValue: prismaMock },
+        {
+          provide: ActivityLogsService,
+          useValue: { log: jest.fn().mockResolvedValue(undefined) },
+        },
       ],
     }).compile();
 

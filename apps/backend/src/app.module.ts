@@ -14,6 +14,7 @@ import { ClubsModule } from './clubs/clubs.module';
 import { BookingsModule } from './bookings/bookings.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { SuperAdminModule } from './superadmin/superadmin.module';
+import { ActivityLogsModule } from './activity-logs/activity-logs.module';
 
 /**
  * AppModule — Módulo raíz de la aplicación SPT Backend.
@@ -50,6 +51,7 @@ import { SuperAdminModule } from './superadmin/superadmin.module';
     BookingsModule,
     NotificationsModule,
     SuperAdminModule,
+    ActivityLogsModule,
   ],
   providers: [
     {

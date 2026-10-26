@@ -99,8 +99,9 @@ export class FacilitiesController {
   async create(
     @CurrentTenant('clubId') clubId: string,
     @Body() dto: CreateFacilityDto,
+    @CurrentUser('id') userId?: string,
   ): Promise<FacilityResponseDto> {
-    return this.facilitiesService.create(clubId, dto);
+    return this.facilitiesService.create(clubId, dto, userId);
   }
 
   @Put(':id')
@@ -111,8 +112,9 @@ export class FacilitiesController {
     @CurrentTenant('clubId') clubId: string,
     @Param('id') id: string,
     @Body() dto: UpdateFacilityDto,
+    @CurrentUser('id') userId?: string,
   ): Promise<FacilityResponseDto> {
-    return this.facilitiesService.update(clubId, id, dto);
+    return this.facilitiesService.update(clubId, id, dto, userId);
   }
 
   @Delete(':id')
@@ -122,8 +124,9 @@ export class FacilitiesController {
   async remove(
     @CurrentTenant('clubId') clubId: string,
     @Param('id') id: string,
+    @CurrentUser('id') userId?: string,
   ): Promise<{ success: boolean; message: string }> {
-    return this.facilitiesService.remove(clubId, id);
+    return this.facilitiesService.remove(clubId, id, userId);
   }
 
   // ─── Bloqueos de Instalación ───────────────────────────────
@@ -146,8 +149,9 @@ export class FacilitiesController {
     @CurrentTenant('clubId') clubId: string,
     @Param('id') facilityId: string,
     @Body() dto: CreateFacilityBlockDto,
+    @CurrentUser('id') userId?: string,
   ): Promise<FacilityBlockResponseDto> {
-    return this.facilitiesService.createBlock(clubId, facilityId, dto);
+    return this.facilitiesService.createBlock(clubId, facilityId, dto, userId);
   }
 
   @Delete(':id/blocks/:blockId')
@@ -159,7 +163,8 @@ export class FacilitiesController {
     @CurrentTenant('clubId') clubId: string,
     @Param('id') facilityId: string,
     @Param('blockId') blockId: string,
+    @CurrentUser('id') userId?: string,
   ): Promise<{ success: boolean }> {
-    return this.facilitiesService.removeBlock(clubId, facilityId, blockId);
+    return this.facilitiesService.removeBlock(clubId, facilityId, blockId, userId);
   }
 }

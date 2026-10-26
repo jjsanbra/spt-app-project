@@ -1,0 +1,100 @@
+@use "base/responsive" as *;
+
+.user-activity-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.date-cell {
+  font-size: var(--font-size-sm);
+  color: var(--text-color-secondary);
+  white-space: nowrap;
+}
+
+.summary-cell {
+  .summary-text {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: var(--spacing-2xl) !important;
+
+  .empty-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    color: var(--text-color-secondary);
+
+    .empty-icon {
+      font-size: 2.5rem;
+      opacity: 0.4;
+    }
+
+    p {
+      margin: 0;
+      font-size: var(--font-size-sm);
+    }
+  }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+
+  .detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+
+    .detail-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-color-secondary);
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      font-size: var(--font-size-sm);
+      color: var(--text-color);
+
+      &.summary-highlight {
+        font-weight: var(--font-weight-semibold);
+      }
+    }
+  }
+
+  .detail-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+
+    .detail-label {
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-semibold);
+      color: var(--text-color-secondary);
+      text-transform: uppercase;
+    }
+
+    .json-viewer {
+      background: var(--surface-muted);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-sm);
+      font-family: monospace;
+      font-size: var(--font-size-xs);
+      color: var(--text-color);
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 0;
+    }
+  }
+}

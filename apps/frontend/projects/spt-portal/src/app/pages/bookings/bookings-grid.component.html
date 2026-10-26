@@ -271,7 +271,7 @@
                                 <div class="court-subinfo">
                                   <span>{{ facility.courtType }}</span>
                                   @if (facility.hasLighting) {
-                                    <i class="pi pi-sun lighting-mini-icon" title="Luz disponible"></i>
+                                    <i class="pi pi-sun lighting-mini-icon" [pTooltip]="'PORTAL.BOOKINGS.LIGHTING_AVAILABLE' | translate" tooltipPosition="top"></i>
                                   }
                                 </div>
                               </div>
@@ -308,7 +308,8 @@
                                     }"
                                     [disabled]="slot.status !== 'AVAILABLE' || isCutoff"
                                     (click)="selectSlot(facility, slot, selectedDate)"
-                                    [title]="isCutoff ? getCutoffTooltip() : ''"
+                                    [pTooltip]="isCutoff ? getCutoffTooltip() : ''"
+                                    tooltipPosition="top"
                                   >
                                     @if (isCutoff) {
                                       <span class="slot-cutoff-text"><i class="pi pi-clock"></i> {{ slot.startHourText }}</span>
@@ -316,7 +317,7 @@
                                       <span class="slot-price-text">
                                         {{ slot.price | currency: 'EUR':'symbol':'1.2-2' }}
                                         @if (slot.isPeakHour) {
-                                          <span class="slot-peak-indicator" title="Hora punta">★</span>
+                                          <span class="slot-peak-indicator" [pTooltip]="'PORTAL.BOOKINGS.PEAK_HOUR' | translate" tooltipPosition="top">★</span>
                                         }
                                       </span>
                                     } @else if (slot.status === 'OCCUPIED') {
@@ -371,7 +372,7 @@
                     </span>
                   </div>
                   @if (facility.hasLighting) {
-                    <div class="lighting-badge" title="Iluminación disponible">
+                    <div class="lighting-badge" [pTooltip]="'PORTAL.BOOKINGS.LIGHTING_AVAILABLE' | translate" tooltipPosition="top">
                       <i class="pi pi-sun"></i>
                     </div>
                   }
@@ -394,7 +395,8 @@
                       }"
                       [disabled]="slot.status !== 'AVAILABLE' || isCardCutoff"
                       (click)="selectSlot(facility, slot, selectedDate)"
-                      [title]="isCardCutoff ? getCutoffTooltip() : ''"
+                      [pTooltip]="isCardCutoff ? getCutoffTooltip() : ''"
+                      tooltipPosition="top"
                     >
                       <span class="slot-time">{{ slot.startHourText }} - {{ slot.endHourText }}</span>
                       @if (isCardCutoff) {
