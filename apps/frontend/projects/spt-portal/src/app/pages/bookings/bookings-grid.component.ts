@@ -11,6 +11,7 @@ import {
   NotificationService,
   TimeSlotAvailabilityDto,
   TimeSlotAvailabilityDtoStatus as SlotStatus,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -41,6 +42,7 @@ export interface SportGridGroup {
     RouterLink,
     TranslatePipe,
     CurrencyPipe,
+    PageHeaderComponent,
     ButtonModule,
     SelectModule,
     DialogModule,

@@ -1,84 +1,83 @@
 <div class="activity-logs-container">
-  <p-card>
-    <ng-template #title>
-      <div class="flex items-center gap-2">
-        <i class="pi pi-history text-primary"></i>
-        <span>{{ 'ADMIN.LOGS.TITLE' | translate }}</span>
+  <!-- Header de página unificado -->
+  <spt-page-header
+    icon="pi pi-history"
+    [title]="'ADMIN.LOGS.TITLE' | translate"
+    [subtitle]="'ADMIN.LOGS.SUBTITLE' | translate"
+  />
+
+  <!-- Barra de Filtros y Herramientas -->
+  <div class="filters-toolbar">
+    <div class="filters-left">
+      <p-iconfield class="filter-search">
+        <p-inputicon class="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="searchTerm"
+          (keyup.enter)="onFilterChange()"
+          [placeholder]="'ADMIN.LOGS.SEARCH_PLACEHOLDER' | translate"
+        />
+      </p-iconfield>
+
+      <div class="filter-control">
+        <p-select
+          [options]="categoryOptions"
+          [(ngModel)]="selectedCategory"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onFilterChange()"
+          [appendTo]="'body'"
+          class="filter-select"
+        ></p-select>
       </div>
-    </ng-template>
-    <ng-template #subtitle>
-      <span>{{ 'ADMIN.LOGS.SUBTITLE' | translate }}</span>
-    </ng-template>
 
-    <!-- Toolbar oficial de PrimeNG para agrupar filtros y acciones -->
-    <p-toolbar class="mb-4">
-      <ng-template #start>
-        <div class="flex items-center gap-3 flex-wrap">
-          <p-iconfield>
-            <p-inputicon class="pi pi-search" />
-            <input
-              type="text"
-              pInputText
-              [(ngModel)]="searchTerm"
-              (keyup.enter)="onFilterChange()"
-              [placeholder]="'ADMIN.LOGS.SEARCH_PLACEHOLDER' | translate"
-              class="w-64"
-            />
-          </p-iconfield>
+      <div class="filter-control">
+        <p-datepicker
+          [(ngModel)]="dateRange"
+          selectionMode="range"
+          [readonlyInput]="true"
+          [showIcon]="true"
+          [iconDisplay]="'input'"
+          dateFormat="dd/mm/yy"
+          (onSelect)="onFilterChange()"
+          [placeholder]="'ADMIN.LOGS.DATE_RANGE' | translate"
+          [appendTo]="'body'"
+          class="filter-datepicker"
+        ></p-datepicker>
+      </div>
 
-          <p-select
-            [options]="categoryOptions"
-            [(ngModel)]="selectedCategory"
-            optionLabel="label"
-            optionValue="value"
-            (onChange)="onFilterChange()"
-            [appendTo]="'body'"
-            class="w-56"
-          ></p-select>
+      <button
+        type="button"
+        pButton
+        iconOnly
+        [outlined]="true"
+        severity="secondary"
+        (click)="clearFilters()"
+        [pTooltip]="'ADMIN.LOGS.CLEAR_FILTERS' | translate"
+        tooltipPosition="top"
+      >
+        <i class="pi pi-filter-slash"></i>
+      </button>
+    </div>
 
-          <p-datepicker
-            [(ngModel)]="dateRange"
-            selectionMode="range"
-            [readonlyInput]="true"
-            [showIcon]="true"
-            dateFormat="dd/mm/yy"
-            (onSelect)="onFilterChange()"
-            [placeholder]="'ADMIN.LOGS.DATE_RANGE' | translate"
-            [appendTo]="'body'"
-            class="w-60"
-          ></p-datepicker>
+    <div class="filters-right">
+      <button
+        type="button"
+        pButton
+        severity="secondary"
+        [outlined]="true"
+        [disabled]="logs.length === 0"
+        (click)="exportCsv()"
+      >
+        <i class="pi pi-download"></i>
+        <span>{{ 'ADMIN.LOGS.EXPORT_CSV' | translate }}</span>
+      </button>
+    </div>
+  </div>
 
-          <button
-            type="button"
-            pButton
-            iconOnly
-            variant="text"
-            severity="secondary"
-            (click)="clearFilters()"
-            [pTooltip]="'ADMIN.LOGS.CLEAR_FILTERS' | translate"
-            tooltipPosition="top"
-          >
-            <i class="pi pi-filter-slash"></i>
-          </button>
-        </div>
-      </ng-template>
-
-      <ng-template #end>
-        <button
-          type="button"
-          pButton
-          severity="secondary"
-          variant="outlined"
-          [disabled]="logs.length === 0"
-          (click)="exportCsv()"
-        >
-          <i class="pi pi-download mr-2"></i>
-          <span>{{ 'ADMIN.LOGS.EXPORT_CSV' | translate }}</span>
-        </button>
-      </ng-template>
-    </p-toolbar>
-
-    <!-- Tabla oficial de PrimeNG -->
+  <!-- Tabla de Auditoría -->
+  <div class="table-card">
     <p-table
       [value]="logs"
       [lazy]="true"
@@ -163,7 +162,7 @@
         </tr>
       </ng-template>
     </p-table>
-  </p-card>
+  </div>
 
   <!-- Diálogo Modal de Inspección Detallada -->
   <p-dialog

@@ -1,0 +1,32 @@
+<header class="page-header" role="banner">
+  <div class="header-titles">
+    @if (backUrl) {
+      <div class="breadcrumbs-back">
+        <a [routerLink]="backUrl" class="back-link">
+          <i class="pi pi-arrow-left"></i>
+          <span>{{ backLabel || ('COMMON.BACK' | translate) }}</span>
+        </a>
+      </div>
+    }
+
+    <div class="title-row">
+      @if (icon) {
+        <i [class]="icon + ' header-icon'"></i>
+      }
+      <h1 class="page-title">{{ title }}</h1>
+      @if (badgeText) {
+        <p-tag [value]="badgeText" [severity]="badgeSeverity" class="header-badge" />
+      }
+    </div>
+
+    @if (subtitle) {
+      <p class="page-subtitle">{{ subtitle }}</p>
+    }
+  </div>
+
+  <div class="header-actions">
+    <ng-content select="[filters]"></ng-content>
+    <ng-content select="[actions]"></ng-content>
+    <ng-content></ng-content>
+  </div>
+</header>

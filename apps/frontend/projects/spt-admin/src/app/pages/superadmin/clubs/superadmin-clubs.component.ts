@@ -10,10 +10,13 @@ import {
   SuperAdminClubResponseDto,
   SuperadminClubsService,
   UpdateSuperAdminClubDto,
+  PageHeaderComponent,
 } from '@core';
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -29,11 +32,14 @@ import { TooltipModule } from 'primeng/tooltip';
     FormsModule,
     ReactiveFormsModule,
     TranslatePipe,
+    PageHeaderComponent,
     SharedModule,
     TableModule,
     ButtonModule,
     TagModule,
     DialogModule,
+    IconFieldModule,
+    InputIconModule,
     InputTextModule,
     InputNumberModule,
     SelectModule,

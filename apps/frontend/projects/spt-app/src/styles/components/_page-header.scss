@@ -1,0 +1,103 @@
+/* ==========================================================================
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — UNIFIED PAGE HEADER
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_page-header.scss
+   ========================================================================== */
+
+@use "../base/variables" as *;
+@use "../base/responsive" as *;
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-lg);
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+
+  .header-titles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2xs);
+
+    .breadcrumbs-back {
+      margin-bottom: var(--spacing-2xs);
+
+      .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-xs);
+        color: var(--text-muted);
+        font-family: var(--font-body);
+        font-size: var(--font-size-sm);
+        text-decoration: none;
+        transition: color var(--theme-transition);
+
+        &:hover {
+          color: var(--primary-color);
+        }
+
+        i {
+          font-size: var(--font-size-xs);
+        }
+      }
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      flex-wrap: wrap;
+
+      .header-icon {
+        font-size: var(--font-size-xl);
+        color: var(--primary-color);
+      }
+
+      .page-title {
+        font-family: var(--font-heading);
+        font-size: var(--font-size-xl);
+        font-weight: var(--font-weight-bold);
+        color: var(--text-color);
+        letter-spacing: -0.02em;
+        margin: 0;
+        line-height: 1.2;
+      }
+
+      .header-badge {
+        font-size: var(--font-size-xs);
+      }
+    }
+
+    .page-subtitle {
+      font-family: var(--font-body);
+      font-size: var(--font-size-sm);
+      color: var(--text-muted);
+      margin: 0;
+      line-height: 1.4;
+    }
+  }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+
+    @include mobile {
+      width: 100%;
+      justify-content: stretch;
+
+      button,
+      .p-button,
+      .p-select {
+        flex: 1;
+      }
+    }
+  }
+}

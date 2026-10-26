@@ -14,6 +14,7 @@ import {
   PricingRuleResponseDtoSportType,
   PricingService,
   UpdatePricingRuleDto,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -34,6 +35,7 @@ export type PricingScope = 'GLOBAL' | 'SPORT' | 'FACILITY';
     CommonModule,
     ReactiveFormsModule,
     TranslatePipe,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     TagModule,

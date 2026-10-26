@@ -7,6 +7,8 @@
 .p-datepicker {
   display: inline-flex;
   max-width: 100%;
+  position: relative;
+  align-items: center;
 
   .p-datepicker-input {
     font-family: var(--font-body);
@@ -29,8 +31,25 @@
     }
   }
 
-  .p-datepicker-input-icon-container {
+  /* Si tiene icono integrado a la derecha, reservar espacio para que la fecha no se solape */
+  &:has(.p-datepicker-input-icon-container) .p-datepicker-input,
+  &:has(.p-datepicker-input-icon) .p-datepicker-input,
+  &.p-datepicker-input-icon-right .p-datepicker-input {
+    padding-right: calc(var(--spacing-md) + 1.75rem) !important;
+  }
+
+  .p-datepicker-input-icon-container,
+  .p-datepicker-input-icon {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--text-muted);
+    pointer-events: none;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 

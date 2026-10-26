@@ -7,9 +7,9 @@ import {
   ActivityLogsControllerFindMyLogsParams,
   ActivityLogsService,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -18,7 +18,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 export interface UserCategoryFilter {
@@ -34,8 +33,7 @@ export interface UserCategoryFilter {
     DatePipe,
     FormsModule,
     TranslatePipe,
-    CardModule,
-    ToolbarModule,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     TagModule,

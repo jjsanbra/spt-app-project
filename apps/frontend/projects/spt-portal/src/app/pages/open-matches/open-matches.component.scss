@@ -16,30 +16,6 @@
   }
 }
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-
-  .page-title {
-    font-family: var(--font-heading);
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-color);
-    letter-spacing: -0.02em;
-    margin: 0;
-  }
-
-  .page-subtitle {
-    font-family: var(--font-body);
-    font-size: var(--font-size-sm);
-    color: var(--text-muted);
-    margin-top: var(--spacing-2xs);
-  }
-}
-
 .filter-bar-card {
   display: flex;
   justify-content: space-between;

@@ -9,6 +9,7 @@ import {
   NotificationService,
   OpenMatchResponseDto,
   OpenMatchResponseDtoSportType as SportType,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -24,6 +25,7 @@ import { TagModule } from 'primeng/tag';
     TranslatePipe,
     CurrencyPipe,
     DatePipe,
+    PageHeaderComponent,
     ButtonModule,
     SelectModule,
     TagModule,

@@ -52,6 +52,50 @@ input.p-inputtext {
 }
 
 /* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG IconField (p-iconfield / p-inputicon)
+   -------------------------------------------------------------------------- */
+p-iconfield,
+.p-iconfield {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+
+  p-inputicon,
+  .p-inputicon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    pointer-events: none;
+
+    &:first-child {
+      left: var(--spacing-md);
+    }
+
+    &:last-child {
+      right: var(--spacing-md);
+    }
+  }
+
+  &:has(.p-inputicon:first-child) .p-inputtext,
+  &:has(p-inputicon:first-child) .p-inputtext {
+    padding-left: calc(var(--spacing-md) + 1.75rem) !important;
+  }
+
+  &:has(.p-inputicon:last-child) .p-inputtext,
+  &:has(p-inputicon:last-child) .p-inputtext {
+    padding-right: calc(var(--spacing-md) + 1.75rem) !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Estandarización Universal de PrimeNG Select (p-select / p-dropdown)
    -------------------------------------------------------------------------- */
 .form-group .p-select,

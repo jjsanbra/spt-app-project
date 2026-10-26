@@ -1,11 +1,10 @@
 <div class="admin-page-container">
-  <!-- Header de página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'ADMIN.FACILITIES.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'ADMIN.FACILITIES.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Header de página unificado -->
+  <spt-page-header
+    [title]="'ADMIN.FACILITIES.TITLE' | translate"
+    [subtitle]="'ADMIN.FACILITIES.SUBTITLE' | translate"
+  >
+    <div actions>
       <button
         type="button"
         pButton
@@ -15,7 +14,7 @@
         {{ 'ADMIN.FACILITIES.ADD_BUTTON' | translate }}
       </button>
     </div>
-  </div>
+  </spt-page-header>
 
   <!-- Tabla de Pistas -->
   <div class="table-card">

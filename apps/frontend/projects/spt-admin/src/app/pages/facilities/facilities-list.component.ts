@@ -17,6 +17,7 @@ import {
   PricingService,
   UpdateFacilityDto,
   UpdatePricingRuleDto,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -44,6 +45,7 @@ export interface ResolvedBasePrice {
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     TagModule,

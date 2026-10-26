@@ -1,11 +1,10 @@
 <div class="admin-page-container">
-  <!-- Cabecera de Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'ADMIN.MEMBERS.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'ADMIN.MEMBERS.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    [title]="'ADMIN.MEMBERS.TITLE' | translate"
+    [subtitle]="'ADMIN.MEMBERS.SUBTITLE' | translate"
+  >
+    <div actions>
       <button
         type="button"
         pButton
@@ -15,21 +14,20 @@
         {{ 'ADMIN.MEMBERS.INVITE_BTN' | translate }}
       </button>
     </div>
-  </div>
+  </spt-page-header>
 
   <!-- Barra de Filtros y Búsqueda -->
   <div class="filters-bar">
-    <div class="search-input-wrapper">
-      <i class="pi pi-search search-icon"></i>
+    <p-iconfield class="search-field">
+      <p-inputicon class="pi pi-search" />
       <input
         type="text"
         pInputText
         [placeholder]="'ADMIN.MEMBERS.SEARCH_PLACEHOLDER' | translate"
         [(ngModel)]="searchTerm"
         (input)="onSearchChange()"
-        class="search-input"
       />
-    </div>
+    </p-iconfield>
 
     <div class="role-filter-wrapper">
       <p-select

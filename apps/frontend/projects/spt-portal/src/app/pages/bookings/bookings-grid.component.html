@@ -1,11 +1,10 @@
 <div class="portal-page-container">
-  <!-- Cabecera de Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'PORTAL.BOOKINGS.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'PORTAL.BOOKINGS.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    [title]="'PORTAL.BOOKINGS.TITLE' | translate"
+    [subtitle]="'PORTAL.BOOKINGS.SUBTITLE' | translate"
+  >
+    <div actions>
       <a routerLink="/portal/my-bookings">
         <button
           type="button"
@@ -18,7 +17,7 @@
         </button>
       </a>
     </div>
-  </div>
+  </spt-page-header>
 
   <!-- Barra de Filtros y Granularidad -->
   <div class="filter-controls-card">

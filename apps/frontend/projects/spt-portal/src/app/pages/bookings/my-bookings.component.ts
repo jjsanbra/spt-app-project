@@ -8,6 +8,7 @@ import {
   BookingsService,
   ConfirmDialogService,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -21,6 +22,7 @@ import { TagModule } from 'primeng/tag';
     TranslatePipe,
     CurrencyPipe,
     DatePipe,
+    PageHeaderComponent,
     ButtonModule,
     TagModule,
   ],

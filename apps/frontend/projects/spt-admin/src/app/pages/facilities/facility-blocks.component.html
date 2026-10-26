@@ -1,22 +1,14 @@
 <div class="admin-page-container">
-  <!-- Header de página con botón volver -->
-  <div class="page-header">
-    <div class="header-titles">
-      <div class="breadcrumbs-back">
-        <a routerLink="/admin/facilities" class="back-link">
-          <i class="pi pi-arrow-left"></i> {{ 'ADMIN.BLOCKS.BACK_TO_FACILITIES' | translate }}
-        </a>
-      </div>
-      <h1 class="page-title">
-        {{ 'ADMIN.BLOCKS.TITLE' | translate }}
-        @if (facilityName) {
-          <span class="facility-badge-name">— {{ facilityName }}</span>
-        }
-      </h1>
-      <p class="page-subtitle">{{ 'ADMIN.BLOCKS.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
-      @if (facilities.length > 1) {
+  <!-- Header de página unificado con botón volver -->
+  <spt-page-header
+    [title]="'ADMIN.BLOCKS.TITLE' | translate"
+    [subtitle]="'ADMIN.BLOCKS.SUBTITLE' | translate"
+    backUrl="/admin/facilities"
+    [backLabel]="'ADMIN.BLOCKS.BACK_TO_FACILITIES' | translate"
+    [badgeText]="facilityName ? '— ' + facilityName : undefined"
+  >
+    @if (facilities.length > 1) {
+      <div filters>
         <p-select
           [options]="facilities"
           [(ngModel)]="facilityId"
@@ -26,7 +18,9 @@
           [placeholder]="'ADMIN.BLOCKS.SELECT_FACILITY' | translate"
           class="facility-select-control"
         ></p-select>
-      }
+      </div>
+    }
+    <div actions>
       <button
         type="button"
         pButton
@@ -37,7 +31,7 @@
         {{ 'ADMIN.BLOCKS.ADD_BUTTON' | translate }}
       </button>
     </div>
-  </div>
+  </spt-page-header>
 
   <!-- Tabla de Bloqueos -->
   <div class="table-card">

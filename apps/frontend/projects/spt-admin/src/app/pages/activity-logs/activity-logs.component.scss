@@ -10,35 +10,79 @@
   }
 }
 
-.page-header {
+.filters-toolbar {
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-lg);
   gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  flex-wrap: wrap;
 
   @include mobile {
     flex-direction: column;
     align-items: stretch;
   }
-}
 
-.header-titles {
-  .page-title {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--text-color);
-    margin: 0 0 var(--spacing-2xs) 0;
+  .filters-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+    flex: 1;
+
+    @include mobile {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
   }
 
-  .page-subtitle {
-    font-size: var(--font-size-sm);
-    color: var(--text-color-secondary);
-    margin: 0;
+  .filters-right {
+    display: flex;
+    align-items: center;
+
+    @include mobile {
+      width: 100%;
+      button {
+        width: 100%;
+      }
+    }
   }
 }
 
+.filter-search {
+  flex: 1;
+  min-width: 240px;
+  max-width: 360px;
 
+  @include mobile {
+    max-width: 100%;
+    min-width: 100%;
+  }
+}
+
+.filter-control {
+  min-width: 180px;
+
+  @include mobile {
+    width: 100%;
+    min-width: 100%;
+  }
+
+  .filter-select,
+  .filter-datepicker {
+    width: 100%;
+  }
+}
+
+.table-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-table);
+  overflow: hidden;
+  transition: var(--theme-transition);
+}
 
 .user-cell {
   .user-info {

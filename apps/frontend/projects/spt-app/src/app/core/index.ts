@@ -24,6 +24,9 @@ export * from './services/confirm-dialog.service';
 export * from './services/realtime-notifications.service';
 export * from './services/theme.service';
 
+// Componentes UI transversales
+export * from './components/page-header/page-header.component';
+
 // Interceptores y Guards
 export * from './interceptors/auth.interceptor';
 export * from './guards/auth.guard';

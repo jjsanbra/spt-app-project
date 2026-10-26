@@ -8,9 +8,12 @@ import {
   ClubsMembersService,
   ConfirmDialogService,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
@@ -25,10 +28,13 @@ import { TooltipModule } from 'primeng/tooltip';
     FormsModule,
     ReactiveFormsModule,
     TranslatePipe,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     TagModule,
     DialogModule,
+    IconFieldModule,
+    InputIconModule,
     InputTextModule,
     SelectModule,
     TooltipModule,

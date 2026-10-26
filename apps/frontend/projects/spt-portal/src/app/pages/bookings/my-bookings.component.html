@@ -1,11 +1,10 @@
 <div class="portal-page-container">
-  <!-- Cabecera de Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'PORTAL.MY_BOOKINGS.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'PORTAL.MY_BOOKINGS.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    [title]="'PORTAL.MY_BOOKINGS.TITLE' | translate"
+    [subtitle]="'PORTAL.MY_BOOKINGS.SUBTITLE' | translate"
+  >
+    <div actions>
       <a routerLink="/portal/book">
         <button
           type="button"
@@ -16,7 +15,7 @@
         </button>
       </a>
     </div>
-  </div>
+  </spt-page-header>
 
   @if (loading) {
     <div class="loading-state">

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   ConfirmDialogService,
@@ -9,6 +9,7 @@ import {
   FacilityBlockResponseDto,
   FacilityResponseDto,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -24,8 +25,8 @@ import { TooltipModule } from 'primeng/tooltip';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
     TranslatePipe,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     DialogModule,

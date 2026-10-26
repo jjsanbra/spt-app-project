@@ -14,50 +14,6 @@
   margin-bottom: var(--spacing-xs);
 }
 
-.back-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  color: var(--primary);
-  text-decoration: none;
-  font-family: var(--font-label);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-
-  &:hover {
-    text-decoration: underline;
-  }
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: var(--spacing-lg);
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-}
-
-.page-title {
-  font-family: var(--font-heading);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--text-color);
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--spacing-2xs) 0;
-}
-
-.facility-badge-name {
-  color: var(--primary);
-}
-
-.page-subtitle {
-  font-family: var(--font-body);
-  font-size: var(--font-size-sm);
-  color: var(--text-muted);
-  margin: 0;
-}
-
 .table-card {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);

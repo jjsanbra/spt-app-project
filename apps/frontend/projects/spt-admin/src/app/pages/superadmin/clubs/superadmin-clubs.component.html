@@ -1,12 +1,10 @@
 <div class="superadmin-page-container">
-  <!-- Cabecera de Página -->
-  <header class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'SUPERADMIN.CLUBS.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'SUPERADMIN.CLUBS.SUBTITLE' | translate }}</p>
-    </div>
-
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    [title]="'SUPERADMIN.CLUBS.TITLE' | translate"
+    [subtitle]="'SUPERADMIN.CLUBS.SUBTITLE' | translate"
+  >
+    <div actions>
       <button
         type="button"
         pButton
@@ -17,21 +15,20 @@
         {{ 'SUPERADMIN.CLUBS.NEW_CLUB_BTN' | translate }}
       </button>
     </div>
-  </header>
+  </spt-page-header>
 
   <!-- Barra de Filtros -->
   <div class="filters-toolbar">
-    <div class="search-box">
-      <i class="pi pi-search search-icon"></i>
+    <p-iconfield class="filter-search">
+      <p-inputicon class="pi pi-search" />
       <input
         type="text"
         pInputText
         [(ngModel)]="searchFilter"
         (input)="onSearchChange()"
         [placeholder]="'SUPERADMIN.CLUBS.SEARCH_PLACEHOLDER' | translate"
-        class="search-input"
       />
-    </div>
+    </p-iconfield>
 
     <div class="filter-controls">
       <p-select

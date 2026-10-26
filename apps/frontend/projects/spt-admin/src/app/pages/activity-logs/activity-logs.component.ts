@@ -9,9 +9,9 @@ import {
   ActivityLogsService,
   AuthService,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -21,7 +21,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableLazyLoadEvent, TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
-import { ToolbarModule } from 'primeng/toolbar';
 import { TooltipModule } from 'primeng/tooltip';
 
 export interface CategoryOption {
@@ -36,8 +35,7 @@ export interface CategoryOption {
     CommonModule,
     FormsModule,
     TranslatePipe,
-    CardModule,
-    ToolbarModule,
+    PageHeaderComponent,
     TableModule,
     ButtonModule,
     TagModule,

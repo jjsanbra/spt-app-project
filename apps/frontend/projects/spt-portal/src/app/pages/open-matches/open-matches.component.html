@@ -1,11 +1,10 @@
 <div class="portal-page-container">
-  <!-- Cabecera de Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'PORTAL.OPEN_MATCHES.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'PORTAL.OPEN_MATCHES.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    [title]="'PORTAL.OPEN_MATCHES.TITLE' | translate"
+    [subtitle]="'PORTAL.OPEN_MATCHES.SUBTITLE' | translate"
+  >
+    <div actions>
       <a routerLink="/portal/book">
         <button
           type="button"
@@ -16,7 +15,7 @@
         </button>
       </a>
     </div>
-  </div>
+  </spt-page-header>
 
   <!-- Barra de Filtros y Fechas -->
   <div class="filter-bar-card">
