@@ -232,7 +232,7 @@
   --shadow-glow-pink: 0 0 20px rgba(255, 45, 120, 0.25);
   --shadow-glow-cyan: 0 0 16px rgba(5, 150, 105, 0.20);
 
-  /* PrimeNG Theme Tokens */
+  /* PrimeNG Theme Tokens (Pure Color Customization) */
   --p-primary-color: var(--primary-color);
   --p-primary-hover-color: var(--primary-hover);
   --p-focus-ring-color: rgba(255, 45, 120, 0.20);
@@ -242,9 +242,13 @@
   --p-form-field-focus-border-color: var(--primary-color);
   --p-form-field-color: var(--text-main);
   --p-form-field-placeholder-color: var(--text-dim);
-  --p-form-field-border-radius: var(--radius-sm);
-  --p-form-field-padding-x: var(--spacing-md);
-  --p-form-field-padding-y: var(--spacing-sm);
+
+  /* PrimeNG Select Tokens */
+  --p-select-background: var(--surface-card);
+  --p-select-border-color: var(--border-input);
+  --p-select-color: var(--text-main);
+  --p-select-placeholder-color: var(--text-dim);
+  --p-select-dropdown-color: var(--text-dim);
 
   /* PrimeNG DatePicker Tokens */
   --p-datepicker-panel-background: var(--surface-card);
@@ -421,7 +425,7 @@
   --shadow-glow-pink: 0 0 24px rgba(255, 45, 120, 0.40);
   --shadow-glow-cyan: 0 0 20px rgba(36, 255, 205, 0.35);
 
-  /* PrimeNG Theme Tokens */
+  /* PrimeNG Theme Tokens (Pure Color Customization) */
   --p-primary-color: var(--primary-color);
   --p-primary-hover-color: var(--primary-hover);
   --p-focus-ring-color: rgba(255, 45, 120, 0.35);
@@ -431,9 +435,13 @@
   --p-form-field-focus-border-color: var(--primary-color);
   --p-form-field-color: var(--text-main);
   --p-form-field-placeholder-color: var(--text-dim);
-  --p-form-field-border-radius: var(--radius-sm);
-  --p-form-field-padding-x: var(--spacing-md);
-  --p-form-field-padding-y: var(--spacing-sm);
+
+  /* PrimeNG Select Tokens */
+  --p-select-background: var(--surface-card);
+  --p-select-border-color: var(--border-input);
+  --p-select-color: var(--text-main);
+  --p-select-placeholder-color: var(--text-dim);
+  --p-select-dropdown-color: var(--text-dim);
 
   /* PrimeNG DatePicker Tokens */
   --p-datepicker-panel-background: var(--surface-card);

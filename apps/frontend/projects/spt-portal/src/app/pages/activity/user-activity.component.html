@@ -14,6 +14,7 @@
         <input
           type="text"
           pInputText
+          pSize="large"
           [(ngModel)]="searchTerm"
           (keyup.enter)="onFilterChange()"
           [placeholder]="'PORTAL.ACTIVITY.SEARCH_PLACEHOLDER' | translate"
@@ -22,6 +23,7 @@
 
       <div class="filter-control">
         <p-select
+          size="large"
           [options]="categoryOptions"
           [(ngModel)]="selectedCategory"
           (onChange)="onFilterChange()"
@@ -35,6 +37,7 @@
       <button
         type="button"
         pButton
+        size="large"
         [outlined]="true"
         severity="secondary"
         (click)="onFilterChange()"

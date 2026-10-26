@@ -24,6 +24,8 @@ export default withNativeFederation({
     .get(),
 
   skip: [
+    '@primeng/themes',
+    '@primeng/themes/aura',
     'rxjs/ajax',
     'rxjs/fetch',
     'rxjs/testing',

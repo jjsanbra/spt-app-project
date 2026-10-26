@@ -34,6 +34,7 @@
               id="profile-email"
               type="email"
               pInputText
+              pSize="large"
               class="w-full"
               formControlName="email"
             />
@@ -47,6 +48,7 @@
                 id="profile-first-name"
                 type="text"
                 pInputText
+                pSize="large"
                 class="w-full"
                 formControlName="firstName"
                 [invalid]="(profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) ?? false"
@@ -66,6 +68,7 @@
                 id="profile-last-name"
                 type="text"
                 pInputText
+                pSize="large"
                 class="w-full"
                 formControlName="lastName"
                 [invalid]="(profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) ?? false"
@@ -86,6 +89,7 @@
               id="profile-phone"
               type="tel"
               pInputText
+              pSize="large"
               class="w-full"
               formControlName="phone"
               [placeholder]="'USERS.PHONE' | translate"
@@ -97,6 +101,7 @@
             <button
               type="submit"
               pButton
+              size="large"
               [loading]="loading"
               [disabled]="loading || profileForm.invalid"
               icon="pi pi-check"

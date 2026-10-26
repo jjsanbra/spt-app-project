@@ -87,7 +87,15 @@ describe('ActivityLogsComponent', () => {
     );
     expect(component.logs).toHaveLength(1);
     expect(component.totalRecords).toBe(1);
+    const compiled = fixture.nativeElement;
+    console.log("SELECT_CLASS:", compiled.querySelector("p-select")?.className);
+    console.log("INPUT_CLASS:", compiled.querySelector("input[pInputText]")?.className);
+    console.log("DP_CLASS:", compiled.querySelector("p-datepicker input")?.className);
+    console.log("BTN_CLASS:", compiled.querySelector("button[pButton]")?.className);
+
     expect(component.loading).toBe(false);
+
+
   });
 
   it('debe no cargar datos si no hay club activo', () => {

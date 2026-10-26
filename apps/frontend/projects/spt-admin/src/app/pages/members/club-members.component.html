@@ -8,6 +8,7 @@
       <button
         type="button"
         pButton
+        size="large"
         icon="pi pi-user-plus"
         (click)="openInviteModal()"
       >
@@ -23,6 +24,7 @@
       <input
         type="text"
         pInputText
+        pSize="large"
         [placeholder]="'ADMIN.MEMBERS.SEARCH_PLACEHOLDER' | translate"
         [(ngModel)]="searchTerm"
         (input)="onSearchChange()"
@@ -31,6 +33,7 @@
 
     <div class="role-filter-wrapper">
       <p-select
+        size="large"
         [options]="filterRoleOptions"
         [(ngModel)]="selectedRoleFilter"
         (onChange)="onRoleFilterChange($event)"
@@ -224,6 +227,7 @@
           id="memberEmail"
           type="email"
           pInputText
+          pSize="large"
           formControlName="email"
           [placeholder]="'ADMIN.MEMBERS.FIELD_EMAIL_PLACEHOLDER' | translate"
           class="w-full"
@@ -235,6 +239,7 @@
         <label for="memberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
         <p-select
           inputId="memberRole"
+          size="large"
           [options]="roleOptions"
           formControlName="role"
           optionLabel="label"
@@ -254,6 +259,7 @@
           id="memberNum"
           type="text"
           pInputText
+          pSize="large"
           formControlName="memberNumber"
           [placeholder]="'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER_PLACEHOLDER' | translate"
           class="w-full"
@@ -264,6 +270,7 @@
         <button
           type="button"
           pButton
+          size="large"
           [outlined]="true"
           severity="secondary"
           (click)="closeInviteModal()"
@@ -273,6 +280,7 @@
         <button
           type="submit"
           pButton
+          size="large"
           icon="pi pi-check"
           [loading]="saving"
         >
@@ -303,6 +311,7 @@
         <label for="editMemberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
         <p-select
           inputId="editMemberRole"
+          size="large"
           [options]="roleOptions"
           formControlName="role"
           optionLabel="label"
@@ -319,6 +328,7 @@
         <button
           type="button"
           pButton
+          size="large"
           [outlined]="true"
           severity="secondary"
           (click)="closeRoleModal()"
@@ -328,6 +338,7 @@
         <button
           type="submit"
           pButton
+          size="large"
           icon="pi pi-check"
           [loading]="saving"
         >

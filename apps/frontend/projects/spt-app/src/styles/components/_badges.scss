@@ -3,6 +3,15 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_badges.scss
    ========================================================================== */
 
+:root {
+  --p-tag-font-size: var(--font-size-2xs);
+  --p-tag-font-weight: var(--font-weight-bold);
+  --p-tag-border-radius: var(--radius-full);
+  --p-tag-rounded-border-radius: var(--radius-full);
+  --p-tag-padding: 0.2rem 0.65rem;
+  --p-tag-gap: 0.25rem;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -38,13 +47,9 @@
 
 /* PrimeNG p-tag Overrides (Stitch Pill Style) */
 .p-tag {
-  font-family: var(--font-label) !important;
-  font-size: var(--font-size-2xs) !important;
-  font-weight: var(--font-weight-bold) !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.05em !important;
-  border-radius: var(--radius-full) !important;
-  padding: 0.2rem 0.65rem !important;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 
   &.p-tag-success {
     background: var(--status-confirmed-bg) !important;

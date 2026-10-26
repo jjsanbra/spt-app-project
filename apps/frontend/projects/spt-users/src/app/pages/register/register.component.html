@@ -15,6 +15,7 @@
               id="register-first-name"
               type="text"
               pInputText
+              pSize="large"
               class="w-full"
               formControlName="firstName"
               [invalid]="(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) ?? false"
@@ -33,6 +34,7 @@
               id="register-last-name"
               type="text"
               pInputText
+              pSize="large"
               class="w-full"
               formControlName="lastName"
               [invalid]="(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) ?? false"
@@ -53,6 +55,7 @@
             id="register-email"
             type="email"
             pInputText
+            pSize="large"
             class="w-full"
             formControlName="email"
             [invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) ?? false"
@@ -76,6 +79,7 @@
             id="register-phone"
             type="tel"
             pInputText
+            pSize="large"
             class="w-full"
             formControlName="phone"
             [placeholder]="'AUTH.PHONE' | translate"
@@ -87,6 +91,7 @@
           <label for="register-password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
           <p-password
             id="register-password"
+            size="large"
             formControlName="password"
             [toggleMask]="true"
             [fluid]="true"
@@ -109,6 +114,7 @@
           <label for="register-confirm-password" class="form-label">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
           <p-password
             id="register-confirm-password"
+            size="large"
             formControlName="confirmPassword"
             [feedback]="false"
             [toggleMask]="true"
@@ -132,6 +138,7 @@
           <button
             type="submit"
             pButton
+            size="large"
             class="w-full"
             [loading]="loading"
             [disabled]="loading"

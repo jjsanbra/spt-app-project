@@ -14,6 +14,7 @@
             id="login-email"
             type="email"
             pInputText
+            pSize="large"
             class="w-full"
             formControlName="email"
             [invalid]="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) ?? false"
@@ -35,6 +36,7 @@
           <label for="login-password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
           <p-password
             id="login-password"
+            size="large"
             formControlName="password"
             [feedback]="false"
             [toggleMask]="true"
@@ -67,6 +69,7 @@
           <button
             type="submit"
             pButton
+            size="large"
             class="w-full"
             [loading]="loading"
             [disabled]="loading"

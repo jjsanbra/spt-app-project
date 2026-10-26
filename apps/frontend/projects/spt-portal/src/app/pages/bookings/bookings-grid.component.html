@@ -42,6 +42,7 @@
         @if (calendarGranularity === 'week') {
           <div class="facility-filter-wrapper">
             <p-select
+              size="large"
               [options]="facilitySelectOptions"
               [(ngModel)]="selectedWeekFacilityId"
               optionLabel="label"
@@ -57,6 +58,7 @@
         } @else {
           <div class="sport-filter-wrapper">
             <p-select
+              size="large"
               [options]="sportFilterOptions"
               [(ngModel)]="selectedSport"
               (onChange)="onSportChange($event)"
@@ -117,6 +119,7 @@
           <!-- Selector DatePicker de PrimeNG v22 -->
           <div class="datepicker-container">
             <p-datepicker
+              size="large"
               [(ngModel)]="selectedCalendarDate"
               (ngModelChange)="onDatePickerChange($event)"
               [showIcon]="true"
@@ -610,6 +613,7 @@
               id="bookingNotes"
               type="text"
               pInputText
+              pSize="large"
               formControlName="notes"
               [placeholder]="'PORTAL.BOOKINGS.FIELD_NOTES_PLACEHOLDER' | translate"
               class="w-full"

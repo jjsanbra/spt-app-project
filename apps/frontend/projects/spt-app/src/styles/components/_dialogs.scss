@@ -6,6 +6,16 @@
 @use "../base/variables" as *;
 @use "../base/responsive" as *;
 
+:root {
+  --p-dialog-border-radius: var(--radius-md);
+  --p-dialog-background: var(--surface-pure);
+  --p-dialog-border-color: var(--border-subtle);
+  --p-dialog-shadow: var(--shadow-tier3);
+  --p-dialog-header-padding: var(--spacing-md) var(--spacing-lg);
+  --p-dialog-content-padding: var(--spacing-lg);
+  --p-dialog-footer-padding: var(--spacing-md) var(--spacing-lg);
+}
+
 /* 1. Máscara y Backdrop de Diálogo */
 .p-dialog-mask {
   overflow-x: hidden !important;
@@ -23,14 +33,14 @@
 /* 2. Contenedor Base PrimeNG Dialog (.p-dialog y .custom-p-dialog) */
 .p-dialog,
 .custom-p-dialog.p-dialog {
-  border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-tier3, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)) !important;
-  border: 1px solid var(--border-subtle) !important;
-  background: var(--surface-pure) !important;
-  overflow: hidden !important;
-  max-width: calc(100vw - 1.5rem) !important;
-  box-sizing: border-box !important;
-  margin: 0 auto !important;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-tier3);
+  border: 1px solid var(--border-subtle);
+  background: var(--surface-pure);
+  overflow: hidden;
+  max-width: calc(100vw - 1.5rem);
+  box-sizing: border-box;
+  margin: 0 auto;
 
   @include mobile {
     width: 95vw !important;
@@ -46,13 +56,11 @@
 
   /* 3. Cabecera */
   .p-dialog-header {
-    padding: var(--spacing-md) var(--spacing-lg) !important;
-    border-bottom: 1px solid var(--border-subtle) !important;
-    background: var(--surface-pure) !important;
-    border-top-left-radius: var(--radius-md) !important;
-    border-top-right-radius: var(--radius-md) !important;
-    box-sizing: border-box !important;
-    max-width: 100% !important;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--border-subtle);
+    background: var(--surface-pure);
+    box-sizing: border-box;
+    max-width: 100%;
 
     .p-dialog-title {
       font-family: var(--font-heading) !important;

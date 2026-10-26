@@ -14,8 +14,7 @@
     "target": "ES2022",
     "module": "preserve",
     "paths": {
-      "@core": ["./projects/spt-app/src/app/core/index.ts"],
-      "@core/*": ["./projects/spt-app/src/app/core/*"]
+      "@core": ["./projects/spt-app/src/app/core/index.ts"]
     }
   },
   "angularCompilerOptions": {

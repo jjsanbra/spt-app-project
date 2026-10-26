@@ -8,6 +8,7 @@
       <button
         type="button"
         pButton
+        size="large"
         icon="pi pi-plus"
         (click)="openCreateModal()"
       >
@@ -143,6 +144,7 @@
         id="pricing-name"
         type="text"
         pInputText
+        pSize="large"
         class="w-full"
         formControlName="name"
         placeholder="Ej. Tarifa Fines de Semana Punta"
@@ -154,6 +156,7 @@
       <label for="pricing-scope" class="form-label">{{ 'ADMIN.PRICING.FIELD_SCOPE' | translate }}</label>
       <p-select
         inputId="pricing-scope"
+        size="large"
         [options]="scopeOptions"
         formControlName="scope"
         [fluid]="true"
@@ -170,6 +173,7 @@
         <label for="pricing-sport" class="form-label">{{ 'ADMIN.PRICING.FIELD_SPORT' | translate }}</label>
         <p-select
           inputId="pricing-sport"
+          size="large"
           [options]="sportOptions"
           formControlName="sportType"
           [fluid]="true"
@@ -188,6 +192,7 @@
         <label for="pricing-facility" class="form-label">{{ 'ADMIN.PRICING.FIELD_FACILITY' | translate }}</label>
         <p-select
           inputId="pricing-facility"
+          size="large"
           [options]="facilityOptions"
           formControlName="facilityId"
           [fluid]="true"
@@ -208,6 +213,7 @@
           id="pricing-start"
           type="text"
           pInputText
+          pSize="large"
           class="w-full"
           formControlName="startTime"
           placeholder="08:00"
@@ -219,6 +225,7 @@
           id="pricing-end"
           type="text"
           pInputText
+          pSize="large"
           class="w-full"
           formControlName="endTime"
           placeholder="17:00"
@@ -232,6 +239,7 @@
         <label for="pricing-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
         <p-inputnumber
           inputId="pricing-member-price"
+          size="large"
           formControlName="memberPrice"
           [min]="0"
           mode="currency"
@@ -244,6 +252,7 @@
         <label for="pricing-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
         <p-inputnumber
           inputId="pricing-guest-price"
+          size="large"
           formControlName="guestPrice"
           [min]="0"
           mode="currency"
@@ -260,6 +269,7 @@
         <label for="pricing-light-surcharge" class="form-label">{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</label>
         <p-inputnumber
           inputId="pricing-light-surcharge"
+          size="large"
           formControlName="lightSurcharge"
           [min]="0"
           mode="currency"
@@ -272,6 +282,7 @@
         <label for="pricing-priority" class="form-label">{{ 'ADMIN.PRICING.PRIORITY' | translate }}</label>
         <p-inputnumber
           inputId="pricing-priority"
+          size="large"
           formControlName="priority"
           [min]="1"
           [max]="100"
@@ -298,6 +309,7 @@
       <button
         type="button"
         pButton
+        size="large"
         severity="secondary"
         [text]="true"
         (click)="displayModal = false"
@@ -307,6 +319,7 @@
       <button
         type="submit"
         pButton
+        size="large"
         [loading]="saving"
         [disabled]="pricingForm.invalid || saving"
       >

@@ -8,6 +8,7 @@
       <button
         type="button"
         pButton
+        size="large"
         icon="pi pi-plus"
         (click)="openCreateModal()"
       >
@@ -152,6 +153,7 @@
         id="facility-name"
         type="text"
         pInputText
+        pSize="large"
         class="w-full"
         formControlName="name"
         [invalid]="(facilityForm.get('name')?.invalid && facilityForm.get('name')?.touched) ?? false"
@@ -165,6 +167,7 @@
         <label for="facility-sport" class="form-label">{{ 'ADMIN.FACILITIES.SPORT' | translate }}</label>
         <p-select
           inputId="facility-sport"
+          size="large"
           [options]="sportOptions"
           formControlName="sportType"
           [fluid]="true"
@@ -180,6 +183,7 @@
         <label for="facility-court" class="form-label">{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</label>
         <p-select
           inputId="facility-court"
+          size="large"
           [options]="courtOptions"
           formControlName="courtType"
           [fluid]="true"
@@ -199,6 +203,7 @@
         <label for="facility-surface" class="form-label">{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</label>
         <p-select
           inputId="facility-surface"
+          size="large"
           [options]="surfaceOptions"
           formControlName="surfaceType"
           [fluid]="true"
@@ -214,6 +219,7 @@
         <label for="facility-slot" class="form-label">{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</label>
         <p-select
           inputId="facility-slot"
+          size="large"
           [options]="slotOptions"
           formControlName="defaultSlotMinutes"
           [fluid]="true"
@@ -233,6 +239,7 @@
         <label for="facility-min-players" class="form-label">Min Jugadores</label>
         <p-inputnumber
           inputId="facility-min-players"
+          size="large"
           formControlName="minPlayers"
           [min]="1"
           [max]="50"
@@ -243,6 +250,7 @@
         <label for="facility-max-players" class="form-label">Max Jugadores</label>
         <p-inputnumber
           inputId="facility-max-players"
+          size="large"
           formControlName="maxPlayers"
           [min]="1"
           [max]="50"
@@ -283,6 +291,7 @@
           <label for="facility-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
           <p-inputnumber
             inputId="facility-member-price"
+            size="large"
             formControlName="customMemberPrice"
             [min]="0"
             mode="currency"
@@ -295,6 +304,7 @@
           <label for="facility-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
           <p-inputnumber
             inputId="facility-guest-price"
+            size="large"
             formControlName="customGuestPrice"
             [min]="0"
             mode="currency"
@@ -315,6 +325,7 @@
       <button
         type="button"
         pButton
+        size="large"
         severity="secondary"
         [text]="true"
         (click)="displayModal = false"
@@ -324,6 +335,7 @@
       <button
         type="submit"
         pButton
+        size="large"
         [loading]="saving"
         [disabled]="facilityForm.invalid || saving"
       >

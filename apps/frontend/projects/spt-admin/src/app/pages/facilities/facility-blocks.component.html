@@ -10,6 +10,7 @@
     @if (facilities.length > 1) {
       <div filters>
         <p-select
+          size="large"
           [options]="facilities"
           [(ngModel)]="facilityId"
           optionLabel="name"
@@ -24,6 +25,7 @@
       <button
         type="button"
         pButton
+        size="large"
         icon="pi pi-plus"
         [disabled]="!facilityId"
         (click)="openCreateModal()"
@@ -114,6 +116,7 @@
         id="block-title"
         type="text"
         pInputText
+        pSize="large"
         class="w-full"
         formControlName="title"
         [placeholder]="'ADMIN.BLOCKS.PLACEHOLDER_TITLE' | translate"
@@ -128,6 +131,7 @@
           id="block-start"
           type="datetime-local"
           pInputText
+          pSize="large"
           class="w-full"
           formControlName="startTime"
         />
@@ -138,6 +142,7 @@
           id="block-end"
           type="datetime-local"
           pInputText
+          pSize="large"
           class="w-full"
           formControlName="endTime"
         />
@@ -151,6 +156,7 @@
         id="block-reason"
         type="text"
         pInputText
+        pSize="large"
         class="w-full"
         formControlName="reason"
         placeholder="Opcional: detalles del trabajo a realizar"
@@ -162,6 +168,7 @@
       <button
         type="button"
         pButton
+        size="large"
         severity="secondary"
         [text]="true"
         (click)="displayModal = false"
@@ -171,6 +178,7 @@
       <button
         type="submit"
         pButton
+        size="large"
         [loading]="saving"
         [disabled]="blockForm.invalid || saving"
       >

@@ -3,17 +3,16 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_buttons.scss
    ========================================================================== */
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
+:root {
+  --p-button-border-radius: var(--radius-sm);
+  --p-button-padding-y: var(--spacing-sm);
+  --p-button-padding-x: var(--spacing-md);
+  --p-button-transition-duration: 0.2s;
+}
+
+.btn,
+.p-button {
   font-family: var(--font-label);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-sm);
-  padding: 0.65rem 1.25rem;
-  border-radius: var(--radius-sm);
-  border: none;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-decoration: none;
@@ -33,7 +32,6 @@
   font-weight: var(--font-weight-bold) !important;
   border: none !important;
   box-shadow: var(--shadow-glow-pink) !important;
-  border-radius: var(--radius-sm) !important;
   transition: all 0.2s ease !important;
 
   &:hover {
@@ -53,7 +51,6 @@
   font-family: var(--font-label) !important;
   border: 1px solid var(--border-subtle) !important;
   box-shadow: var(--shadow-tier1) !important;
-  border-radius: var(--radius-sm) !important;
 
   &:hover {
     background: var(--surface-container-high) !important;
@@ -82,7 +79,6 @@
   color: var(--error) !important;
   border: 1px solid var(--status-disputed-border) !important;
   font-family: var(--font-label) !important;
-  border-radius: var(--radius-sm) !important;
 
   &:hover {
     background: var(--error) !important;
@@ -117,15 +113,13 @@
   }
 }
 
-/* Tamaños de Botón */
-.btn-sm,
-.p-button.p-button-sm {
+/* Tamaños de Botón Auxiliares */
+.btn-sm {
   padding: 0.4rem 0.85rem !important;
   font-size: var(--font-size-xs) !important;
 }
 
-.btn-lg,
-.p-button.p-button-lg {
+.btn-lg {
   padding: 0.75rem 1.75rem !important;
   font-size: var(--font-size-base) !important;
   font-weight: var(--font-weight-bold) !important;

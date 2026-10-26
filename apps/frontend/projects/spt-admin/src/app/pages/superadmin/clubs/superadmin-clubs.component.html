@@ -8,6 +8,7 @@
       <button
         type="button"
         pButton
+        size="large"
         severity="primary"
         (click)="openNewModal()"
       >
@@ -24,6 +25,7 @@
       <input
         type="text"
         pInputText
+        pSize="large"
         [(ngModel)]="searchFilter"
         (input)="onSearchChange()"
         [placeholder]="'SUPERADMIN.CLUBS.SEARCH_PLACEHOLDER' | translate"
@@ -32,6 +34,7 @@
 
     <div class="filter-controls">
       <p-select
+        size="large"
         [options]="statusOptions"
         [(ngModel)]="statusFilter"
         (onChange)="onStatusFilterChange($event.value)"
@@ -181,6 +184,7 @@
               id="name"
               type="text"
               pInputText
+              pSize="large"
               formControlName="name"
               (blur)="onNameBlur()"
               [placeholder]="'SUPERADMIN.CLUBS.MODAL.NAME_PLACEHOLDER' | translate"
@@ -193,6 +197,7 @@
               id="slug"
               type="text"
               pInputText
+              pSize="large"
               formControlName="slug"
               [placeholder]="'SUPERADMIN.CLUBS.MODAL.SLUG_PLACEHOLDER' | translate"
             />
@@ -204,6 +209,7 @@
               id="email"
               type="email"
               pInputText
+              pSize="large"
               formControlName="email"
               [placeholder]="'SUPERADMIN.CLUBS.MODAL.EMAIL_PLACEHOLDER' | translate"
             />
@@ -215,6 +221,7 @@
               id="phone"
               type="text"
               pInputText
+              pSize="large"
               formControlName="phone"
               placeholder="+34..."
             />
@@ -226,6 +233,7 @@
               id="address"
               type="text"
               pInputText
+              pSize="large"
               formControlName="address"
             />
           </div>
@@ -236,6 +244,7 @@
               id="city"
               type="text"
               pInputText
+              pSize="large"
               formControlName="city"
             />
           </div>
@@ -246,6 +255,7 @@
               id="postalCode"
               type="text"
               pInputText
+              pSize="large"
               formControlName="postalCode"
             />
           </div>
@@ -261,6 +271,7 @@
             <label for="openingHour">{{ 'SUPERADMIN.CLUBS.MODAL.OPENING_HOUR' | translate }} (0-23)</label>
             <p-inputnumber
               id="openingHour"
+              size="large"
               formControlName="openingHour"
               [min]="0"
               [max]="23"
@@ -271,6 +282,7 @@
             <label for="closingHour">{{ 'SUPERADMIN.CLUBS.MODAL.CLOSING_HOUR' | translate }} (1-24)</label>
             <p-inputnumber
               id="closingHour"
+              size="large"
               formControlName="closingHour"
               [min]="1"
               [max]="24"
@@ -281,6 +293,7 @@
             <label for="slotDurationMinutes">{{ 'SUPERADMIN.CLUBS.MODAL.SLOT_DURATION' | translate }}</label>
             <p-inputnumber
               id="slotDurationMinutes"
+              size="large"
               formControlName="slotDurationMinutes"
               [step]="30"
               [min]="30"
@@ -292,6 +305,7 @@
             <label for="paymentMode">{{ 'SUPERADMIN.CLUBS.MODAL.PAYMENT_MODE' | translate }}</label>
             <p-select
               id="paymentMode"
+              size="large"
               [options]="paymentModes"
               formControlName="paymentMode"
               optionLabel="label"
@@ -315,6 +329,7 @@
               id="ownerEmail"
               type="email"
               pInputText
+              pSize="large"
               formControlName="ownerEmail"
               [placeholder]="'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL_PLACEHOLDER' | translate"
             />
@@ -327,6 +342,7 @@
         <button
           type="button"
           pButton
+          size="large"
           [text]="true"
           severity="secondary"
           (click)="displayModal = false"
@@ -337,6 +353,7 @@
         <button
           type="submit"
           pButton
+          size="large"
           severity="primary"
           [loading]="saving"
           [disabled]="clubForm.invalid"

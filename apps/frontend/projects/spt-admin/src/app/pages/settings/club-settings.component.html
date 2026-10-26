@@ -9,6 +9,7 @@
       <button
         type="button"
         pButton
+        size="large"
         icon="pi pi-check"
         (click)="submitSettings()"
         [loading]="saving"
@@ -39,6 +40,7 @@
               id="clubName"
               type="text"
               pInputText
+              pSize="large"
               formControlName="name"
               [placeholder]="'ADMIN.SETTINGS.FIELD_NAME_PLACEHOLDER' | translate"
               class="w-full"
@@ -51,6 +53,7 @@
               id="clubEmail"
               type="email"
               pInputText
+              pSize="large"
               formControlName="email"
               class="w-full"
             />
@@ -76,6 +79,7 @@
               id="clubAddress"
               type="text"
               pInputText
+              pSize="large"
               formControlName="address"
               [placeholder]="'ADMIN.SETTINGS.FIELD_ADDRESS_PLACEHOLDER' | translate"
               class="w-full"
@@ -88,6 +92,7 @@
               id="clubPhone"
               type="text"
               pInputText
+              pSize="large"
               formControlName="phone"
               [placeholder]="'ADMIN.SETTINGS.FIELD_PHONE_PLACEHOLDER' | translate"
               class="w-full"
@@ -102,6 +107,7 @@
               id="clubCity"
               type="text"
               pInputText
+              pSize="large"
               formControlName="city"
               class="w-full"
             />
@@ -113,6 +119,7 @@
               id="clubPostalCode"
               type="text"
               pInputText
+              pSize="large"
               formControlName="postalCode"
               class="w-full"
             />
@@ -139,6 +146,7 @@
             <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
             <p-select
               inputId="openingHour"
+              size="large"
               [options]="hourOptions"
               formControlName="openingHour"
               optionLabel="label"
@@ -155,6 +163,7 @@
             <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
             <p-select
               inputId="closingHour"
+              size="large"
               [options]="hourOptions"
               formControlName="closingHour"
               optionLabel="label"
@@ -173,6 +182,7 @@
             <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
             <p-select
               inputId="slotDuration"
+              size="large"
               [options]="slotDurationOptions"
               formControlName="slotDurationMinutes"
               optionLabel="label"
@@ -189,6 +199,7 @@
             <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }}) *</label>
             <p-inputnumber
               inputId="minNotice"
+              size="large"
               formControlName="openGameMinNoticeHours"
               [min]="1"
               [max]="72"
@@ -216,6 +227,7 @@
           <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
           <p-select
             inputId="paymentMode"
+            size="large"
             [options]="paymentModeOptions"
             formControlName="paymentMode"
             optionLabel="label"
@@ -268,6 +280,7 @@
       <button
         type="submit"
         pButton
+        size="large"
         icon="pi pi-check"
         [loading]="saving"
         class="save-button-lg"
