@@ -328,6 +328,7 @@
       "ROLE_ADMIN": "Administrador",
       "ROLE_STAFF": "Personal / Staff",
       "ROLE_MEMBER": "Socio / Jugador",
+      "ROLE_GUEST": "Invitado",
       "STATUS_ACTIVE": "Activo",
       "STATUS_INACTIVE": "Inactivo",
       "COL_MEMBER": "Miembro",

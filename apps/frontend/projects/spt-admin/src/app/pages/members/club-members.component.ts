@@ -80,6 +80,7 @@ export class ClubMembersComponent implements OnInit {
       { label: this.translate.instant('ADMIN.MEMBERS.ROLE_ADMIN'), value: ClubRole.ADMIN },
       { label: this.translate.instant('ADMIN.MEMBERS.ROLE_STAFF'), value: ClubRole.STAFF },
       { label: this.translate.instant('ADMIN.MEMBERS.ROLE_MEMBER'), value: ClubRole.MEMBER },
+      { label: this.translate.instant('ADMIN.MEMBERS.ROLE_GUEST'), value: ClubRole.GUEST },
     ];
   }
 
@@ -289,6 +290,7 @@ export class ClubMembersComponent implements OnInit {
       case ClubRole.STAFF:
         return 'warn';
       case ClubRole.MEMBER:
+      case ClubRole.GUEST:
       default:
         return 'secondary';
     }
