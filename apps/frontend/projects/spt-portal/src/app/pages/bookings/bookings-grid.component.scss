@@ -13,63 +13,127 @@
 .filter-controls-card {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-md);
   padding: var(--spacing-md);
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   margin-bottom: var(--spacing-lg);
 
-  @include mobile {
+  @include mobile-or-tablet {
     padding: var(--spacing-sm);
     gap: var(--spacing-sm);
   }
 }
 
-.filter-header-row {
+/* NIVEL 1: Contexto y Filtros de Negocio */
+.header-context-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
   flex-wrap: wrap;
 
-  @include mobile {
+  @include mobile-or-tablet {
     flex-direction: column;
     align-items: stretch;
     gap: var(--spacing-sm);
   }
 }
 
-.granularity-toggle-wrapper {
+.granularity-toggle-wrapper,
+.view-mode-toggle {
   display: flex;
   align-items: center;
 
-  @include mobile {
+  @include mobile-or-tablet {
     width: 100%;
-    ::ng-deep .p-selectbutton {
+  }
+
+  /* Segmented Control Unificado para p-selectbutton */
+  ::ng-deep .p-selectbutton {
+    display: inline-flex;
+    align-items: center;
+    background-color: var(--surface-container-low);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2xs);
+    gap: var(--spacing-2xs);
+
+    @include mobile-or-tablet {
       width: 100%;
       display: flex;
-      .p-togglebutton {
+    }
+
+    .p-togglebutton {
+      border: none !important;
+      background: transparent !important;
+      color: var(--text-muted) !important;
+      border-radius: var(--radius-md) !important;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--theme-transition);
+      box-shadow: none !important;
+      outline: none !important;
+
+      @include mobile-or-tablet {
         flex: 1;
+      }
+
+      .p-togglebutton-content {
+        display: inline-flex;
+        align-items: center;
         justify-content: center;
+        gap: var(--spacing-xs);
+        padding: var(--spacing-xs) var(--spacing-md);
+        font-family: var(--font-label);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-medium);
+        color: inherit;
+        white-space: nowrap;
+
+        i {
+          font-size: var(--font-size-xs);
+          color: inherit;
+        }
+
+        .segmented-label {
+          font-size: var(--font-size-xs);
+          font-weight: inherit;
+        }
+      }
+
+      &:hover:not(.p-togglebutton-checked) {
+        background-color: var(--surface-container-high) !important;
+        color: var(--text-color) !important;
+      }
+
+      &.p-togglebutton-checked {
+        background-color: var(--surface-card) !important;
+        color: var(--primary-color) !important;
+        box-shadow: var(--shadow-tier1) !important;
+
+        .p-togglebutton-content {
+          font-weight: var(--font-weight-semibold);
+
+          i {
+            color: var(--primary-color);
+          }
+        }
       }
     }
   }
-
-  .granularity-label {
-    margin-left: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-  }
 }
 
-.filter-right-tools {
+.header-filters-wrapper {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
   flex-wrap: wrap;
 
-  @include mobile {
+  @include mobile-or-tablet {
     flex-direction: column;
     align-items: stretch;
     width: 100%;
@@ -77,9 +141,9 @@
 }
 
 .facility-filter-wrapper {
-  min-width: 200px;
+  min-width: 220px;
 
-  @include mobile {
+  @include mobile-or-tablet {
     width: 100%;
   }
 
@@ -89,9 +153,9 @@
 }
 
 .sport-filter-wrapper {
-  min-width: 180px;
+  min-width: 200px;
 
-  @include mobile {
+  @include mobile-or-tablet {
     width: 100%;
   }
 
@@ -104,93 +168,53 @@
   display: flex;
   align-items: center;
 
-  .view-mode-label {
-    margin-left: var(--spacing-xs);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-medium);
-
-    @include mobile {
-      display: none;
-    }
-  }
-}
-
-.filter-navigation-row {
-  display: flex;
-  align-items: center;
-  padding-top: var(--spacing-xs);
-  border-top: 1px solid var(--border-subtle);
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
-
-  @include mobile {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-.date-quick-buttons {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  flex-wrap: wrap;
-
-  @include mobile {
+  @include mobile-or-tablet {
     width: 100%;
   }
+}
 
-  .datepicker-container {
-    min-width: 160px;
+/* NIVEL 2: Barra de Navegación Temporal Universal */
+.header-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
 
-    @include mobile {
-      width: 100%;
-      ::ng-deep .p-datepicker {
-        width: 100%;
-      }
-    }
+  @include mobile-or-tablet {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
   }
 }
 
-.week-nav-controls,
-.month-nav-controls {
+.nav-step-group {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
   flex-wrap: wrap;
 
-  @include mobile {
+  @include mobile-or-tablet {
     width: 100%;
     justify-content: space-between;
   }
+}
 
-  .range-display-label {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--spacing-2xs);
-    font-family: var(--font-heading);
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-color);
-    margin-left: var(--spacing-xs);
-    white-space: nowrap;
-    text-transform: capitalize;
+.nav-date-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
 
-    i {
-      color: var(--primary-color);
-      font-size: var(--font-size-xs);
-    }
-
-    @include mobile {
-      margin-left: 0;
-      width: 100%;
-      order: -1;
-      justify-content: center;
-      padding: var(--spacing-2xs) 0;
-    }
+  @include mobile-or-tablet {
+    width: 100%;
+    justify-content: space-between;
   }
 }
 
-.nav-icon-btn {
+.nav-arrow-btn {
   width: 36px !important;
   height: 36px !important;
   min-width: 36px !important;
@@ -208,10 +232,9 @@
   i {
     font-size: var(--font-size-xs) !important;
     color: var(--text-color) !important;
-    display: inline-block;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: var(--surface-card) !important;
     border-color: var(--primary-color) !important;
     color: var(--primary-color) !important;
@@ -221,10 +244,66 @@
     }
   }
 
-  @include mobile {
-    width: 42px !important;
-    height: 42px !important;
-    min-width: 42px !important;
+  &:disabled {
+    opacity: 0.35 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+.nav-quick-btn {
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  border-radius: var(--radius-md) !important;
+  height: 36px !important;
+
+  &.is-selected {
+    background: var(--surface-container-high) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    font-weight: var(--font-weight-semibold) !important;
+    box-shadow: 0 0 12px rgba(255, 45, 120, 0.2) !important;
+  }
+}
+
+.period-display-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--radius-full);
+  background-color: var(--surface-container-low);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+
+  i {
+    color: var(--primary-color);
+    font-size: var(--font-size-xs);
+  }
+}
+
+.compact-datepicker {
+  ::ng-deep .p-datepicker {
+    width: 150px;
+
+    .p-inputtext {
+      height: 36px;
+      font-size: var(--font-size-xs);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-family: var(--font-label);
+    }
+  }
+
+  @include mobile-or-tablet {
+    width: 100%;
+    ::ng-deep .p-datepicker {
+      width: 100%;
+    }
   }
 }
 

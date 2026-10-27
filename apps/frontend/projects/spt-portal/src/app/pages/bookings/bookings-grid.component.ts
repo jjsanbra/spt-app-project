@@ -278,6 +278,31 @@ export class BookingsGridComponent implements OnInit {
     return Array.from(slotsSet).sort((a, b) => a.localeCompare(b));
   }
 
+  get activeWeekTimeSlots(): string[] {
+    const facility = this.activeWeekFacility;
+    if (!facility) return [];
+
+    const slotsSet = new Set<string>();
+    if (facility.slots && facility.slots.length > 0) {
+      for (const slot of facility.slots) {
+        slotsSet.add(`${slot.startHourText} - ${slot.endHourText}`);
+      }
+    } else {
+      // Fallback: si la pista seleccionada no tiene slots en el payload, buscar pistas del mismo deporte
+      const sameSportFacilities = this.facilitiesAvailability.filter(
+        (f) => f.sportType === facility.sportType,
+      );
+      for (const f of sameSportFacilities) {
+        if (f.slots) {
+          for (const s of f.slots) {
+            slotsSet.add(`${s.startHourText} - ${s.endHourText}`);
+          }
+        }
+      }
+    }
+    return Array.from(slotsSet).sort((a, b) => a.localeCompare(b));
+  }
+
   getSlotForFacilityAndTime(
     facility: FacilityAvailabilityResponseDto,
     timeRange: string,
@@ -460,6 +485,19 @@ export class BookingsGridComponent implements OnInit {
     return this.selectedDate === this.getTodayDateString();
   }
 
+  isTomorrowSelected(): boolean {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return this.selectedDate === this.formatDate(tomorrow);
+  }
+
+  isPrevDayDisabled(): boolean {
+    if (!this.selectedCalendarDate) return false;
+    const current = new Date(this.selectedCalendarDate);
+    current.setHours(0, 0, 0, 0);
+    return current.getTime() <= this.minDate.getTime();
+  }
+
   setToday(): void {
     this.onDateChange(this.getTodayDateString());
   }
@@ -468,6 +506,19 @@ export class BookingsGridComponent implements OnInit {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     this.onDateChange(this.formatDate(tomorrow));
+  }
+
+  prevDay(): void {
+    if (this.isPrevDayDisabled()) return;
+    const d = new Date(this.selectedCalendarDate);
+    d.setDate(d.getDate() - 1);
+    this.onDatePickerChange(d);
+  }
+
+  nextDay(): void {
+    const d = new Date(this.selectedCalendarDate);
+    d.setDate(d.getDate() + 1);
+    this.onDatePickerChange(d);
   }
 
   formatDate(d: Date): string {
@@ -505,11 +556,34 @@ export class BookingsGridComponent implements OnInit {
     this.cdr.markForCheck();
   }
 
+  onWeekDateChange(date: Date | null): void {
+    if (!date) return;
+    this.selectedWeekStart = this.getMonday(date);
+    this.cdr.markForCheck();
+  }
+
   prevMonth(): void {
     const d = new Date(this.selectedMonthDate);
     d.setMonth(d.getMonth() - 1);
     this.selectedMonthDate = d;
     this.cdr.markForCheck();
+  }
+
+  onMonthDateChange(date: Date | null): void {
+    if (!date) return;
+    this.selectedMonthDate = date;
+    this.cdr.markForCheck();
+  }
+
+  get formattedMonthLabel(): string {
+    const d = this.selectedMonthDate || new Date();
+    const str = new Intl.DateTimeFormat('es-ES', { month: 'long', year: 'numeric' }).format(d);
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  get formattedWeekRangeLabel(): string {
+    if (!this.weekDays || this.weekDays.length < 7) return '';
+    return `${this.weekDays[0].label} — ${this.weekDays[6].label}`;
   }
 
   nextMonth(): void {

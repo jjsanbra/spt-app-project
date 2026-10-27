@@ -540,5 +540,142 @@ describe('BookingsGridComponent', () => {
       expect(groups[0].peakHoursRange).toBe('17:00 - 21:30');
     });
   });
+
+  describe('activeWeekTimeSlots (Vista Semana Homologada con Vista Día)', () => {
+    const multiSportAvailability: FacilityAvailabilityResponseDto[] = [
+      {
+        facilityId: 'padel-1',
+        facilityName: 'Pádel 1 Cristal',
+        sportType: 'PADEL' as any,
+        courtType: 'INDOOR' as any,
+        surfaceType: 'CRYSTAL' as any,
+        hasLighting: true,
+        defaultSlotMinutes: 90,
+        slots: [
+          { startTime: 'T08:00:00Z', endTime: 'T09:30:00Z', startHourText: '08:00', endHourText: '09:30', status: SlotStatus.AVAILABLE, price: 16, isPeakHour: false, lightSurcharge: 2 },
+          { startTime: 'T09:30:00Z', endTime: 'T11:00:00Z', startHourText: '09:30', endHourText: '11:00', status: SlotStatus.AVAILABLE, price: 16, isPeakHour: false, lightSurcharge: 2 },
+        ],
+      },
+      {
+        facilityId: 'tennis-1',
+        facilityName: 'Tenis 1 Tierra',
+        sportType: 'TENNIS' as any,
+        courtType: 'OUTDOOR' as any,
+        surfaceType: 'CLAY' as any,
+        hasLighting: false,
+        defaultSlotMinutes: 60,
+        slots: [
+          { startTime: 'T08:00:00Z', endTime: 'T09:00:00Z', startHourText: '08:00', endHourText: '09:00', status: SlotStatus.AVAILABLE, price: 12, isPeakHour: false, lightSurcharge: 0 },
+          { startTime: 'T09:00:00Z', endTime: 'T10:00:00Z', startHourText: '09:00', endHourText: '10:00', status: SlotStatus.AVAILABLE, price: 12, isPeakHour: false, lightSurcharge: 0 },
+        ],
+      },
+      {
+        facilityId: 'squash-1',
+        facilityName: 'Squash 1',
+        sportType: 'SQUASH' as any,
+        courtType: 'INDOOR' as any,
+        surfaceType: 'PARQUET' as any,
+        hasLighting: true,
+        defaultSlotMinutes: 30,
+        slots: [
+          { startTime: 'T08:00:00Z', endTime: 'T08:30:00Z', startHourText: '08:00', endHourText: '08:30', status: SlotStatus.AVAILABLE, price: 8, isPeakHour: false, lightSurcharge: 1 },
+          { startTime: 'T08:30:00Z', endTime: 'T09:00:00Z', startHourText: '08:30', endHourText: '09:00', status: SlotStatus.AVAILABLE, price: 8, isPeakHour: false, lightSurcharge: 1 },
+        ],
+      },
+    ];
+
+    it('debe devolver solo las franjas de 90 min para la pista activa de pádel sin mezclar franjas de 30 o 60 min', () => {
+      component.facilitiesAvailability = multiSportAvailability;
+      component.selectedWeekFacilityId = 'padel-1';
+
+      expect(component.activeWeekTimeSlots).toEqual(['08:00 - 09:30', '09:30 - 11:00']);
+      // En contraste, uniqueTimeSlots mezclaba todas las franjas
+      expect(component.uniqueTimeSlots).toContain('08:00 - 08:30');
+      expect(component.uniqueTimeSlots).toContain('08:00 - 09:00');
+    });
+
+    it('debe recalcular las franjas reactivamente al cambiar a una pista de tenis de 60 min', () => {
+      component.facilitiesAvailability = multiSportAvailability;
+      component.selectedWeekFacilityId = 'tennis-1';
+
+      expect(component.activeWeekTimeSlots).toEqual(['08:00 - 09:00', '09:00 - 10:00']);
+    });
+
+    it('debe recurrir al fallback del mismo deporte si la pista activa no tiene slots en el payload', () => {
+      component.facilitiesAvailability = [
+        {
+          facilityId: 'padel-2-vacia',
+          facilityName: 'Pádel 2 Sin Slots',
+          sportType: 'PADEL' as any,
+          courtType: 'INDOOR' as any,
+          surfaceType: 'CRYSTAL' as any,
+          hasLighting: true,
+          defaultSlotMinutes: 90,
+          slots: [],
+        },
+        ...multiSportAvailability,
+      ];
+      component.selectedWeekFacilityId = 'padel-2-vacia';
+
+      // Toma como referencia las franjas de padel-1 que es del mismo deporte
+      expect(component.activeWeekTimeSlots).toEqual(['08:00 - 09:30', '09:30 - 11:00']);
+    });
+  });
+
+  describe('Header Navigation & Date Controls (Rediseño de Layout)', () => {
+    it('debe avanzar y retroceder días con nextDay() y prevDay()', () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      component.selectedCalendarDate = new Date(today);
+
+      component.nextDay();
+      const expectedTomorrow = new Date(today);
+      expectedTomorrow.setDate(today.getDate() + 1);
+      expect(component.selectedCalendarDate.getDate()).toBe(expectedTomorrow.getDate());
+
+      component.prevDay();
+      expect(component.selectedCalendarDate.getDate()).toBe(today.getDate());
+    });
+
+    it('debe deshabilitar prevDay() si la fecha actual es igual o menor a minDate', () => {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      component.minDate.setTime(today.getTime());
+      component.selectedCalendarDate = new Date(today);
+
+      expect(component.isPrevDayDisabled()).toBe(true);
+
+      component.nextDay();
+      expect(component.isPrevDayDisabled()).toBe(false);
+    });
+
+    it('debe detectar correctamente si mañana está seleccionado con isTomorrowSelected()', () => {
+      component.setTomorrow();
+      expect(component.isTomorrowSelected()).toBe(true);
+      expect(component.isTodaySelected()).toBe(false);
+
+      component.setToday();
+      expect(component.isTomorrowSelected()).toBe(false);
+      expect(component.isTodaySelected()).toBe(true);
+    });
+
+    it('debe actualizar la semana al seleccionar una fecha con onWeekDateChange()', () => {
+      const targetDate = new Date(2026, 9, 28); // Miércoles 28 de octubre 2026
+      component.onWeekDateChange(targetDate);
+
+      // El lunes de esa semana es el 26 de octubre 2026
+      expect(component.selectedWeekStart.getDate()).toBe(26);
+      expect(component.selectedWeekStart.getMonth()).toBe(9);
+    });
+
+    it('debe actualizar el mes al invocar onMonthDateChange() y formatearlo en español', () => {
+      const targetMonth = new Date(2026, 10, 1); // Noviembre 2026
+      component.onMonthDateChange(targetMonth);
+
+      expect(component.selectedMonthDate.getMonth()).toBe(10);
+      expect(component.formattedMonthLabel).toContain('Noviembre');
+      expect(component.formattedMonthLabel).toContain('2026');
+    });
+  });
 });
 

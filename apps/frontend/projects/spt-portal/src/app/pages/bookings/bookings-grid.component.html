@@ -19,10 +19,10 @@
     </div>
   </spt-page-header>
 
-  <!-- Barra de Filtros y Granularidad -->
+  <!-- Barra de Filtros y Navegación en 2 Niveles -->
   <div class="filter-controls-card">
-    <!-- FILA SUPERIOR: Selector de granularidad y herramientas a la derecha -->
-    <div class="filter-header-row">
+    <!-- NIVEL 1: Contexto y Filtros de Negocio -->
+    <div class="header-context-row">
       <div class="granularity-toggle-wrapper">
         <p-selectbutton
           [options]="granularityOptions"
@@ -30,19 +30,20 @@
           [allowEmpty]="false"
           optionLabel="label"
           optionValue="value"
+          styleClass="custom-segmented-control"
         >
           <ng-template #item let-item>
             <i [class]="item.icon"></i>
-            <span class="granularity-label">{{ item.label }}</span>
+            <span class="segmented-label">{{ item.label }}</span>
           </ng-template>
         </p-selectbutton>
       </div>
 
-      <div class="filter-right-tools">
+      <div class="header-filters-wrapper">
         @if (calendarGranularity === 'week') {
           <div class="facility-filter-wrapper">
             <p-select
-              size="large"
+              size="small"
               [options]="facilitySelectOptions"
               [(ngModel)]="selectedWeekFacilityId"
               optionLabel="label"
@@ -58,7 +59,7 @@
         } @else {
           <div class="sport-filter-wrapper">
             <p-select
-              size="large"
+              size="small"
               [options]="sportFilterOptions"
               [(ngModel)]="selectedSport"
               (onChange)="onSportChange($event)"
@@ -82,10 +83,11 @@
               optionLabel="label"
               optionValue="value"
               [allowEmpty]="false"
+              styleClass="custom-segmented-control"
             >
               <ng-template #item let-item>
                 <i [class]="item.icon"></i>
-                <span class="view-mode-label">{{ item.label }}</span>
+                <span class="segmented-label">{{ item.label }}</span>
               </ng-template>
             </p-selectbutton>
           </div>
@@ -93,15 +95,30 @@
       </div>
     </div>
 
-    <!-- FILA INFERIOR: Barra de Navegación Temporal -->
-    <div class="filter-navigation-row">
+    <!-- NIVEL 2: Barra de Navegación Temporal Universal -->
+    <div class="header-nav-row">
+      <!-- Caso 1: VISTA DÍA -->
       @if (calendarGranularity === 'day') {
-        <div class="date-quick-buttons">
+        <div class="nav-step-group">
           <button
             type="button"
             pButton
-            [severity]="isTodaySelected() ? 'primary' : 'secondary'"
-            [outlined]="!isTodaySelected()"
+            severity="secondary"
+            [outlined]="true"
+            class="nav-arrow-btn"
+            (click)="prevDay()"
+            [disabled]="isPrevDayDisabled()"
+            [title]="'PORTAL.BOOKINGS.PREV_DAY' | translate"
+          >
+            <i class="pi pi-chevron-left"></i>
+          </button>
+          <button
+            type="button"
+            pButton
+            severity="secondary"
+            [outlined]="true"
+            class="nav-quick-btn"
+            [class.is-selected]="isTodaySelected()"
             (click)="setToday()"
           >
             {{ 'COMMON.TODAY' | translate }}
@@ -109,17 +126,24 @@
           <button
             type="button"
             pButton
-            [severity]="!isTodaySelected() ? 'primary' : 'secondary'"
-            [outlined]="isTodaySelected()"
+            severity="secondary"
+            [outlined]="true"
+            class="nav-quick-btn"
+            [class.is-selected]="isTomorrowSelected()"
             (click)="setTomorrow()"
           >
             {{ 'COMMON.TOMORROW' | translate }}
           </button>
+          <button type="button" pButton severity="secondary" [outlined]="true" class="nav-arrow-btn" (click)="nextDay()"
+            [title]="'PORTAL.BOOKINGS.NEXT_DAY' | translate">
+            <i class="pi pi-chevron-right"></i>
+          </button>
+          </div>
 
-          <!-- Selector DatePicker de PrimeNG v22 -->
+        <div class="nav-date-group">
           <div class="datepicker-container">
             <p-datepicker
-              size="large"
+              size="small"
               [(ngModel)]="selectedCalendarDate"
               (ngModelChange)="onDatePickerChange($event)"
               [showIcon]="true"
@@ -128,17 +152,21 @@
               [minDate]="minDate"
               [appendTo]="'body'"
               inputId="bookings-calendar-date"
+              class="compact-datepicker"
             ></p-datepicker>
           </div>
         </div>
-      } @else if (calendarGranularity === 'week') {
-        <div class="week-nav-controls">
+      }
+      
+      <!-- Caso 2: VISTA SEMANA -->
+      @else if (calendarGranularity === 'week') {
+      <div class="nav-step-group">
           <button
             type="button"
             pButton
             severity="secondary"
             [outlined]="true"
-            class="nav-icon-btn"
+            class="nav-arrow-btn"
             (click)="prevWeek()"
             [title]="'PORTAL.BOOKINGS.PREV_WEEK' | translate"
           >
@@ -149,6 +177,7 @@
             pButton
             severity="secondary"
             [outlined]="true"
+            class="nav-quick-btn"
             (click)="currentWeek()"
           >
             {{ 'PORTAL.BOOKINGS.CURRENT_WEEK' | translate }}
@@ -158,25 +187,36 @@
             pButton
             severity="secondary"
             [outlined]="true"
-            class="nav-icon-btn"
+            class="nav-arrow-btn"
             (click)="nextWeek()"
             [title]="'PORTAL.BOOKINGS.NEXT_WEEK' | translate"
           >
             <i class="pi pi-chevron-right"></i>
           </button>
-          <span class="range-display-label">
-            <i class="pi pi-calendar"></i>
-            {{ weekDays[0].label }} — {{ weekDays[6].label }}
-          </span>
         </div>
-      } @else {
-        <div class="month-nav-controls">
+        
+        <div class="nav-date-group">
+          <span class="period-display-pill">
+            <i class="pi pi-calendar"></i>
+            <span>{{ formattedWeekRangeLabel }}</span>
+          </span>
+          <div class="datepicker-inline-picker">
+            <p-datepicker size="small" [(ngModel)]="selectedCalendarDate" (ngModelChange)="onWeekDateChange($event)"
+              [showIcon]="true" [iconDisplay]="'input'" dateFormat="dd/mm/yy" [appendTo]="'body'" inputId="bookings-week-date"
+              class="compact-datepicker"></p-datepicker>
+          </div>
+        </div>
+        }
+        
+        <!-- Caso 3: VISTA MES -->
+        @else {
+        <div class="nav-step-group">
           <button
             type="button"
             pButton
             severity="secondary"
             [outlined]="true"
-            class="nav-icon-btn"
+            class="nav-arrow-btn"
             (click)="prevMonth()"
             [title]="'PORTAL.BOOKINGS.PREV_MONTH' | translate"
           >
@@ -187,6 +227,7 @@
             pButton
             severity="secondary"
             [outlined]="true"
+            class="nav-quick-btn"
             (click)="currentMonth()"
           >
             {{ 'PORTAL.BOOKINGS.CURRENT_MONTH' | translate }}
@@ -196,16 +237,24 @@
             pButton
             severity="secondary"
             [outlined]="true"
-            class="nav-icon-btn"
+            class="nav-arrow-btn"
             (click)="nextMonth()"
             [title]="'PORTAL.BOOKINGS.NEXT_MONTH' | translate"
           >
             <i class="pi pi-chevron-right"></i>
           </button>
-          <span class="range-display-label">
+        </div>
+        
+        <div class="nav-date-group">
+          <span class="period-display-pill">
             <i class="pi pi-calendar"></i>
-            {{ selectedMonthDate | date: 'MMMM yyyy' }}
+            <span>{{ formattedMonthLabel }}</span>
           </span>
+          <div class="datepicker-inline-picker">
+            <p-datepicker size="small" view="month" dateFormat="mm/yy" [(ngModel)]="selectedMonthDate"
+              (ngModelChange)="onMonthDateChange($event)" [showIcon]="true" [iconDisplay]="'input'" [appendTo]="'body'"
+              inputId="bookings-month-date" class="compact-datepicker"></p-datepicker>
+          </div>
         </div>
       }
     </div>
@@ -458,7 +507,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  @for (timeRange of uniqueTimeSlots; track timeRange) {
+                  @for (timeRange of activeWeekTimeSlots; track timeRange) {
                     <tr>
                       <td class="matrix-time-cell">
                         <span class="time-cell-badge">{{ timeRange }}</span>
@@ -613,7 +662,7 @@
               id="bookingNotes"
               type="text"
               pInputText
-              pSize="large"
+              pSize="small"
               formControlName="notes"
               [placeholder]="'PORTAL.BOOKINGS.FIELD_NOTES_PLACEHOLDER' | translate"
               class="w-full"
