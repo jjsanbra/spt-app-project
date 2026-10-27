@@ -14,6 +14,13 @@
   --p-dialog-header-padding: var(--spacing-md) var(--spacing-lg);
   --p-dialog-content-padding: var(--spacing-lg);
   --p-dialog-footer-padding: var(--spacing-md) var(--spacing-lg);
+
+  --p-popover-background: var(--surface-card);
+  --p-popover-border-color: var(--border-subtle);
+  --p-popover-color: var(--text-color);
+  --p-popover-border-radius: var(--radius-lg);
+  --p-popover-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+  --p-popover-content-padding: 0;
 }
 
 /* 1. Máscara y Backdrop de Diálogo */
@@ -316,4 +323,39 @@
     }
   }
 }
+
+/* ==========================================================================
+   POPOVERS & OVERLAYS FLOTANTES (PRIMENG)
+   ========================================================================== */
+.p-popover {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-lg) !important;
+  color: var(--text-color) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3) !important;
+  overflow: hidden;
+
+  .p-popover-content {
+    padding: 0 !important;
+    background: var(--surface-card) !important;
+  }
+
+  &:before {
+    border-bottom-color: var(--border-subtle) !important;
+  }
+
+  &:after {
+    border-bottom-color: var(--surface-card) !important;
+  }
+
+  &.p-popover-flipped {
+    &:before {
+      border-top-color: var(--border-subtle) !important;
+    }
+    &:after {
+      border-top-color: var(--surface-card) !important;
+    }
+  }
+}
+
 

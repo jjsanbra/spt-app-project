@@ -4,7 +4,7 @@ import {
   HttpHandlerFn,
   HttpRequest,
 } from '@angular/common/http';
-import { ApplicationRef, inject } from '@angular/core';
+import { ApplicationRef, inject, Injector } from '@angular/core';
 import { catchError, finalize, Observable, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
@@ -13,9 +13,10 @@ export function authInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   const appRef = inject(ApplicationRef);
-  const authService = inject(AuthService);
-  const token = authService.getAccessToken();
-  const activeClubId = authService.getActiveClubId();
+  const injector = inject(Injector);
+
+  const token = localStorage.getItem('spt_access_token');
+  const activeClubId = localStorage.getItem('spt_active_club_id');
 
   let headers = req.headers;
 
@@ -38,8 +39,10 @@ export function authInterceptor(
     catchError((error: HttpErrorResponse) => {
       // Si es un 401 y no es la petición de login/refresh, intentamos refrescar token
       const isAuthUrl = req.url.includes('/auth/login') || req.url.includes('/auth/refresh');
+      const refreshToken = localStorage.getItem('spt_refresh_token');
 
-      if (error.status === 401 && !isAuthUrl && authService.getRefreshToken()) {
+      if (error.status === 401 && !isAuthUrl && refreshToken) {
+        const authService = injector.get(AuthService);
         return authService.refreshSession().pipe(
           switchMap((tokenRes) => {
             const retryReq = req.clone({
@@ -56,6 +59,7 @@ export function authInterceptor(
 
       return throwError(() => error);
     }),
+
     finalize(() => {
       setTimeout(() => {
         try {

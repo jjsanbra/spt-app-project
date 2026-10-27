@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
-import { Router, provideRouter } from '@angular/router';
+import { Router, NavigationEnd, provideRouter } from '@angular/router';
 import { signal } from '@angular/core';
 import { provideTranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -78,10 +78,12 @@ describe('App', () => {
   it('should render brand and router outlet', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
+    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.brand-name')).toBeTruthy();
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });
+
 
   describe('hasAdminRole computed', () => {
     it('should return false when user is not logged in', () => {
@@ -288,5 +290,147 @@ describe('App', () => {
       expect(el.querySelector('.auth-layout')).toBeFalsy();
     });
   });
+
+  describe('canViewMatches computed & sidebar link visibility', () => {
+    it('debe devolver false si no hay usuario autenticado', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      authServiceMock.currentUser.set(null);
+      expect(app.canViewMatches()).toBe(false);
+    });
+
+    it('debe devolver false si el usuario es superadmin y no renderizar el enlace en el sidebar', () => {
+      authServiceMock.isAuthenticated.set(true);
+      authServiceMock.currentUser.set({
+        id: 'u-super',
+        email: 'superadmin@spt-app.local',
+        firstName: 'Super',
+        lastName: 'Admin',
+        isSuperAdmin: true,
+        memberships: [],
+      });
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(app.canViewMatches()).toBe(false);
+      const el = fixture.nativeElement as HTMLElement;
+      const matchesLink = el.querySelector('a[routerLink="/portal/matches"]');
+      expect(matchesLink).toBeFalsy();
+    });
+
+    it('debe devolver false si el usuario es administrador o dueño del club activo', () => {
+      authServiceMock.isAuthenticated.set(true);
+      authServiceMock.activeClub.set({ clubId: 'c1', clubName: 'Club Central', clubSlug: 'club-central', role: 'ADMIN', walletBalance: 0 });
+      authServiceMock.currentUser.set({
+        id: 'u-admin',
+        email: 'admin@centralpadel.local',
+        firstName: 'Admin',
+        lastName: 'Club',
+        isSuperAdmin: false,
+        memberships: [{ clubId: 'c1', clubName: 'Club Central', clubSlug: 'club-central', role: 'ADMIN', walletBalance: 0 } as any],
+      } as any);
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(app.canViewMatches()).toBe(false);
+      const el = fixture.nativeElement as HTMLElement;
+      const matchesLink = el.querySelector('a[routerLink="/portal/matches"]');
+      expect(matchesLink).toBeFalsy();
+    });
+
+    it('debe devolver true para un socio normal y renderizar el enlace en el sidebar', () => {
+      authServiceMock.isAuthenticated.set(true);
+      authServiceMock.activeClub.set({ clubId: 'c1', clubName: 'Club Central', clubSlug: 'club-central', role: 'MEMBER', walletBalance: 50 });
+      authServiceMock.currentUser.set({
+        id: 'u-member',
+        email: 'socio@spt-app.local',
+        firstName: 'Socio',
+        lastName: 'Jugador',
+        isSuperAdmin: false,
+        memberships: [{ clubId: 'c1', clubName: 'Club Central', clubSlug: 'club-central', role: 'MEMBER', walletBalance: 50 } as any],
+      } as any);
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      fixture.detectChanges();
+
+      expect(app.canViewMatches()).toBe(true);
+      const el = fixture.nativeElement as HTMLElement;
+      const matchesLink = el.querySelector('a[routerLink="/portal/matches"]');
+      expect(matchesLink).toBeTruthy();
+    });
+
+    it('debe devolver false si el usuario tiene membresía de OWNER en otro club', () => {
+      authServiceMock.isAuthenticated.set(true);
+      authServiceMock.activeClub.set({ clubId: 'c2', clubName: 'Otro Club', role: 'MEMBER' });
+      authServiceMock.currentUser.set({
+        id: 'u-owner-other',
+        email: 'owner@club.local',
+        firstName: 'Owner',
+        lastName: 'Club',
+        isSuperAdmin: false,
+        memberships: [{ clubId: 'c1', clubName: 'Club 1', role: 'OWNER' } as any],
+      } as any);
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      expect(app.canViewMatches()).toBe(false);
+    });
+  });
+
+  describe('sidebar and navigation methods', () => {
+    it('toggleSidebar should toggle sidebarOpen state', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      const initial = app.sidebarOpen();
+      app.toggleSidebar();
+      expect(app.sidebarOpen()).toBe(!initial);
+      app.toggleSidebar();
+      expect(app.sidebarOpen()).toBe(initial);
+    });
+
+    it('closeSidebar should close sidebar only on mobile', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.isDesktop.set(false);
+      app.sidebarOpen.set(true);
+      app.closeSidebar();
+      expect(app.sidebarOpen()).toBe(false);
+
+      app.isDesktop.set(true);
+      app.sidebarOpen.set(true);
+      app.closeSidebar();
+      expect(app.sidebarOpen()).toBe(true);
+    });
+
+    it('window resize should update isDesktop and sidebarOpen', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 500 });
+      window.dispatchEvent(new Event('resize'));
+      expect(app.isDesktop()).toBe(false);
+
+      Object.defineProperty(window, 'innerWidth', { writable: true, configurable: true, value: 1200 });
+      window.dispatchEvent(new Event('resize'));
+      expect(app.isDesktop()).toBe(true);
+    });
+
+    it('navigation should update currentUrl and close sidebar on mobile', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.isDesktop.set(false);
+      app.sidebarOpen.set(true);
+
+      (router as any).events.next(new (class extends NavigationEnd {
+        constructor() {
+          super(1, '/portal/activity', '/portal/activity');
+        }
+      })());
+
+      expect(app.currentUrl()).toBe('/portal/activity');
+      expect(app.sidebarOpen()).toBe(false);
+    });
+  });
 });
+
 

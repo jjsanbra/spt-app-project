@@ -10,6 +10,8 @@
   --p-tag-rounded-border-radius: var(--radius-full);
   --p-tag-padding: 0.2rem 0.65rem;
   --p-tag-gap: 0.25rem;
+  --p-overlaybadge-outline-width: 0px;
+    --p-overlaybadge-outline-color: transparent;
 }
 
 .badge {
@@ -83,6 +85,46 @@
   }
 }
 
+/* PrimeNG p-badge & p-overlaybadge Overrides (Stitch Style) */
+.p-overlaybadge .p-badge {
+  outline: none !important;
+  box-shadow: none !important;
+  transform: translate(0, 0) !important;
+}
+
+.p-badge {
+  font-family: var(--font-label);
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  &.p-badge-danger {
+    background: var(--primary) !important;
+    color: var(--primary-contrast) !important;
+  }
+
+  &.p-badge-warn,
+  &.p-badge-warning {
+    background: var(--status-pending) !important;
+    color: #FFFFFF !important;
+  }
+
+  &.p-badge-info {
+    background: var(--cyan-pulse) !important;
+    color: #FFFFFF !important;
+  }
+
+  &.p-badge-success {
+    background: var(--status-confirmed) !important;
+    color: #FFFFFF !important;
+  }
+
+  &.p-badge-secondary {
+    background: var(--surface-container-high) !important;
+    color: var(--text-color) !important;
+  }
+}
 /* Podium circles */
 .podium-medal {
   width: 28px;

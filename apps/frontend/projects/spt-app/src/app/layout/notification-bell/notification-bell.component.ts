@@ -33,19 +33,20 @@ export class NotificationBellComponent {
   getNotificationIcon(type: string): string {
     switch (type) {
       case 'BOOKING_CONFIRMED':
-        return 'pi pi-calendar-check text-green-500';
+        return 'pi pi-check-circle notif-icon-success';
       case 'BOOKING_CANCELLED':
-        return 'pi pi-calendar-times text-red-500';
+        return 'pi pi-calendar-times notif-icon-danger';
       case 'OPEN_GAME_JOINED':
-        return 'pi pi-user-plus text-blue-500';
+        return 'pi pi-user-plus notif-icon-info';
       case 'OPEN_GAME_COMPLETE':
-        return 'pi pi-users text-primary-500';
+        return 'pi pi-users notif-icon-primary';
       case 'PAYMENT_RECEIVED':
-        return 'pi pi-credit-card text-emerald-500';
+        return 'pi pi-credit-card notif-icon-emerald';
       default:
-        return 'pi pi-bell text-secondary-500';
+        return 'pi pi-bell notif-icon-muted';
     }
   }
+
 
   formatTime(dateStr: string): string {
     const date = new Date(dateStr);

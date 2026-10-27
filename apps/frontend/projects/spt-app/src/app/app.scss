@@ -32,58 +32,22 @@
 }
 
 /* --------------------------------------------------------------------------
-   1. Backdrop para Drawer Móvil
+   1. Sidebar Oficial PrimeNG (p-sidebar) — Personalización de Tokens y Colores
    -------------------------------------------------------------------------- */
-.sidebar-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(12, 12, 33, 0.65);
-  backdrop-filter: blur(6px);
-  z-index: 1040;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease-in-out;
-
-  &.is-visible {
-    opacity: 1;
-    pointer-events: auto;
+:host ::ng-deep .app-sidebar {
+  .p-sidebar-panel {
+    background-color: var(--surface-sidebar);
+    border-right: 1px solid var(--border-subtle);
+    color: var(--text-color);
   }
 
-  @include desktop {
-    display: none;
+  .p-sidebar-header,
+  .p-sidebar-content,
+  .p-sidebar-footer {
+    padding: 0;
   }
 }
 
-/* --------------------------------------------------------------------------
-   2. Sidebar Lateral Izquierdo
-   -------------------------------------------------------------------------- */
-.app-sidebar {
-  width: var(--admin-sidebar-w);
-  min-width: var(--admin-sidebar-w);
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  left: 0;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--surface-sidebar);
-  border-right: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-sidebar);
-  z-index: 1050;
-  transition: var(--theme-transition), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  @include mobile-or-tablet {
-    position: fixed;
-    transform: translateX(-100%);
-    box-shadow: var(--shadow-tier4);
-
-    &.is-open {
-      transform: translateX(0);
-    }
-  }
-}
 
 /* Header de Marca */
 .sidebar-header {

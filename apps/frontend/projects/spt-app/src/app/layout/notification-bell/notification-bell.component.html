@@ -1,34 +1,34 @@
 <div class="notification-bell-container">
-  <!-- Botón de Campana con OverlayBadge Oficial PrimeNG -->
+  <!-- Botón de Campana con OverlayBadge Oficial PrimeNG (https://primeng.dev/button#badge) -->
   @if (unreadCount() > 0) {
-    <p-overlay-badge [value]="unreadCount().toString()" severity="danger" size="small">
+    <p-overlay-badge [value]="" severity="danger">
       <button
         type="button"
         pButton
-        iconOnly
         [text]="true"
         [rounded]="true"
-        severity="secondary"
-        class="bell-button"
+        severity="danger"
         (click)="op.toggle($event)"
         [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+        iconOnly
+        variant="outlined"
       >
-        <i class="pi pi-bell bell-icon"></i>
+        <i class="pi pi-bell"></i>
       </button>
     </p-overlay-badge>
   } @else {
     <button
       type="button"
       pButton
-      iconOnly
       [text]="true"
       [rounded]="true"
       severity="secondary"
-      class="bell-button"
       (click)="op.toggle($event)"
       [attr.aria-label]="'NOTIFICATIONS.TITLE' | translate"
+      iconOnly
+      variant="outlined"
     >
-      <i class="pi pi-bell bell-icon"></i>
+      <i class="pi pi-bell"></i>
     </button>
   }
 
@@ -41,12 +41,12 @@
           <span class="header-title">{{ 'NOTIFICATIONS.TITLE' | translate }}</span>
           @if (unreadCount() > 0) {
             <p-badge
-              class="unread-pill"
               [value]="unreadCount().toString()"
-              severity="warn"
+              severity="danger"
             ></p-badge>
           }
         </div>
+
 
         @if (unreadCount() > 0) {
           <button
@@ -55,10 +55,11 @@
             [text]="true"
             size="small"
             severity="primary"
-            icon="pi pi-check-double"
+            class="mark-all-btn"
             (click)="onMarkAllAsRead()"
           >
-            {{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}
+            <i class="pi pi-check-double"></i>
+            <span>{{ 'NOTIFICATIONS.MARK_ALL_READ' | translate }}</span>
           </button>
         }
       </div>

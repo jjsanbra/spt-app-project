@@ -4,6 +4,7 @@ import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } fro
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService, ThemeService } from '@core';
 import { ButtonModule } from 'primeng/button';
+import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -21,6 +22,7 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
     RouterLinkActive,
     TranslatePipe,
     ButtonModule,
+    SidebarModule,
     TagModule,
     ToastModule,
     ConfirmDialogModule,
@@ -35,7 +37,12 @@ export class App {
   readonly themeService = inject(ThemeService);
   private readonly router = inject(Router);
 
-  readonly sidebarOpen = signal<boolean>(false);
+  readonly isDesktop = signal<boolean>(
+    typeof window !== 'undefined' ? window.innerWidth >= 1024 : true,
+  );
+
+
+  readonly sidebarOpen = signal<boolean>(this.isDesktop());
   readonly currentUrl = signal<string>(this.router.url || '');
 
   readonly isAuthPage = computed(() => {
@@ -53,11 +60,40 @@ export class App {
     ) ?? false;
   });
 
+  readonly canViewMatches = computed(() => {
+    const user = this.authService.currentUser();
+    if (!user) return false;
+    if (user.isSuperAdmin) return false;
+
+    const activeRole = this.authService.activeClub()?.role;
+    if (activeRole === 'OWNER' || activeRole === 'ADMIN') return false;
+
+    const isClubAdmin = user.memberships?.some(
+      (m) => m.role === 'OWNER' || m.role === 'ADMIN',
+    );
+    if (isClubAdmin) return false;
+
+    return true;
+  });
+
   constructor() {
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', () => {
+        const desktop = window.innerWidth >= 1024;
+        if (desktop !== this.isDesktop()) {
+
+          this.isDesktop.set(desktop);
+          this.sidebarOpen.set(desktop);
+        }
+      });
+    }
+
     this.router.events
       .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
       .subscribe((event) => {
-        this.sidebarOpen.set(false);
+        if (!this.isDesktop()) {
+          this.sidebarOpen.set(false);
+        }
         this.currentUrl.set(event.urlAfterRedirects || event.url);
       });
   }
@@ -67,7 +103,9 @@ export class App {
   }
 
   closeSidebar(): void {
-    this.sidebarOpen.set(false);
+    if (!this.isDesktop()) {
+      this.sidebarOpen.set(false);
+    }
   }
 
   onLogout(): void {
@@ -75,3 +113,4 @@ export class App {
     this.router.navigate(['/login']);
   }
 }
+

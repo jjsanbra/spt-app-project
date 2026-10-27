@@ -65,7 +65,7 @@ describe('NotificationBellComponent', () => {
   });
 
   it('should return correct icons for notification types', () => {
-    expect(component.getNotificationIcon('BOOKING_CONFIRMED')).toContain('pi-calendar-check');
+    expect(component.getNotificationIcon('BOOKING_CONFIRMED')).toContain('pi-check-circle');
     expect(component.getNotificationIcon('BOOKING_CANCELLED')).toContain('pi-calendar-times');
     expect(component.getNotificationIcon('OPEN_GAME_JOINED')).toContain('pi-user-plus');
     expect(component.getNotificationIcon('OPEN_GAME_COMPLETE')).toContain('pi-users');

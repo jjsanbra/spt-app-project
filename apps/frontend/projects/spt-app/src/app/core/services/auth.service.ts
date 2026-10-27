@@ -33,7 +33,9 @@ export class AuthService {
   readonly userMemberships = computed(() => this.currentUser()?.memberships || []);
 
   constructor() {
-    this.initSession();
+    queueMicrotask(() => {
+      this.initSession();
+    });
   }
 
   // ─── Inicialización de Sesión ─────────────────────────────
@@ -51,6 +53,8 @@ export class AuthService {
       },
     });
   }
+
+
 
   // ─── Autenticación ────────────────────────────────────────
   login(dto: LoginDto): Observable<AuthResponseDto> {
