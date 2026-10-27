@@ -38,7 +38,6 @@ services:
     name: spt-app-pre
     runtime: static
     plan: free
-    region: frankfurt
     branch: develop
     buildCommand: npm install && cd apps/frontend && npx ng build spt-app
     staticPublishPath: apps/frontend/dist/spt-app/browser
@@ -52,7 +51,6 @@ services:
     name: spt-mfe-admin-pre
     runtime: static
     plan: free
-    region: frankfurt
     branch: develop
     buildCommand: npm install && cd apps/frontend && npx ng build spt-admin
     staticPublishPath: apps/frontend/dist/spt-admin/browser
@@ -70,7 +68,6 @@ services:
     name: spt-mfe-portal-pre
     runtime: static
     plan: free
-    region: frankfurt
     branch: develop
     buildCommand: npm install && cd apps/frontend && npx ng build spt-portal
     staticPublishPath: apps/frontend/dist/spt-portal/browser
@@ -88,7 +85,6 @@ services:
     name: spt-mfe-users-pre
     runtime: static
     plan: free
-    region: frankfurt
     branch: develop
     buildCommand: npm install && cd apps/frontend && npx ng build spt-users
     staticPublishPath: apps/frontend/dist/spt-users/browser
