@@ -67,3 +67,4 @@ test-results/
 *.zip
 .cache/
 .turbo/
+.neon

@@ -30,7 +30,21 @@ export function authInterceptor(
 
   let url = req.url;
   if (url.startsWith('/api')) {
-    url = `http://localhost:3000${url}`;
+    const isLocalhost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1' ||
+        window.location.hostname === '0.0.0.0');
+
+    const isPreEnv = typeof window !== 'undefined' && window.location.hostname.includes('-pre');
+
+    const apiBase = isLocalhost
+      ? 'http://localhost:3000'
+      : isPreEnv
+        ? 'https://spt-backend-pre.onrender.com'
+        : 'https://spt-backend-api.onrender.com';
+
+    url = `${apiBase}${url}`;
   }
 
   const clonedReq = req.clone({ url, headers });

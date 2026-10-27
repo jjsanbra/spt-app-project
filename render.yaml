@@ -1,39 +1,27 @@
-# =====================================================
-# SPT App — Render Infrastructure as Code
-# Docs: https://render.com/docs/blueprint-spec
-# =====================================================
-#
-# IMPORTANTE: Las URLs de los Static Sites se asignan
-# automáticamente por Render. Actualiza las variables
-# de entorno MFE_* después del primer despliegue.
-# =====================================================
-
+# =============================================================================
+# Render Blueprint — SPT App Project (Entorno de Preproducción: 'pre')
+# Despliegue 100% Free Tier: 1 Web Service (Node/NestJS) + 4 Static Sites (Angular)
+# =============================================================================
 services:
-  # ─────────────────────────────────────────────────
-  # BACKEND — NestJS API
-  # ─────────────────────────────────────────────────
+  # ─── 1. Backend API (NestJS + Prisma + Neon) ──────────────────────────────
   - type: web
-    name: spt-backend
+    name: spt-backend-pre
     runtime: node
-    rootDir: apps/backend
-    buildCommand: npm install && npm run build && npx prisma generate
-    startCommand: node dist/main.js
-    releaseCommand: npx prisma migrate deploy
-    healthCheckPath: /api/health
+    plan: free
+    region: frankfurt # Misma región eu-central-1 que Neon para latencia mínima
+    branch: develop
+    buildCommand: npm install && cd apps/backend && npx prisma generate && npm run build
+    startCommand: cd apps/backend && npx prisma migrate deploy && node dist/main.js
+    healthCheckPath: /api/v1/health
     envVars:
       - key: NODE_ENV
-        value: production
+        value: staging
       - key: PORT
-        value: 3000
+        value: 10000
       - key: DATABASE_URL
-        fromDatabase:
-          name: spt-postgres
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: spt-redis
-          property: connectionString
+        value: postgresql://spt-bd_owner:npg_pAiykgX29GHJ@ep-late-leaf-b99kvjgd-pooler.c-7.eu-central-1.aws.neon.tech/spt-bd?sslmode=require&channel_binding=require
+      - key: DATABASE_URL_UNPOOLED
+        value: postgresql://spt-bd_owner:npg_pAiykgX29GHJ@ep-late-leaf-b99kvjgd.c-7.eu-central-1.aws.neon.tech/spt-bd?sslmode=require&channel_binding=require
       - key: JWT_ACCESS_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
@@ -43,121 +31,72 @@ services:
       - key: JWT_REFRESH_EXPIRES_IN
         value: 7d
       - key: CORS_ORIGINS
-        value: https://spt-app.onrender.com,https://spt-admin.onrender.com,https://spt-portal.onrender.com,https://spt-users.onrender.com
-      - key: FRONTEND_URL
-        value: https://spt-app.onrender.com
-      - key: EMAIL_HOST
-        sync: false
-      - key: EMAIL_PORT
-        value: 587
-      - key: EMAIL_USER
-        sync: false
-      - key: EMAIL_PASSWORD
-        sync: false
-      - key: EMAIL_FROM
-        value: SPT App <noreply@spt-app.com>
+        value: https://spt-app-pre.onrender.com,https://spt-mfe-admin-pre.onrender.com,https://spt-mfe-portal-pre.onrender.com,https://spt-mfe-users-pre.onrender.com
 
-  # ─────────────────────────────────────────────────
-  # FRONTEND — Shell Host (spt-app)
-  # Se despliega ÚLTIMO (depende de los remotes)
-  # ─────────────────────────────────────────────────
+  # ─── 2. Shell Host (Angular Native Federation) ─────────────────────────────
   - type: web
-    name: spt-app
+    name: spt-app-pre
     runtime: static
-    rootDir: apps/frontend
-    buildCommand: >
-      npm install &&
-      MFE_ADMIN_URL=https://spt-admin.onrender.com
-      MFE_PORTAL_URL=https://spt-portal.onrender.com
-      MFE_USERS_URL=https://spt-users.onrender.com
-      npx ng build spt-app --configuration production
-    staticPublishPath: dist/spt-app/browser
+    plan: free
+    region: frankfurt
+    branch: develop
+    buildCommand: npm install && cd apps/frontend && npx ng build spt-app
+    staticPublishPath: apps/frontend/dist/spt-app/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+
+  # ─── 3. Microfrontend Admin (spt-admin) ───────────────────────────────────
+  - type: web
+    name: spt-mfe-admin-pre
+    runtime: static
+    plan: free
+    region: frankfurt
+    branch: develop
+    buildCommand: npm install && cd apps/frontend && npx ng build spt-admin
+    staticPublishPath: apps/frontend/dist/spt-admin/browser
     headers:
       - path: /*
-        name: Cache-Control
-        value: no-cache
+        name: Access-Control-Allow-Origin
+        value: "*"
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
 
-  # ─────────────────────────────────────────────────
-  # REMOTE — spt-admin
-  # ─────────────────────────────────────────────────
+  # ─── 4. Microfrontend Portal de Reservas (spt-portal) ───────────────────────
   - type: web
-    name: spt-admin
+    name: spt-mfe-portal-pre
     runtime: static
-    rootDir: apps/frontend
-    buildCommand: npm install && npx ng build spt-admin --configuration production
-    staticPublishPath: dist/spt-admin/browser
+    plan: free
+    region: frankfurt
+    branch: develop
+    buildCommand: npm install && cd apps/frontend && npx ng build spt-portal
+    staticPublishPath: apps/frontend/dist/spt-portal/browser
     headers:
-      - path: /remoteEntry.json
+      - path: /*
         name: Access-Control-Allow-Origin
-        value: '*'
-      - path: /*.js
-        name: Access-Control-Allow-Origin
-        value: '*'
+        value: "*"
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
 
-  # ─────────────────────────────────────────────────
-  # REMOTE — spt-portal
-  # ─────────────────────────────────────────────────
+  # ─── 5. Microfrontend Usuarios y Auth (spt-users) ──────────────────────────
   - type: web
-    name: spt-portal
+    name: spt-mfe-users-pre
     runtime: static
-    rootDir: apps/frontend
-    buildCommand: npm install && npx ng build spt-portal --configuration production
-    staticPublishPath: dist/spt-portal/browser
+    plan: free
+    region: frankfurt
+    branch: develop
+    buildCommand: npm install && cd apps/frontend && npx ng build spt-users
+    staticPublishPath: apps/frontend/dist/spt-users/browser
     headers:
-      - path: /remoteEntry.json
+      - path: /*
         name: Access-Control-Allow-Origin
-        value: '*'
-      - path: /*.js
-        name: Access-Control-Allow-Origin
-        value: '*'
+        value: "*"
     routes:
       - type: rewrite
         source: /*
         destination: /index.html
-
-  # ─────────────────────────────────────────────────
-  # REMOTE — spt-users
-  # ─────────────────────────────────────────────────
-  - type: web
-    name: spt-users
-    runtime: static
-    rootDir: apps/frontend
-    buildCommand: npm install && npx ng build spt-users --configuration production
-    staticPublishPath: dist/spt-users/browser
-    headers:
-      - path: /remoteEntry.json
-        name: Access-Control-Allow-Origin
-        value: '*'
-      - path: /*.js
-        name: Access-Control-Allow-Origin
-        value: '*'
-    routes:
-      - type: rewrite
-        source: /*
-        destination: /index.html
-
-  # ─────────────────────────────────────────────────
-  # REDIS (BullMQ — Colas de notificaciones)
-  # ─────────────────────────────────────────────────
-  - type: redis
-    name: spt-redis
-    ipAllowList: []
-    plan: starter
-
-databases:
-  # ─────────────────────────────────────────────────
-  # POSTGRESQL (Managed by Render)
-  # ─────────────────────────────────────────────────
-  - name: spt-postgres
-    databaseName: spt_db
-    user: spt_user
-    plan: starter
-    ipAllowList: []
