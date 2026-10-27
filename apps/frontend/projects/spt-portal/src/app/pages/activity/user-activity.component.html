@@ -82,7 +82,7 @@
           </td>
           <td>
             <p-tag
-              [value]="log.action"
+              [value]="'LOG_ACTIONS.' + log.action | translate"
               [severity]="getActionSeverity(log.action)"
             ></p-tag>
           </td>

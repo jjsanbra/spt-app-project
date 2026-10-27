@@ -1,33 +1,47 @@
 <div class="admin-page-container">
-  <!-- Header de página unificado con botón volver -->
+  <!-- Header de página unificado con filtros globales -->
   <spt-page-header
     [title]="'ADMIN.BLOCKS.TITLE' | translate"
     [subtitle]="'ADMIN.BLOCKS.SUBTITLE' | translate"
-    backUrl="/admin/facilities"
-    [backLabel]="'ADMIN.BLOCKS.BACK_TO_FACILITIES' | translate"
-    [badgeText]="facilityName ? '— ' + facilityName : undefined"
+    [backUrl]="isRoutePrefiltered ? '/admin/facilities' : undefined"
+    [backLabel]="isRoutePrefiltered ? ('ADMIN.BLOCKS.BACK_TO_FACILITIES' | translate) : undefined"
+    [badgeText]="isRoutePrefiltered && prefilteredFacilityName ? prefilteredFacilityName : undefined"
   >
-    @if (facilities.length > 1) {
-      <div filters>
+    <div filters class="filter-controls">
+      @if (sportOptions.length > 2) {
         <p-select
           size="large"
-          [options]="facilities"
-          [(ngModel)]="facilityId"
-          optionLabel="name"
-          optionValue="id"
-          (onChange)="onFacilityChange($event.value)"
-          [placeholder]="'ADMIN.BLOCKS.SELECT_FACILITY' | translate"
+          [options]="sportOptions"
+          [(ngModel)]="selectedSport"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onSportFilterChange($event.value)"
+          [placeholder]="'ADMIN.BLOCKS.FILTER_ALL_SPORTS' | translate"
           class="facility-select-control"
         ></p-select>
-      </div>
-    }
+      }
+
+      @if (facilityFilterOptions.length > 2) {
+        <p-select
+          size="large"
+          [options]="facilityFilterOptions"
+          [(ngModel)]="selectedFacilityId"
+          optionLabel="label"
+          optionValue="value"
+          (onChange)="onFacilityFilterChange($event.value)"
+          [placeholder]="'ADMIN.BLOCKS.FILTER_ALL_FACILITIES' | translate"
+          class="facility-select-control"
+        ></p-select>
+      }
+    </div>
+
     <div actions>
       <button
         type="button"
         pButton
         size="large"
         icon="pi pi-plus"
-        [disabled]="!facilityId"
+        [disabled]="facilities.length === 0"
         (click)="openCreateModal()"
       >
         {{ 'ADMIN.BLOCKS.ADD_BUTTON' | translate }}
@@ -49,6 +63,8 @@
     >
       <ng-template #header pTemplate="header">
         <tr>
+          <th>{{ 'ADMIN.BLOCKS.SPORT' | translate }}</th>
+          <th>{{ 'ADMIN.BLOCKS.FACILITY' | translate }}</th>
           <th>{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</th>
           <th>{{ 'ADMIN.BLOCKS.REASON' | translate }}</th>
           <th>{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</th>
@@ -59,8 +75,15 @@
 
       <ng-template #body let-block pTemplate="body">
         <tr>
+          <td>
+            <p-tag
+              [value]="'SPORTS.' + block.sportType | translate"
+              [severity]="getSportSeverity(block.sportType)"
+            ></p-tag>
+          </td>
+          <td class="font-medium">{{ block.facilityName || '—' }}</td>
           <td class="font-semibold">{{ block.title }}</td>
-          <td class="text-muted">{{ block.reason || '-' }}</td>
+          <td class="text-muted">{{ block.reason || '—' }}</td>
           <td>{{ block.startTime | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td>{{ block.endTime | date: 'dd/MM/yyyy HH:mm' }}</td>
           <td class="text-right">
@@ -72,7 +95,7 @@
                 rounded
                 variant="text"
                 severity="danger"
-                (click)="onRemoveBlock(block.id)"
+                (click)="onRemoveBlock(block)"
                 [pTooltip]="'ADMIN.BLOCKS.DELETE_BUTTON' | translate"
                 tooltipPosition="top"
                 [showDelay]="1500"
@@ -86,11 +109,11 @@
 
       <ng-template #emptymessage pTemplate="emptymessage">
         <tr>
-          <td colspan="5" class="text-center p-4 text-muted">
+          <td colspan="7" class="text-center p-4 text-muted">
             @if (facilities.length === 0) {
               {{ 'ADMIN.BLOCKS.NO_FACILITIES' | translate }}
             } @else {
-              {{ 'ADMIN.BLOCKS.EMPTY' | translate }}
+              {{ 'ADMIN.BLOCKS.EMPTY_GLOBAL' | translate }}
             }
           </td>
         </tr>
@@ -104,11 +127,58 @@
   [(visible)]="displayModal"
   [header]="'ADMIN.BLOCKS.ADD_BUTTON' | translate"
   [modal]="true"
-  [style]="{ width: '500px' }"
+  [style]="{ width: '540px' }"
   [draggable]="false"
   [resizable]="false"
 >
   <form [formGroup]="blockForm" (ngSubmit)="onSubmitBlock()" class="block-form">
+    <!-- Deporte y Ámbito -->
+    <div class="form-row">
+      <div class="form-group flex-1">
+        <label for="block-sport" class="form-label">{{ 'ADMIN.BLOCKS.SPORT' | translate }}</label>
+        <p-select
+          id="block-sport"
+          size="large"
+          class="w-full"
+          formControlName="sportType"
+          [options]="sportOptions.slice(1)"
+          optionLabel="label"
+          optionValue="value"
+          [placeholder]="'ADMIN.BLOCKS.SELECT_SPORT' | translate"
+        ></p-select>
+      </div>
+
+      <div class="form-group flex-1">
+        <label for="block-scope" class="form-label">{{ 'ADMIN.BLOCKS.SCOPE' | translate }}</label>
+        <p-select
+          id="block-scope"
+          size="large"
+          class="w-full"
+          formControlName="scope"
+          [options]="scopeOptions"
+          optionLabel="label"
+          optionValue="value"
+        ></p-select>
+      </div>
+    </div>
+
+    <!-- Pista Específica (Solo si ámbito es SINGLE) -->
+    @if (blockForm.get('scope')?.value === 'SINGLE') {
+      <div class="form-group">
+        <label for="block-facility" class="form-label">{{ 'ADMIN.BLOCKS.FACILITY' | translate }}</label>
+        <p-select
+          id="block-facility"
+          size="large"
+          class="w-full"
+          formControlName="facilityId"
+          [options]="modalFacilityOptions"
+          optionLabel="label"
+          optionValue="value"
+          [placeholder]="'ADMIN.BLOCKS.SELECT_FACILITY' | translate"
+        ></p-select>
+      </div>
+    }
+
     <!-- Título -->
     <div class="form-group">
       <label for="block-title" class="form-label">{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</label>
@@ -159,7 +229,7 @@
         pSize="large"
         class="w-full"
         formControlName="reason"
-        placeholder="Opcional: detalles del trabajo a realizar"
+        placeholder="Opcional: detalles del trabajo a realizar o evento"
       />
     </div>
 

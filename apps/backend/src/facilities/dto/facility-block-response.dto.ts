@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { SportType } from '@prisma/client';
 
 export class FacilityBlockResponseDto {
   @ApiProperty({ example: 'blk-916b62-92d3-4a9d-86df-87d547e457ea' })
@@ -9,6 +10,12 @@ export class FacilityBlockResponseDto {
 
   @ApiProperty({ example: 'fac-816b62-92d3-4a9d-86df-87d547e457ec' })
   facilityId: string;
+
+  @ApiPropertyOptional({ example: 'Pista 1 Central' })
+  facilityName?: string;
+
+  @ApiPropertyOptional({ enum: SportType, example: SportType.PADEL })
+  sportType?: SportType;
 
   @ApiProperty({ example: 'Mantenimiento focos y red' })
   title: string;

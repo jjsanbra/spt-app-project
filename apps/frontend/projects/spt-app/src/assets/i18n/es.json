@@ -158,7 +158,11 @@
     "CONFIRM_TITLE": "Confirmación",
     "CONFIRM_DELETE_TITLE": "¿Eliminar elemento?",
     "CONFIRM_DELETE_MSG": "Esta acción no se puede deshacer. ¿Deseas continuar?",
-    "PAGE_REPORT": "{first} - {last} de {totalRecords}"
+    "PAGE_REPORT": "{first} - {last} de {totalRecords}",
+    "ACTIONS": "Acciones",
+    "VIEW_DETAILS": "Ver detalles",
+    "ACTIVE": "Activo",
+    "INACTIVE": "Inactivo"
   },
   "USERS": {
     "PROFILE_TITLE": "Mi Perfil",
@@ -226,7 +230,7 @@
       "SURFACE_CLAY": "Tierra Batida (Clay)",
       "SURFACE_CONCRETE": "Hormigón / Cemento",
       "SURFACE_RESIN": "Resina",
-      "COURT_TYPE_PARQUET": "Parquet",
+      "SURFACE_PARQUET": "Parquet",
       "COL_BASE_PRICE": "Tarifa Base",
       "PRICE_MEMBER_GUEST": "{{member}}€ / {{guest}}€",
       "CUSTOM_PRICE_ENABLED": "Establecer tarifa base específica para esta pista",
@@ -244,10 +248,21 @@
       "START_TIME": "Fecha y hora de inicio",
       "END_TIME": "Fecha y hora de finalización",
       "EMPTY": "No hay bloqueos programados en esta pista.",
+      "EMPTY_GLOBAL": "No hay bloqueos temporales programados con los filtros seleccionados.",
       "SUCCESS_CREATE": "Bloqueo programado con éxito",
+      "SUCCESS_BULK_CREATE": "Bloqueos programados con éxito",
       "SUCCESS_DELETE": "Bloqueo eliminado correctamente",
       "BACK_TO_FACILITIES": "Volver a Pistas",
       "SELECT_FACILITY": "Pista a gestionar",
+      "FILTER_ALL_SPORTS": "Todos los deportes",
+      "FILTER_ALL_FACILITIES": "Todas las pistas",
+      "SPORT": "Deporte",
+      "FACILITY": "Pista",
+      "SELECT_SPORT": "Selecciona deporte",
+      "SCOPE": "Ámbito del bloqueo",
+      "SCOPE_SINGLE": "Pista específica",
+      "SCOPE_ALL_SPORT": "Todas las pistas de este deporte",
+      "TARGET_FACILITIES": "Pistas afectadas",
       "NO_FACILITIES": "No hay pistas configuradas en este club. Crea una pista primero para poder programar bloqueos.",
       "CONFIRM_DELETE_TITLE": "Levantar Bloqueo",
       "CONFIRM_DELETE_MSG": "¿Estás seguro de que deseas eliminar este bloqueo de pista?",
@@ -568,8 +583,8 @@
       "NEW_CLUB_BTN": "Nuevo Club",
       "SEARCH_PLACEHOLDER": "Buscar por nombre, slug o ciudad...",
       "STATUS_ALL": "Todos los estados",
-      "STATUS_ACTIVE": "Activos",
-      "STATUS_INACTIVE": "Inactivos",
+      "STATUS_ACTIVE": "Activo",
+      "STATUS_INACTIVE": "Inactivo",
       "EMPTY": "No se encontraron clubes registrados.",
       "TABLE": {
         "NAME": "Centro Deportivo",
@@ -618,6 +633,31 @@
       "SUCCESS_UPDATE": "Centro deportivo actualizado correctamente",
       "SUCCESS_TOGGLE": "Estado del centro deportivo actualizado"
     }
+  },
+  "LOG_ACTIONS": {
+    "BOOKING_CREATED": "Reserva creada",
+    "BOOKING_CANCELLED": "Reserva cancelada",
+    "BOOKING_MODIFIED": "Reserva modificada",
+    "BOOKING_COMPLETED": "Reserva completada",
+    "FACILITY_CREATED": "Pista creada",
+    "FACILITY_UPDATED": "Pista actualizada",
+    "FACILITY_DELETED": "Pista desactivada",
+    "FACILITY_BLOCK_CREATED": "Bloqueo programado",
+    "FACILITY_BLOCK_DELETED": "Bloqueo levantado",
+    "PRICING_RULE_CREATED": "Tarifa creada",
+    "PRICING_RULE_UPDATED": "Tarifa actualizada",
+    "PRICING_RULE_DELETED": "Tarifa eliminada",
+    "MEMBER_ROLE_CHANGED": "Rol modificado",
+    "MEMBER_WALLET_TOPUP": "Recarga de monedero",
+    "MEMBER_WALLET_ADJUSTED": "Ajuste de saldo",
+    "MEMBER_STATUS_CHANGED": "Estado de socio cambiado",
+    "AUTH_LOGIN_SUCCESS": "Inicio de sesión",
+    "AUTH_PASSWORD_CHANGED": "Contraseña cambiada",
+    "AUTH_FAILED_ATTEMPT": "Acceso fallido",
+    "CLUB_CREATED": "Club creado",
+    "CLUB_UPDATED": "Club actualizado",
+    "CLUB_STATUS_TOGGLED": "Estado de club cambiado"
   }
 }
+
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
   ConfirmDialogService,
+  CreateFacilityDtoSportType as SportType,
   FacilitiesService,
   FacilityBlockResponseDto,
   NotificationService,
@@ -23,6 +24,7 @@ describe('FacilityBlocksComponent', () => {
   const mockFacility = getFacilitiesControllerFindOneResponseMock({
     id: 'fac-1',
     name: 'Pista 1 Central',
+    sportType: SportType.PADEL,
   });
 
   const mockBlocks: FacilityBlockResponseDto[] = [
@@ -30,6 +32,8 @@ describe('FacilityBlocksComponent', () => {
       id: 'block-1',
       clubId: 'club-1',
       facilityId: 'fac-1',
+      facilityName: 'Pista 1 Central',
+      sportType: SportType.PADEL,
       title: 'Mantenimiento Red',
       reason: 'Sustitución de anclaje',
       startTime: '2026-10-25T10:00:00.000Z',
@@ -41,9 +45,12 @@ describe('FacilityBlocksComponent', () => {
     facilitiesServiceSpy = {
       facilitiesControllerFindAll: vi.fn().mockReturnValue(of([mockFacility])),
       facilitiesControllerFindOne: vi.fn().mockReturnValue(of(mockFacility)),
+      facilitiesControllerFindClubBlocks: vi.fn().mockReturnValue(of(mockBlocks)),
       facilitiesControllerFindBlocks: vi.fn().mockReturnValue(of(mockBlocks)),
       facilitiesControllerCreateBlock: vi.fn().mockReturnValue(of(mockBlocks[0])),
+      facilitiesControllerCreateBulkBlocks: vi.fn().mockReturnValue(of(mockBlocks)),
       facilitiesControllerRemoveBlock: vi.fn().mockReturnValue(of({ success: true })),
+      facilitiesControllerRemoveBlockById: vi.fn().mockReturnValue(of({ success: true })),
     };
 
     confirmDialogServiceMock = {
@@ -80,23 +87,28 @@ describe('FacilityBlocksComponent', () => {
     fixture.detectChanges();
   });
 
-  it('debe crear el componente y cargar la información de la pista y bloqueos', () => {
+  it('debe crear el componente y cargar la información global y de la pista', () => {
     expect(component).toBeTruthy();
     expect(facilitiesServiceSpy.facilitiesControllerFindAll).toHaveBeenCalled();
-    expect(facilitiesServiceSpy.facilitiesControllerFindBlocks).toHaveBeenCalledWith('fac-1');
-    expect(component.facilityName).toBe('Pista 1 Central');
+    expect(facilitiesServiceSpy.facilitiesControllerFindClubBlocks).toHaveBeenCalled();
+    expect(component.selectedFacilityId).toBe('fac-1');
+    expect(component.prefilteredFacilityName).toBe('Pista 1 Central');
     expect(component.blocks).toHaveLength(1);
   });
 
-  it('debe abrir el modal para programar un bloqueo', () => {
+  it('debe abrir el modal para programar un bloqueo con valores iniciales', () => {
     component.openCreateModal();
     expect(component.displayModal).toBeTruthy();
     expect(component.blockForm.get('title')?.value).toBe('');
+    expect(component.blockForm.get('scope')?.value).toBe('SINGLE');
   });
 
-  it('debe llamar al endpoint de creación de bloqueo al enviar el formulario', () => {
+  it('debe crear bloqueos para pista individual (scope SINGLE)', () => {
     component.openCreateModal();
     component.blockForm.patchValue({
+      sportType: SportType.PADEL,
+      scope: 'SINGLE',
+      facilityId: 'fac-1',
       title: 'Torneo Pádel',
       reason: 'Fase eliminatoria',
       startTime: '2026-10-25T08:00',
@@ -105,10 +117,42 @@ describe('FacilityBlocksComponent', () => {
 
     component.onSubmitBlock();
 
-    expect(facilitiesServiceSpy.facilitiesControllerCreateBlock).toHaveBeenCalledWith(
-      'fac-1',
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks).toHaveBeenCalledWith(
       expect.objectContaining({
+        facilityIds: ['fac-1'],
         title: 'Torneo Pádel',
+      }),
+    );
+    expect(component.displayModal).toBeFalsy();
+  });
+
+  it('debe crear bloqueos para todas las pistas del deporte (scope ALL_SPORT)', () => {
+    const secondFacility = {
+      ...mockFacility,
+      id: 'fac-2',
+      name: 'Pista 2 Cristal',
+      sportType: SportType.PADEL,
+    };
+    component.facilities = [mockFacility, secondFacility];
+    facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks.mockReturnValue(
+      of([mockBlocks[0], { ...mockBlocks[0], id: 'block-2', facilityId: 'fac-2' }]),
+    );
+
+    component.openCreateModal();
+    component.blockForm.patchValue({
+      sportType: SportType.PADEL,
+      scope: 'ALL_SPORT',
+      title: 'Torneo Club Fin de Semana',
+      startTime: '2026-11-01T09:00',
+      endTime: '2026-11-01T15:00',
+    });
+
+    component.onSubmitBlock();
+
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        facilityIds: ['fac-1', 'fac-2'],
+        title: 'Torneo Club Fin de Semana',
       }),
     );
     expect(component.displayModal).toBeFalsy();
@@ -119,7 +163,7 @@ describe('FacilityBlocksComponent', () => {
     component.blockForm.patchValue({ title: '' });
     component.onSubmitBlock();
 
-    expect(facilitiesServiceSpy.facilitiesControllerCreateBlock).not.toHaveBeenCalled();
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks).not.toHaveBeenCalled();
     expect(component.blockForm.touched).toBe(true);
   });
 
@@ -127,6 +171,9 @@ describe('FacilityBlocksComponent', () => {
     const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'warn');
     component.openCreateModal();
     component.blockForm.patchValue({
+      sportType: SportType.PADEL,
+      scope: 'SINGLE',
+      facilityId: 'fac-1',
       title: 'Bloqueo Inválido',
       startTime: '2026-10-25T14:00',
       endTime: '2026-10-25T10:00',
@@ -135,17 +182,37 @@ describe('FacilityBlocksComponent', () => {
     component.onSubmitBlock();
 
     expect(notifySpy).toHaveBeenCalledWith('ADMIN.BLOCKS.ERRORS.INVALID_DATES');
-    expect(facilitiesServiceSpy.facilitiesControllerCreateBlock).not.toHaveBeenCalled();
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks).not.toHaveBeenCalled();
   });
 
-  it('debe manejar error al crear bloqueo', () => {
+  it('debe advertir si no hay pistas disponibles para el deporte al crear bloqueo', () => {
+    const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'warn');
+    component.openCreateModal();
+    component.blockForm.patchValue({
+      sportType: SportType.TENNIS,
+      scope: 'ALL_SPORT',
+      title: 'Lluvia en tenis',
+      startTime: '2026-10-25T10:00',
+      endTime: '2026-10-25T14:00',
+    });
+
+    component.onSubmitBlock();
+
+    expect(notifySpy).toHaveBeenCalledWith('ADMIN.BLOCKS.NO_FACILITIES');
+    expect(facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks).not.toHaveBeenCalled();
+  });
+
+  it('debe manejar error al crear bloqueo en bulk', () => {
     const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
-    facilitiesServiceSpy.facilitiesControllerCreateBlock.mockReturnValue(
+    facilitiesServiceSpy.facilitiesControllerCreateBulkBlocks.mockReturnValue(
       throwError(() => new Error('Error al crear')),
     );
 
     component.openCreateModal();
     component.blockForm.patchValue({
+      sportType: SportType.PADEL,
+      scope: 'SINGLE',
+      facilityId: 'fac-1',
       title: 'Bloqueo Fallido',
       startTime: '2026-10-25T10:00',
       endTime: '2026-10-25T12:00',
@@ -157,61 +224,46 @@ describe('FacilityBlocksComponent', () => {
     expect(component.saving).toBe(false);
   });
 
-  it('debe levantar o eliminar un bloqueo existente y manejar error', () => {
-    component.onRemoveBlock('block-1');
-    expect(facilitiesServiceSpy.facilitiesControllerRemoveBlock).toHaveBeenCalledWith(
-      'fac-1',
+  it('debe levantar o eliminar un bloqueo existente con removeBlockById', () => {
+    component.onRemoveBlock(mockBlocks[0]);
+    expect(facilitiesServiceSpy.facilitiesControllerRemoveBlockById).toHaveBeenCalledWith(
       'block-1',
     );
 
     const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
-    facilitiesServiceSpy.facilitiesControllerRemoveBlock.mockReturnValue(
+    facilitiesServiceSpy.facilitiesControllerRemoveBlockById.mockReturnValue(
       throwError(() => new Error('Error al borrar')),
     );
-    component.onRemoveBlock('block-1');
+    component.onRemoveBlock(mockBlocks[0]);
     expect(notifySpy).toHaveBeenCalledWith('ERRORS.GENERIC');
   });
 
-  it('debe permitir cambiar de pista seleccionada y recargar los bloqueos asociados', () => {
-    const secondFacility = { ...mockFacility, id: 'fac-2', name: 'Pista 2 Cristal' };
-    component.facilities = [mockFacility, secondFacility];
-
-    component.onFacilityChange('fac-2');
-
-    expect(component.facilityId).toBe('fac-2');
-    expect(component.facilityName).toBe('Pista 2 Cristal');
-    expect(facilitiesServiceSpy.facilitiesControllerFindBlocks).toHaveBeenCalledWith('fac-2');
-
-    // Early returns
-    component.onFacilityChange('fac-2'); // Mismo id
-    component.onFacilityChange(''); // Id vacío
+  it('debe filtrar bloqueos por deporte', () => {
+    component.onSportFilterChange(SportType.PADEL);
+    expect(component.selectedSport).toBe(SportType.PADEL);
+    expect(facilitiesServiceSpy.facilitiesControllerFindClubBlocks).toHaveBeenCalled();
   });
 
-  it('debe cargar la primera pista por defecto cuando no hay id en la ruta', () => {
+  it('debe filtrar bloqueos por pista específica', () => {
+    component.onFacilityFilterChange('fac-1');
+    expect(component.selectedFacilityId).toBe('fac-1');
+    expect(facilitiesServiceSpy.facilitiesControllerFindClubBlocks).toHaveBeenCalled();
+  });
+
+  it('debe inicializar sin id de ruta cuando se accede desde menú general', () => {
     const route = TestBed.inject(ActivatedRoute);
     vi.spyOn(route.snapshot.paramMap, 'get').mockReturnValue(null);
 
     component.ngOnInit();
 
-    expect(component.facilityId).toBe('fac-1');
-    expect(component.facilityName).toBe('Pista 1 Central');
-  });
-
-  it('debe gestionar lista vacía de pistas cuando no hay id en la ruta', () => {
-    const route = TestBed.inject(ActivatedRoute);
-    vi.spyOn(route.snapshot.paramMap, 'get').mockReturnValue(null);
-    facilitiesServiceSpy.facilitiesControllerFindAll.mockReturnValue(of([]));
-
-    component.ngOnInit();
-
-    expect(component.facilityId).toBe('');
-    expect(component.loading).toBe(false);
+    expect(component.isRoutePrefiltered).toBe(false);
+    expect(component.selectedFacilityId).toBe('');
   });
 
   it('debe manejar error al cargar pistas en ngOnInit', () => {
     const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
     facilitiesServiceSpy.facilitiesControllerFindAll.mockReturnValue(
-      throwError(() => new Error('Error al cargar pistas')),
+      throwError(() => new Error('Error de red')),
     );
 
     component.ngOnInit();
@@ -220,35 +272,22 @@ describe('FacilityBlocksComponent', () => {
     expect(component.loading).toBe(false);
   });
 
-  it('debe llamar a loadFacilityInfo y actualizar el nombre de la pista', () => {
-    component.facilityId = 'fac-1';
-    component.loadFacilityInfo();
-
-    expect(facilitiesServiceSpy.facilitiesControllerFindOne).toHaveBeenCalledWith('fac-1');
-    expect(component.facilityName).toBe('Pista 1 Central');
-
-    component.facilityId = '';
-    component.loadFacilityInfo(); // early return si no hay facilityId
-  });
-
-  it('debe vaciar bloques si facilityId está vacío en loadBlocks', () => {
-    component.facilityId = '';
-    component.loadBlocks();
-
-    expect(component.blocks).toEqual([]);
-    expect(component.loading).toBe(false);
-  });
-
-  it('debe manejar error al cargar bloques en loadBlocks', () => {
+  it('debe manejar error al cargar bloqueos en loadBlocks', () => {
     const notifySpy = vi.spyOn(TestBed.inject(NotificationService), 'error');
-    facilitiesServiceSpy.facilitiesControllerFindBlocks.mockReturnValue(
+    facilitiesServiceSpy.facilitiesControllerFindClubBlocks.mockReturnValue(
       throwError(() => new Error('Error al cargar bloques')),
     );
 
-    component.facilityId = 'fac-1';
     component.loadBlocks();
 
     expect(notifySpy).toHaveBeenCalledWith('ERRORS.NETWORK');
     expect(component.loading).toBe(false);
+  });
+
+  it('debe devolver severidad adecuada para cada deporte en getSportSeverity', () => {
+    expect(component.getSportSeverity('PADEL')).toBe('success');
+    expect(component.getSportSeverity('TENNIS')).toBe('warn');
+    expect(component.getSportSeverity('PICKLEBALL')).toBe('info');
+    expect(component.getSportSeverity('OTHER')).toBe('secondary');
   });
 });

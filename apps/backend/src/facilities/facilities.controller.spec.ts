@@ -16,6 +16,9 @@ describe('FacilitiesController', () => {
     findBlocks: jest.Mock;
     createBlock: jest.Mock;
     removeBlock: jest.Mock;
+    findClubBlocks: jest.Mock;
+    createBulkBlocks: jest.Mock;
+    removeBlockById: jest.Mock;
   };
   let availabilityService: {
     getAvailability: jest.Mock;
@@ -34,6 +37,9 @@ describe('FacilitiesController', () => {
       findBlocks: jest.fn(),
       createBlock: jest.fn(),
       removeBlock: jest.fn(),
+      findClubBlocks: jest.fn(),
+      createBulkBlocks: jest.fn(),
+      removeBlockById: jest.fn(),
     };
     availabilityService = {
       getAvailability: jest.fn(),
@@ -136,6 +142,36 @@ describe('FacilitiesController', () => {
 
     const result = await controller.removeBlock(clubId, facilityId, 'block-1', 'user-1');
     expect(facilitiesService.removeBlock).toHaveBeenCalledWith(clubId, facilityId, 'block-1', 'user-1');
+    expect(result.success).toBe(true);
+  });
+
+  it('findClubBlocks debe delegar en facilitiesService.findClubBlocks', async () => {
+    facilitiesService.findClubBlocks.mockResolvedValue([]);
+
+    const result = await controller.findClubBlocks(clubId, undefined, undefined);
+    expect(facilitiesService.findClubBlocks).toHaveBeenCalledWith(clubId, undefined, undefined);
+    expect(result).toEqual([]);
+  });
+
+  it('createBulkBlocks debe delegar en facilitiesService.createBulkBlocks', async () => {
+    const dto = {
+      facilityIds: ['fac-1', 'fac-2'],
+      title: 'Torneo Pádel',
+      startTime: '2026-11-01T10:00:00Z',
+      endTime: '2026-11-01T14:00:00Z',
+    };
+    facilitiesService.createBulkBlocks.mockResolvedValue([{ id: 'blk-1' }, { id: 'blk-2' }]);
+
+    const result = await controller.createBulkBlocks(clubId, dto as any, 'user-1');
+    expect(facilitiesService.createBulkBlocks).toHaveBeenCalledWith(clubId, dto, 'user-1');
+    expect(result).toHaveLength(2);
+  });
+
+  it('removeBlockById debe delegar en facilitiesService.removeBlockById', async () => {
+    facilitiesService.removeBlockById.mockResolvedValue({ success: true });
+
+    const result = await controller.removeBlockById(clubId, 'block-1', 'user-1');
+    expect(facilitiesService.removeBlockById).toHaveBeenCalledWith(clubId, 'block-1', 'user-1');
     expect(result.success).toBe(true);
   });
 });

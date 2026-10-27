@@ -317,10 +317,10 @@
                           @for (facility of group.facilities; track facility.facilityId) {
                             <th class="matrix-court-header">
                               <div class="court-header-card">
-                                <span class="court-sport-pill">{{ facility.sportType }}</span>
+                                <span class="court-sport-pill">{{ 'SPORTS.' + facility.sportType | translate }}</span>
                                 <h4 class="court-title">{{ facility.facilityName }}</h4>
                                 <div class="court-subinfo">
-                                  <span>{{ facility.courtType }}</span>
+                                  <span>{{ 'ADMIN.FACILITIES.COURT_TYPE_' + facility.courtType | translate }}</span>
                                   @if (facility.hasLighting) {
                                     <i class="pi pi-sun lighting-mini-icon" [pTooltip]="'PORTAL.BOOKINGS.LIGHTING_AVAILABLE' | translate" tooltipPosition="top"></i>
                                   }
@@ -479,9 +479,9 @@
           <div class="calendar-matrix-card">
             @if (currentFacility) {
               <div class="week-facility-banner">
-                <span class="court-sport-pill">{{ currentFacility.sportType }}</span>
+                <span class="court-sport-pill">{{ 'SPORTS.' + currentFacility.sportType | translate }}</span>
                 <h3 class="facility-title">{{ currentFacility.facilityName }}</h3>
-                <span class="court-subinfo">{{ currentFacility.courtType }} • {{ currentFacility.surfaceType }}</span>
+                <span class="court-subinfo">{{ 'ADMIN.FACILITIES.COURT_TYPE_' + currentFacility.courtType | translate }} • {{ 'ADMIN.FACILITIES.SURFACE_' + currentFacility.surfaceType | translate }}</span>
               </div>
             }
             <div class="matrix-table-container">

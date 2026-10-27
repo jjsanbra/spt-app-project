@@ -53,6 +53,7 @@ describe('FacilitiesService', () => {
         ),
         delete: jest.fn().mockResolvedValue({ id: 'block-del' }),
       },
+      $transaction: jest.fn().mockImplementation((operations) => Promise.all(operations)),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -224,6 +225,102 @@ describe('FacilitiesService', () => {
         }),
       });
       expect(result).toBeDefined();
+      expect(result.facilityName).toBe(mockFacility.name);
+    });
+  });
+
+  describe('findClubBlocks', () => {
+    it('debe listar los bloqueos del club mapeando facilityName y sportType', async () => {
+      prismaMock.facilityBlock.findMany.mockResolvedValue([
+        {
+          id: 'blk-1',
+          clubId: mockClubId,
+          facilityId: mockFacilityId,
+          title: 'Mantenimiento',
+          reason: null,
+          startTime: new Date(),
+          endTime: new Date(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          facility: {
+            name: 'Pista 1 Central',
+            sportType: SportType.PADEL,
+          },
+        },
+      ]);
+
+      const result = await service.findClubBlocks(mockClubId);
+      expect(result).toHaveLength(1);
+      expect(result[0].facilityName).toBe('Pista 1 Central');
+      expect(result[0].sportType).toBe(SportType.PADEL);
+    });
+  });
+
+  describe('createBulkBlocks', () => {
+    it('debe validar que startTime sea anterior a endTime', async () => {
+      const invalidDto = {
+        facilityIds: [mockFacilityId],
+        title: 'Torneo Pádel',
+        startTime: '2026-11-01T15:00:00.000Z',
+        endTime: '2026-11-01T10:00:00.000Z',
+      };
+
+      await expect(service.createBulkBlocks(mockClubId, invalidDto)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('debe validar que todas las pistas pertenezcan al club', async () => {
+      prismaMock.facility.findMany.mockResolvedValue([]); // ninguna encontrada
+      const dto = {
+        facilityIds: ['fac-invalid'],
+        title: 'Torneo Pádel',
+        startTime: '2026-11-01T10:00:00.000Z',
+        endTime: '2026-11-01T15:00:00.000Z',
+      };
+
+      await expect(service.createBulkBlocks(mockClubId, dto)).rejects.toThrow(BadRequestException);
+    });
+
+    it('debe crear múltiples bloqueos atómicamente', async () => {
+      prismaMock.facility.findMany.mockResolvedValue([
+        { id: mockFacilityId, name: 'Pista 1', sportType: SportType.PADEL },
+      ]);
+      const dto = {
+        facilityIds: [mockFacilityId],
+        title: 'Torneo Pádel',
+        startTime: '2026-11-01T10:00:00.000Z',
+        endTime: '2026-11-01T15:00:00.000Z',
+      };
+
+      const result = await service.createBulkBlocks(mockClubId, dto, 'user-1');
+      expect(prismaMock.$transaction).toHaveBeenCalled();
+      expect(result).toHaveLength(1);
+      expect(result[0].facilityName).toBe('Pista 1');
+    });
+  });
+
+  describe('removeBlockById', () => {
+    it('debe lanzar NotFoundException si el bloqueo no existe', async () => {
+      prismaMock.facilityBlock.findFirst.mockResolvedValue(null);
+
+      await expect(service.removeBlockById(mockClubId, 'invalid-id')).rejects.toThrow(
+        NotFoundException,
+      );
+    });
+
+    it('debe eliminar el bloqueo y registrar la actividad si existe', async () => {
+      prismaMock.facilityBlock.findFirst.mockResolvedValue({
+        id: 'blk-1',
+        clubId: mockClubId,
+        facilityId: mockFacilityId,
+        title: 'Mantenimiento',
+        facility: { name: 'Pista 1' },
+      });
+
+      const result = await service.removeBlockById(mockClubId, 'blk-1', 'user-1');
+      expect(prismaMock.facilityBlock.delete).toHaveBeenCalledWith({ where: { id: 'blk-1' } });
+      expect(result.success).toBe(true);
     });
   });
 });

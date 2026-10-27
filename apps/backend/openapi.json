@@ -418,6 +418,173 @@
         ]
       }
     },
+    "/api/v1/facilities/blocks": {
+      "get": {
+        "operationId": "FacilitiesController_findClubBlocks",
+        "summary": "Listar todos los bloqueos temporales del club con filtros (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sportType",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por deporte",
+            "schema": {
+              "enum": [
+                "PADEL",
+                "TENNIS",
+                "FOOTBALL_7",
+                "FOOTBALL_11",
+                "FUTSAL",
+                "BASKETBALL",
+                "PICKLEBALL",
+                "SQUASH",
+                "BADMINTON",
+                "VOLLEYBALL",
+                "BEACH_VOLLEY",
+                "FRONTON",
+                "INDOOR_FRONTON",
+                "HANDBALL",
+                "TABLE_TENNIS",
+                "ATHLETICS_TRACK",
+                "SWIMMING_LANE",
+                "CLIMBING_WALL",
+                "MULTI_SPORT"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "facilityId",
+            "required": false,
+            "in": "query",
+            "description": "Filtrar por pista específica",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityBlockResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/facilities/blocks/bulk": {
+      "post": {
+        "operationId": "FacilitiesController_createBulkBlocks",
+        "summary": "Crear bloqueos temporales masivos en varias pistas (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BulkCreateFacilityBlockDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/FacilityBlockResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/facilities/blocks/{blockId}": {
+      "delete": {
+        "operationId": "FacilitiesController_removeBlockById",
+        "summary": "Eliminar o levantar bloqueo temporal por ID (Admin)",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "blockId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Bloqueo eliminado correctamente"
+          }
+        },
+        "tags": [
+          "Facilities"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/facilities/{id}": {
       "get": {
         "operationId": "FacilitiesController_findOne",
@@ -2796,6 +2963,132 @@
           "updatedAt"
         ]
       },
+      "FacilityBlockResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "blk-916b62-92d3-4a9d-86df-87d547e457ea"
+          },
+          "clubId": {
+            "type": "string",
+            "example": "ca816b62-92d3-4a9d-86df-87d547e457eb"
+          },
+          "facilityId": {
+            "type": "string",
+            "example": "fac-816b62-92d3-4a9d-86df-87d547e457ec"
+          },
+          "facilityName": {
+            "type": "string",
+            "example": "Pista 1 Central"
+          },
+          "sportType": {
+            "type": "string",
+            "enum": [
+              "PADEL",
+              "TENNIS",
+              "FOOTBALL_7",
+              "FOOTBALL_11",
+              "FUTSAL",
+              "BASKETBALL",
+              "PICKLEBALL",
+              "SQUASH",
+              "BADMINTON",
+              "VOLLEYBALL",
+              "BEACH_VOLLEY",
+              "FRONTON",
+              "INDOOR_FRONTON",
+              "HANDBALL",
+              "TABLE_TENNIS",
+              "ATHLETICS_TRACK",
+              "SWIMMING_LANE",
+              "CLIMBING_WALL",
+              "MULTI_SPORT"
+            ],
+            "example": "PADEL"
+          },
+          "title": {
+            "type": "string",
+            "example": "Mantenimiento focos y red"
+          },
+          "reason": {
+            "type": "string",
+            "nullable": true,
+            "example": "Revisión técnica anual de iluminación"
+          },
+          "startTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T10:00:00.000Z"
+          },
+          "endTime": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-25T14:00:00.000Z"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2026-10-20T10:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "clubId",
+          "facilityId",
+          "title",
+          "startTime",
+          "endTime",
+          "createdAt",
+          "updatedAt"
+        ]
+      },
+      "BulkCreateFacilityBlockDto": {
+        "type": "object",
+        "properties": {
+          "facilityIds": {
+            "description": "Listado de IDs de pistas a bloquear (mínimo 1)",
+            "example": [
+              "fac-816b62-92d3-4a9d-86df-87d547e457ec"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "title": {
+            "type": "string",
+            "example": "Mantenimiento o Torneo Fin de Semana",
+            "description": "Título o concepto del bloqueo de pista"
+          },
+          "reason": {
+            "type": "string",
+            "example": "Revisión técnica o reserva para torneo de pádel",
+            "description": "Motivo o detalle explicativo adicional del bloqueo"
+          },
+          "startTime": {
+            "type": "string",
+            "example": "2026-11-01T08:00:00.000Z",
+            "description": "Fecha y hora de inicio del bloqueo (formato ISO 8601)"
+          },
+          "endTime": {
+            "type": "string",
+            "example": "2026-11-01T15:00:00.000Z",
+            "description": "Fecha y hora de finalización del bloqueo (formato ISO 8601)"
+          }
+        },
+        "required": [
+          "facilityIds",
+          "title",
+          "startTime",
+          "endTime"
+        ]
+      },
       "CreateFacilityDto": {
         "type": "object",
         "properties": {
@@ -2974,62 +3267,6 @@
             "description": "Estado operativo de la instalación deportiva"
           }
         }
-      },
-      "FacilityBlockResponseDto": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "blk-916b62-92d3-4a9d-86df-87d547e457ea"
-          },
-          "clubId": {
-            "type": "string",
-            "example": "ca816b62-92d3-4a9d-86df-87d547e457eb"
-          },
-          "facilityId": {
-            "type": "string",
-            "example": "fac-816b62-92d3-4a9d-86df-87d547e457ec"
-          },
-          "title": {
-            "type": "string",
-            "example": "Mantenimiento focos y red"
-          },
-          "reason": {
-            "type": "string",
-            "nullable": true,
-            "example": "Revisión técnica anual de iluminación"
-          },
-          "startTime": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2026-10-25T10:00:00.000Z"
-          },
-          "endTime": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2026-10-25T14:00:00.000Z"
-          },
-          "createdAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2026-10-20T10:00:00.000Z"
-          },
-          "updatedAt": {
-            "format": "date-time",
-            "type": "string",
-            "example": "2026-10-20T10:00:00.000Z"
-          }
-        },
-        "required": [
-          "id",
-          "clubId",
-          "facilityId",
-          "title",
-          "startTime",
-          "endTime",
-          "createdAt",
-          "updatedAt"
-        ]
       },
       "CreateFacilityBlockDto": {
         "type": "object",

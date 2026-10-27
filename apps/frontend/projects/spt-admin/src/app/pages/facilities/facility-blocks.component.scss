@@ -14,6 +14,13 @@
   margin-bottom: var(--spacing-xs);
 }
 
+.filter-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
 .table-card {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);

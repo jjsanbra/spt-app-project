@@ -26,6 +26,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { TenantGuard } from '../auth/guards/tenant.guard';
+import { BulkCreateFacilityBlockDto } from './dto/bulk-create-facility-block.dto';
 import { CreateFacilityBlockDto } from './dto/create-facility-block.dto';
 import { CreateFacilityDto } from './dto/create-facility.dto';
 import { FacilityBlockResponseDto } from './dto/facility-block-response.dto';
@@ -80,6 +81,47 @@ export class FacilitiesController {
   ): Promise<FacilityResponseDto[]> {
     const activeBool = isActive !== undefined ? isActive === 'true' : undefined;
     return this.facilitiesService.findAll(clubId, sportType, activeBool);
+  }
+
+  // ─── Bloqueos a Nivel de Club (Globales) ─────────────────────
+
+  @Get('blocks')
+  @Roles(ClubRole.ADMIN, ClubRole.OWNER)
+  @ApiOperation({ summary: 'Listar todos los bloqueos temporales del club con filtros (Admin)' })
+  @ApiQuery({ name: 'sportType', enum: SportType, required: false, description: 'Filtrar por deporte' })
+  @ApiQuery({ name: 'facilityId', required: false, description: 'Filtrar por pista específica' })
+  @ApiResponse({ status: 200, type: [FacilityBlockResponseDto] })
+  async findClubBlocks(
+    @CurrentTenant('clubId') clubId: string,
+    @Query('sportType') sportType?: SportType,
+    @Query('facilityId') facilityId?: string,
+  ): Promise<FacilityBlockResponseDto[]> {
+    return this.facilitiesService.findClubBlocks(clubId, sportType, facilityId);
+  }
+
+  @Post('blocks/bulk')
+  @Roles(ClubRole.ADMIN, ClubRole.OWNER)
+  @ApiOperation({ summary: 'Crear bloqueos temporales masivos en varias pistas (Admin)' })
+  @ApiResponse({ status: 201, type: [FacilityBlockResponseDto] })
+  async createBulkBlocks(
+    @CurrentTenant('clubId') clubId: string,
+    @Body() dto: BulkCreateFacilityBlockDto,
+    @CurrentUser('id') userId?: string,
+  ): Promise<FacilityBlockResponseDto[]> {
+    return this.facilitiesService.createBulkBlocks(clubId, dto, userId);
+  }
+
+  @Delete('blocks/:blockId')
+  @Roles(ClubRole.ADMIN, ClubRole.OWNER)
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Eliminar o levantar bloqueo temporal por ID (Admin)' })
+  @ApiResponse({ status: 200, description: 'Bloqueo eliminado correctamente' })
+  async removeBlockById(
+    @CurrentTenant('clubId') clubId: string,
+    @Param('blockId') blockId: string,
+    @CurrentUser('id') userId?: string,
+  ): Promise<{ success: boolean }> {
+    return this.facilitiesService.removeBlockById(clubId, blockId, userId);
   }
 
   @Get(':id')
