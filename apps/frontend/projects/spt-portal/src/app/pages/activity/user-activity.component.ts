@@ -1,6 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   ActivityLogItemDto,
@@ -30,6 +31,7 @@ export interface UserCategoryFilter {
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink,
     DatePipe,
     FormsModule,
     TranslatePipe,

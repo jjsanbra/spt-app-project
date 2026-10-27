@@ -9,19 +9,26 @@
       </div>
     }
 
-    <div class="title-row">
+    <div class="header-main-info">
       @if (icon) {
-        <i [class]="icon + ' header-icon'"></i>
+        <div class="header-icon-badge">
+          <i [class]="icon + ' header-icon'"></i>
+        </div>
       }
-      <h1 class="page-title">{{ title }}</h1>
-      @if (badgeText) {
-        <p-tag [value]="badgeText" [severity]="badgeSeverity" class="header-badge" />
-      }
-    </div>
 
-    @if (subtitle) {
-      <p class="page-subtitle">{{ subtitle }}</p>
-    }
+      <div class="title-content">
+        <div class="title-row">
+          <h1 class="page-title">{{ title }}</h1>
+          @if (badgeText) {
+            <p-tag [value]="badgeText" [severity]="badgeSeverity" class="header-badge" />
+          }
+        </div>
+
+        @if (subtitle) {
+          <p class="page-subtitle">{{ subtitle }}</p>
+        }
+      </div>
+    </div>
   </div>
 
   <div class="header-actions">

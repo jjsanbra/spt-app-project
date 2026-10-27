@@ -48,38 +48,78 @@
       }
     }
 
-    .title-row {
+    .header-main-info {
       display: flex;
       align-items: center;
-      gap: var(--spacing-xs);
-      flex-wrap: wrap;
 
-      .header-icon {
-        font-size: var(--font-size-xl);
-        color: var(--primary-color);
+      @include mobile {
+        align-items: flex-start;
       }
 
-      .page-title {
-        font-family: var(--font-heading);
-        font-size: var(--font-size-xl);
-        font-weight: var(--font-weight-bold);
-        color: var(--text-color);
-        letter-spacing: -0.02em;
-        margin: 0;
-        line-height: 1.2;
+      .header-icon-badge {
+        width: 52px;
+        height: 52px;
+        border-radius: var(--radius-lg);
+        background: var(--primary-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        box-shadow: var(--shadow-glow-pink);
+        flex-shrink: 0;
+        margin-right: var(--spacing-lg);
+        transition: var(--theme-transition);
+
+        @include mobile {
+          width: 44px;
+          height: 44px;
+          margin-right: var(--spacing-md);
+        }
+
+        .header-icon {
+          font-size: var(--font-size-xl);
+          color: #ffffff;
+
+          @include mobile {
+            font-size: var(--font-size-lg);
+          }
+        }
       }
 
-      .header-badge {
-        font-size: var(--font-size-xs);
-      }
-    }
+      .title-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-2xs);
 
-    .page-subtitle {
-      font-family: var(--font-body);
-      font-size: var(--font-size-sm);
-      color: var(--text-muted);
-      margin: 0;
-      line-height: 1.4;
+        .title-row {
+          display: flex;
+          align-items: center;
+          gap: var(--spacing-xs);
+          flex-wrap: wrap;
+
+          .page-title {
+            font-family: var(--font-heading);
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-color);
+            letter-spacing: -0.02em;
+            margin: 0;
+            line-height: 1.2;
+          }
+
+          .header-badge {
+            font-size: var(--font-size-xs);
+          }
+        }
+
+        .page-subtitle {
+          font-family: var(--font-body);
+          font-size: var(--font-size-sm);
+          color: var(--text-muted);
+          margin: 0;
+          line-height: 1.4;
+        }
+      }
     }
   }
 

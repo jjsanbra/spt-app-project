@@ -1,11 +1,11 @@
 <div class="admin-page-container">
-  <!-- Cabecera de Página -->
-  <div class="page-header">
-    <div class="header-titles">
-      <h1 class="page-title">{{ 'ADMIN.SETTINGS.TITLE' | translate }}</h1>
-      <p class="page-subtitle">{{ 'ADMIN.SETTINGS.SUBTITLE' | translate }}</p>
-    </div>
-    <div class="header-actions">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header
+    icon="pi pi-cog"
+    [title]="'ADMIN.SETTINGS.TITLE' | translate"
+    [subtitle]="'ADMIN.SETTINGS.SUBTITLE' | translate"
+  >
+    <div actions>
       <button
         type="button"
         pButton
@@ -17,7 +17,7 @@
         {{ 'ADMIN.SETTINGS.SAVE_BTN' | translate }}
       </button>
     </div>
-  </div>
+  </spt-page-header>
 
   <form [formGroup]="settingsForm" (ngSubmit)="submitSettings()" class="settings-form-layout">
     <!-- Card 1: Información y Contacto -->

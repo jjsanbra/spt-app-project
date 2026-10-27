@@ -7,6 +7,7 @@ import {
   ClubSettingsResponseDtoPaymentMode as PaymentMode,
   ClubsSettingsService,
   NotificationService,
+  PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -21,6 +22,7 @@ import { TextareaModule } from 'primeng/textarea';
     CommonModule,
     ReactiveFormsModule,
     TranslatePipe,
+    PageHeaderComponent,
     ButtonModule,
     InputTextModule,
     InputNumberModule,

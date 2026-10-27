@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import {
   ActivityLogItemDto,
@@ -53,6 +54,7 @@ describe('UserActivityComponent', () => {
       imports: [UserActivityComponent],
       providers: [
         provideHttpClient(),
+        provideRouter([]),
         provideTranslateService({ lang: 'es' }),
         { provide: ActivityLogsService, useValue: activityLogsServiceSpy },
         { provide: NotificationService, useValue: notificationServiceSpy },

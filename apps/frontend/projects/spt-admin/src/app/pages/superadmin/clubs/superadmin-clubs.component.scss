@@ -1,17 +1,12 @@
-@use "../../../../../../spt-app/src/styles/base/responsive" as *;
+@use "base/responsive" as *;
 
-.superadmin-page-container {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  padding: var(--spacing-lg) var(--spacing-xl);
+.admin-page-container {
   max-width: 1400px;
   margin: 0 auto;
-  width: 100%;
+  padding: var(--spacing-xl) var(--spacing-lg);
 
   @include mobile {
-    padding: var(--spacing-md);
-    gap: var(--spacing-md);
+    padding: var(--spacing-md) var(--spacing-sm);
   }
 }
 
@@ -20,6 +15,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
   flex-wrap: wrap;
 
   .filter-search {

@@ -1,0 +1,23 @@
+/* ==========================================================================
+   SPT DESIGN SYSTEM — UNIFIED PAGE LAYOUT & CONTAINERS
+   Ruta: apps/frontend/projects/spt-app/src/styles/utilities/_layout.scss
+   ========================================================================== */
+
+@use "../base/variables" as *;
+@use "../base/responsive" as *;
+
+.page-container,
+.admin-page-container,
+.portal-page-container,
+.superadmin-page-container,
+.activity-logs-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+
+  @include mobile {
+    padding: var(--spacing-md) var(--spacing-sm);
+  }
+}

@@ -1,10 +1,22 @@
-<div class="user-activity-container">
+<div class="portal-page-container">
   <!-- Cabecera de Página unificada -->
   <spt-page-header
     icon="pi pi-history"
     [title]="'PORTAL.ACTIVITY.TITLE' | translate"
     [subtitle]="'PORTAL.ACTIVITY.SUBTITLE' | translate"
-  />
+  >
+    <div actions>
+      <a routerLink="/portal/book">
+        <button
+          type="button"
+          pButton
+          icon="pi pi-plus"
+        >
+          {{ 'PORTAL.MY_BOOKINGS.NEW_BOOKING_BTN' | translate }}
+        </button>
+      </a>
+    </div>
+  </spt-page-header>
 
   <!-- Barra de Filtros y Búsqueda -->
   <div class="filters-toolbar">
@@ -60,7 +72,7 @@
       [rows]="rows"
       [totalRecords]="totalRecords"
       [loading]="loading"
-      [rowsPerPageOptions]="[10, 15, 25, 50]"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
       [stripedRows]="true"
       [showCurrentPageReport]="true"
       [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
@@ -139,7 +151,7 @@
 
         <div class="detail-row">
           <span class="detail-label">{{ 'PORTAL.ACTIVITY.STATUS' | translate }}:</span>
-          <p-tag [value]="selectedLog.action" [severity]="getActionSeverity(selectedLog.action)"></p-tag>
+          <p-tag [value]="'LOG_ACTIONS.' + selectedLog.action | translate" [severity]="getActionSeverity(selectedLog.action)"></p-tag>
         </div>
         <p-divider />
 

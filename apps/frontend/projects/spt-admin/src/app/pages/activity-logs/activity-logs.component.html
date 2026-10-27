@@ -1,10 +1,10 @@
-<div class="activity-logs-container">
+<div class="admin-page-container">
   <!-- Header de página unificado -->
   <spt-page-header
     icon="pi pi-history"
     [title]="'ADMIN.LOGS.TITLE' | translate"
     [subtitle]="'ADMIN.LOGS.SUBTITLE' | translate"
-  />
+  ></spt-page-header>
 
   <!-- Barra de Filtros y Herramientas -->
   <div class="filters-toolbar">
@@ -91,7 +91,7 @@
       [rows]="rows"
       [totalRecords]="totalRecords"
       [loading]="loading"
-      [rowsPerPageOptions]="[10, 20, 50, 100]"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
       [stripedRows]="true"
       [showCurrentPageReport]="true"
       [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
