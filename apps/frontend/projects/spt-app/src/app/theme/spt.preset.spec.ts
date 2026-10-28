@@ -26,4 +26,15 @@ describe('SPTPreset', () => {
     expect(colorScheme.dark.surface).toBeDefined();
     expect(colorScheme.dark.surface[50]).toBe('#07060d');
   });
+
+  it('debe configurar los tokens de componentes para card, button y avatar', () => {
+    const components = (SPTPreset as any).components;
+    expect(components).toBeDefined();
+    expect(components.card).toBeDefined();
+    expect(components.card.root.borderRadius).toBe('16px');
+    expect(components.button).toBeDefined();
+    expect(components.button.root.borderRadius).toBe('8px');
+    expect(components.avatar).toBeDefined();
+    expect(components.avatar.xl.width).toBe('5rem');
+  });
 });

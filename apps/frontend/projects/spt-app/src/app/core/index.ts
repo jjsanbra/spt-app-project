@@ -24,6 +24,7 @@ export * from './services/notification.service';
 export * from './services/confirm-dialog.service';
 export * from './services/realtime-notifications.service';
 export * from './services/theme.service';
+export * from '../theme/spt.preset';
 
 // Componentes UI transversales
 export * from './components/page-header/page-header.component';

@@ -79,3 +79,26 @@
     color: var(--text-dim);
   }
 }
+
+/* Avatar de Usuario con Identidad Stitch */
+.user-avatar-badge.p-avatar,
+p-avatar.user-avatar-badge,
+.user-avatar-badge {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--primary-gradient);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(255, 45, 120, 0.35);
+  outline: 4px solid rgba(255, 45, 120, 0.15);
+
+  .p-avatar-icon,
+  i {
+    font-size: 32px;
+    color: #FFFFFF;
+  }
+}
+

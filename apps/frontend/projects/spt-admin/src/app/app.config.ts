@@ -9,7 +9,7 @@ import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
-import { authInterceptor, loadingInterceptor } from '@core';
+import { authInterceptor, loadingInterceptor, SPTPreset } from '@core';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -30,6 +30,7 @@ export const appConfig: ApplicationConfig = {
     }),
     providePrimeNG({
       theme: {
+        preset: SPTPreset,
         options: {
           darkModeSelector: '[data-theme="dark"]',
         },

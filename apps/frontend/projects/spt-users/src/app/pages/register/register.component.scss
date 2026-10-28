@@ -95,6 +95,13 @@
 
 .form-actions {
   margin-top: var(--spacing-sm);
+
+  .p-button,
+  button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .auth-footer {
@@ -120,3 +127,4 @@
     opacity: 0.85;
   }
 }
+

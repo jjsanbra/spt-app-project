@@ -103,6 +103,13 @@
 
 .form-actions {
   margin-top: var(--spacing-sm);
+
+  .p-button,
+  button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .quick-login-divider-badge {
@@ -139,15 +146,15 @@
 }
 
 .quick-user-card-btn {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  padding: var(--spacing-sm) var(--spacing-md) !important;
-  border-radius: var(--radius-md) !important;
-  background-color: var(--surface-pure) !important;
-  transition: all 0.2s ease !important;
-  text-align: left !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  background-color: var(--surface-pure);
+  transition: all 0.2s ease;
+  text-align: left;
 
   &:hover {
     transform: translateY(-1px);
@@ -205,5 +212,6 @@
     opacity: 0.85;
   }
 }
+
 
 

@@ -44,4 +44,35 @@ export const SPTPreset = definePreset(Aura, {
       },
     },
   },
+  components: {
+    card: {
+      root: {
+        background: '{surface.0}',
+        borderRadius: '16px',
+        shadow: '0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04)',
+      },
+      body: {
+        padding: '1.5rem',
+      },
+    },
+    button: {
+      root: {
+        borderRadius: '8px',
+      },
+    },
+    avatar: {
+      root: {
+        background: 'var(--primary-gradient)',
+        color: '#FFFFFF',
+      },
+      xl: {
+        width: '5rem',
+        height: '5rem',
+        fontSize: '2rem',
+        icon: {
+          size: '2rem',
+        },
+      },
+    },
+  },
 });

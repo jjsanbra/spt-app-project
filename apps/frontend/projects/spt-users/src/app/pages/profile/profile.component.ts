@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, effect, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
@@ -54,6 +54,16 @@ export class ProfileComponent implements OnInit {
   });
 
   loading = false;
+
+  constructor() {
+    effect(() => {
+      const user = this.authService.currentUser();
+      if (user && this.profileForm.pristine) {
+        this.populateForm(user);
+        this.cdr.markForCheck();
+      }
+    });
+  }
 
   ngOnInit(): void {
     const user = this.authService.currentUser();

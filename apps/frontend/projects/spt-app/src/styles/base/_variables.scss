@@ -144,6 +144,19 @@
   --p-checkbox-sm-height: 1rem;
   --p-checkbox-lg-width: 1.5rem;
   --p-checkbox-lg-height: 1.5rem;
+
+  /* PrimeNG Avatar Geometrics */
+  --p-avatar-width: 2.5rem;
+  --p-avatar-height: 2.5rem;
+  --p-avatar-font-size: 1rem;
+  --p-avatar-border-radius: var(--radius-md);
+  --p-avatar-lg-width: 3.5rem;
+  --p-avatar-lg-height: 3.5rem;
+  --p-avatar-lg-font-size: 1.5rem;
+  --p-avatar-xl-width: 5rem;
+  --p-avatar-xl-height: 5rem;
+  --p-avatar-xl-font-size: 2rem;
+  --p-avatar-xl-icon-size: 2rem;
 }
 
 /* ==========================================================================
@@ -370,6 +383,10 @@
   --p-popover-border-color: var(--border-subtle);
   --p-popover-color: var(--text-color);
   --p-popover-shadow: var(--shadow-tier3);
+
+  /* PrimeNG Avatar Tokens */
+  --p-avatar-background: var(--primary-gradient);
+  --p-avatar-color: #FFFFFF;
 
   /* PrimeNG Select Overlay & Option Tokens */
   --p-select-overlay-background: var(--surface-card);
@@ -616,6 +633,10 @@
   --p-popover-border-color: var(--border-subtle);
   --p-popover-color: var(--text-color);
   --p-popover-shadow: var(--shadow-tier3);
+
+  /* PrimeNG Avatar Tokens */
+  --p-avatar-background: var(--primary-gradient);
+  --p-avatar-color: #FFFFFF;
 
   /* PrimeNG Select Overlay & Option Tokens */
   --p-select-overlay-background: var(--surface-card);

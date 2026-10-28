@@ -57,7 +57,7 @@
               {{ 'USERS.PHONE' | translate }}
             </span>
             <span class="info-value">
-              {{ profileForm.get('phone')?.value || '—' }}
+              {{ profileForm.get('phone')?.value || authService.currentUser()?.phone || '—' }}
             </span>
           </div>
         </div>

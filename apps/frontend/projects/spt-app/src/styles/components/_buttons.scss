@@ -19,18 +19,18 @@
 .btn-primary,
 .p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-secondary):not(.p-button-danger):not(.p-button-success):not(.p-button-warning):not(.p-button-info),
 .p-button.p-button-primary:not(.p-button-outlined):not(.p-button-text) {
-  background: var(--primary-gradient) !important;
-  color: var(--primary-contrast) !important;
-  font-family: var(--font-label) !important;
-  font-weight: var(--font-weight-bold) !important;
-  border: none !important;
-  box-shadow: var(--shadow-glow-pink) !important;
-  transition: all 0.2s ease !important;
+  background: var(--primary-gradient);
+  color: var(--primary-contrast);
+  font-family: var(--font-label);
+  font-weight: var(--font-weight-bold);
+  border: none;
+  box-shadow: var(--shadow-glow-pink);
+  transition: all 0.2s ease;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 0 26px var(--primary-glow) !important;
-    background: var(--primary-gradient-hover) !important;
+    box-shadow: 0 0 26px var(--primary-glow);
+    background: var(--primary-gradient-hover);
     opacity: 0.95;
   }
 }
@@ -39,95 +39,106 @@
 .btn-secondary,
 .p-button.p-button-secondary.p-button-outlined,
 .p-button.p-button-outlined:not(.p-button-danger):not(.p-button-success) {
-  background: var(--surface-container) !important;
-  color: var(--text-color) !important;
-  font-family: var(--font-label) !important;
-  border: 1px solid var(--border-subtle) !important;
-  box-shadow: var(--shadow-tier1) !important;
+  background: var(--surface-container);
+  color: var(--text-color);
+  font-family: var(--font-label);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--shadow-tier1);
 
   &:hover {
-    background: var(--surface-container-high) !important;
-    color: var(--text-color) !important;
-    border-color: var(--border-input) !important;
+    background: var(--surface-container-high);
+    color: var(--text-color);
+    border-color: var(--border-input);
     transform: translateY(-1px);
   }
 }
 
 /* Botón de Texto Simple */
 .p-button.p-button-text:not(.p-button-danger) {
-  background: transparent !important;
-  color: var(--text-muted) !important;
-  font-family: var(--font-label) !important;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-label);
 
   &:hover {
-    background: var(--surface-container-high) !important;
-    color: var(--text-color) !important;
+    background: var(--surface-container-high);
+    color: var(--text-color);
   }
 }
 
 /* Botón Danger / Destructivo */
 .btn-danger,
 .p-button.p-button-danger:not(.p-button-text):not(.p-button-outlined) {
-  background: var(--status-disputed-bg) !important;
-  color: var(--error) !important;
-  border: 1px solid var(--status-disputed-border) !important;
-  font-family: var(--font-label) !important;
+  background: var(--status-disputed-bg);
+  color: var(--error);
+  border: 1px solid var(--status-disputed-border);
+  font-family: var(--font-label);
 
   &:hover {
-    background: var(--error) !important;
-    color: #FFFFFF !important;
-    border-color: var(--error) !important;
+    background: var(--error);
+    color: #FFFFFF;
+    border-color: var(--error);
     transform: translateY(-1px);
   }
 }
 
 .p-button.p-button-danger.p-button-text {
-  background: transparent !important;
-  color: var(--error) !important;
-  border: 1px solid transparent !important;
+  background: transparent;
+  color: var(--error);
+  border: 1px solid transparent;
 
   &:hover {
-    background: var(--status-disputed-bg) !important;
-    color: var(--error) !important;
+    background: var(--status-disputed-bg);
+    color: var(--error);
   }
 }
 
 /* Botón Success (Neon Cyan / Mint) */
 .btn-success,
 .p-button.p-button-success {
-  background: rgba(36, 255, 205, 0.15) !important;
-  color: var(--secondary-fixed) !important;
-  border: 1px solid rgba(36, 255, 205, 0.35) !important;
-  font-family: var(--font-label) !important;
+  background: rgba(36, 255, 205, 0.15);
+  color: var(--secondary-fixed);
+  border: 1px solid rgba(36, 255, 205, 0.35);
+  font-family: var(--font-label);
 
   &:hover {
-    background: var(--secondary-fixed) !important;
-    color: #002118 !important;
+    background: var(--secondary-fixed);
+    color: #002118;
   }
 }
 
 /* Tamaños de Botón Auxiliares */
 .btn-sm {
-  padding: 0.4rem 0.85rem !important;
-  font-size: var(--font-size-xs) !important;
+  padding: 0.4rem 0.85rem;
+  font-size: var(--font-size-xs);
 }
 
 .btn-lg {
-  padding: 0.75rem 1.75rem !important;
-  font-size: var(--font-size-base) !important;
-  font-weight: var(--font-weight-bold) !important;
-  border-radius: var(--radius-md) !important;
-  gap: var(--spacing-sm) !important;
+  padding: 0.75rem 1.75rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-md);
+  gap: var(--spacing-sm);
 }
 
 /* Botones de Icono Compactos (Acciones de Fila de Tabla) */
 .action-btn-compact,
 .p-button.p-button-icon-only.p-button-sm {
-  width: var(--action-btn-size) !important;
-  height: var(--action-btn-size) !important;
-  padding: 0 !important;
-  border-radius: var(--action-btn-radius) !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
+  width: var(--action-btn-size);
+  height: var(--action-btn-size);
+  padding: 0;
+  border-radius: var(--action-btn-radius);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Utilidad Universal de Botón de Ancho Completo */
+button.p-button.w-full,
+.p-button.w-full,
+p-button.w-full,
+p-button.w-full > .p-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
