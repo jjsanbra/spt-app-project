@@ -9,17 +9,19 @@
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
         <!-- Email -->
         <div class="form-group">
-          <label for="login-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
-          <input
-            id="login-email"
-            type="email"
-            pInputText
-            pSize="large"
-            class="w-full"
-            formControlName="email"
-            [invalid]="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) ?? false"
-            [placeholder]="'AUTH.EMAIL' | translate"
-          />
+          <p-floatlabel variant="in" class="w-full">
+            <input
+              id="login-email"
+              type="email"
+              pInputText
+              pSize="large"
+              class="w-full"
+              formControlName="email"
+              [invalid]="(loginForm.get('email')?.invalid && loginForm.get('email')?.touched) ?? false"
+              autocomplete="email"
+            />
+            <label for="login-email">{{ 'AUTH.EMAIL' | translate }}</label>
+          </p-floatlabel>
           @if (loginForm.get('email')?.touched && loginForm.get('email')?.errors) {
             <small class="form-error">
               @if (loginForm.get('email')?.hasError('required')) {
@@ -33,17 +35,18 @@
 
         <!-- Password -->
         <div class="form-group">
-          <label for="login-password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
-          <p-password
-            id="login-password"
-            size="large"
-            formControlName="password"
-            [feedback]="false"
-            [toggleMask]="true"
-            [fluid]="true"
-            [invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) ?? false"
-            [placeholder]="'AUTH.PASSWORD' | translate"
-          ></p-password>
+          <p-floatlabel variant="in" class="w-full">
+            <p-password
+              id="login-password"
+              size="large"
+              formControlName="password"
+              [feedback]="false"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="(loginForm.get('password')?.invalid && loginForm.get('password')?.touched) ?? false"
+            ></p-password>
+            <label for="login-password">{{ 'AUTH.PASSWORD' | translate }}</label>
+          </p-floatlabel>
           @if (loginForm.get('password')?.touched && loginForm.get('password')?.errors) {
             <small class="form-error">
               {{ 'AUTH.ERRORS.REQUIRED' | translate }}

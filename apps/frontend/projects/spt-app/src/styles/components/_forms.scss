@@ -274,3 +274,23 @@ p-checkbox,
   }
 }
 
+/* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG FloatLabel (p-floatlabel)
+   -------------------------------------------------------------------------- */
+p-floatlabel,
+.p-floatlabel {
+  display: block;
+  position: relative;
+  width: 100%;
+
+  &.w-full {
+    width: 100%;
+  }
+
+  label {
+    font-family: var(--font-body);
+    transition: all 0.2s ease;
+  }
+}
+
+

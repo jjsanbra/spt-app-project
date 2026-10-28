@@ -15,6 +15,7 @@ import {
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
@@ -38,6 +39,7 @@ interface SelectOption<T = string> {
     TableModule,
     ButtonModule,
     DialogModule,
+    FloatLabel,
     InputTextModule,
     SelectModule,
     TagModule,

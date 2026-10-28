@@ -13,6 +13,7 @@ import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DividerModule } from 'primeng/divider';
+import { FloatLabel } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -28,6 +29,7 @@ import { TagModule } from 'primeng/tag';
     PageHeaderComponent,
     AvatarModule,
     CardModule,
+    FloatLabel,
     InputTextModule,
     IconFieldModule,
     InputIconModule,

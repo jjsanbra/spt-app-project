@@ -136,102 +136,120 @@
     <!-- Deporte y Ámbito -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <label for="block-sport" class="form-label">{{ 'ADMIN.BLOCKS.SPORT' | translate }}</label>
-        <p-select
-          id="block-sport"
-          size="large"
-          class="w-full"
-          formControlName="sportType"
-          [options]="sportOptions.slice(1)"
-          optionLabel="label"
-          optionValue="value"
-          [placeholder]="'ADMIN.BLOCKS.SELECT_SPORT' | translate"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="block-sport"
+            size="large"
+            class="w-full"
+            formControlName="sportType"
+            [options]="sportOptions.slice(1)"
+            optionLabel="label"
+            optionValue="value"
+            [fluid]="true"
+            [appendTo]="'body'"
+          ></p-select>
+          <label for="block-sport">{{ 'ADMIN.BLOCKS.SPORT' | translate }}</label>
+        </p-floatlabel>
       </div>
 
       <div class="form-group flex-1">
-        <label for="block-scope" class="form-label">{{ 'ADMIN.BLOCKS.SCOPE' | translate }}</label>
-        <p-select
-          id="block-scope"
-          size="large"
-          class="w-full"
-          formControlName="scope"
-          [options]="scopeOptions"
-          optionLabel="label"
-          optionValue="value"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="block-scope"
+            size="large"
+            class="w-full"
+            formControlName="scope"
+            [options]="scopeOptions"
+            optionLabel="label"
+            optionValue="value"
+            [fluid]="true"
+            [appendTo]="'body'"
+          ></p-select>
+          <label for="block-scope">{{ 'ADMIN.BLOCKS.SCOPE' | translate }}</label>
+        </p-floatlabel>
       </div>
     </div>
 
     <!-- Pista Específica (Solo si ámbito es SINGLE) -->
     @if (blockForm.get('scope')?.value === 'SINGLE') {
       <div class="form-group">
-        <label for="block-facility" class="form-label">{{ 'ADMIN.BLOCKS.FACILITY' | translate }}</label>
-        <p-select
-          id="block-facility"
-          size="large"
-          class="w-full"
-          formControlName="facilityId"
-          [options]="modalFacilityOptions"
-          optionLabel="label"
-          optionValue="value"
-          [placeholder]="'ADMIN.BLOCKS.SELECT_FACILITY' | translate"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="block-facility"
+            size="large"
+            class="w-full"
+            formControlName="facilityId"
+            [options]="modalFacilityOptions"
+            optionLabel="label"
+            optionValue="value"
+            [fluid]="true"
+            [appendTo]="'body'"
+          ></p-select>
+          <label for="block-facility">{{ 'ADMIN.BLOCKS.FACILITY' | translate }}</label>
+        </p-floatlabel>
       </div>
     }
 
     <!-- Título -->
     <div class="form-group">
-      <label for="block-title" class="form-label">{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</label>
-      <input
-        id="block-title"
-        type="text"
-        pInputText
-        pSize="large"
-        class="w-full"
-        formControlName="title"
-        [placeholder]="'ADMIN.BLOCKS.PLACEHOLDER_TITLE' | translate"
-      />
+      <p-floatlabel variant="in" class="w-full">
+        <input
+          id="block-title"
+          type="text"
+          pInputText
+          pSize="large"
+          class="w-full"
+          formControlName="title"
+          autocomplete="off"
+        />
+        <label for="block-title">{{ 'ADMIN.BLOCKS.BLOCK_TITLE' | translate }}</label>
+      </p-floatlabel>
     </div>
 
     <!-- Fechas Inicio / Fin (tipo datetime-local) -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <label for="block-start" class="form-label">{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</label>
-        <input
-          id="block-start"
-          type="datetime-local"
-          pInputText
-          pSize="large"
-          class="w-full"
-          formControlName="startTime"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="block-start"
+            type="datetime-local"
+            pInputText
+            pSize="large"
+            class="w-full"
+            formControlName="startTime"
+          />
+          <label for="block-start">{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</label>
+        </p-floatlabel>
       </div>
       <div class="form-group flex-1">
-        <label for="block-end" class="form-label">{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</label>
-        <input
-          id="block-end"
-          type="datetime-local"
-          pInputText
-          pSize="large"
-          class="w-full"
-          formControlName="endTime"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="block-end"
+            type="datetime-local"
+            pInputText
+            pSize="large"
+            class="w-full"
+            formControlName="endTime"
+          />
+          <label for="block-end">{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</label>
+        </p-floatlabel>
       </div>
     </div>
 
     <!-- Motivo -->
     <div class="form-group">
-      <label for="block-reason" class="form-label">{{ 'ADMIN.BLOCKS.REASON' | translate }}</label>
-      <input
-        id="block-reason"
-        type="text"
-        pInputText
-        pSize="large"
-        class="w-full"
-        formControlName="reason"
-        placeholder="Opcional: detalles del trabajo a realizar o evento"
-      />
+      <p-floatlabel variant="in" class="w-full">
+        <input
+          id="block-reason"
+          type="text"
+          pInputText
+          pSize="large"
+          class="w-full"
+          formControlName="reason"
+          autocomplete="off"
+        />
+        <label for="block-reason">{{ 'ADMIN.BLOCKS.REASON' | translate }}</label>
+      </p-floatlabel>
     </div>
 
     <!-- Acciones -->

@@ -10,17 +10,19 @@
         <!-- Grid de Nombre y Apellidos -->
         <div class="form-row">
           <div class="form-group">
-            <label for="register-first-name" class="form-label">{{ 'AUTH.FIRST_NAME' | translate }}</label>
-            <input
-              id="register-first-name"
-              type="text"
-              pInputText
-              pSize="large"
-              class="w-full"
-              formControlName="firstName"
-              [invalid]="(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) ?? false"
-              [placeholder]="'AUTH.FIRST_NAME' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="register-first-name"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="firstName"
+                [invalid]="(registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) ?? false"
+                autocomplete="given-name"
+              />
+              <label for="register-first-name">{{ 'AUTH.FIRST_NAME' | translate }}</label>
+            </p-floatlabel>
             @if (registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors) {
               <small class="form-error">
                 {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -29,17 +31,19 @@
           </div>
 
           <div class="form-group">
-            <label for="register-last-name" class="form-label">{{ 'AUTH.LAST_NAME' | translate }}</label>
-            <input
-              id="register-last-name"
-              type="text"
-              pInputText
-              pSize="large"
-              class="w-full"
-              formControlName="lastName"
-              [invalid]="(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) ?? false"
-              [placeholder]="'AUTH.LAST_NAME' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="register-last-name"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="lastName"
+                [invalid]="(registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) ?? false"
+                autocomplete="family-name"
+              />
+              <label for="register-last-name">{{ 'AUTH.LAST_NAME' | translate }}</label>
+            </p-floatlabel>
             @if (registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors) {
               <small class="form-error">
                 {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -50,17 +54,19 @@
 
         <!-- Email -->
         <div class="form-group">
-          <label for="register-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
-          <input
-            id="register-email"
-            type="email"
-            pInputText
-            pSize="large"
-            class="w-full"
-            formControlName="email"
-            [invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) ?? false"
-            [placeholder]="'AUTH.EMAIL' | translate"
-          />
+          <p-floatlabel variant="in" class="w-full">
+            <input
+              id="register-email"
+              type="email"
+              pInputText
+              pSize="large"
+              class="w-full"
+              formControlName="email"
+              [invalid]="(registerForm.get('email')?.invalid && registerForm.get('email')?.touched) ?? false"
+              autocomplete="email"
+            />
+            <label for="register-email">{{ 'AUTH.EMAIL' | translate }}</label>
+          </p-floatlabel>
           @if (registerForm.get('email')?.touched && registerForm.get('email')?.errors) {
             <small class="form-error">
               @if (registerForm.get('email')?.hasError('required')) {
@@ -74,30 +80,33 @@
 
         <!-- Teléfono -->
         <div class="form-group">
-          <label for="register-phone" class="form-label">{{ 'AUTH.PHONE' | translate }}</label>
-          <input
-            id="register-phone"
-            type="tel"
-            pInputText
-            pSize="large"
-            class="w-full"
-            formControlName="phone"
-            [placeholder]="'AUTH.PHONE' | translate"
-          />
+          <p-floatlabel variant="in" class="w-full">
+            <input
+              id="register-phone"
+              type="tel"
+              pInputText
+              pSize="large"
+              class="w-full"
+              formControlName="phone"
+              autocomplete="tel"
+            />
+            <label for="register-phone">{{ 'AUTH.PHONE' | translate }}</label>
+          </p-floatlabel>
         </div>
 
         <!-- Password -->
         <div class="form-group">
-          <label for="register-password" class="form-label">{{ 'AUTH.PASSWORD' | translate }}</label>
-          <p-password
-            id="register-password"
-            size="large"
-            formControlName="password"
-            [toggleMask]="true"
-            [fluid]="true"
-            [invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) ?? false"
-            [placeholder]="'AUTH.PASSWORD' | translate"
-          ></p-password>
+          <p-floatlabel variant="in" class="w-full">
+            <p-password
+              id="register-password"
+              size="large"
+              formControlName="password"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="(registerForm.get('password')?.invalid && registerForm.get('password')?.touched) ?? false"
+            ></p-password>
+            <label for="register-password">{{ 'AUTH.PASSWORD' | translate }}</label>
+          </p-floatlabel>
           @if (registerForm.get('password')?.touched && registerForm.get('password')?.errors) {
             <small class="form-error">
               @if (registerForm.get('password')?.hasError('required')) {
@@ -111,17 +120,18 @@
 
         <!-- Confirm Password -->
         <div class="form-group">
-          <label for="register-confirm-password" class="form-label">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
-          <p-password
-            id="register-confirm-password"
-            size="large"
-            formControlName="confirmPassword"
-            [feedback]="false"
-            [toggleMask]="true"
-            [fluid]="true"
-            [invalid]="((registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) || (registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordMismatch'))) ?? false"
-            [placeholder]="'AUTH.CONFIRM_PASSWORD' | translate"
-          ></p-password>
+          <p-floatlabel variant="in" class="w-full">
+            <p-password
+              id="register-confirm-password"
+              size="large"
+              formControlName="confirmPassword"
+              [feedback]="false"
+              [toggleMask]="true"
+              [fluid]="true"
+              [invalid]="((registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) || (registerForm.get('confirmPassword')?.touched && registerForm.hasError('passwordMismatch'))) ?? false"
+            ></p-password>
+            <label for="register-confirm-password">{{ 'AUTH.CONFIRM_PASSWORD' | translate }}</label>
+          </p-floatlabel>
           @if (registerForm.get('confirmPassword')?.touched && (registerForm.get('confirmPassword')?.errors || registerForm.hasError('passwordMismatch'))) {
             <small class="form-error">
               @if (registerForm.get('confirmPassword')?.hasError('required')) {

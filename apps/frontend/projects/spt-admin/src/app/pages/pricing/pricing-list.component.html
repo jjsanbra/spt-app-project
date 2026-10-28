@@ -140,155 +140,173 @@
   <form [formGroup]="pricingForm" (ngSubmit)="onSubmitModal()" class="pricing-form">
     <!-- Nombre -->
     <div class="form-group">
-      <label for="pricing-name" class="form-label">{{ 'ADMIN.PRICING.NAME' | translate }}</label>
-      <input
-        id="pricing-name"
-        type="text"
-        pInputText
-        pSize="large"
-        class="w-full"
-        formControlName="name"
-        placeholder="Ej. Tarifa Fines de Semana Punta"
-      />
+      <p-floatlabel variant="in" class="w-full">
+        <input
+          id="pricing-name"
+          type="text"
+          pInputText
+          pSize="large"
+          class="w-full"
+          formControlName="name"
+          autocomplete="off"
+        />
+        <label for="pricing-name">{{ 'ADMIN.PRICING.NAME' | translate }}</label>
+      </p-floatlabel>
     </div>
 
     <!-- Ámbito de la tarifa -->
     <div class="form-group">
-      <label for="pricing-scope" class="form-label">{{ 'ADMIN.PRICING.FIELD_SCOPE' | translate }}</label>
-      <p-select
-        inputId="pricing-scope"
-        size="large"
-        [options]="scopeOptions"
-        formControlName="scope"
-        [fluid]="true"
-        optionLabel="label"
-        optionValue="value"
-        [appendTo]="'body'"
-        scrollHeight="200px"
-      ></p-select>
+      <p-floatlabel variant="in" class="w-full">
+        <p-select
+          inputId="pricing-scope"
+          size="large"
+          [options]="scopeOptions"
+          formControlName="scope"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          scrollHeight="200px"
+        ></p-select>
+        <label for="pricing-scope">{{ 'ADMIN.PRICING.FIELD_SCOPE' | translate }}</label>
+      </p-floatlabel>
     </div>
 
     <!-- Selector de deporte condicional -->
     @if (pricingForm.get('scope')?.value === 'SPORT') {
       <div class="form-group">
-        <label for="pricing-sport" class="form-label">{{ 'ADMIN.PRICING.FIELD_SPORT' | translate }}</label>
-        <p-select
-          inputId="pricing-sport"
-          size="large"
-          [options]="sportOptions"
-          formControlName="sportType"
-          [fluid]="true"
-          optionLabel="label"
-          optionValue="value"
-          [appendTo]="'body'"
-          scrollHeight="240px"
-          [placeholder]="'ADMIN.PRICING.FIELD_SPORT_PLACEHOLDER' | translate"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="pricing-sport"
+            size="large"
+            [options]="sportOptions"
+            formControlName="sportType"
+            [fluid]="true"
+            optionLabel="label"
+            optionValue="value"
+            [appendTo]="'body'"
+            scrollHeight="240px"
+          ></p-select>
+          <label for="pricing-sport">{{ 'ADMIN.PRICING.FIELD_SPORT' | translate }}</label>
+        </p-floatlabel>
       </div>
     }
 
     <!-- Selector de pista condicional -->
     @if (pricingForm.get('scope')?.value === 'FACILITY') {
       <div class="form-group">
-        <label for="pricing-facility" class="form-label">{{ 'ADMIN.PRICING.FIELD_FACILITY' | translate }}</label>
-        <p-select
-          inputId="pricing-facility"
-          size="large"
-          [options]="facilityOptions"
-          formControlName="facilityId"
-          [fluid]="true"
-          optionLabel="label"
-          optionValue="value"
-          [appendTo]="'body'"
-          scrollHeight="240px"
-          [placeholder]="'ADMIN.PRICING.FIELD_FACILITY_PLACEHOLDER' | translate"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="pricing-facility"
+            size="large"
+            [options]="facilityOptions"
+            formControlName="facilityId"
+            [fluid]="true"
+            optionLabel="label"
+            optionValue="value"
+            [appendTo]="'body'"
+            scrollHeight="240px"
+          ></p-select>
+          <label for="pricing-facility">{{ 'ADMIN.PRICING.FIELD_FACILITY' | translate }}</label>
+        </p-floatlabel>
       </div>
     }
 
     <!-- Horas Inicio / Fin -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <label for="pricing-start" class="form-label">Hora Inicio (HH:mm)</label>
-        <input
-          id="pricing-start"
-          type="text"
-          pInputText
-          pSize="large"
-          class="w-full"
-          formControlName="startTime"
-          placeholder="08:00"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="pricing-start"
+            type="text"
+            pInputText
+            pSize="large"
+            class="w-full"
+            formControlName="startTime"
+            autocomplete="off"
+          />
+          <label for="pricing-start">{{ 'ADMIN.PRICING.START_TIME' | translate }}</label>
+        </p-floatlabel>
       </div>
       <div class="form-group flex-1">
-        <label for="pricing-end" class="form-label">Hora Fin (HH:mm)</label>
-        <input
-          id="pricing-end"
-          type="text"
-          pInputText
-          pSize="large"
-          class="w-full"
-          formControlName="endTime"
-          placeholder="17:00"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="pricing-end"
+            type="text"
+            pInputText
+            pSize="large"
+            class="w-full"
+            formControlName="endTime"
+            autocomplete="off"
+          />
+          <label for="pricing-end">{{ 'ADMIN.PRICING.END_TIME' | translate }}</label>
+        </p-floatlabel>
       </div>
     </div>
 
     <!-- Precios Socio e Invitado -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <label for="pricing-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
-        <p-inputnumber
-          inputId="pricing-member-price"
-          size="large"
-          formControlName="memberPrice"
-          [min]="0"
-          mode="currency"
-          currency="EUR"
-          locale="es-ES"
-          [fluid]="true"
-        ></p-inputnumber>
+        <p-floatlabel variant="in" class="w-full">
+          <p-inputnumber
+            inputId="pricing-member-price"
+            size="large"
+            formControlName="memberPrice"
+            [min]="0"
+            mode="currency"
+            currency="EUR"
+            locale="es-ES"
+            [fluid]="true"
+          ></p-inputnumber>
+          <label for="pricing-member-price">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
+        </p-floatlabel>
       </div>
       <div class="form-group flex-1">
-        <label for="pricing-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
-        <p-inputnumber
-          inputId="pricing-guest-price"
-          size="large"
-          formControlName="guestPrice"
-          [min]="0"
-          mode="currency"
-          currency="EUR"
-          locale="es-ES"
-          [fluid]="true"
-        ></p-inputnumber>
+        <p-floatlabel variant="in" class="w-full">
+          <p-inputnumber
+            inputId="pricing-guest-price"
+            size="large"
+            formControlName="guestPrice"
+            [min]="0"
+            mode="currency"
+            currency="EUR"
+            locale="es-ES"
+            [fluid]="true"
+          ></p-inputnumber>
+          <label for="pricing-guest-price">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
+        </p-floatlabel>
       </div>
     </div>
 
     <!-- Suplemento Luz y Prioridad -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <label for="pricing-light-surcharge" class="form-label">{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</label>
-        <p-inputnumber
-          inputId="pricing-light-surcharge"
-          size="large"
-          formControlName="lightSurcharge"
-          [min]="0"
-          mode="currency"
-          currency="EUR"
-          locale="es-ES"
-          [fluid]="true"
-        ></p-inputnumber>
+        <p-floatlabel variant="in" class="w-full">
+          <p-inputnumber
+            inputId="pricing-light-surcharge"
+            size="large"
+            formControlName="lightSurcharge"
+            [min]="0"
+            mode="currency"
+            currency="EUR"
+            locale="es-ES"
+            [fluid]="true"
+          ></p-inputnumber>
+          <label for="pricing-light-surcharge">{{ 'ADMIN.PRICING.LIGHT_SURCHARGE' | translate }}</label>
+        </p-floatlabel>
       </div>
       <div class="form-group flex-1">
-        <label for="pricing-priority" class="form-label">{{ 'ADMIN.PRICING.PRIORITY' | translate }}</label>
-        <p-inputnumber
-          inputId="pricing-priority"
-          size="large"
-          formControlName="priority"
-          [min]="1"
-          [max]="100"
-          [fluid]="true"
-        ></p-inputnumber>
+        <p-floatlabel variant="in" class="w-full">
+          <p-inputnumber
+            inputId="pricing-priority"
+            size="large"
+            formControlName="priority"
+            [min]="1"
+            [max]="100"
+            [fluid]="true"
+          ></p-inputnumber>
+          <label for="pricing-priority">{{ 'ADMIN.PRICING.PRIORITY' | translate }}</label>
+        </p-floatlabel>
       </div>
     </div>
 

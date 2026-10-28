@@ -19,6 +19,7 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
+import { FloatLabel } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -40,6 +41,7 @@ export type PricingScope = 'GLOBAL' | 'SPORT' | 'FACILITY';
     ButtonModule,
     TagModule,
     DialogModule,
+    FloatLabel,
     InputTextModule,
     InputNumberModule,
     SelectModule,

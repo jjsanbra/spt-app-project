@@ -223,48 +223,54 @@
     <form [formGroup]="inviteForm" (ngSubmit)="submitInvite()" class="member-form">
       <!-- Email -->
       <div class="form-group">
-        <label for="memberEmail">{{ 'ADMIN.MEMBERS.FIELD_EMAIL' | translate }} *</label>
-        <input
-          id="memberEmail"
-          type="email"
-          pInputText
-          pSize="large"
-          formControlName="email"
-          [placeholder]="'ADMIN.MEMBERS.FIELD_EMAIL_PLACEHOLDER' | translate"
-          class="w-full"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="memberEmail"
+            type="email"
+            pInputText
+            pSize="large"
+            formControlName="email"
+            class="w-full"
+            autocomplete="email"
+          />
+          <label for="memberEmail">{{ 'ADMIN.MEMBERS.FIELD_EMAIL' | translate }} *</label>
+        </p-floatlabel>
       </div>
 
       <!-- Rol -->
       <div class="form-group">
-        <label for="memberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
-        <p-select
-          inputId="memberRole"
-          size="large"
-          [options]="roleOptions"
-          formControlName="role"
-          optionLabel="label"
-          optionValue="value"
-          [fluid]="true"
-          [appendTo]="'body'"
-          [focusOnHover]="false"
-          [autoOptionFocus]="false"
-          scrollHeight="320px"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="memberRole"
+            size="large"
+            [options]="roleOptions"
+            formControlName="role"
+            optionLabel="label"
+            optionValue="value"
+            [fluid]="true"
+            [appendTo]="'body'"
+            [focusOnHover]="false"
+            [autoOptionFocus]="false"
+            scrollHeight="320px"
+          ></p-select>
+          <label for="memberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
+        </p-floatlabel>
       </div>
 
       <!-- Número de Socio -->
       <div class="form-group">
-        <label for="memberNum">{{ 'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER' | translate }}</label>
-        <input
-          id="memberNum"
-          type="text"
-          pInputText
-          pSize="large"
-          formControlName="memberNumber"
-          [placeholder]="'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER_PLACEHOLDER' | translate"
-          class="w-full"
-        />
+        <p-floatlabel variant="in" class="w-full">
+          <input
+            id="memberNum"
+            type="text"
+            pInputText
+            pSize="large"
+            formControlName="memberNumber"
+            class="w-full"
+            autocomplete="off"
+          />
+          <label for="memberNum">{{ 'ADMIN.MEMBERS.FIELD_MEMBER_NUMBER' | translate }}</label>
+        </p-floatlabel>
       </div>
 
       <div class="dialog-actions">
@@ -309,20 +315,22 @@
 
     <form [formGroup]="roleForm" (ngSubmit)="submitRoleChange()" class="member-form">
       <div class="form-group">
-        <label for="editMemberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
-        <p-select
-          inputId="editMemberRole"
-          size="large"
-          [options]="roleOptions"
-          formControlName="role"
-          optionLabel="label"
-          optionValue="value"
-          [fluid]="true"
-          [appendTo]="'body'"
-          [focusOnHover]="false"
-          [autoOptionFocus]="false"
-          scrollHeight="320px"
-        ></p-select>
+        <p-floatlabel variant="in" class="w-full">
+          <p-select
+            inputId="editMemberRole"
+            size="large"
+            [options]="roleOptions"
+            formControlName="role"
+            optionLabel="label"
+            optionValue="value"
+            [fluid]="true"
+            [appendTo]="'body'"
+            [focusOnHover]="false"
+            [autoOptionFocus]="false"
+            scrollHeight="320px"
+          ></p-select>
+          <label for="editMemberRole">{{ 'ADMIN.MEMBERS.FIELD_ROLE' | translate }} *</label>
+        </p-floatlabel>
       </div>
 
       <div class="dialog-actions">

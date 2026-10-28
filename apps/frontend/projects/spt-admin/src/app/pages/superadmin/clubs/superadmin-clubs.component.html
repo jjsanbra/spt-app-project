@@ -180,85 +180,109 @@
 
         <div class="form-grid">
           <div class="form-field full-width">
-            <label for="name">{{ 'SUPERADMIN.CLUBS.MODAL.NAME' | translate }} *</label>
-            <input
-              id="name"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="name"
-              (blur)="onNameBlur()"
-              [placeholder]="'SUPERADMIN.CLUBS.MODAL.NAME_PLACEHOLDER' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="name"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="name"
+                (blur)="onNameBlur()"
+                autocomplete="off"
+              />
+              <label for="name">{{ 'SUPERADMIN.CLUBS.MODAL.NAME' | translate }} *</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field full-width">
-            <label for="slug">{{ 'SUPERADMIN.CLUBS.MODAL.SLUG' | translate }} *</label>
-            <input
-              id="slug"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="slug"
-              [placeholder]="'SUPERADMIN.CLUBS.MODAL.SLUG_PLACEHOLDER' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="slug"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="slug"
+                autocomplete="off"
+              />
+              <label for="slug">{{ 'SUPERADMIN.CLUBS.MODAL.SLUG' | translate }} *</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="email">{{ 'SUPERADMIN.CLUBS.MODAL.EMAIL' | translate }} *</label>
-            <input
-              id="email"
-              type="email"
-              pInputText
-              pSize="large"
-              formControlName="email"
-              [placeholder]="'SUPERADMIN.CLUBS.MODAL.EMAIL_PLACEHOLDER' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="email"
+                type="email"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="email"
+                autocomplete="email"
+              />
+              <label for="email">{{ 'SUPERADMIN.CLUBS.MODAL.EMAIL' | translate }} *</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="phone">{{ 'SUPERADMIN.CLUBS.MODAL.PHONE' | translate }}</label>
-            <input
-              id="phone"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="phone"
-              placeholder="+34..."
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="phone"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="phone"
+                autocomplete="tel"
+              />
+              <label for="phone">{{ 'SUPERADMIN.CLUBS.MODAL.PHONE' | translate }}</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field full-width">
-            <label for="address">{{ 'SUPERADMIN.CLUBS.MODAL.ADDRESS' | translate }}</label>
-            <input
-              id="address"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="address"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="address"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="address"
+                autocomplete="street-address"
+              />
+              <label for="address">{{ 'SUPERADMIN.CLUBS.MODAL.ADDRESS' | translate }}</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="city">{{ 'SUPERADMIN.CLUBS.MODAL.CITY' | translate }}</label>
-            <input
-              id="city"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="city"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="city"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="city"
+                autocomplete="address-level2"
+              />
+              <label for="city">{{ 'SUPERADMIN.CLUBS.MODAL.CITY' | translate }}</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="postalCode">{{ 'SUPERADMIN.CLUBS.MODAL.POSTAL_CODE' | translate }}</label>
-            <input
-              id="postalCode"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="postalCode"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="postalCode"
+                type="text"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="postalCode"
+                autocomplete="postal-code"
+              />
+              <label for="postalCode">{{ 'SUPERADMIN.CLUBS.MODAL.POSTAL_CODE' | translate }}</label>
+            </p-floatlabel>
           </div>
         </div>
       </div>
@@ -269,53 +293,65 @@
 
         <div class="form-grid">
           <div class="form-field">
-            <label for="openingHour">{{ 'SUPERADMIN.CLUBS.MODAL.OPENING_HOUR' | translate }} (0-23)</label>
-            <p-inputnumber
-              id="openingHour"
-              size="large"
-              formControlName="openingHour"
-              [min]="0"
-              [max]="23"
-            ></p-inputnumber>
+            <p-floatlabel variant="in" class="w-full">
+              <p-inputnumber
+                id="openingHour"
+                size="large"
+                formControlName="openingHour"
+                [min]="0"
+                [max]="23"
+                [fluid]="true"
+              ></p-inputnumber>
+              <label for="openingHour">{{ 'SUPERADMIN.CLUBS.MODAL.OPENING_HOUR' | translate }} (0-23)</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="closingHour">{{ 'SUPERADMIN.CLUBS.MODAL.CLOSING_HOUR' | translate }} (1-24)</label>
-            <p-inputnumber
-              id="closingHour"
-              size="large"
-              formControlName="closingHour"
-              [min]="1"
-              [max]="24"
-            ></p-inputnumber>
+            <p-floatlabel variant="in" class="w-full">
+              <p-inputnumber
+                id="closingHour"
+                size="large"
+                formControlName="closingHour"
+                [min]="1"
+                [max]="24"
+                [fluid]="true"
+              ></p-inputnumber>
+              <label for="closingHour">{{ 'SUPERADMIN.CLUBS.MODAL.CLOSING_HOUR' | translate }} (1-24)</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="slotDurationMinutes">{{ 'SUPERADMIN.CLUBS.MODAL.SLOT_DURATION' | translate }}</label>
-            <p-inputnumber
-              id="slotDurationMinutes"
-              size="large"
-              formControlName="slotDurationMinutes"
-              [step]="30"
-              [min]="30"
-              [max]="120"
-            ></p-inputnumber>
+            <p-floatlabel variant="in" class="w-full">
+              <p-inputnumber
+                id="slotDurationMinutes"
+                size="large"
+                formControlName="slotDurationMinutes"
+                [step]="30"
+                [min]="30"
+                [max]="120"
+                [fluid]="true"
+              ></p-inputnumber>
+              <label for="slotDurationMinutes">{{ 'SUPERADMIN.CLUBS.MODAL.SLOT_DURATION' | translate }}</label>
+            </p-floatlabel>
           </div>
 
           <div class="form-field">
-            <label for="paymentMode">{{ 'SUPERADMIN.CLUBS.MODAL.PAYMENT_MODE' | translate }}</label>
-            <p-select
-              id="paymentMode"
-              size="large"
-              [options]="paymentModes"
-              formControlName="paymentMode"
-              optionLabel="label"
-              optionValue="value"
-              [appendTo]="'body'"
-              [focusOnHover]="false"
-              [autoOptionFocus]="false"
-              scrollHeight="320px"
-            ></p-select>
+            <p-floatlabel variant="in" class="w-full">
+              <p-select
+                id="paymentMode"
+                size="large"
+                [options]="paymentModes"
+                formControlName="paymentMode"
+                optionLabel="label"
+                optionValue="value"
+                [appendTo]="'body'"
+                [focusOnHover]="false"
+                [autoOptionFocus]="false"
+                [fluid]="true"
+                scrollHeight="320px"
+              ></p-select>
+              <label for="paymentMode">{{ 'SUPERADMIN.CLUBS.MODAL.PAYMENT_MODE' | translate }}</label>
+            </p-floatlabel>
           </div>
         </div>
       </div>
@@ -325,15 +361,18 @@
         <div class="form-section">
           <h4 class="section-title">{{ 'SUPERADMIN.CLUBS.MODAL.OWNER_TITLE' | translate }}</h4>
           <div class="form-field full-width">
-            <label for="ownerEmail">{{ 'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL' | translate }}</label>
-            <input
-              id="ownerEmail"
-              type="email"
-              pInputText
-              pSize="large"
-              formControlName="ownerEmail"
-              [placeholder]="'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL_PLACEHOLDER' | translate"
-            />
+            <p-floatlabel variant="in" class="w-full">
+              <input
+                id="ownerEmail"
+                type="email"
+                pInputText
+                pSize="large"
+                class="w-full"
+                formControlName="ownerEmail"
+                autocomplete="email"
+              />
+              <label for="ownerEmail">{{ 'SUPERADMIN.CLUBS.MODAL.OWNER_EMAIL' | translate }}</label>
+            </p-floatlabel>
           </div>
         </div>
       }

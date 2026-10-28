@@ -17,6 +17,7 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
+import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -46,6 +47,7 @@ export interface SportGridGroup {
     ButtonModule,
     SelectModule,
     DialogModule,
+    FloatLabel,
     InputTextModule,
     CheckboxModule,
     TagModule,
