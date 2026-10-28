@@ -20,6 +20,7 @@
   padding: 0 !important;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   box-sizing: border-box;
 }
 
@@ -30,20 +31,43 @@ p-table,
 .p-datatable {
   display: block;
   width: 100%;
+  max-width: 100%;
 
+  .p-datatable-table-container,
   .p-datatable-wrapper {
     overflow-x: auto;
     overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     width: 100%;
+    max-width: 100%;
     border-top-left-radius: var(--radius-lg);
     border-top-right-radius: var(--radius-lg);
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-subtle) transparent;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: var(--border-subtle);
+      border-radius: var(--radius-full);
+
+      &:hover {
+        background: var(--text-dim);
+      }
+    }
   }
 
   .p-datatable-table {
     border-collapse: separate;
     border-spacing: 0;
     width: 100%;
+    min-width: 100%;
   }
 
   /* Cabecera Stitch */

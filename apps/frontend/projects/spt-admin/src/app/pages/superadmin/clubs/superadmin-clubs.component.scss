@@ -44,6 +44,9 @@
   border: 1px solid var(--border-subtle);
   overflow: hidden;
   box-shadow: var(--shadow-table);
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
 
   .club-info-cell {
     display: flex;
