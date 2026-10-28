@@ -30,6 +30,13 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'matches',
+    loadComponent: () =>
+      import('./pages/open-matches/open-matches.component').then(
+        (m) => m.OpenMatchesComponent,
+      ),
+  },
+  {
     path: 'activity',
     loadComponent: () =>
       import('./pages/activity/user-activity.component').then(

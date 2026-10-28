@@ -14,6 +14,7 @@ import {
   PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -37,6 +38,7 @@ interface SelectOption<T = string> {
     PageHeaderComponent,
     TableModule,
     ButtonModule,
+    DatePickerModule,
     DialogModule,
     InputTextModule,
     SelectModule,
@@ -80,8 +82,8 @@ export class FacilityBlocksComponent implements OnInit {
     facilityId: [''],
     title: ['', [Validators.required, Validators.minLength(3)]],
     reason: [''],
-    startTime: ['', [Validators.required]],
-    endTime: ['', [Validators.required]],
+    startTime: [null, [Validators.required]],
+    endTime: [null, [Validators.required]],
   });
 
   ngOnInit(): void {
@@ -252,8 +254,8 @@ export class FacilityBlocksComponent implements OnInit {
       facilityId: initialFacilityId,
       title: '',
       reason: '',
-      startTime: '',
-      endTime: '',
+      startTime: null,
+      endTime: null,
     });
 
     this.updateModalFacilityOptions(initialSport);

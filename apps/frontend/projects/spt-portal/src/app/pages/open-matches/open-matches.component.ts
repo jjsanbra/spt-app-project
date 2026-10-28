@@ -12,6 +12,7 @@ import {
   PageHeaderComponent,
 } from '@core';
 import { ButtonModule } from 'primeng/button';
+import { DatePickerModule } from 'primeng/datepicker';
 import { SelectModule } from 'primeng/select';
 import { TagModule } from 'primeng/tag';
 
@@ -27,6 +28,7 @@ import { TagModule } from 'primeng/tag';
     DatePipe,
     PageHeaderComponent,
     ButtonModule,
+    DatePickerModule,
     SelectModule,
     TagModule,
   ],
@@ -43,6 +45,12 @@ export class OpenMatchesComponent implements OnInit {
   matches: OpenMatchResponseDto[] = [];
   loading = false;
   selectedDate: string = new Date().toISOString().split('T')[0];
+  selectedCalendarDate: Date = new Date();
+  minDate: Date = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  })();
   selectedSport: SportType | 'ALL' = 'ALL';
 
   get sportOptions() {
@@ -93,11 +101,77 @@ export class OpenMatchesComponent implements OnInit {
       });
   }
 
+  formatDate(d: Date): string {
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  getTodayDateString(): string {
+    return this.formatDate(new Date());
+  }
+
+  isTodaySelected(): boolean {
+    return this.selectedDate === this.getTodayDateString();
+  }
+
+  isTomorrowSelected(): boolean {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return this.selectedDate === this.formatDate(tomorrow);
+  }
+
+  isPrevDayDisabled(): boolean {
+    if (!this.selectedCalendarDate) return false;
+    const current = new Date(this.selectedCalendarDate);
+    current.setHours(0, 0, 0, 0);
+    return current.getTime() <= this.minDate.getTime();
+  }
+
+  setToday(): void {
+    this.onDateChange(this.getTodayDateString());
+  }
+
+  setTomorrow(): void {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.onDateChange(this.formatDate(tomorrow));
+  }
+
+  prevDay(): void {
+    if (this.isPrevDayDisabled()) return;
+    const d = new Date(this.selectedCalendarDate);
+    d.setDate(d.getDate() - 1);
+    this.onDatePickerChange(d);
+  }
+
+  nextDay(): void {
+    const d = new Date(this.selectedCalendarDate);
+    d.setDate(d.getDate() + 1);
+    this.onDatePickerChange(d);
+  }
+
+  onDatePickerChange(date: Date | null): void {
+    if (!date) return;
+    this.selectedCalendarDate = date;
+    this.selectedDate = this.formatDate(date);
+    this.loadMatches();
+  }
+
+  onDateChange(newDate: string): void {
+    this.selectedDate = newDate;
+    const [y, m, d] = newDate.split('-').map(Number);
+    if (y && m && d) {
+      this.selectedCalendarDate = new Date(y, m - 1, d);
+    }
+    this.loadMatches();
+  }
+
   setQuickDate(offsetDays: number): void {
     const target = new Date();
     target.setDate(target.getDate() + offsetDays);
-    this.selectedDate = target.toISOString().split('T')[0];
-    this.loadMatches();
+    this.onDatePickerChange(target);
   }
 
   onSportChange(): void {

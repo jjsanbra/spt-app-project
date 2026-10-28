@@ -147,4 +147,39 @@ describe('OpenMatchesComponent', () => {
     const emptySlots = component.getEmptySlotsCount(mockOpenMatches[0]);
     expect(emptySlots.length).toBe(2);
   });
+
+  it('debe navegar al día siguiente y al día anterior recargando partidas', () => {
+    fixture.detectChanges();
+    expect(component.isTodaySelected()).toBe(true);
+
+    component.nextDay();
+    expect(component.isTodaySelected()).toBe(false);
+    expect(mockBookingsService.bookingsControllerFindOpenMatches).toHaveBeenCalledTimes(2);
+
+    expect(component.isPrevDayDisabled()).toBe(false);
+    component.prevDay();
+    expect(component.isTodaySelected()).toBe(true);
+    expect(mockBookingsService.bookingsControllerFindOpenMatches).toHaveBeenCalledTimes(3);
+  });
+
+  it('debe navegar directamente a hoy y mañana con los botones rápidos', () => {
+    fixture.detectChanges();
+    component.setTomorrow();
+    expect(component.isTomorrowSelected()).toBe(true);
+    expect(component.isTodaySelected()).toBe(false);
+
+    component.setToday();
+    expect(component.isTodaySelected()).toBe(true);
+    expect(component.isTomorrowSelected()).toBe(false);
+  });
+
+  it('debe manejar cambios en el datepicker de fecha', () => {
+    fixture.detectChanges();
+    const futureDate = new Date();
+    futureDate.setDate(futureDate.getDate() + 5);
+
+    component.onDatePickerChange(futureDate);
+    expect(component.selectedCalendarDate).toEqual(futureDate);
+    expect(mockBookingsService.bookingsControllerFindOpenMatches).toHaveBeenCalled();
+  });
 });

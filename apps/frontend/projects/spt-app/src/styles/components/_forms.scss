@@ -167,6 +167,22 @@ p-inputnumber.w-full {
 }
 
 /* --------------------------------------------------------------------------
+   Estandarización Universal de PrimeNG DatePicker (p-datepicker)
+   -------------------------------------------------------------------------- */
+.form-group .p-datepicker,
+.form-group p-datepicker,
+.modal-form .p-datepicker,
+.modal-form p-datepicker,
+.facility-form .p-datepicker,
+.pricing-form .p-datepicker,
+.block-form .p-datepicker,
+.p-datepicker.w-full,
+p-datepicker.w-full {
+  width: 100% !important;
+  display: flex;
+}
+
+/* --------------------------------------------------------------------------
    Estandarización Universal de PrimeNG Checkbox (p-checkbox)
    -------------------------------------------------------------------------- */
 p-checkbox,

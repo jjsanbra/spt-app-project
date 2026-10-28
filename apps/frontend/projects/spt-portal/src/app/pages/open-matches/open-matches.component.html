@@ -18,60 +18,100 @@
     </div>
   </spt-page-header>
 
-  <!-- Barra de Filtros y Fechas -->
-  <div class="filter-bar-card">
-    <div class="quick-dates">
-      <button
-        type="button"
-        pButton
-        [text]="true"
-        icon="pi pi-calendar"
-        (click)="setQuickDate(0)"
-      >
-        {{ 'PORTAL.OPEN_MATCHES.TODAY' | translate }}
-      </button>
-      <button
-        type="button"
-        pButton
-        [text]="true"
-        icon="pi pi-forward"
-        (click)="setQuickDate(1)"
-      >
-        {{ 'PORTAL.OPEN_MATCHES.TOMORROW' | translate }}
-      </button>
+  <!-- Barra de Filtros y Navegación en 2 Niveles (Homologada con Reservas) -->
+  <div class="filter-controls-card">
+    <!-- NIVEL 1: Contexto y Filtros de Negocio -->
+    <div class="header-context-row">
+      <div class="header-filters-wrapper">
+        <div class="sport-filter-wrapper">
+          <p-select
+            size="small"
+            [(ngModel)]="selectedSport"
+            [options]="sportOptions"
+            optionLabel="label"
+            optionValue="value"
+            (onChange)="onSportChange()"
+            inputId="match-sport-select"
+            class="sport-select"
+            [appendTo]="'body'"
+            [focusOnHover]="false"
+            [autoOptionFocus]="false"
+            scrollHeight="320px"
+          ></p-select>
+        </div>
+      </div>
     </div>
 
-    <div class="filter-controls">
-      <div class="filter-item date-picker-item">
-        <label for="matchDate">{{ 'PORTAL.OPEN_MATCHES.DATE' | translate }}</label>
-        <input
-          id="matchDate"
-          type="date"
-          class="custom-date-input"
-          [(ngModel)]="selectedDate"
-          (change)="loadMatches()"
-        />
+    <!-- NIVEL 2: Barra de Navegación Temporal Universal -->
+    <div class="header-nav-row">
+      <!-- Navegación Temporal (Izquierda) -->
+      <div class="nav-step-group">
+        <button
+          type="button"
+          pButton
+          severity="secondary"
+          [outlined]="true"
+          class="nav-arrow-btn"
+          (click)="prevDay()"
+          [disabled]="isPrevDayDisabled()"
+          [title]="'PORTAL.BOOKINGS.PREV_DAY' | translate"
+        >
+          <i class="pi pi-chevron-left"></i>
+        </button>
+
+        <button
+          type="button"
+          pButton
+          severity="secondary"
+          [outlined]="true"
+          class="nav-quick-btn"
+          [class.is-selected]="isTodaySelected()"
+          (click)="setToday()"
+        >
+          {{ 'PORTAL.OPEN_MATCHES.TODAY' | translate }}
+        </button>
+
+        <button
+          type="button"
+          pButton
+          severity="secondary"
+          [outlined]="true"
+          class="nav-quick-btn"
+          [class.is-selected]="isTomorrowSelected()"
+          (click)="setTomorrow()"
+        >
+          {{ 'PORTAL.OPEN_MATCHES.TOMORROW' | translate }}
+        </button>
+
+        <button
+          type="button"
+          pButton
+          severity="secondary"
+          [outlined]="true"
+          class="nav-arrow-btn"
+          (click)="nextDay()"
+          [title]="'PORTAL.BOOKINGS.NEXT_DAY' | translate"
+        >
+          <i class="pi pi-chevron-right"></i>
+        </button>
       </div>
 
-      <div class="filter-item sport-select-item">
-        <label for="matchSport">{{ 'PORTAL.OPEN_MATCHES.SPORT' | translate }}</label>
-        <p-select
-          id="matchSport"
-          size="large"
-          [(ngModel)]="selectedSport"
-          [options]="sportOptions"
-          optionLabel="label"
-          optionValue="value"
-          (onChange)="onSportChange()"
-          [appendTo]="'body'"
-          [focusOnHover]="false"
-          [autoOptionFocus]="false"
-          scrollHeight="320px"
-        >
-          <ng-template let-option #item>
-            <span>{{ option.label }}</span>
-          </ng-template>
-        </p-select>
+      <!-- Selector de Fecha (Derecha) -->
+      <div class="nav-date-group">
+        <div class="datepicker-container">
+          <p-datepicker
+            size="small"
+            [(ngModel)]="selectedCalendarDate"
+            (ngModelChange)="onDatePickerChange($event)"
+            [showIcon]="true"
+            [iconDisplay]="'input'"
+            dateFormat="dd/mm/yy"
+            [minDate]="minDate"
+            [appendTo]="'body'"
+            inputId="match-calendar-date"
+            class="compact-datepicker"
+          ></p-datepicker>
+        </div>
       </div>
     </div>
   </div>

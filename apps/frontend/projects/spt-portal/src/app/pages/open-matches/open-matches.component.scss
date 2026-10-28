@@ -10,72 +10,183 @@
   }
 }
 
-.filter-bar-card {
+.filter-controls-card {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  background: var(--surface-card);
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
-  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-xl);
+  margin-bottom: var(--spacing-lg);
 
-  .quick-dates {
-    display: flex;
-    gap: var(--spacing-xs);
+  @include mobile-or-tablet {
+    padding: var(--spacing-sm);
+    gap: var(--spacing-sm);
   }
+}
 
-  .filter-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-    flex-wrap: wrap;
+/* NIVEL 1: Contexto y Filtros de Negocio */
+.header-context-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 
-    .filter-item {
-      display: flex;
-      flex-direction: column;
-      gap: var(--spacing-2xs);
-
-      label {
-        font-family: var(--font-label);
-        font-size: var(--font-size-xs);
-        font-weight: var(--font-weight-semibold);
-        color: var(--text-muted);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-    }
-
-    .custom-date-input {
-      background: var(--surface-container-low);
-      border: 1px solid var(--border-input);
-      border-radius: var(--radius-md);
-      padding: var(--spacing-xs) var(--spacing-sm);
-      color: var(--text-color);
-      font-size: var(--font-size-sm);
-      outline: none;
-      transition: border-color 0.2s ease;
-
-      &:focus {
-        border-color: var(--primary);
-      }
-    }
-  }
-
-  @include mobile {
+  @include mobile-or-tablet {
     flex-direction: column;
     align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+}
 
-    .quick-dates {
-      justify-content: space-between;
+.header-filters-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+
+  @include mobile-or-tablet {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+  }
+}
+
+.sport-filter-wrapper {
+  min-width: 220px;
+
+  @include mobile-or-tablet {
+    width: 100%;
+  }
+
+  .sport-select {
+    width: 100%;
+  }
+}
+
+/* NIVEL 2: Barra de Navegación Temporal Universal */
+.header-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+
+  @include mobile-or-tablet {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--spacing-sm);
+  }
+}
+
+.nav-step-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  flex-wrap: wrap;
+
+  @include mobile-or-tablet {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.nav-date-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+
+  @include mobile-or-tablet {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+.datepicker-container {
+  display: flex;
+  align-items: center;
+
+  @include mobile-or-tablet {
+    width: 100%;
+  }
+}
+
+.nav-arrow-btn {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: var(--radius-full) !important;
+  border: 1px solid var(--border-subtle) !important;
+  background-color: var(--surface-container-low) !important;
+  color: var(--text-color) !important;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: var(--font-size-xs) !important;
+    color: var(--text-color) !important;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--surface-card) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+
+    i {
+      color: var(--primary-color) !important;
     }
+  }
 
-    .filter-controls {
-      flex-direction: column;
-      align-items: stretch;
+  &:disabled {
+    opacity: 0.35 !important;
+    cursor: not-allowed !important;
+  }
+}
+
+.nav-quick-btn {
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs) !important;
+  font-weight: var(--font-weight-medium) !important;
+  padding: var(--spacing-xs) var(--spacing-md) !important;
+  border-radius: var(--radius-md) !important;
+  height: 36px !important;
+
+  &.is-selected {
+    background: var(--surface-container-high) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--primary-color) !important;
+    font-weight: var(--font-weight-semibold) !important;
+    box-shadow: 0 0 12px rgba(255, 45, 120, 0.2) !important;
+  }
+}
+
+.compact-datepicker {
+  ::ng-deep .p-datepicker {
+    width: 150px;
+
+    .p-inputtext {
+      height: 36px;
+      font-size: var(--font-size-xs);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-family: var(--font-label);
+    }
+  }
+
+  @include mobile-or-tablet {
+    width: 100%;
+
+    ::ng-deep .p-datepicker {
+      width: 100%;
     }
   }
 }

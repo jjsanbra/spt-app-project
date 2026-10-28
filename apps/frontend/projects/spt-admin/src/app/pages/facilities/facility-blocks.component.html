@@ -194,29 +194,37 @@
       />
     </div>
 
-    <!-- Fechas Inicio / Fin (tipo datetime-local) -->
+    <!-- Fechas Inicio / Fin (p-datepicker con hora) -->
     <div class="form-row">
       <div class="form-group flex-1">
         <label for="block-start" class="form-label">{{ 'ADMIN.BLOCKS.START_TIME' | translate }}</label>
-        <input
-          id="block-start"
-          type="datetime-local"
-          pInputText
-          pSize="large"
-          class="w-full"
+        <p-datepicker
+          inputId="block-start"
           formControlName="startTime"
-        />
+          [showTime]="true"
+          hourFormat="24"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          iconDisplay="input"
+          [appendTo]="'body'"
+          class="w-full"
+          styleClass="w-full"
+        ></p-datepicker>
       </div>
       <div class="form-group flex-1">
         <label for="block-end" class="form-label">{{ 'ADMIN.BLOCKS.END_TIME' | translate }}</label>
-        <input
-          id="block-end"
-          type="datetime-local"
-          pInputText
-          pSize="large"
-          class="w-full"
+        <p-datepicker
+          inputId="block-end"
           formControlName="endTime"
-        />
+          [showTime]="true"
+          hourFormat="24"
+          dateFormat="dd/mm/yy"
+          [showIcon]="true"
+          iconDisplay="input"
+          [appendTo]="'body'"
+          class="w-full"
+          styleClass="w-full"
+        ></p-datepicker>
       </div>
     </div>
 
