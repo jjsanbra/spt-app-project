@@ -32,6 +32,7 @@ describe('AuthService', () => {
           id: 'club-1',
           name: 'Club Central',
           slug: 'club-central',
+          city: 'Barcelona',
           isActive: true,
         },
         role: ClubRole.MEMBER,
@@ -158,7 +159,7 @@ describe('AuthService', () => {
       prisma.user.findUnique.mockResolvedValue(superAdminUser);
       (bcrypt.compare as jest.Mock).mockResolvedValue(true);
       prisma.club.findMany.mockResolvedValue([
-        { id: 'club-global', name: 'Global Club', slug: 'global', isActive: true },
+        { id: 'club-global', name: 'Global Club', slug: 'global', city: 'Madrid', isActive: true },
       ]);
 
       const result = await service.login({
@@ -168,6 +169,7 @@ describe('AuthService', () => {
 
       expect(result.user.memberships.length).toBe(1);
       expect(result.user.memberships[0].clubId).toBe('club-global');
+      expect(result.user.memberships[0].clubCity).toBe('Madrid');
     });
   });
 

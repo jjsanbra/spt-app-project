@@ -80,6 +80,7 @@ export class AuthService {
                 id: true,
                 name: true,
                 slug: true,
+                city: true,
                 isActive: true,
               },
             },
@@ -138,7 +139,7 @@ export class AuthService {
           isActive: true,
           ...(existingClubIds.length > 0 ? { id: { notIn: existingClubIds } } : {}),
         },
-        select: { id: true, name: true, slug: true, isActive: true },
+        select: { id: true, name: true, slug: true, city: true, isActive: true },
       });
     }
 
@@ -210,6 +211,7 @@ export class AuthService {
                 id: true,
                 name: true,
                 slug: true,
+                city: true,
                 isActive: true,
               },
             },
@@ -232,7 +234,7 @@ export class AuthService {
           isActive: true,
           ...(existingClubIds.length > 0 ? { id: { notIn: existingClubIds } } : {}),
         },
-        select: { id: true, name: true, slug: true, isActive: true },
+        select: { id: true, name: true, slug: true, city: true, isActive: true },
       });
     }
 
@@ -270,6 +272,7 @@ export class AuthService {
         clubId: m.club.id,
         clubName: m.club.name,
         clubSlug: m.club.slug,
+        clubCity: m.club.city ?? null,
         role: m.role,
         memberNumber: m.memberNumber,
         walletBalance: Number(m.walletBalance),
@@ -279,6 +282,7 @@ export class AuthService {
       clubId: c.id,
       clubName: c.name,
       clubSlug: c.slug,
+      clubCity: c.city ?? null,
       role: ClubRole.OWNER,
       memberNumber: 'SUPERADMIN',
       walletBalance: 0,

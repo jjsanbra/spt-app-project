@@ -2525,6 +2525,12 @@
             "example": "central-padel",
             "description": "Slug del club"
           },
+          "clubCity": {
+            "type": "string",
+            "example": "Barcelona",
+            "nullable": true,
+            "description": "Ciudad o localidad donde radica el club"
+          },
           "role": {
             "type": "string",
             "enum": [

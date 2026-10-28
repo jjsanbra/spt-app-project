@@ -177,6 +177,11 @@
     "UPDATE_SUCCESS": "Perfil actualizado correctamente",
     "ACTIVE_CLUB": "Club Activo",
     "CHANGE_CLUB": "Cambiar de club",
+    "CHANGE_CLUB_MODAL_TITLE": "Cambiar de Club",
+    "SEARCH_CLUB_PLACEHOLDER": "Buscar por nombre o ciudad...",
+    "NO_CLUBS_FOUND": "No se encontraron clubes que coincidan con la búsqueda",
+    "SELECT_CLUB": "Seleccionar",
+    "CLUB_CHANGED_SUCCESS": "Has cambiado al club",
     "NO_MEMBERSHIPS": "No tienes membresías activas en ningún club",
     "SUPERADMIN_BADGE": "Superadmin Global"
   },

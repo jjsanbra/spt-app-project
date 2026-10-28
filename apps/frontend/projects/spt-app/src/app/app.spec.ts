@@ -12,10 +12,12 @@ describe('App', () => {
   let authServiceMock: {
     currentUser: ReturnType<typeof signal<UserSummaryDto | null>>;
     activeClub: ReturnType<typeof signal<any>>;
+    userMemberships: ReturnType<typeof signal<any[]>>;
     isAuthenticated: ReturnType<typeof signal<boolean>>;
     isSuperAdmin: ReturnType<typeof signal<boolean>>;
     isOwnerOrSuperAdmin: ReturnType<typeof signal<boolean>>;
     getAccessToken: ReturnType<typeof vi.fn>;
+    setActiveClub: ReturnType<typeof vi.fn>;
     logout: ReturnType<typeof vi.fn>;
   };
   let realtimeNotificationsMock: {
@@ -34,10 +36,12 @@ describe('App', () => {
     authServiceMock = {
       currentUser: signal<UserSummaryDto | null>(null),
       activeClub: signal<any>(null),
+      userMemberships: signal<any[]>([]),
       isAuthenticated: signal<boolean>(false),
       isSuperAdmin: signal<boolean>(false),
       isOwnerOrSuperAdmin: signal<boolean>(false),
       getAccessToken: vi.fn().mockReturnValue('mock-token'),
+      setActiveClub: vi.fn(),
       logout: vi.fn(),
     };
 
@@ -179,7 +183,7 @@ describe('App', () => {
   });
 
   describe('Template rendering authenticated vs guest', () => {
-    it('should render active club badge, wallet, notification bell and logout when authenticated as regular member', () => {
+    it('should render active club in topbar, wallet, notification bell and logout when authenticated as regular member', () => {
       authServiceMock.isAuthenticated.set(true);
       authServiceMock.currentUser.set({
         id: 'u1',
@@ -191,9 +195,13 @@ describe('App', () => {
       authServiceMock.activeClub.set({
         clubId: 'c1',
         clubName: 'Club Central',
+        clubCity: 'Barcelona',
         role: 'MEMBER',
         walletBalance: 45.5,
       });
+      authServiceMock.userMemberships.set([
+        { clubId: 'c1', clubName: 'Club Central', clubCity: 'Barcelona', role: 'MEMBER' },
+      ]);
       authServiceMock.isSuperAdmin.set(false);
       authServiceMock.isOwnerOrSuperAdmin.set(false);
 
@@ -201,7 +209,9 @@ describe('App', () => {
       fixture.detectChanges();
 
       const el = fixture.nativeElement as HTMLElement;
-      expect(el.querySelector('.active-club-badge')).toBeTruthy();
+      expect(el.querySelector('.context-club-name')?.textContent).toContain('Club Central');
+      expect(el.querySelector('.context-club-city')?.textContent).toContain('Barcelona');
+      expect(el.querySelector('.sidebar-club-card')).toBeNull();
       expect(el.querySelector('.user-wallet')?.textContent).toContain('45.5');
       expect(el.querySelector('app-notification-bell')).toBeTruthy();
     });
@@ -218,9 +228,13 @@ describe('App', () => {
       authServiceMock.activeClub.set({
         clubId: 'c1',
         clubName: 'Club Central',
+        clubCity: 'Barcelona',
         role: 'OWNER',
         walletBalance: 0.0,
       });
+      authServiceMock.userMemberships.set([
+        { clubId: 'c1', clubName: 'Club Central', clubCity: 'Barcelona', role: 'OWNER' },
+      ]);
       authServiceMock.isSuperAdmin.set(false);
       authServiceMock.isOwnerOrSuperAdmin.set(true);
 
@@ -228,7 +242,8 @@ describe('App', () => {
       fixture.detectChanges();
 
       const el = fixture.nativeElement as HTMLElement;
-      expect(el.querySelector('.active-club-badge')).toBeTruthy();
+      expect(el.querySelector('.context-club-name')?.textContent).toContain('Club Central');
+      expect(el.querySelector('.sidebar-club-card')).toBeNull();
       expect(el.querySelector('.user-wallet')).toBeFalsy();
     });
 
@@ -429,6 +444,84 @@ describe('App', () => {
 
       expect(app.currentUrl()).toBe('/portal/activity');
       expect(app.sidebarOpen()).toBe(false);
+    });
+  });
+
+  describe('Change club dialog & real-time search', () => {
+    const clubsList = [
+      { clubId: 'c1', clubName: 'Barcelona Pádel Club', clubSlug: 'barcelona-padel', clubCity: 'Barcelona', role: 'OWNER' as const, walletBalance: 100 },
+      { clubId: 'c2', clubName: 'Madrid Tenis Center', clubSlug: 'madrid-tenis', clubCity: 'Madrid', role: 'MEMBER' as const, walletBalance: 20 },
+      { clubId: 'c3', clubName: 'Valencia Sport Center', clubSlug: 'valencia-sport', clubCity: 'Valencia', role: 'ADMIN' as const, walletBalance: 0 },
+    ];
+
+    it('openChangeClubDialog debe limpiar el término de búsqueda y abrir la modal', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+
+      app.clubSearchTerm.set('filtro previo');
+      app.openChangeClubDialog();
+
+      expect(app.clubSearchTerm()).toBe('');
+      expect(app.changeClubDialogVisible()).toBe(true);
+    });
+
+    it('filteredMemberships debe filtrar en tiempo real por nombre del club', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      authServiceMock.userMemberships.set(clubsList);
+
+      app.clubSearchTerm.set('Madrid');
+      expect(app.filteredMemberships().length).toBe(1);
+      expect(app.filteredMemberships()[0].clubName).toBe('Madrid Tenis Center');
+
+      app.clubSearchTerm.set('center');
+      expect(app.filteredMemberships().length).toBe(2);
+    });
+
+    it('filteredMemberships debe filtrar en tiempo real por ciudad', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      authServiceMock.userMemberships.set(clubsList);
+
+      app.clubSearchTerm.set('valencia');
+      expect(app.filteredMemberships().length).toBe(1);
+      expect(app.filteredMemberships()[0].clubCity).toBe('Valencia');
+    });
+
+    it('onSelectClub debe cambiar de club activo y cerrar la modal', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      authServiceMock.activeClub.set(clubsList[0]);
+      app.changeClubDialogVisible.set(true);
+
+      app.onSelectClub(clubsList[1]);
+
+      expect(authServiceMock.setActiveClub).toHaveBeenCalledWith(clubsList[1]);
+      expect(app.changeClubDialogVisible()).toBe(false);
+    });
+
+    it('onSelectClub no debe re-activar si se selecciona el mismo club activo', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      authServiceMock.activeClub.set(clubsList[0]);
+      app.changeClubDialogVisible.set(true);
+
+      app.onSelectClub(clubsList[0]);
+
+      expect(authServiceMock.setActiveClub).not.toHaveBeenCalled();
+      expect(app.changeClubDialogVisible()).toBe(false);
+    });
+
+    it('onSelectClub debe redirigir a /portal si se cambia a un club con rol MEMBER estando en /admin', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      app.currentUrl.set('/admin/facilities');
+      authServiceMock.activeClub.set(clubsList[0]); // OWNER
+      authServiceMock.isSuperAdmin.set(false);
+
+      app.onSelectClub(clubsList[1]); // MEMBER
+
+      expect(router.navigate).toHaveBeenCalledWith(['/portal']);
     });
   });
 });

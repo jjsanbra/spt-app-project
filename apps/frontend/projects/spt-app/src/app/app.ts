@@ -1,9 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
-import { AuthService, ThemeService } from '@core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { AuthService, ClubMembershipSummaryDto, NotificationService, ThemeService } from '@core';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
@@ -17,11 +22,16 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
     TranslatePipe,
     ButtonModule,
+    DialogModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule,
     SidebarModule,
     TagModule,
     ToastModule,
@@ -36,14 +46,28 @@ export class App {
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
   private readonly router = inject(Router);
+  private readonly notify = inject(NotificationService);
+  private readonly translate = inject(TranslateService);
 
   readonly isDesktop = signal<boolean>(
     typeof window !== 'undefined' ? window.innerWidth >= 1024 : true,
   );
 
-
   readonly sidebarOpen = signal<boolean>(this.isDesktop());
   readonly currentUrl = signal<string>(this.router.url || '');
+  readonly changeClubDialogVisible = signal<boolean>(false);
+  readonly clubSearchTerm = signal<string>('');
+
+  readonly filteredMemberships = computed(() => {
+    const term = this.clubSearchTerm().trim().toLowerCase();
+    const memberships = this.authService.userMemberships();
+    if (!term) return memberships;
+    return memberships.filter(
+      (m) =>
+        m.clubName.toLowerCase().includes(term) ||
+        (m.clubCity && m.clubCity.toLowerCase().includes(term)),
+    );
+  });
 
   readonly isAuthPage = computed(() => {
     const url = this.currentUrl();
@@ -105,6 +129,36 @@ export class App {
   closeSidebar(): void {
     if (!this.isDesktop()) {
       this.sidebarOpen.set(false);
+    }
+  }
+
+  openChangeClubDialog(): void {
+    this.clubSearchTerm.set('');
+    this.changeClubDialogVisible.set(true);
+  }
+
+  onSelectClub(club: ClubMembershipSummaryDto): void {
+    if (this.authService.activeClub()?.clubId === club.clubId) {
+      this.changeClubDialogVisible.set(false);
+      return;
+    }
+
+    this.authService.setActiveClub(club);
+    const successMsg = this.translate.instant('USERS.CLUB_CHANGED_SUCCESS');
+    this.notify.success(`${successMsg}: ${club.clubName}`);
+    this.changeClubDialogVisible.set(false);
+
+    // Salvaguarda: si estamos en /admin/* y en el nuevo club no tiene permisos de admin, redirigir a /portal
+    const currentUrl = this.currentUrl();
+    const isAdminRoute = currentUrl.startsWith('/admin');
+    const hasAdminInNewClub =
+      club.role === 'OWNER' ||
+      club.role === 'ADMIN' ||
+      club.role === 'STAFF' ||
+      this.authService.isSuperAdmin();
+
+    if (isAdminRoute && !hasAdminInNewClub) {
+      this.router.navigate(['/portal']);
     }
   }
 

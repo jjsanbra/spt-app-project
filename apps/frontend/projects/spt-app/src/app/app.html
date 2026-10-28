@@ -51,25 +51,8 @@
           </p-sidebar-header>
 
           <p-sidebar-content>
-            <!-- Badge Club Activo (Multi-tenant) -->
-            @if (authService.isAuthenticated() && authService.activeClub()) {
-              <div class="sidebar-club-card active-club-badge" [title]="'USERS.ACTIVE_CLUB' | translate">
-                <div class="club-card-icon">
-                  <i class="pi pi-building"></i>
-                </div>
-        <div class="club-card-details">
-          <span class="club-card-name">{{ authService.activeClub()?.clubName }}</span>
-          <p-tag
-            [value]="authService.activeClub()?.role"
-            severity="secondary"
-            class="club-role-tag"
-          ></p-tag>
-        </div>
-      </div>
-    }
-
-    <!-- Navegación Principal Categorizada -->
-    <nav class="sidebar-nav">
+            <!-- Navegación Principal Categorizada -->
+            <nav class="sidebar-nav">
       @if (authService.isAuthenticated()) {
         <!-- Sección Portal Jugador -->
         <div class="nav-section-title">{{ 'NAV.PORTAL_SECTION' | translate }}</div>
@@ -314,11 +297,35 @@
             ></button>
 
             <div class="topbar-context">
-              @if (authService.activeClub()) {
-                <span class="context-club">{{ authService.activeClub()?.clubName }}</span>
-                <span class="context-divider">•</span>
+              @if (authService.activeClub(); as club) {
+                <div class="topbar-club-wrapper">
+                  <span class="context-club-name">{{ club.clubName }}</span>
+                  @if (club.clubCity) {
+                    <span class="context-club-city">
+                      <i class="pi pi-map-marker"></i>
+                      {{ club.clubCity }}
+                    </span>
+                  }
+                  @if (authService.userMemberships().length > 1) {
+                    <button
+                      type="button"
+                      pButton
+                      [outlined]="true"
+                      size="small"
+                      severity="secondary"
+                      class="change-club-topbar-btn"
+                      icon="pi pi-sync"
+                      (click)="openChangeClubDialog()"
+                      [pTooltip]="'USERS.CHANGE_CLUB' | translate"
+                      tooltipPosition="bottom"
+                    >
+                      <span class="btn-label-desktop">{{ 'USERS.CHANGE_CLUB' | translate }}</span>
+                    </button>
+                  }
+                </div>
+              } @else {
+                <span class="context-tagline">{{ 'APP.TAGLINE' | translate }}</span>
               }
-              <span class="context-tagline">{{ 'APP.TAGLINE' | translate }}</span>
             </div>
           </div>
 
@@ -354,3 +361,90 @@
     </div>
   </p-sidebar-main>
 </p-sidebar-layout>
+
+<!-- Modal Selección de Club Multi-Tenant con Buscador -->
+<p-dialog
+  [(visible)]="changeClubDialogVisible"
+  [modal]="true"
+  [header]="'USERS.CHANGE_CLUB_MODAL_TITLE' | translate"
+  [style]="{ width: '90vw', maxWidth: '580px' }"
+  [draggable]="false"
+  [resizable]="false"
+  class="change-club-dialog"
+>
+  <div class="change-club-modal-body">
+    <!-- Buscador en tiempo real -->
+    <div class="club-search-container">
+      <p-iconfield class="w-full">
+        <p-inputicon class="pi pi-search" />
+        <input
+          type="text"
+          pInputText
+          [(ngModel)]="clubSearchTerm"
+          [placeholder]="'USERS.SEARCH_CLUB_PLACEHOLDER' | translate"
+          class="w-full"
+        />
+      </p-iconfield>
+    </div>
+
+    <!-- Lista de clubes filtrados -->
+    <div class="club-cards-list">
+      @for (membership of filteredMemberships(); track membership.clubId) {
+        <div
+          class="club-selection-card"
+          [class.is-active-club]="membership.clubId === authService.activeClub()?.clubId"
+        >
+          <div class="club-card-main">
+            <div class="club-card-avatar">
+              <i class="pi pi-building"></i>
+            </div>
+            <div class="club-card-info">
+              <span class="club-name">{{ membership.clubName }}</span>
+              <div class="club-meta-row">
+                @if (membership.clubCity) {
+                  <span class="club-location">
+                    <i class="pi pi-map-marker"></i>
+                    {{ membership.clubCity }}
+                  </span>
+                  <span class="meta-dot">•</span>
+                }
+                <p-tag
+                  [value]="('ADMIN.MEMBERS.ROLE_' + membership.role) | translate"
+                  severity="secondary"
+                  class="club-role-pill"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="club-card-actions">
+            @if (membership.clubId === authService.activeClub()?.clubId) {
+              <p-tag
+                [value]="'COMMON.ACTIVE' | translate"
+                severity="success"
+                icon="pi pi-check"
+                class="active-status-badge"
+              />
+            } @else {
+              <button
+                type="button"
+                pButton
+                size="small"
+                severity="secondary"
+                [outlined]="true"
+                (click)="onSelectClub(membership)"
+              >
+                {{ 'USERS.SELECT_CLUB' | translate }}
+              </button>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-clubs-state">
+          <i class="pi pi-search-minus empty-icon"></i>
+          <p class="empty-text">{{ 'USERS.NO_CLUBS_FOUND' | translate }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</p-dialog>

@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ClubRole } from '@prisma/client';
 
 export class ClubMembershipSummaryDto {
@@ -10,6 +10,9 @@ export class ClubMembershipSummaryDto {
 
   @ApiProperty({ example: 'central-padel', description: 'Slug del club' })
   clubSlug: string;
+
+  @ApiPropertyOptional({ type: String, example: 'Barcelona', nullable: true, description: 'Ciudad o localidad donde radica el club' })
+  clubCity?: string | null;
 
   @ApiProperty({ enum: ClubRole, example: ClubRole.MEMBER, description: 'Rol del usuario en el club' })
   role: ClubRole;
