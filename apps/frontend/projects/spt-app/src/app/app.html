@@ -365,6 +365,14 @@
 
       <!-- Contenedor de Vistas (<router-outlet>) -->
       <main class="app-main">
+        @if (loadingService.isLoading()) {
+          <div class="global-loading-overlay">
+            <div class="global-loading-card">
+              <p-progress-spinner strokeWidth="4" class="global-spinner"></p-progress-spinner>
+              <span class="global-loading-text">{{ 'COMMON.LOADING' | translate }}</span>
+            </div>
+          </div>
+        }
         <router-outlet></router-outlet>
       </main>
     </div>

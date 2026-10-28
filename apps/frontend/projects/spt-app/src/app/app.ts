@@ -1,14 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NavigationEnd, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import {
+  NavigationCancel,
+  NavigationEnd,
+  NavigationError,
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  RouterOutlet,
+} from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { AuthService, ClubMembershipSummaryDto, NotificationService, ThemeService } from '@core';
+import {
+  AuthService,
+  ClubMembershipSummaryDto,
+  LoadingService,
+  NotificationService,
+  ThemeService,
+} from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { SidebarModule, SidebarTrigger } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
@@ -32,6 +48,7 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
     IconFieldModule,
     InputIconModule,
     InputTextModule,
+    ProgressSpinnerModule,
     SidebarModule,
     SidebarTrigger,
     TagModule,
@@ -46,6 +63,7 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
 export class App {
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
+  readonly loadingService = inject(LoadingService);
   private readonly router = inject(Router);
   private readonly notify = inject(NotificationService);
   private readonly translate = inject(TranslateService);
@@ -113,14 +131,23 @@ export class App {
       });
     }
 
-    this.router.events
-      .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        if (!this.isDesktop()) {
-          this.sidebarOpen.set(false);
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        this.loadingService.show();
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.loadingService.hide();
+        if (event instanceof NavigationEnd) {
+          if (!this.isDesktop()) {
+            this.sidebarOpen.set(false);
+          }
+          this.currentUrl.set(event.urlAfterRedirects || event.url);
         }
-        this.currentUrl.set(event.urlAfterRedirects || event.url);
-      });
+      }
+    });
   }
 
   toggleSidebar(): void {

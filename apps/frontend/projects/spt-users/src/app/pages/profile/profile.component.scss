@@ -23,161 +23,7 @@
 }
 
 /* ==========================================================================
-   Sobreescrituras Centrales de Componentes PrimeNG para esta Vista
-   (Declaradas estrictamente en la raíz con :host ::ng-deep)
-   ========================================================================== */
-:host ::ng-deep {
-  /* Contenedores de Tarjeta PrimeNG */
-  .identity-card.p-card,
-  .form-card.p-card {
-    background-color: var(--surface-container-low, #F8FAFC) !important;
-    border: 1px solid var(--border-subtle, #E2E8F0) !important;
-    border-radius: var(--radius-xl, 16px) !important;
-    box-shadow: var(--shadow-card) !important;
-    overflow: hidden !important;
-
-    .p-card-body {
-      padding: var(--spacing-xl) !important;
-
-      @include mobile {
-        padding: var(--spacing-lg) var(--spacing-md) !important;
-      }
-    }
-
-    .p-card-content {
-      padding: 0 !important;
-    }
-  }
-
-  /* Divisor oficial PrimeNG adaptado al Design System */
-  .p-divider.p-divider-horizontal {
-    margin: var(--spacing-md) 0 !important;
-    padding: 0 !important;
-
-    &:before {
-      border-block-start: 1px solid var(--border-subtle, #E2E8F0) !important;
-    }
-  }
-
-  /* Avatar PrimeNG oficial con degradado y halo de marca */
-  .user-avatar-badge.p-avatar {
-    width: 80px !important;
-    height: 80px !important;
-    border-radius: 50% !important;
-    background: var(--primary-gradient) !important;
-    color: #FFFFFF !important;
-    box-shadow: 0 4px 14px rgba(255, 45, 120, 0.35) !important;
-    outline: 4px solid rgba(255, 45, 120, 0.15) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    .p-avatar-icon {
-      font-size: 32px !important;
-      color: #FFFFFF !important;
-    }
-  }
-
-  /* Tags de Rol y Estado */
-  .role-tag.p-tag {
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    padding: 2px 10px !important;
-    letter-spacing: 0.05em !important;
-  }
-
-  .info-tag.p-tag {
-    font-size: 11px !important;
-    font-weight: 600 !important;
-    padding: 2px 8px !important;
-  }
-
-  .readonly-tag.p-tag {
-    font-size: 10px !important;
-    font-weight: 600 !important;
-    padding: 2px 8px !important;
-
-    .p-tag-icon {
-      font-size: 9px !important;
-      margin-right: 4px !important;
-    }
-  }
-
-  /* Campos PrimeNG (IconField e InputText) */
-  .field-iconfield {
-    width: 100% !important;
-    display: block !important;
-
-    .p-iconfield {
-      width: 100% !important;
-      display: block !important;
-    }
-
-    .p-inputicon {
-      color: var(--text-dim, #94A3B8) !important;
-      font-size: 13px !important;
-      z-index: 2;
-    }
-
-    .p-inputtext {
-      width: 100% !important;
-      font-size: 13px !important;
-      padding: 10px 14px 10px 38px !important;
-      border-radius: var(--radius-md, 8px) !important;
-      background-color: var(--surface-pure, #FFFFFF) !important;
-      border: 1px solid var(--border-input, #CBD5E1) !important;
-      color: var(--text-color) !important;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
-
-      &:focus {
-        border-color: var(--primary, #FF2D78) !important;
-        box-shadow: 0 0 0 3px rgba(255, 45, 120, 0.15) !important;
-      }
-
-      &.readonly-input,
-      &:disabled {
-        background-color: var(--surface-muted, #F1F5F9) !important;
-        color: var(--text-muted) !important;
-        font-family: monospace !important;
-        font-size: 12px !important;
-        cursor: not-allowed !important;
-        opacity: 0.9 !important;
-        border-color: var(--border-subtle, #E2E8F0) !important;
-      }
-    }
-  }
-
-  /* Botón Guardar */
-  .save-profile-btn.p-button {
-    background: var(--primary-gradient) !important;
-    border: none !important;
-    color: #FFFFFF !important;
-    font-family: var(--font-label) !important;
-    font-weight: 600 !important;
-    font-size: 13px !important;
-    padding: 10px 22px !important;
-    border-radius: var(--radius-lg, 10px) !important;
-    box-shadow: 0 4px 14px rgba(255, 45, 120, 0.35) !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: var(--spacing-xs) !important;
-    transition: transform 0.15s ease, box-shadow 0.15s ease !important;
-
-    &:hover:not(:disabled) {
-      background: var(--primary-gradient-hover) !important;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(255, 45, 120, 0.45) !important;
-    }
-
-    &:disabled {
-      opacity: 0.6 !important;
-      cursor: not-allowed !important;
-    }
-  }
-}
-
-/* ==========================================================================
-   Estructura Interna: Ficha de Identidad (Columna Izquierda)
+   Estructura: Ficha de Identidad (Columna Izquierda)
    ========================================================================== */
 .identity-card-content {
   display: flex;
@@ -227,23 +73,26 @@
   }
 }
 
+/* Lista limpia de información de identidad (sin cajas superpuestas) */
 .identity-quick-info {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
 }
 
 .info-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px var(--spacing-md);
-  background-color: var(--surface-pure, #FFFFFF);
-  border: 1px solid var(--border-subtle, #E2E8F0);
-  border-radius: var(--radius-md, 8px);
+  padding: var(--spacing-sm) 0;
+  border-bottom: 1px solid var(--border-subtle);
   font-size: var(--font-size-xs);
   gap: var(--spacing-sm);
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 
   .info-label {
     display: flex;
@@ -255,20 +104,20 @@
 
     i {
       font-size: 13px;
-      color: var(--primary, #FF2D78);
+      color: var(--primary-color);
 
       &.pi-check-circle {
-        color: #10B981;
+        color: var(--status-success, #10B981);
       }
 
       &.pi-phone {
-        color: #3B82F6;
+        color: var(--status-confirmed, #3B82F6);
       }
     }
   }
 
   .info-value {
-    font-size: 11px;
+    font-size: var(--font-size-xs);
     font-weight: var(--font-weight-medium);
     color: var(--text-color);
     font-family: monospace;
@@ -276,7 +125,7 @@
 }
 
 /* ==========================================================================
-   Estructura Interna: Formulario de Datos Personales (Columna Derecha)
+   Estructura: Formulario de Datos Personales (Columna Derecha)
    ========================================================================== */
 .card-section-header {
   display: flex;
@@ -284,14 +133,14 @@
   gap: var(--spacing-md);
   padding-bottom: var(--spacing-md);
   margin-bottom: var(--spacing-lg);
-  border-bottom: 1px solid var(--border-subtle, #E2E8F0);
+  border-bottom: 1px solid var(--border-subtle);
 
   .section-icon {
     width: 36px;
     height: 36px;
-    border-radius: var(--radius-md, 8px);
-    background-color: rgba(255, 45, 120, 0.1);
-    color: var(--primary, #FF2D78);
+    border-radius: var(--radius-md);
+    background-color: var(--primary-color-alpha-10, rgba(255, 45, 120, 0.1));
+    color: var(--primary-color);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -320,13 +169,22 @@
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--spacing-xs);
+
+  .field-iconfield {
+    width: 100%;
+    display: block;
+
+    .p-inputtext {
+      width: 100%;
+    }
+  }
 }
 
 .label-row {
@@ -336,34 +194,35 @@
 }
 
 .form-label {
-  font-size: 11px;
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--text-muted);
+  color: var(--text-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin: 0;
+  margin: 0 0 var(--spacing-2xs) 0;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 
   @include mobile {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 }
 
 .form-error {
   font-size: var(--font-size-2xs);
-  color: var(--status-cancelled, #DC2626);
+  color: var(--status-cancelled);
   margin-top: 2px;
 }
 
 .form-actions-footer {
   margin-top: var(--spacing-md);
   padding-top: var(--spacing-md);
-  border-top: 1px solid var(--border-subtle, #E2E8F0);
+  border-top: 1px solid var(--border-subtle);
   display: flex;
   justify-content: flex-end;
 }
