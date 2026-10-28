@@ -3,21 +3,6 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_datepicker.scss
    ========================================================================== */
 
-:root {
-  --p-datepicker-panel-background: var(--surface-card);
-  --p-datepicker-panel-border-color: var(--border-subtle);
-  --p-datepicker-panel-border-radius: var(--radius-md);
-  --p-datepicker-panel-shadow: var(--shadow-tier3);
-  --p-datepicker-panel-padding: var(--spacing-md);
-  --p-datepicker-header-background: transparent;
-  --p-datepicker-header-border-color: var(--border-subtle);
-  --p-datepicker-header-color: var(--text-color);
-  --p-datepicker-date-border-radius: var(--radius-sm);
-  --p-datepicker-date-hover-background: var(--surface-container-high);
-  --p-datepicker-date-selected-background: var(--primary-color);
-  --p-datepicker-date-selected-color: #ffffff;
-}
-
 /* Contenedor del Input DatePicker */
 .p-datepicker {
   display: inline-flex;

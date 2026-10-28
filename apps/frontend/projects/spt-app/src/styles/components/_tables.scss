@@ -6,14 +6,6 @@
 @use "../base/variables" as *;
 @use "../base/responsive" as *;
 
-:root {
-  --p-datatable-header-cell-background: var(--surface-table-th);
-  --p-datatable-header-cell-color: var(--text-dim);
-  --p-datatable-header-cell-border-color: var(--border-table-header);
-  --p-datatable-body-cell-border-color: var(--border-subtle);
-  --p-datatable-row-hover-background: var(--surface-table-row-hover);
-}
-
 /* --------------------------------------------------------------------------
    1. Contenedor Card de Tabla
    -------------------------------------------------------------------------- */

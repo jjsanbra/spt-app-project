@@ -3,17 +3,6 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_badges.scss
    ========================================================================== */
 
-:root {
-  --p-tag-font-size: var(--font-size-2xs);
-  --p-tag-font-weight: var(--font-weight-bold);
-  --p-tag-border-radius: var(--radius-full);
-  --p-tag-rounded-border-radius: var(--radius-full);
-  --p-tag-padding: 0.2rem 0.65rem;
-  --p-tag-gap: 0.25rem;
-  --p-overlaybadge-outline-width: 0px;
-    --p-overlaybadge-outline-color: transparent;
-}
-
 .badge {
   display: inline-flex;
   align-items: center;

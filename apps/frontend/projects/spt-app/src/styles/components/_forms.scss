@@ -20,49 +20,6 @@
   margin-bottom: var(--spacing-2xs);
 }
 
-:root {
-  --p-inputtext-padding-y: var(--p-form-field-padding-y, 0.5rem);
-  --p-inputtext-padding-x: var(--p-form-field-padding-x, 0.75rem);
-  --p-inputtext-sm-padding-y: var(--p-form-field-sm-padding-y, 0.375rem);
-  --p-inputtext-sm-padding-x: var(--p-form-field-sm-padding-x, 0.625rem);
-  --p-inputtext-sm-font-size: var(--p-form-field-sm-font-size, 0.875rem);
-  --p-inputtext-lg-padding-y: var(--p-form-field-lg-padding-y, 0.625rem);
-  --p-inputtext-lg-padding-x: var(--p-form-field-lg-padding-x, 0.875rem);
-  --p-inputtext-lg-font-size: var(--p-form-field-lg-font-size, 1.125rem);
-  --p-inputtext-border-radius: var(--p-form-field-border-radius, 6px);
-  --p-inputtext-shadow: var(--p-form-field-shadow, 0 1px 2px 0 rgba(18, 18, 23, 0.05));
-
-  --p-select-padding-y: var(--p-form-field-padding-y, 0.5rem);
-  --p-select-padding-x: var(--p-form-field-padding-x, 0.75rem);
-  --p-select-sm-padding-y: var(--p-form-field-sm-padding-y, 0.375rem);
-  --p-select-sm-padding-x: var(--p-form-field-sm-padding-x, 0.625rem);
-  --p-select-sm-font-size: var(--p-form-field-sm-font-size, 0.875rem);
-  --p-select-lg-padding-y: var(--p-form-field-lg-padding-y, 0.625rem);
-  --p-select-lg-padding-x: var(--p-form-field-lg-padding-x, 0.875rem);
-  --p-select-lg-font-size: var(--p-form-field-lg-font-size, 1.125rem);
-  --p-select-border-radius: var(--p-form-field-border-radius, 6px);
-
-  /* PrimeNG Select Overlay & Dropdown Tokens */
-  --p-select-overlay-background: var(--surface-card);
-  --p-select-overlay-border-color: var(--border-subtle);
-  --p-select-overlay-border-radius: var(--radius-md);
-  --p-select-overlay-color: var(--text-color);
-  --p-select-overlay-shadow: var(--shadow-tier3);
-
-  /* PrimeNG Select List & Option Tokens */
-  --p-select-list-padding: var(--spacing-2xs);
-  --p-select-list-gap: 2px;
-  --p-select-option-padding: var(--spacing-xs) var(--spacing-md);
-  --p-select-option-border-radius: var(--radius-xs);
-  --p-select-option-color: var(--text-color);
-  --p-select-option-focus-background: var(--surface-container-high);
-  --p-select-option-focus-color: var(--text-color);
-  --p-select-option-selected-background: var(--primary-glow);
-  --p-select-option-selected-color: var(--primary-color);
-  --p-select-option-selected-focus-background: var(--primary-glow);
-  --p-select-option-selected-focus-color: var(--primary-color);
-}
-
 .form-control,
 .p-inputtext,
 input.p-inputtext {
@@ -137,7 +94,26 @@ p-select,
   }
 
   .p-select-dropdown {
+    width: var(--p-select-dropdown-width, 2.75rem);
     color: var(--text-dim);
+  }
+
+  &.p-select-sm,
+  &[size="small"] {
+    --p-select-dropdown-width: 2.25rem;
+
+    .p-select-dropdown {
+      width: 2.25rem;
+    }
+  }
+
+  &.p-select-lg,
+  &[size="large"] {
+    --p-select-dropdown-width: 3rem;
+
+    .p-select-dropdown {
+      width: 3rem;
+    }
   }
 
   &:not(.p-disabled):hover {

@@ -68,6 +68,70 @@
 
   /* Transitions */
   --theme-transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+
+  /* --------------------------------------------------------------------------
+     4. PrimeNG Invariant & Geometric Tokens (Single Source of Truth)
+     -------------------------------------------------------------------------- */
+  /* Buttons */
+  --p-button-border-radius: var(--radius-sm);
+  --p-button-padding-y: var(--spacing-sm);
+  --p-button-padding-x: var(--spacing-md);
+  --p-button-transition-duration: 0.2s;
+
+  /* Tags & Badges */
+  --p-tag-font-size: var(--font-size-2xs);
+  --p-tag-font-weight: var(--font-weight-bold);
+  --p-tag-border-radius: var(--radius-full);
+  --p-tag-rounded-border-radius: var(--radius-full);
+  --p-tag-padding: 0.2rem 0.65rem;
+  --p-tag-gap: 0.25rem;
+  --p-overlaybadge-outline-width: 0px;
+  --p-overlaybadge-outline-color: transparent;
+
+  /* Cards */
+  --p-card-border-radius: var(--radius-lg);
+
+  /* Forms & InputText */
+  --p-inputtext-padding-y: var(--spacing-sm, 0.5rem);
+  --p-inputtext-padding-x: var(--spacing-md, 0.75rem);
+  --p-inputtext-sm-padding-y: 0.375rem;
+  --p-inputtext-sm-padding-x: 0.625rem;
+  --p-inputtext-sm-font-size: var(--font-size-xs, 0.875rem);
+  --p-inputtext-lg-padding-y: 0.625rem;
+  --p-inputtext-lg-padding-x: 0.875rem;
+  --p-inputtext-lg-font-size: var(--font-size-lg, 1.125rem);
+  --p-inputtext-border-radius: var(--radius-sm, 6px);
+  --p-inputtext-shadow: 0 1px 2px 0 rgba(18, 18, 23, 0.05);
+
+  /* Select Geometrics */
+  --p-select-padding-y: var(--spacing-sm, 0.5rem);
+  --p-select-padding-x: var(--spacing-md, 0.75rem);
+  --p-select-sm-padding-y: 0.375rem;
+  --p-select-sm-padding-x: 0.625rem;
+  --p-select-sm-font-size: var(--font-size-xs, 0.875rem);
+  --p-select-lg-padding-y: 0.625rem;
+  --p-select-lg-padding-x: 0.875rem;
+  --p-select-lg-font-size: var(--font-size-lg, 1.125rem);
+  --p-select-border-radius: var(--radius-sm, 6px);
+  --p-select-dropdown-width: 2.75rem;
+  --p-select-list-padding: var(--spacing-2xs);
+  --p-select-list-gap: 2px;
+  --p-select-option-padding: var(--spacing-xs) var(--spacing-md);
+  --p-select-option-border-radius: var(--radius-xs);
+  --p-select-overlay-border-radius: var(--radius-md);
+
+  /* DatePicker Geometrics */
+  --p-datepicker-panel-border-radius: var(--radius-md);
+  --p-datepicker-panel-padding: var(--spacing-md);
+  --p-datepicker-date-border-radius: var(--radius-sm);
+
+  /* Dialogs & Popovers Geometrics */
+  --p-dialog-border-radius: var(--radius-md);
+  --p-dialog-header-padding: var(--spacing-md) var(--spacing-lg);
+  --p-dialog-content-padding: var(--spacing-lg);
+  --p-dialog-footer-padding: var(--spacing-md) var(--spacing-lg);
+  --p-popover-border-radius: var(--radius-lg);
+  --p-popover-content-padding: 0;
 }
 
 /* ==========================================================================
@@ -249,6 +313,12 @@
   --p-select-color: var(--text-main);
   --p-select-placeholder-color: var(--text-dim);
   --p-select-dropdown-color: var(--text-dim);
+  --p-select-dropdown-width: 2.75rem;
+
+  /* PrimeNG Sidebar Tokens */
+  --p-sidebar-panel-background: var(--surface-sidebar);
+  --p-sidebar-border-color: var(--border-subtle);
+  --p-sidebar-backdrop-background: rgba(0, 0, 0, 0.5);
 
   /* PrimeNG DatePicker Tokens */
   --p-datepicker-panel-background: var(--surface-card);
@@ -261,6 +331,40 @@
   --p-datepicker-date-hover-background: var(--surface-container-high);
   --p-datepicker-date-selected-background: var(--primary-color);
   --p-datepicker-date-selected-color: #FFFFFF;
+
+  /* PrimeNG Card Tokens */
+  --p-card-background: var(--surface-card);
+  --p-card-color: var(--text-color);
+  --p-card-shadow: var(--shadow-card);
+
+  /* PrimeNG Dialog & Popover Tokens */
+  --p-dialog-background: var(--surface-pure);
+  --p-dialog-border-color: var(--border-subtle);
+  --p-dialog-shadow: var(--shadow-tier3);
+  --p-popover-background: var(--surface-card);
+  --p-popover-border-color: var(--border-subtle);
+  --p-popover-color: var(--text-color);
+  --p-popover-shadow: var(--shadow-tier3);
+
+  /* PrimeNG Select Overlay & Option Tokens */
+  --p-select-overlay-background: var(--surface-card);
+  --p-select-overlay-border-color: var(--border-subtle);
+  --p-select-overlay-color: var(--text-color);
+  --p-select-overlay-shadow: var(--shadow-tier3);
+  --p-select-option-color: var(--text-color);
+  --p-select-option-focus-background: var(--surface-container-high);
+  --p-select-option-focus-color: var(--text-color);
+  --p-select-option-selected-background: var(--primary-glow);
+  --p-select-option-selected-color: var(--primary-color);
+  --p-select-option-selected-focus-background: var(--primary-glow);
+  --p-select-option-selected-focus-color: var(--primary-color);
+
+  /* PrimeNG DataTable Tokens */
+  --p-datatable-header-cell-background: var(--surface-table-th);
+  --p-datatable-header-cell-color: var(--text-dim);
+  --p-datatable-header-cell-border-color: var(--border-table-header);
+  --p-datatable-body-cell-border-color: var(--border-subtle);
+  --p-datatable-row-hover-background: var(--surface-table-row-hover);
 }
 
 /* ==========================================================================
@@ -442,6 +546,12 @@
   --p-select-color: var(--text-main);
   --p-select-placeholder-color: var(--text-dim);
   --p-select-dropdown-color: var(--text-dim);
+  --p-select-dropdown-width: 2.75rem;
+
+  /* PrimeNG Sidebar Tokens */
+  --p-sidebar-panel-background: var(--surface-sidebar);
+  --p-sidebar-border-color: var(--border-subtle);
+  --p-sidebar-backdrop-background: rgba(0, 0, 0, 0.5);
 
   /* PrimeNG DatePicker Tokens */
   --p-datepicker-panel-background: var(--surface-card);
@@ -454,4 +564,38 @@
   --p-datepicker-date-hover-background: var(--surface-container-high);
   --p-datepicker-date-selected-background: var(--primary-color);
   --p-datepicker-date-selected-color: #FFFFFF;
+
+  /* PrimeNG Card Tokens */
+  --p-card-background: var(--surface-card);
+  --p-card-color: var(--text-color);
+  --p-card-shadow: var(--shadow-card);
+
+  /* PrimeNG Dialog & Popover Tokens */
+  --p-dialog-background: var(--surface-pure);
+  --p-dialog-border-color: var(--border-subtle);
+  --p-dialog-shadow: var(--shadow-tier3);
+  --p-popover-background: var(--surface-card);
+  --p-popover-border-color: var(--border-subtle);
+  --p-popover-color: var(--text-color);
+  --p-popover-shadow: var(--shadow-tier3);
+
+  /* PrimeNG Select Overlay & Option Tokens */
+  --p-select-overlay-background: var(--surface-card);
+  --p-select-overlay-border-color: var(--border-subtle);
+  --p-select-overlay-color: var(--text-color);
+  --p-select-overlay-shadow: var(--shadow-tier3);
+  --p-select-option-color: var(--text-color);
+  --p-select-option-focus-background: var(--surface-container-high);
+  --p-select-option-focus-color: var(--text-color);
+  --p-select-option-selected-background: var(--primary-glow);
+  --p-select-option-selected-color: var(--primary-color);
+  --p-select-option-selected-focus-background: var(--primary-glow);
+  --p-select-option-selected-focus-color: var(--primary-color);
+
+  /* PrimeNG DataTable Tokens */
+  --p-datatable-header-cell-background: var(--surface-table-th);
+  --p-datatable-header-cell-color: var(--text-dim);
+  --p-datatable-header-cell-border-color: var(--border-table-header);
+  --p-datatable-body-cell-border-color: var(--border-subtle);
+  --p-datatable-row-hover-background: var(--surface-table-row-hover);
 }

@@ -3,13 +3,6 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_cards.scss
    ========================================================================== */
 
-:root {
-  --p-card-background: var(--surface-card);
-  --p-card-border-radius: var(--radius-lg);
-  --p-card-color: var(--text-color);
-  --p-card-shadow: var(--shadow-card);
-}
-
 .container {
   max-width: 1400px;
   margin: 0 auto;

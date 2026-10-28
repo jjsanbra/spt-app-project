@@ -9,7 +9,7 @@ import { DialogModule } from 'primeng/dialog';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
-import { SidebarModule } from 'primeng/sidebar';
+import { SidebarModule, SidebarTrigger } from 'primeng/sidebar';
 import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -33,6 +33,7 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
     InputIconModule,
     InputTextModule,
     SidebarModule,
+    SidebarTrigger,
     TagModule,
     ToastModule,
     ConfirmDialogModule,

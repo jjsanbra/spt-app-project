@@ -3,13 +3,6 @@
    Ruta: apps/frontend/projects/spt-app/src/styles/components/_buttons.scss
    ========================================================================== */
 
-:root {
-  --p-button-border-radius: var(--radius-sm);
-  --p-button-padding-y: var(--spacing-sm);
-  --p-button-padding-x: var(--spacing-md);
-  --p-button-transition-duration: 0.2s;
-}
-
 .btn,
 .p-button {
   font-family: var(--font-label);

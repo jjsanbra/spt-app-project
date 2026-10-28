@@ -35,6 +35,8 @@
    1. Sidebar Oficial PrimeNG (p-sidebar) — Personalización de Tokens y Colores
    -------------------------------------------------------------------------- */
 :host ::ng-deep .app-sidebar {
+  --px-sidebar-width: var(--admin-sidebar-w);
+
   .p-sidebar-panel {
     background-color: var(--surface-sidebar);
     border-right: 1px solid var(--border-subtle);
@@ -46,6 +48,19 @@
   .p-sidebar-footer {
     padding: 0;
   }
+
+  &[data-overlay] {
+    z-index: 1200;
+
+    .p-sidebar-aside {
+      z-index: 1200;
+      box-shadow: var(--shadow-sidebar);
+    }
+  }
+}
+
+:host ::ng-deep .p-sidebar-backdrop {
+  z-index: 1100;
 }
 
 
@@ -300,7 +315,7 @@
   min-height: var(--topbar-height);
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: space-between;

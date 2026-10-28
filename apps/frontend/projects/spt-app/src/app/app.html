@@ -5,6 +5,7 @@
   @if (!isAuthPage()) {
     <!-- Sidebar Lateral Izquierdo Oficial PrimeNG (https://primeng.dev/sidebar) -->
     <p-sidebar
+      id="app-sidebar"
       [(open)]="sidebarOpen"
       side="left"
       collapsible="offcanvas"
@@ -38,11 +39,12 @@
                 <button
                   type="button"
                   pButton
+                  pSidebarTrigger
+                  target="app-sidebar"
                   [text]="true"
                   [rounded]="true"
                   size="small"
                   class="mobile-close-btn"
-                  (click)="closeSidebar()"
                   [attr.aria-label]="'NAV.SIDEBAR_CLOSE' | translate"
                   iconOnly
                 >
@@ -291,10 +293,11 @@
             <button
               type="button"
               pButton
+              pSidebarTrigger
+              target="app-sidebar"
               [text]="true"
               [rounded]="true"
               class="sidebar-toggle-btn"
-              (click)="toggleSidebar()"
               [attr.aria-label]="(sidebarOpen() ? 'NAV.SIDEBAR_CLOSE' : 'NAV.SIDEBAR_OPEN') | translate"
               iconOnly
             >

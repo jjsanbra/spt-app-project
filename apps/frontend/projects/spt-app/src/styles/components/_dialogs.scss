@@ -6,23 +6,6 @@
 @use "../base/variables" as *;
 @use "../base/responsive" as *;
 
-:root {
-  --p-dialog-border-radius: var(--radius-md);
-  --p-dialog-background: var(--surface-pure);
-  --p-dialog-border-color: var(--border-subtle);
-  --p-dialog-shadow: var(--shadow-tier3);
-  --p-dialog-header-padding: var(--spacing-md) var(--spacing-lg);
-  --p-dialog-content-padding: var(--spacing-lg);
-  --p-dialog-footer-padding: var(--spacing-md) var(--spacing-lg);
-
-  --p-popover-background: var(--surface-card);
-  --p-popover-border-color: var(--border-subtle);
-  --p-popover-color: var(--text-color);
-  --p-popover-border-radius: var(--radius-lg);
-  --p-popover-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
-  --p-popover-content-padding: 0;
-}
-
 /* 1. Máscara y Backdrop de Diálogo */
 .p-dialog-mask {
   overflow-x: hidden !important;
