@@ -111,59 +111,52 @@
 
           <div class="form-row">
             <div class="form-group flex-2">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubName" type="text" pInputText pSize="large" formControlName="name" class="w-full" autocomplete="off" />
-                <label for="clubName">{{ 'ADMIN.SETTINGS.FIELD_NAME' | translate }} *</label>
-              </p-floatlabel>
+              <label for="clubName">{{ 'ADMIN.SETTINGS.FIELD_NAME' | translate }} *</label>
+              <input id="clubName" type="text" pInputText pSize="large" formControlName="name"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_NAME_PLACEHOLDER' | translate" class="w-full" />
             </div>
 
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubEmail" type="email" pInputText pSize="large" formControlName="email" class="w-full" autocomplete="email" />
-                <label for="clubEmail">{{ 'ADMIN.SETTINGS.FIELD_EMAIL' | translate }} *</label>
-              </p-floatlabel>
+              <label for="clubEmail">{{ 'ADMIN.SETTINGS.FIELD_EMAIL' | translate }} *</label>
+              <input id="clubEmail" type="email" pInputText pSize="large" formControlName="email" class="w-full" />
             </div>
-          </div>
+            </div>
 
           <div class="form-group">
-            <p-floatlabel variant="in" class="w-full">
-              <textarea id="clubDesc" pTextarea formControlName="description" rows="2" class="w-full"></textarea>
-              <label for="clubDesc">{{ 'ADMIN.SETTINGS.FIELD_DESCRIPTION' | translate }}</label>
-            </p-floatlabel>
+            <label for="clubDesc">{{ 'ADMIN.SETTINGS.FIELD_DESCRIPTION' | translate }}</label>
+            <textarea id="clubDesc" pTextarea formControlName="description"
+              [placeholder]="'ADMIN.SETTINGS.FIELD_DESCRIPTION_PLACEHOLDER' | translate"
+              rows="2"
+              class="w-full"
+            ></textarea>
           </div>
 
           <div class="form-row">
             <div class="form-group flex-2">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubAddress" type="text" pInputText pSize="large" formControlName="address" class="w-full" autocomplete="street-address" />
-                <label for="clubAddress">{{ 'ADMIN.SETTINGS.FIELD_ADDRESS' | translate }}</label>
-              </p-floatlabel>
+              <label for="clubAddress">{{ 'ADMIN.SETTINGS.FIELD_ADDRESS' | translate }}</label>
+              <input id="clubAddress" type="text" pInputText pSize="large" formControlName="address"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_ADDRESS_PLACEHOLDER' | translate" class="w-full" />
             </div>
 
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubPhone" type="text" pInputText pSize="large" formControlName="phone" class="w-full" autocomplete="tel" />
-                <label for="clubPhone">{{ 'ADMIN.SETTINGS.FIELD_PHONE' | translate }}</label>
-              </p-floatlabel>
+              <label for="clubPhone">{{ 'ADMIN.SETTINGS.FIELD_PHONE' | translate }}</label>
+              <input id="clubPhone" type="text" pInputText pSize="large" formControlName="phone"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_PHONE_PLACEHOLDER' | translate" class="w-full" />
             </div>
-          </div>
+            </div>
 
           <div class="form-row">
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubCity" type="text" pInputText pSize="large" formControlName="city" class="w-full" autocomplete="address-level2" />
-                <label for="clubCity">{{ 'ADMIN.SETTINGS.FIELD_CITY' | translate }}</label>
-              </p-floatlabel>
+              <label for="clubCity">{{ 'ADMIN.SETTINGS.FIELD_CITY' | translate }}</label>
+              <input id="clubCity" type="text" pInputText pSize="large" formControlName="city" class="w-full" />
             </div>
 
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <input id="clubPostalCode" type="text" pInputText pSize="large" formControlName="postalCode" class="w-full" autocomplete="postal-code" />
-                <label for="clubPostalCode">{{ 'ADMIN.SETTINGS.FIELD_POSTAL_CODE' | translate }}</label>
-              </p-floatlabel>
+              <label for="clubPostalCode">{{ 'ADMIN.SETTINGS.FIELD_POSTAL_CODE' | translate }}</label>
+              <input id="clubPostalCode" type="text" pInputText pSize="large" formControlName="postalCode" class="w-full" />
             </div>
-          </div>
-        </div>
+            </div>
+            </div>
 
         <!-- Card 2: Horarios y Operativa de Pistas -->
         <div class="settings-section">
@@ -174,48 +167,41 @@
             <div>
               <h3 class="section-title">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_TITLE' | translate }}</h3>
               <p class="section-desc">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_DESC' | translate }}</p>
-            </div>
-          </div>
+              </div>
+              </div>
 
           <div class="form-row">
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <p-select inputId="openingHour" size="large" [options]="hourOptions" formControlName="openingHour"
-                  optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
-                  [autoOptionFocus]="false" scrollHeight="320px"></p-select>
-                <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
-              </p-floatlabel>
+              <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
+              <p-select inputId="openingHour" size="large" [options]="hourOptions" formControlName="openingHour"
+                optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+                [autoOptionFocus]="false" scrollHeight="320px"></p-select>
             </div>
 
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <p-select inputId="closingHour" size="large" [options]="hourOptions" formControlName="closingHour" optionLabel="label"
-                  optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false" [autoOptionFocus]="false"
-                  scrollHeight="320px"></p-select>
-                <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
-              </p-floatlabel>
+              <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
+              <p-select inputId="closingHour" size="large" [options]="hourOptions" formControlName="closingHour" optionLabel="label"
+                optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false" [autoOptionFocus]="false"
+                scrollHeight="320px"></p-select>
             </div>
-          </div>
+            </div>
 
           <div class="form-row">
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <p-select inputId="slotDuration" size="large" [options]="slotDurationOptions" formControlName="slotDurationMinutes"
-                  optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
-                  [autoOptionFocus]="false" scrollHeight="320px"></p-select>
-                <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
-              </p-floatlabel>
+              <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
+              <p-select inputId="slotDuration" size="large" [options]="slotDurationOptions" formControlName="slotDurationMinutes"
+                optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+                [autoOptionFocus]="false" scrollHeight="320px"></p-select>
             </div>
 
             <div class="form-group flex-1">
-              <p-floatlabel variant="in" class="w-full">
-                <p-inputnumber inputId="minNotice" size="large" formControlName="openGameMinNoticeHours" [min]="1" [max]="72"
-                  [fluid]="true"></p-inputnumber>
-                <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }}) *</label>
-              </p-floatlabel>
+              <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }})
+                *</label>
+              <p-inputnumber inputId="minNotice" size="large" formControlName="openGameMinNoticeHours" [min]="1" [max]="72"
+                [fluid]="true"></p-inputnumber>
             </div>
-          </div>
-        </div>
+            </div>
+            </div>
 
         <!-- Card 3: Modalidad de Pago -->
         <div class="settings-section">
@@ -226,16 +212,14 @@
             <div>
               <h3 class="section-title">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_TITLE' | translate }}</h3>
               <p class="section-desc">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_DESC' | translate }}</p>
-            </div>
-          </div>
+              </div>
+              </div>
 
           <div class="form-group">
-            <p-floatlabel variant="in" class="w-full">
-              <p-select inputId="paymentMode" size="large" [options]="paymentModeOptions" formControlName="paymentMode"
-                optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
-                [autoOptionFocus]="false" scrollHeight="320px"></p-select>
-              <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
-            </p-floatlabel>
+            <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
+            <p-select inputId="paymentMode" size="large" [options]="paymentModeOptions" formControlName="paymentMode"
+              optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+              [autoOptionFocus]="false" scrollHeight="320px"></p-select>
           </div>
 
           <!-- Descripciones de los modos -->

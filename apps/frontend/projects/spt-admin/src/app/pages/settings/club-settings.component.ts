@@ -14,7 +14,6 @@ import {
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { SelectModule } from 'primeng/select';
@@ -45,7 +44,6 @@ export interface ManagedClubRow {
     DialogModule,
     TagModule,
     TooltipModule,
-    FloatLabel,
     InputTextModule,
     InputNumberModule,
     SelectModule,

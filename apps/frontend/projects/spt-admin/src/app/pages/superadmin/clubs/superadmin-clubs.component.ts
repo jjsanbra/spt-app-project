@@ -15,7 +15,6 @@ import {
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FloatLabel } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -39,7 +38,6 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     TagModule,
     DialogModule,
-    FloatLabel,
     IconFieldModule,
     InputIconModule,
     InputTextModule,

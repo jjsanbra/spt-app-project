@@ -12,7 +12,6 @@ import {
 } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { FloatLabel } from 'primeng/floatlabel';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
@@ -34,7 +33,6 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     TagModule,
     DialogModule,
-    FloatLabel,
     IconFieldModule,
     InputIconModule,
     InputTextModule,

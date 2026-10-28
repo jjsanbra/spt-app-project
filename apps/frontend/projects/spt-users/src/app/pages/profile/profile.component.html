@@ -80,30 +80,26 @@
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
           <!-- Email (Solo lectura / Protegido) -->
           <div class="form-group">
-            <div class="label-row-top" style="display: flex; justify-content: flex-end; margin-bottom: var(--spacing-xs);">
+            <div class="label-row">
+              <label for="profile-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
               <p-tag [value]="'USERS.READONLY_FIELD' | translate" severity="secondary" icon="pi pi-lock" class="readonly-tag"></p-tag>
-            </div>
-            <p-floatlabel variant="in" class="w-full">
-              <p-iconfield class="field-iconfield w-full">
+              </div>
+              <p-iconfield class="field-iconfield">
                 <p-inputicon class="pi pi-envelope field-icon" />
-                <input id="profile-email" type="email" pInputText class="profile-input readonly-input w-full" formControlName="email" readonly />
-              </p-iconfield>
-              <label for="profile-email">{{ 'AUTH.EMAIL' | translate }}</label>
-            </p-floatlabel>
+                <input id="profile-email" type="email" pInputText class="profile-input readonly-input" formControlName="email" />
+            </p-iconfield>
           </div>
 
           <div class="form-row">
             <!-- Nombre -->
             <div class="form-group">
-              <p-floatlabel variant="in" class="w-full">
-                <p-iconfield class="field-iconfield w-full">
-                  <p-inputicon class="pi pi-user field-icon" />
-                  <input id="profile-first-name" type="text" pInputText class="profile-input w-full" formControlName="firstName"
-                    [invalid]="(profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) ?? false"
-                    autocomplete="given-name" />
-                </p-iconfield>
-                <label for="profile-first-name">{{ 'USERS.FIRST_NAME' | translate }} *</label>
-              </p-floatlabel>
+              <label for="profile-first-name" class="form-label">{{ 'USERS.FIRST_NAME' | translate }} *</label>
+              <p-iconfield class="field-iconfield">
+                <p-inputicon class="pi pi-user field-icon" />
+                <input id="profile-first-name" type="text" pInputText class="profile-input" formControlName="firstName"
+                  [invalid]="(profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) ?? false"
+                  [placeholder]="'USERS.FIRST_NAME' | translate" />
+              </p-iconfield>
               @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.errors) {
                 <small class="form-error">
                   {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -113,15 +109,13 @@
 
             <!-- Apellidos -->
             <div class="form-group">
-              <p-floatlabel variant="in" class="w-full">
-                <p-iconfield class="field-iconfield w-full">
-                  <p-inputicon class="pi pi-user field-icon" />
-                  <input id="profile-last-name" type="text" pInputText class="profile-input w-full" formControlName="lastName"
-                    [invalid]="(profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) ?? false"
-                    autocomplete="family-name" />
-                </p-iconfield>
-                <label for="profile-last-name">{{ 'USERS.LAST_NAME' | translate }} *</label>
-              </p-floatlabel>
+              <label for="profile-last-name" class="form-label">{{ 'USERS.LAST_NAME' | translate }} *</label>
+              <p-iconfield class="field-iconfield">
+                <p-inputicon class="pi pi-user field-icon" />
+                <input id="profile-last-name" type="text" pInputText class="profile-input" formControlName="lastName"
+                  [invalid]="(profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) ?? false"
+                  [placeholder]="'USERS.LAST_NAME' | translate" />
+              </p-iconfield>
               @if (profileForm.get('lastName')?.touched && profileForm.get('lastName')?.errors) {
                 <small class="form-error">
                   {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -132,14 +126,12 @@
 
           <!-- Teléfono -->
           <div class="form-group">
-            <p-floatlabel variant="in" class="w-full">
-              <p-iconfield class="field-iconfield w-full">
-                <p-inputicon class="pi pi-phone field-icon" />
-                <input id="profile-phone" type="tel" pInputText class="profile-input w-full" formControlName="phone"
-                  autocomplete="tel" />
-              </p-iconfield>
-              <label for="profile-phone">{{ 'USERS.PHONE' | translate }}</label>
-            </p-floatlabel>
+            <label for="profile-phone" class="form-label">{{ 'USERS.PHONE' | translate }}</label>
+            <p-iconfield class="field-iconfield">
+              <p-inputicon class="pi pi-phone field-icon" />
+              <input id="profile-phone" type="tel" pInputText class="profile-input" formControlName="phone"
+                [placeholder]="'USERS.PHONE' | translate" />
+            </p-iconfield>
           </div>
 
           <!-- Footer de acciones -->

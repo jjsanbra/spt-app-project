@@ -12,7 +12,6 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { AuthService, NotificationService } from '@core';
 import { ButtonModule } from 'primeng/button';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 
@@ -32,7 +31,6 @@ function passwordMatchValidator(control: AbstractControl): ValidationErrors | nu
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
-    FloatLabel,
     InputTextModule,
     PasswordModule,
     ButtonModule,

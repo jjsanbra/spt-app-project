@@ -22,10 +22,9 @@ import {
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
-import { FloatLabel } from 'primeng/floatlabel';
+import { SelectModule } from 'primeng/select';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
-import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
@@ -51,7 +50,6 @@ export interface ResolvedBasePrice {
     ButtonModule,
     TagModule,
     DialogModule,
-    FloatLabel,
     InputTextModule,
     InputNumberModule,
     SelectModule,

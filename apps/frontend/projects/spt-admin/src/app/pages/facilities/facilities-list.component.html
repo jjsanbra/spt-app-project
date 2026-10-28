@@ -149,128 +149,114 @@
   <form [formGroup]="facilityForm" (ngSubmit)="onSubmitModal()" class="facility-form">
     <!-- Nombre -->
     <div class="form-group">
-      <p-floatlabel variant="in" class="w-full">
-        <input
-          id="facility-name"
-          type="text"
-          pInputText
-          pSize="large"
-          class="w-full"
-          formControlName="name"
-          [invalid]="(facilityForm.get('name')?.invalid && facilityForm.get('name')?.touched) ?? false"
-          autocomplete="off"
-        />
-        <label for="facility-name">{{ 'ADMIN.FACILITIES.NAME' | translate }}</label>
-      </p-floatlabel>
+      <label for="facility-name" class="form-label">{{ 'ADMIN.FACILITIES.NAME' | translate }}</label>
+      <input
+        id="facility-name"
+        type="text"
+        pInputText
+        pSize="large"
+        class="w-full"
+        formControlName="name"
+        [invalid]="(facilityForm.get('name')?.invalid && facilityForm.get('name')?.touched) ?? false"
+        placeholder="Ej. Pista 1 Central"
+      />
     </div>
 
     <!-- Deporte y Tipo de Pista -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-select
-            inputId="facility-sport"
-            size="large"
-            [options]="sportOptions"
-            formControlName="sportType"
-            [fluid]="true"
-            optionLabel="label"
-            optionValue="value"
-            [appendTo]="'body'"
-            [focusOnHover]="false"
-            [autoOptionFocus]="false"
-            scrollHeight="320px"
-          ></p-select>
-          <label for="facility-sport">{{ 'ADMIN.FACILITIES.SPORT' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-sport" class="form-label">{{ 'ADMIN.FACILITIES.SPORT' | translate }}</label>
+        <p-select
+          inputId="facility-sport"
+          size="large"
+          [options]="sportOptions"
+          formControlName="sportType"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
+        ></p-select>
       </div>
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-select
-            inputId="facility-court"
-            size="large"
-            [options]="courtOptions"
-            formControlName="courtType"
-            [fluid]="true"
-            optionLabel="label"
-            optionValue="value"
-            [appendTo]="'body'"
-            [focusOnHover]="false"
-            [autoOptionFocus]="false"
-            scrollHeight="320px"
-          ></p-select>
-          <label for="facility-court">{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-court" class="form-label">{{ 'ADMIN.FACILITIES.COURT_TYPE' | translate }}</label>
+        <p-select
+          inputId="facility-court"
+          size="large"
+          [options]="courtOptions"
+          formControlName="courtType"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
+        ></p-select>
       </div>
     </div>
 
     <!-- Superficie y Franja Minutos -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-select
-            inputId="facility-surface"
-            size="large"
-            [options]="surfaceOptions"
-            formControlName="surfaceType"
-            [fluid]="true"
-            optionLabel="label"
-            optionValue="value"
-            [appendTo]="'body'"
-            [focusOnHover]="false"
-            [autoOptionFocus]="false"
-            scrollHeight="320px"
-          ></p-select>
-          <label for="facility-surface">{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-surface" class="form-label">{{ 'ADMIN.FACILITIES.SURFACE' | translate }}</label>
+        <p-select
+          inputId="facility-surface"
+          size="large"
+          [options]="surfaceOptions"
+          formControlName="surfaceType"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
+        ></p-select>
       </div>
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-select
-            inputId="facility-slot"
-            size="large"
-            [options]="slotOptions"
-            formControlName="defaultSlotMinutes"
-            [fluid]="true"
-            optionLabel="label"
-            optionValue="value"
-            [appendTo]="'body'"
-            [focusOnHover]="false"
-            [autoOptionFocus]="false"
-            scrollHeight="320px"
-          ></p-select>
-          <label for="facility-slot">{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-slot" class="form-label">{{ 'ADMIN.FACILITIES.SLOT_MINUTES' | translate }}</label>
+        <p-select
+          inputId="facility-slot"
+          size="large"
+          [options]="slotOptions"
+          formControlName="defaultSlotMinutes"
+          [fluid]="true"
+          optionLabel="label"
+          optionValue="value"
+          [appendTo]="'body'"
+          [focusOnHover]="false"
+          [autoOptionFocus]="false"
+          scrollHeight="320px"
+        ></p-select>
       </div>
     </div>
 
     <!-- Jugadores Min / Max -->
     <div class="form-row">
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-inputnumber
-            inputId="facility-min-players"
-            size="large"
-            formControlName="minPlayers"
-            [min]="1"
-            [max]="50"
-            [fluid]="true"
-          ></p-inputnumber>
-          <label for="facility-min-players">{{ 'ADMIN.FACILITIES.MIN_PLAYERS' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-min-players" class="form-label">Min Jugadores</label>
+        <p-inputnumber
+          inputId="facility-min-players"
+          size="large"
+          formControlName="minPlayers"
+          [min]="1"
+          [max]="50"
+          [fluid]="true"
+        ></p-inputnumber>
       </div>
       <div class="form-group flex-1">
-        <p-floatlabel variant="in" class="w-full">
-          <p-inputnumber
-            inputId="facility-max-players"
-            size="large"
-            formControlName="maxPlayers"
-            [min]="1"
-            [max]="50"
-            [fluid]="true"
-          ></p-inputnumber>
-          <label for="facility-max-players">{{ 'ADMIN.FACILITIES.MAX_PLAYERS' | translate }}</label>
-        </p-floatlabel>
+        <label for="facility-max-players" class="form-label">Max Jugadores</label>
+        <p-inputnumber
+          inputId="facility-max-players"
+          size="large"
+          formControlName="maxPlayers"
+          [min]="1"
+          [max]="50"
+          [fluid]="true"
+        ></p-inputnumber>
       </div>
     </div>
 
@@ -303,34 +289,30 @@
     @if (facilityForm.get('customPricing')?.value) {
       <div class="form-row mt-2">
         <div class="form-group flex-1">
-          <p-floatlabel variant="in" class="w-full">
-            <p-inputnumber
-              inputId="facility-member-price"
-              size="large"
-              formControlName="customMemberPrice"
-              [min]="0"
-              mode="currency"
-              currency="EUR"
-              locale="es-ES"
-              [fluid]="true"
-            ></p-inputnumber>
-            <label for="facility-member-price">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
-          </p-floatlabel>
+          <label for="facility-member-price" class="form-label">{{ 'ADMIN.PRICING.MEMBER_PRICE' | translate }}</label>
+          <p-inputnumber
+            inputId="facility-member-price"
+            size="large"
+            formControlName="customMemberPrice"
+            [min]="0"
+            mode="currency"
+            currency="EUR"
+            locale="es-ES"
+            [fluid]="true"
+          ></p-inputnumber>
         </div>
         <div class="form-group flex-1">
-          <p-floatlabel variant="in" class="w-full">
-            <p-inputnumber
-              inputId="facility-guest-price"
-              size="large"
-              formControlName="customGuestPrice"
-              [min]="0"
-              mode="currency"
-              currency="EUR"
-              locale="es-ES"
-              [fluid]="true"
-            ></p-inputnumber>
-            <label for="facility-guest-price">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
-          </p-floatlabel>
+          <label for="facility-guest-price" class="form-label">{{ 'ADMIN.PRICING.GUEST_PRICE' | translate }}</label>
+          <p-inputnumber
+            inputId="facility-guest-price"
+            size="large"
+            formControlName="customGuestPrice"
+            [min]="0"
+            mode="currency"
+            currency="EUR"
+            locale="es-ES"
+            [fluid]="true"
+          ></p-inputnumber>
         </div>
       </div>
     } @else {

@@ -7,7 +7,6 @@ import { AuthService, NotificationService } from '@core';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DividerModule } from 'primeng/divider';
-import { FloatLabel } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { TagModule } from 'primeng/tag';
@@ -31,7 +30,6 @@ export interface QuickLoginUser {
     ReactiveFormsModule,
     RouterLink,
     TranslatePipe,
-    FloatLabel,
     InputTextModule,
     PasswordModule,
     CheckboxModule,
