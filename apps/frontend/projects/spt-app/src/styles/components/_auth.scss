@@ -233,28 +233,38 @@
   margin-bottom: var(--spacing-xs);
 }
 
-.remember-checkbox-wrap {
-  display: flex;
+.remember-checkbox-wrap,
+.form-group-checkbox {
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   cursor: pointer;
 
-  .remember-label {
+  .remember-label,
+  .checkbox-label {
     font-size: var(--font-size-sm);
-    color: #334155;
+    color: var(--text-color);
     font-weight: var(--font-weight-medium);
     cursor: pointer;
     user-select: none;
+    line-height: 1.25rem;
   }
 
   /* PrimeNG Checkbox custom styling */
-  .p-checkbox .p-checkbox-box {
-    border-radius: var(--radius-xs);
-    border-color: var(--border-input);
+  .p-checkbox {
+    width: 1.25rem;
+    height: 1.25rem;
 
-    &.p-highlight {
-      background: var(--admin-primary) !important;
-      border-color: var(--admin-primary) !important;
+    .p-checkbox-box {
+      width: 1.25rem;
+      height: 1.25rem;
+      border-radius: var(--radius-xs);
+      border-color: var(--border-input);
+
+      &.p-highlight {
+        background: var(--primary-color) !important;
+        border-color: var(--primary-color) !important;
+      }
     }
   }
 }

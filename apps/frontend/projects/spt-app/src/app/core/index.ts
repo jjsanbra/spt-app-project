@@ -19,6 +19,7 @@ export {
 
 // Servicios de infraestructura y UI
 export * from './services/auth.service';
+export * from './services/loading.service';
 export * from './services/notification.service';
 export * from './services/confirm-dialog.service';
 export * from './services/realtime-notifications.service';
@@ -29,6 +30,7 @@ export * from './components/page-header/page-header.component';
 
 // Interceptores y Guards
 export * from './interceptors/auth.interceptor';
+export * from './interceptors/loading.interceptor';
 export * from './guards/auth.guard';
 
 // Mocks y generadores de datos ficticios generados por Orval

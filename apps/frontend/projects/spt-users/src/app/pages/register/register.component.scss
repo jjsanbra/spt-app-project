@@ -23,7 +23,7 @@
 .auth-card-wrapper {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl, 16px);
   padding: var(--spacing-2xl);
   box-shadow: var(--shadow-card);
   transition: var(--theme-transition);
@@ -35,7 +35,7 @@
 
 .auth-header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: var(--spacing-2xl);
 }
 
 .auth-title {
@@ -57,37 +57,40 @@
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-xl);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
 
   @include mobile {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xs);
+  gap: var(--spacing-sm);
 }
 
 .form-label {
-  font-size: var(--font-size-xs);
+  font-size: 11px;
   font-weight: var(--font-weight-semibold);
-  color: var(--text-color);
+  color: var(--text-muted);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  line-height: 1;
+  margin: 0;
 }
 
 .form-error {
   font-size: var(--font-size-2xs);
   color: var(--status-cancelled);
-  margin-top: var(--spacing-2xs);
+  margin-top: 2px;
 }
 
 .form-actions {
@@ -98,7 +101,7 @@
   margin-top: var(--spacing-xl);
   text-align: center;
   border-top: 1px solid var(--border-subtle);
-  padding-top: var(--spacing-md);
+  padding-top: var(--spacing-lg);
 }
 
 .footer-text {
@@ -115,20 +118,5 @@
   &:hover {
     text-decoration: underline;
     opacity: 0.85;
-  }
-}
-
-:host ::ng-deep {
-  .p-password {
-    width: 100%;
-    display: block;
-  }
-
-  .p-password-input {
-    width: 100%;
-  }
-
-  .p-button {
-    width: 100%;
   }
 }

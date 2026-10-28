@@ -63,7 +63,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xs);
+  gap: 6px;
 }
 
 .form-label {
@@ -72,6 +72,7 @@
   color: var(--text-color);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  line-height: 1.2;
 }
 
 .form-error {
@@ -81,10 +82,11 @@
 }
 
 .form-group-checkbox {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-sm);
   margin-top: calc(-1 * var(--spacing-xs));
+  cursor: pointer;
 }
 
 .checkbox-label {
@@ -92,6 +94,7 @@
   color: var(--text-color);
   cursor: pointer;
   user-select: none;
+  line-height: 1.25rem;
 }
 
 .form-actions {
@@ -211,5 +214,15 @@
 
   .p-button {
     width: 100%;
+  }
+
+  .p-checkbox {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+
+    .p-checkbox-box {
+      width: 1.25rem !important;
+      height: 1.25rem !important;
+    }
   }
 }

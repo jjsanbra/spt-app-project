@@ -132,6 +132,18 @@
   --p-dialog-footer-padding: var(--spacing-md) var(--spacing-lg);
   --p-popover-border-radius: var(--radius-lg);
   --p-popover-content-padding: 0;
+
+  /* PrimeNG Checkbox Geometrics */
+  --p-checkbox-width: 1.25rem;
+  --p-checkbox-height: 1.25rem;
+  --p-checkbox-border-radius: var(--radius-xs, 4px);
+  --p-checkbox-icon-size: 0.875rem;
+  --p-checkbox-shadow: none;
+  --p-checkbox-transition-duration: 0.2s;
+  --p-checkbox-sm-width: 1rem;
+  --p-checkbox-sm-height: 1rem;
+  --p-checkbox-lg-width: 1.5rem;
+  --p-checkbox-lg-height: 1.5rem;
 }
 
 /* ==========================================================================
@@ -338,6 +350,17 @@
   --p-card-shadow: var(--shadow-card);
   --p-divider-border-color: var(--border-subtle);
   --p-content-border-color: var(--border-subtle);
+
+  /* PrimeNG Checkbox Tokens */
+  --p-checkbox-background: var(--surface-pure);
+  --p-checkbox-border-color: var(--border-input);
+  --p-checkbox-hover-border-color: var(--primary-color);
+  --p-checkbox-focus-border-color: var(--primary-color);
+  --p-checkbox-checked-background: var(--primary-color);
+  --p-checkbox-checked-border-color: var(--primary-color);
+  --p-checkbox-checked-hover-background: var(--primary-hover);
+  --p-checkbox-checked-hover-border-color: var(--primary-hover);
+  --p-checkbox-checked-color: #FFFFFF;
 
   /* PrimeNG Dialog & Popover Tokens */
   --p-dialog-background: var(--surface-pure);
@@ -573,6 +596,17 @@
   --p-card-shadow: var(--shadow-card);
   --p-divider-border-color: var(--border-subtle);
   --p-content-border-color: var(--border-subtle);
+
+  /* PrimeNG Checkbox Tokens */
+  --p-checkbox-background: var(--surface-pure);
+  --p-checkbox-border-color: var(--border-input);
+  --p-checkbox-hover-border-color: var(--primary-color);
+  --p-checkbox-focus-border-color: var(--primary-color);
+  --p-checkbox-checked-background: var(--primary-color);
+  --p-checkbox-checked-border-color: var(--primary-color);
+  --p-checkbox-checked-hover-background: var(--primary-hover);
+  --p-checkbox-checked-hover-border-color: var(--primary-hover);
+  --p-checkbox-checked-color: #FFFFFF;
 
   /* PrimeNG Dialog & Popover Tokens */
   --p-dialog-background: var(--surface-pure);
