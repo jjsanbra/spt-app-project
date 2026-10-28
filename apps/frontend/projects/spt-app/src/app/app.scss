@@ -321,12 +321,33 @@
   gap: var(--spacing-md);
 }
 
-.mobile-menu-trigger {
-  display: none;
+.sidebar-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  border-radius: var(--radius-full);
   color: var(--text-color) !important;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition-fast);
 
-  @include mobile-or-tablet {
-    display: inline-flex;
+  i {
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    transition: color var(--transition-fast);
+  }
+
+  &:hover {
+    background-color: var(--surface-hover) !important;
+    color: var(--primary-color) !important;
+
+    i {
+      color: var(--primary-color);
+    }
   }
 }
 
@@ -377,13 +398,40 @@
       }
     }
 
-    .change-club-topbar-btn {
+    .change-club-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
       font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      padding: 0.25rem var(--spacing-sm);
+      border-radius: var(--radius-md);
+      transition: var(--transition-fast);
 
-      .btn-label-desktop {
+      i {
+        font-size: var(--font-size-xs);
+        transition: transform 0.25s ease;
+      }
+
+      &:hover {
+        i {
+          transform: rotate(90deg);
+        }
+      }
+
+      .change-club-btn-text {
         @include mobile {
           display: none;
         }
+      }
+
+      @include mobile {
+        padding: 0;
+        width: 2rem;
+        height: 2rem;
+        min-width: 2rem;
+        border-radius: var(--radius-full);
+        justify-content: center;
       }
     }
   }

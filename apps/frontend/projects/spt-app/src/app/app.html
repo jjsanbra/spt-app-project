@@ -41,11 +41,13 @@
                   [text]="true"
                   [rounded]="true"
                   size="small"
-                  icon="pi pi-times"
                   class="mobile-close-btn"
                   (click)="closeSidebar()"
                   [attr.aria-label]="'NAV.SIDEBAR_CLOSE' | translate"
-                ></button>
+                  iconOnly
+                >
+                  <i class="pi pi-times"></i>
+                </button>
               }
             </div>
           </p-sidebar-header>
@@ -290,11 +292,14 @@
               type="button"
               pButton
               [text]="true"
-              icon="pi pi-bars"
-              class="mobile-menu-trigger"
+              [rounded]="true"
+              class="sidebar-toggle-btn"
               (click)="toggleSidebar()"
-              [attr.aria-label]="'NAV.SIDEBAR_OPEN' | translate"
-            ></button>
+              [attr.aria-label]="(sidebarOpen() ? 'NAV.SIDEBAR_CLOSE' : 'NAV.SIDEBAR_OPEN') | translate"
+              iconOnly
+            >
+              <i class="pi pi-bars"></i>
+            </button>
 
             <div class="topbar-context">
               @if (authService.activeClub(); as club) {
@@ -313,13 +318,14 @@
                       [outlined]="true"
                       size="small"
                       severity="secondary"
-                      class="change-club-topbar-btn"
-                      icon="pi pi-sync"
+                      class="change-club-btn"
                       (click)="openChangeClubDialog()"
                       [pTooltip]="'USERS.CHANGE_CLUB' | translate"
                       tooltipPosition="bottom"
+                      [attr.aria-label]="'USERS.CHANGE_CLUB' | translate"
                     >
-                      <span class="btn-label-desktop">{{ 'USERS.CHANGE_CLUB' | translate }}</span>
+                      <i class="pi pi-sync"></i>
+                      <span class="change-club-btn-text">{{ 'USERS.CHANGE_CLUB' | translate }}</span>
                     </button>
                   }
                 </div>
