@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 import {
@@ -70,6 +71,7 @@ describe('ProfileComponent', () => {
       imports: [ProfileComponent],
       providers: [
         provideHttpClient(),
+        provideRouter([]),
         provideTranslateService({ lang: 'es' }),
         { provide: NotificationService, useValue: notifySpy },
         { provide: AuthService, useValue: authServiceMock },
@@ -88,22 +90,6 @@ describe('ProfileComponent', () => {
     expect(component.profileForm.get('email')?.disabled).toBeTruthy();
     expect(component.profileForm.get('firstName')?.value).toBe('Paula');
     expect(component.profileForm.get('lastName')?.value).toBe('Badosa');
-  });
-
-  it('debe permitir cambiar de club activo', () => {
-    const nuevoClub: ClubMembershipSummaryDto = {
-      clubId: 'club-barcelona',
-      clubName: 'Club Padel Barcelona',
-      clubSlug: 'padel-barcelona',
-      role: 'ADMIN',
-      walletBalance: 200.0,
-    };
-
-    component.onSelectActiveClub(nuevoClub);
-
-    expect(authServiceMock.setActiveClub).toHaveBeenCalledWith(nuevoClub);
-    expect(authServiceMock.activeClub()).toEqual(nuevoClub);
-    expect(notifySpy.info).toHaveBeenCalledWith(nuevoClub.clubName, 'USERS.ACTIVE_CLUB');
   });
 
   it('debe actualizar el perfil con éxito usando el mock de Orval', () => {

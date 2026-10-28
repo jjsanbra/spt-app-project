@@ -4,15 +4,19 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import {
   AuthService,
-  ClubMembershipSummaryDto,
   NotificationService,
+  PageHeaderComponent,
   UsersService,
   UserSummaryDto,
 } from '@core';
+import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
+import { DividerModule } from 'primeng/divider';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { TagModule } from 'primeng/tag';
-import { DividerModule } from 'primeng/divider';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +25,12 @@ import { DividerModule } from 'primeng/divider';
     CommonModule,
     ReactiveFormsModule,
     TranslatePipe,
+    PageHeaderComponent,
+    AvatarModule,
+    CardModule,
     InputTextModule,
+    IconFieldModule,
+    InputIconModule,
     ButtonModule,
     TagModule,
     DividerModule,
@@ -62,11 +71,6 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  onSelectActiveClub(club: ClubMembershipSummaryDto): void {
-    this.authService.setActiveClub(club);
-    this.notify.info(club.clubName, 'USERS.ACTIVE_CLUB');
-  }
-
   onSubmit(): void {
     if (this.profileForm.invalid) {
       this.profileForm.markAllAsTouched();
@@ -96,20 +100,5 @@ export class ProfileComponent implements OnInit {
           this.cdr.markForCheck();
         },
       });
-  }
-
-  getRoleSeverity(role: string): 'success' | 'info' | 'warn' | 'danger' | 'secondary' {
-    switch (role) {
-      case 'OWNER':
-        return 'danger';
-      case 'ADMIN':
-        return 'warn';
-      case 'STAFF':
-        return 'info';
-      case 'MEMBER':
-        return 'success';
-      default:
-        return 'secondary';
-    }
   }
 }

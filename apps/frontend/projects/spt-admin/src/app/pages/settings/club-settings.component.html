@@ -4,289 +4,271 @@
     icon="pi pi-cog"
     [title]="'ADMIN.SETTINGS.TITLE' | translate"
     [subtitle]="'ADMIN.SETTINGS.SUBTITLE' | translate"
-  >
-    <div actions>
-      <button
-        type="button"
-        pButton
-        size="large"
-        icon="pi pi-check"
-        (click)="submitSettings()"
-        [loading]="saving"
-      >
-        {{ 'ADMIN.SETTINGS.SAVE_BTN' | translate }}
-      </button>
-    </div>
-  </spt-page-header>
+  ></spt-page-header>
 
-  <form [formGroup]="settingsForm" (ngSubmit)="submitSettings()" class="settings-form-layout">
-    <!-- Card 1: Información y Contacto -->
-    <div class="settings-card">
-      <div class="card-header">
-        <div class="card-icon">
-          <i class="pi pi-building"></i>
-        </div>
-        <div>
-          <h2 class="card-title">{{ 'ADMIN.SETTINGS.CARD_GENERAL_TITLE' | translate }}</h2>
-          <p class="card-desc">{{ 'ADMIN.SETTINGS.CARD_GENERAL_DESC' | translate }}</p>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="form-row">
-          <div class="form-group flex-2">
-            <label for="clubName">{{ 'ADMIN.SETTINGS.FIELD_NAME' | translate }} *</label>
-            <input
-              id="clubName"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="name"
-              [placeholder]="'ADMIN.SETTINGS.FIELD_NAME_PLACEHOLDER' | translate"
-              class="w-full"
-            />
-          </div>
-
-          <div class="form-group flex-1">
-            <label for="clubEmail">{{ 'ADMIN.SETTINGS.FIELD_EMAIL' | translate }} *</label>
-            <input
-              id="clubEmail"
-              type="email"
-              pInputText
-              pSize="large"
-              formControlName="email"
-              class="w-full"
-            />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="clubDesc">{{ 'ADMIN.SETTINGS.FIELD_DESCRIPTION' | translate }}</label>
-          <textarea
-            id="clubDesc"
-            pTextarea
-            formControlName="description"
-            [placeholder]="'ADMIN.SETTINGS.FIELD_DESCRIPTION_PLACEHOLDER' | translate"
-            rows="3"
-            class="w-full"
-          ></textarea>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-2">
-            <label for="clubAddress">{{ 'ADMIN.SETTINGS.FIELD_ADDRESS' | translate }}</label>
-            <input
-              id="clubAddress"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="address"
-              [placeholder]="'ADMIN.SETTINGS.FIELD_ADDRESS_PLACEHOLDER' | translate"
-              class="w-full"
-            />
-          </div>
-
-          <div class="form-group flex-1">
-            <label for="clubPhone">{{ 'ADMIN.SETTINGS.FIELD_PHONE' | translate }}</label>
-            <input
-              id="clubPhone"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="phone"
-              [placeholder]="'ADMIN.SETTINGS.FIELD_PHONE_PLACEHOLDER' | translate"
-              class="w-full"
-            />
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="clubCity">{{ 'ADMIN.SETTINGS.FIELD_CITY' | translate }}</label>
-            <input
-              id="clubCity"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="city"
-              class="w-full"
-            />
-          </div>
-
-          <div class="form-group flex-1">
-            <label for="clubPostalCode">{{ 'ADMIN.SETTINGS.FIELD_POSTAL_CODE' | translate }}</label>
-            <input
-              id="clubPostalCode"
-              type="text"
-              pInputText
-              pSize="large"
-              formControlName="postalCode"
-              class="w-full"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 2: Horarios y Operativa de Pistas -->
-    <div class="settings-card">
-      <div class="card-header">
-        <div class="card-icon">
-          <i class="pi pi-clock"></i>
-        </div>
-        <div>
-          <h2 class="card-title">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_TITLE' | translate }}</h2>
-          <p class="card-desc">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_DESC' | translate }}</p>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
-            <p-select
-              inputId="openingHour"
-              size="large"
-              [options]="hourOptions"
-              formControlName="openingHour"
-              optionLabel="label"
-              optionValue="value"
-              [fluid]="true"
-              [appendTo]="'body'"
-              [focusOnHover]="false"
-              [autoOptionFocus]="false"
-              scrollHeight="320px"
-            ></p-select>
-          </div>
-
-          <div class="form-group flex-1">
-            <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
-            <p-select
-              inputId="closingHour"
-              size="large"
-              [options]="hourOptions"
-              formControlName="closingHour"
-              optionLabel="label"
-              optionValue="value"
-              [fluid]="true"
-              [appendTo]="'body'"
-              [focusOnHover]="false"
-              [autoOptionFocus]="false"
-              scrollHeight="320px"
-            ></p-select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
-            <p-select
-              inputId="slotDuration"
-              size="large"
-              [options]="slotDurationOptions"
-              formControlName="slotDurationMinutes"
-              optionLabel="label"
-              optionValue="value"
-              [fluid]="true"
-              [appendTo]="'body'"
-              [focusOnHover]="false"
-              [autoOptionFocus]="false"
-              scrollHeight="320px"
-            ></p-select>
-          </div>
-
-          <div class="form-group flex-1">
-            <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }}) *</label>
-            <p-inputnumber
-              inputId="minNotice"
-              size="large"
-              formControlName="openGameMinNoticeHours"
-              [min]="1"
-              [max]="72"
-              [fluid]="true"
-            ></p-inputnumber>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Card 3: Modalidad de Pago -->
-    <div class="settings-card">
-      <div class="card-header">
-        <div class="card-icon">
-          <i class="pi pi-credit-card"></i>
-        </div>
-        <div>
-          <h2 class="card-title">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_TITLE' | translate }}</h2>
-          <p class="card-desc">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_DESC' | translate }}</p>
-        </div>
-      </div>
-
-      <div class="card-body">
-        <div class="form-group">
-          <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
-          <p-select
-            inputId="paymentMode"
-            size="large"
-            [options]="paymentModeOptions"
-            formControlName="paymentMode"
-            optionLabel="label"
-            optionValue="value"
-            [fluid]="true"
-            [appendTo]="'body'"
-            [focusOnHover]="false"
-            [autoOptionFocus]="false"
-            scrollHeight="320px"
-          ></p-select>
-        </div>
-
-        <!-- Descripciones de los modos -->
-        <div class="payment-mode-hint">
-          @switch (settingsForm.get('paymentMode')?.value) {
-            @case ('PRESENTIAL') {
-              <div class="mode-info-box">
-                <i class="pi pi-wallet text-primary"></i>
-                <div>
-                  <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_PRESENTIAL' | translate }}</strong>
-                  <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_PRESENTIAL_DESC' | translate }}</p>
-                </div>
+  <!-- Tabla de Clubes Administrados -->
+  <div class="table-card">
+    <p-table
+      [value]="managedClubs"
+      [loading]="loading"
+      [stripedRows]="true"
+      [paginator]="true"
+      [rows]="10"
+      [rowsPerPageOptions]="[5, 10, 20, 50]"
+      [showCurrentPageReport]="true"
+      [currentPageReportTemplate]="'COMMON.PAGE_REPORT' | translate"
+    >
+      <ng-template #header pTemplate="header">
+        <tr>
+          <th>{{ 'ADMIN.SETTINGS.TABLE_CLUB' | translate }}</th>
+          <th>{{ 'ADMIN.SETTINGS.TABLE_LOCATION' | translate }}</th>
+          <th>{{ 'ADMIN.SETTINGS.TABLE_ROLE' | translate }}</th>
+          <th>{{ 'ADMIN.SETTINGS.TABLE_STATUS' | translate }}</th>
+          <th class="actions-column text-right">{{ 'COMMON.ACTIONS' | translate }}</th>
+        </tr>
+      </ng-template>
+      
+      <ng-template #body let-club pTemplate="body">
+        <tr>
+          <td>
+            <div class="club-cell">
+              <div class="club-avatar">
+                <i class="pi pi-building"></i>
               </div>
+              <div class="club-meta">
+                <span class="club-name">{{ club.name }}</span>
+                <span class="club-slug">@{{ club.slug }}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="location-text">
+              <i class="pi pi-map-marker"></i>
+              {{ club.city || ('ADMIN.SETTINGS.NO_CITY' | translate) }}
+            </span>
+          </td>
+          <td>
+            <p-tag [value]="club.role" [severity]="getRoleSeverity(club.role)"></p-tag>
+          </td>
+          <td>
+            @if (club.clubId === authService.activeClub()?.clubId) {
+            <p-tag [value]="'USERS.ACTIVE_CLUB' | translate" severity="success" icon="pi pi-check"></p-tag>
+            } @else {
+            <span class="text-muted">—</span>
+            }
+          </td>
+          <td class="actions-column text-right">
+            <button
+              type="button"
+              pButton
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              class="configure-action-btn"
+              (click)="openConfigureModal(club)"
+              [pTooltip]="'ADMIN.SETTINGS.CONFIGURE_BTN' | translate"
+              tooltipPosition="top"
+              iconOnly
+            >
+              <i class="pi pi-cog"></i>
+            </button>
+          </td>
+        </tr>
+      </ng-template>
+      
+      <ng-template #emptymessage pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" class="empty-message-cell text-center">
+            {{ 'ADMIN.SETTINGS.NO_CLUBS' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Diálogo Modal de Configuración del Club -->
+  <p-dialog [(visible)]="displayModal" [modal]="true" [dismissableMask]="true"
+    [style]="{ width: '92vw', maxWidth: '780px' }" [header]="modalHeader" (onHide)="onCloseModal()"
+    class="club-settings-dialog">
+    @if (loadingModal) {
+    <div class="modal-loading-state">
+      <i class="pi pi-spin pi-spinner text-primary"></i>
+      <p>{{ 'COMMON.LOADING' | translate }}</p>
+    </div>
+    } @else {
+    <form [formGroup]="settingsForm" (ngSubmit)="submitSettings()" class="settings-modal-form">
+      <!-- Card 1: Información y Contacto -->
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">
+              <i class="pi pi-building"></i>
+            </div>
+            <div>
+              <h3 class="section-title">{{ 'ADMIN.SETTINGS.CARD_GENERAL_TITLE' | translate }}</h3>
+              <p class="section-desc">{{ 'ADMIN.SETTINGS.CARD_GENERAL_DESC' | translate }}</p>
+              </div>
+              </div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="clubName">{{ 'ADMIN.SETTINGS.FIELD_NAME' | translate }} *</label>
+              <input id="clubName" type="text" pInputText pSize="large" formControlName="name"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_NAME_PLACEHOLDER' | translate" class="w-full" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="clubEmail">{{ 'ADMIN.SETTINGS.FIELD_EMAIL' | translate }} *</label>
+              <input id="clubEmail" type="email" pInputText pSize="large" formControlName="email" class="w-full" />
+            </div>
+            </div>
+
+          <div class="form-group">
+            <label for="clubDesc">{{ 'ADMIN.SETTINGS.FIELD_DESCRIPTION' | translate }}</label>
+            <textarea id="clubDesc" pTextarea formControlName="description"
+              [placeholder]="'ADMIN.SETTINGS.FIELD_DESCRIPTION_PLACEHOLDER' | translate"
+              rows="2"
+              class="w-full"
+            ></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="clubAddress">{{ 'ADMIN.SETTINGS.FIELD_ADDRESS' | translate }}</label>
+              <input id="clubAddress" type="text" pInputText pSize="large" formControlName="address"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_ADDRESS_PLACEHOLDER' | translate" class="w-full" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="clubPhone">{{ 'ADMIN.SETTINGS.FIELD_PHONE' | translate }}</label>
+              <input id="clubPhone" type="text" pInputText pSize="large" formControlName="phone"
+                [placeholder]="'ADMIN.SETTINGS.FIELD_PHONE_PLACEHOLDER' | translate" class="w-full" />
+            </div>
+            </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="clubCity">{{ 'ADMIN.SETTINGS.FIELD_CITY' | translate }}</label>
+              <input id="clubCity" type="text" pInputText pSize="large" formControlName="city" class="w-full" />
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="clubPostalCode">{{ 'ADMIN.SETTINGS.FIELD_POSTAL_CODE' | translate }}</label>
+              <input id="clubPostalCode" type="text" pInputText pSize="large" formControlName="postalCode" class="w-full" />
+            </div>
+            </div>
+            </div>
+
+        <!-- Card 2: Horarios y Operativa de Pistas -->
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">
+              <i class="pi pi-clock"></i>
+            </div>
+            <div>
+              <h3 class="section-title">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_TITLE' | translate }}</h3>
+              <p class="section-desc">{{ 'ADMIN.SETTINGS.CARD_SCHEDULE_DESC' | translate }}</p>
+              </div>
+              </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="openingHour">{{ 'ADMIN.SETTINGS.FIELD_OPENING_HOUR' | translate }} *</label>
+              <p-select inputId="openingHour" size="large" [options]="hourOptions" formControlName="openingHour"
+                optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+                [autoOptionFocus]="false" scrollHeight="320px"></p-select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="closingHour">{{ 'ADMIN.SETTINGS.FIELD_CLOSING_HOUR' | translate }} *</label>
+              <p-select inputId="closingHour" size="large" [options]="hourOptions" formControlName="closingHour" optionLabel="label"
+                optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false" [autoOptionFocus]="false"
+                scrollHeight="320px"></p-select>
+            </div>
+            </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="slotDuration">{{ 'ADMIN.SETTINGS.FIELD_SLOT_DURATION' | translate }} *</label>
+              <p-select inputId="slotDuration" size="large" [options]="slotDurationOptions" formControlName="slotDurationMinutes"
+                optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+                [autoOptionFocus]="false" scrollHeight="320px"></p-select>
+            </div>
+
+            <div class="form-group flex-1">
+              <label for="minNotice">{{ 'ADMIN.SETTINGS.FIELD_MIN_NOTICE' | translate }} ({{ 'ADMIN.SETTINGS.HOURS' | translate }})
+                *</label>
+              <p-inputnumber inputId="minNotice" size="large" formControlName="openGameMinNoticeHours" [min]="1" [max]="72"
+                [fluid]="true"></p-inputnumber>
+            </div>
+            </div>
+            </div>
+
+        <!-- Card 3: Modalidad de Pago -->
+        <div class="settings-section">
+          <div class="section-header">
+            <div class="section-icon">
+              <i class="pi pi-credit-card"></i>
+            </div>
+            <div>
+              <h3 class="section-title">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_TITLE' | translate }}</h3>
+              <p class="section-desc">{{ 'ADMIN.SETTINGS.CARD_PAYMENT_DESC' | translate }}</p>
+              </div>
+              </div>
+
+          <div class="form-group">
+            <label for="paymentMode">{{ 'ADMIN.SETTINGS.FIELD_PAYMENT_MODE' | translate }} *</label>
+            <p-select inputId="paymentMode" size="large" [options]="paymentModeOptions" formControlName="paymentMode"
+              optionLabel="label" optionValue="value" [fluid]="true" [appendTo]="'body'" [focusOnHover]="false"
+              [autoOptionFocus]="false" scrollHeight="320px"></p-select>
+          </div>
+
+          <!-- Descripciones de los modos -->
+          <div class="payment-mode-hint">
+            @switch (settingsForm.get('paymentMode')?.value) {
+            @case ('PRESENTIAL') {
+            <div class="mode-info-box">
+              <i class="pi pi-wallet text-primary"></i>
+              <div>
+                <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_PRESENTIAL' | translate }}</strong>
+                <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_PRESENTIAL_DESC' | translate }}</p>
+              </div>
+            </div>
             }
             @case ('ONLINE') {
-              <div class="mode-info-box">
-                <i class="pi pi-credit-card text-primary"></i>
-                <div>
-                  <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_ONLINE' | translate }}</strong>
-                  <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_ONLINE_DESC' | translate }}</p>
-                </div>
+            <div class="mode-info-box">
+              <i class="pi pi-credit-card text-primary"></i>
+              <div>
+                <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_ONLINE' | translate }}</strong>
+                <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_ONLINE_DESC' | translate }}</p>
               </div>
+            </div>
             }
             @case ('HYBRID') {
-              <div class="mode-info-box">
-                <i class="pi pi-sync text-primary"></i>
-                <div>
-                  <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_HYBRID' | translate }}</strong>
-                  <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_HYBRID_DESC' | translate }}</p>
-                </div>
+            <div class="mode-info-box">
+              <i class="pi pi-sync text-primary"></i>
+              <div>
+                <strong>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_HYBRID' | translate }}</strong>
+                <p>{{ 'ADMIN.SETTINGS.PAYMENT_MODE_HYBRID_DESC' | translate }}</p>
               </div>
+            </div>
             }
-          }
-        </div>
-      </div>
-    </div>
+            }
+          </div>
+          </div>
 
-    <!-- Barra inferior fija para guardar -->
-    <div class="form-actions-bottom">
-      <button
-        type="submit"
-        pButton
-        size="large"
-        icon="pi pi-check"
-        [loading]="saving"
-        class="save-button-lg"
-      >
-        {{ 'ADMIN.SETTINGS.SAVE_BTN' | translate }}
-      </button>
-    </div>
-  </form>
+        <!-- Modal Actions Footer -->
+        <div class="dialog-actions-footer">
+          <button type="button" pButton [text]="true" severity="secondary" size="large" (click)="onCloseModal()"
+            [disabled]="saving">
+            {{ 'COMMON.CANCEL' | translate }}
+          </button>
+          <button type="submit" pButton size="large" icon="pi pi-check" [loading]="saving"
+            [disabled]="saving || settingsForm.invalid"
+          >
+            {{ 'ADMIN.SETTINGS.SAVE_BTN' | translate }}
+          </button>
+        </div>
+      </form>
+    }
+    </p-dialog>
 </div>

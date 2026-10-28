@@ -1,59 +1,105 @@
-<div class="profile-page">
-  <div class="profile-container">
-    <!-- Header del Perfil -->
-    <div class="profile-header">
-      <div class="user-avatar-badge">
-        <i class="pi pi-user avatar-icon"></i>
-      </div>
-      <div class="user-meta">
-        <h1 class="user-fullname">
-          {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
-        </h1>
-        <p class="user-email">{{ authService.currentUser()?.email }}</p>
-        @if (authService.isSuperAdmin()) {
-          <p-tag
-            [value]="'USERS.SUPERADMIN_BADGE' | translate"
-            severity="danger"
-            class="superadmin-tag"
-          ></p-tag>
-        }
-      </div>
-    </div>
+<div class="profile-page-container">
+  <!-- Cabecera de Página unificada -->
+  <spt-page-header [title]="'USERS.PROFILE_TITLE' | translate"
+    [subtitle]="'USERS.PROFILE_SUBTITLE' | translate"></spt-page-header>
 
-    <div class="profile-grid">
-      <!-- Tarjeta de Datos Personales -->
-      <div class="profile-card">
-        <h2 class="card-title">{{ 'USERS.PERSONAL_DATA' | translate }}</h2>
+  <div class="profile-layout-grid">
+    <!-- Columna Izquierda: Ficha de Identidad con p-card -->
+    <p-card class="identity-card">
+      <div class="identity-card-content">
+        <div class="identity-avatar-wrapper">
+          <p-avatar icon="pi pi-user" shape="circle" size="xlarge" class="user-avatar-badge"></p-avatar>
+        </div>
+<div class="identity-user-meta">
+  <h2 class="user-fullname">
+    {{ authService.currentUser()?.firstName }} {{ authService.currentUser()?.lastName }}
+          </h2>
+          @if (authService.isSuperAdmin()) {
+          <p-tag [value]="'USERS.SUPERADMIN_BADGE' | translate" severity="danger" class="role-tag"></p-tag>
+          } @else {
+            <p-tag
+              [value]="authService.activeClub()?.role || ('USERS.MEMBER_DEFAULT_ROLE' | translate)"
+              severity="info"
+              class="role-tag"
+            ></p-tag>
+          }
+          <p class="user-email-text">
+            <i class="pi pi-envelope"></i>
+            {{ authService.currentUser()?.email }}
+          </p>
+          </div>
+
         <p-divider></p-divider>
 
+        <!-- Quick Info Rows -->
+        <div class="identity-quick-info">
+          <div class="info-row">
+            <span class="info-label">
+              <i class="pi pi-shield"></i>
+              {{ 'USERS.LEVEL_LABEL' | translate }}
+            </span>
+            <p-tag
+              [value]="authService.isSuperAdmin() ? ('USERS.FULL_ACCESS' | translate) : ('USERS.STANDARD_ACCESS' | translate)"
+              severity="success" class="info-tag"></p-tag>
+          </div>
+        
+          <div class="info-row">
+            <span class="info-label">
+              <i class="pi pi-check-circle"></i>
+              {{ 'USERS.ACCOUNT_STATUS' | translate }}
+            </span>
+            <p-tag [value]="'COMMON.ACTIVE' | translate" severity="success" class="info-tag"></p-tag>
+          </div>
+        
+          <div class="info-row">
+            <span class="info-label">
+              <i class="pi pi-phone"></i>
+              {{ 'USERS.PHONE' | translate }}
+            </span>
+            <span class="info-value">
+              {{ profileForm.get('phone')?.value || '—' }}
+            </span>
+          </div>
+        </div>
+        </div>
+        </p-card>
+        
+        <!-- Columna Derecha: Formulario de Datos Personales con p-card -->
+        <p-card class="form-card">
+          <div class="form-card-content">
+            <div class="card-section-header">
+              <div class="section-icon">
+                <i class="pi pi-id-card"></i>
+              </div>
+              <div>
+                <h3 class="section-title">{{ 'USERS.PERSONAL_DATA' | translate }}</h3>
+                <p class="section-subtitle">{{ 'USERS.PERSONAL_DATA_DESC' | translate }}</p>
+              </div>
+            </div>
+
         <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="profile-form">
-          <!-- Email (Solo lectura) -->
+          <!-- Email (Solo lectura / Protegido) -->
           <div class="form-group">
-            <label for="profile-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
-            <input
-              id="profile-email"
-              type="email"
-              pInputText
-              pSize="large"
-              class="w-full"
-              formControlName="email"
-            />
+            <div class="label-row">
+              <label for="profile-email" class="form-label">{{ 'AUTH.EMAIL' | translate }}</label>
+              <p-tag [value]="'USERS.READONLY_FIELD' | translate" severity="secondary" icon="pi pi-lock" class="readonly-tag"></p-tag>
+              </div>
+              <p-iconfield class="field-iconfield">
+                <p-inputicon class="pi pi-envelope field-icon" />
+                <input id="profile-email" type="email" pInputText class="profile-input readonly-input" formControlName="email" />
+            </p-iconfield>
           </div>
 
           <div class="form-row">
             <!-- Nombre -->
             <div class="form-group">
-              <label for="profile-first-name" class="form-label">{{ 'USERS.FIRST_NAME' | translate }}</label>
-              <input
-                id="profile-first-name"
-                type="text"
-                pInputText
-                pSize="large"
-                class="w-full"
-                formControlName="firstName"
-                [invalid]="(profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) ?? false"
-                [placeholder]="'USERS.FIRST_NAME' | translate"
-              />
+              <label for="profile-first-name" class="form-label">{{ 'USERS.FIRST_NAME' | translate }} *</label>
+              <p-iconfield class="field-iconfield">
+                <p-inputicon class="pi pi-user field-icon" />
+                <input id="profile-first-name" type="text" pInputText class="profile-input" formControlName="firstName"
+                  [invalid]="(profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) ?? false"
+                  [placeholder]="'USERS.FIRST_NAME' | translate" />
+              </p-iconfield>
               @if (profileForm.get('firstName')?.touched && profileForm.get('firstName')?.errors) {
                 <small class="form-error">
                   {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -63,17 +109,13 @@
 
             <!-- Apellidos -->
             <div class="form-group">
-              <label for="profile-last-name" class="form-label">{{ 'USERS.LAST_NAME' | translate }}</label>
-              <input
-                id="profile-last-name"
-                type="text"
-                pInputText
-                pSize="large"
-                class="w-full"
-                formControlName="lastName"
-                [invalid]="(profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) ?? false"
-                [placeholder]="'USERS.LAST_NAME' | translate"
-              />
+              <label for="profile-last-name" class="form-label">{{ 'USERS.LAST_NAME' | translate }} *</label>
+              <p-iconfield class="field-iconfield">
+                <p-inputicon class="pi pi-user field-icon" />
+                <input id="profile-last-name" type="text" pInputText class="profile-input" formControlName="lastName"
+                  [invalid]="(profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) ?? false"
+                  [placeholder]="'USERS.LAST_NAME' | translate" />
+              </p-iconfield>
               @if (profileForm.get('lastName')?.touched && profileForm.get('lastName')?.errors) {
                 <small class="form-error">
                   {{ 'AUTH.ERRORS.REQUIRED' | translate }}
@@ -85,98 +127,29 @@
           <!-- Teléfono -->
           <div class="form-group">
             <label for="profile-phone" class="form-label">{{ 'USERS.PHONE' | translate }}</label>
-            <input
-              id="profile-phone"
-              type="tel"
-              pInputText
-              pSize="large"
-              class="w-full"
-              formControlName="phone"
-              [placeholder]="'USERS.PHONE' | translate"
-            />
+            <p-iconfield class="field-iconfield">
+              <p-inputicon class="pi pi-phone field-icon" />
+              <input id="profile-phone" type="tel" pInputText class="profile-input" formControlName="phone"
+                [placeholder]="'USERS.PHONE' | translate" />
+            </p-iconfield>
           </div>
 
-          <!-- Botón Guardar -->
-          <div class="form-actions">
+          <!-- Footer de acciones -->
+          <div class="form-actions-footer">
             <button
               type="submit"
               pButton
               size="large"
               [loading]="loading"
               [disabled]="loading || profileForm.invalid"
-              icon="pi pi-check"
+              class="save-profile-btn"
             >
+              <i class="pi pi-check"></i>
               {{ 'COMMON.SAVE' | translate }}
             </button>
           </div>
         </form>
       </div>
-
-      <!-- Tarjeta de Membresías y Clubes -->
-      <div class="profile-card">
-        <h2 class="card-title">{{ 'USERS.MEMBERSHIPS_TITLE' | translate }}</h2>
-        <p-divider></p-divider>
-
-        @if (authService.userMemberships().length === 0) {
-          <div class="empty-memberships">
-            <i class="pi pi-info-circle empty-icon"></i>
-            <p>{{ 'USERS.NO_MEMBERSHIPS' | translate }}</p>
-          </div>
-        } @else {
-          <div class="memberships-list">
-            @for (membership of authService.userMemberships(); track membership.clubId) {
-              <div
-                class="membership-item"
-                [class.active-membership]="authService.activeClub()?.clubId === membership.clubId"
-              >
-                <div class="membership-info">
-                  <div class="membership-top">
-                    <h3 class="club-name">{{ membership.clubName }}</h3>
-                    <p-tag
-                      [value]="membership.role"
-                      [severity]="getRoleSeverity(membership.role)"
-                    ></p-tag>
-                  </div>
-
-                  <div class="membership-details">
-                    @if (membership.memberNumber) {
-                      <span class="detail-badge">
-                        <i class="pi pi-id-card"></i>
-                        {{ 'USERS.MEMBER_NUMBER' | translate }}: {{ membership.memberNumber }}
-                      </span>
-                    }
-                    <span class="detail-badge wallet-badge">
-                      <i class="pi pi-wallet"></i>
-                      {{ 'USERS.WALLET_BALANCE' | translate }}: {{ membership.walletBalance }} €
-                    </span>
-                  </div>
-                </div>
-
-                <div class="membership-action">
-                  @if (authService.activeClub()?.clubId === membership.clubId) {
-                    <p-tag
-                      [value]="'USERS.ACTIVE_CLUB' | translate"
-                      severity="success"
-                      icon="pi pi-check"
-                    ></p-tag>
-                  } @else {
-                    <button
-                      type="button"
-                      pButton
-                      [outlined]="true"
-                      size="small"
-                      icon="pi pi-refresh"
-                      (click)="onSelectActiveClub(membership)"
-                    >
-                      {{ 'USERS.CHANGE_CLUB' | translate }}
-                    </button>
-                  }
-                </div>
-              </div>
-            }
-          </div>
-        }
-      </div>
-    </div>
+    </p-card>
   </div>
 </div>

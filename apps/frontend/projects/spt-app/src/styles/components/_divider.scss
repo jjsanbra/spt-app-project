@@ -1,0 +1,35 @@
+/* ==========================================================================
+   STITCH SPORTS CLUB MANAGEMENT DESIGN SYSTEM — DIVIDER COMPONENT
+   Ruta: apps/frontend/projects/spt-app/src/styles/components/_divider.scss
+   ========================================================================== */
+
+p-divider,
+.p-divider {
+  --p-divider-border-color: var(--border-subtle);
+  --p-content-border-color: var(--border-subtle);
+  width: 100%;
+
+  &.p-divider-horizontal {
+    margin: var(--spacing-md) 0;
+    padding: 0;
+
+    &:before {
+      border-block-start: 1px solid var(--border-subtle) !important;
+    }
+  }
+
+  &.p-divider-vertical {
+    margin: 0 var(--spacing-md);
+    padding: 0;
+
+    &:before {
+      border-inline-start: 1px solid var(--border-subtle) !important;
+    }
+  }
+
+  .p-divider-content {
+    background: var(--surface-container-low, #F8FAFC);
+    color: var(--text-muted);
+  }
+}
+
