@@ -19,9 +19,9 @@ services:
       - key: PORT
         value: 10000
       - key: DATABASE_URL
-        value: postgresql://spt-bd_owner:npg_pAiykgX29GHJ@ep-late-leaf-b99kvjgd-pooler.c-7.eu-central-1.aws.neon.tech/spt-bd?sslmode=require&channel_binding=require
+        sync: false
       - key: DATABASE_URL_UNPOOLED
-        value: postgresql://spt-bd_owner:npg_pAiykgX29GHJ@ep-late-leaf-b99kvjgd.c-7.eu-central-1.aws.neon.tech/spt-bd?sslmode=require&channel_binding=require
+        sync: false
       - key: JWT_ACCESS_SECRET
         generateValue: true
       - key: JWT_REFRESH_SECRET
