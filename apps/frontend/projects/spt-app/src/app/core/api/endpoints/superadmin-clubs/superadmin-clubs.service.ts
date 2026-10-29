@@ -28,6 +28,7 @@ import type {
   SuperAdminClubListResponseDto,
   SuperAdminClubResponseDto,
   SuperAdminClubsControllerFindAllParams,
+  SuperadminOverviewResponseDto,
   UpdateSuperAdminClubDto
 } from '../../model';
 
@@ -155,6 +156,40 @@ function filterParams(
 @Injectable({ providedIn: 'root' })
 export class SuperadminClubsService {
   private readonly http = inject(HttpClient);
+/**
+ * Devuelve el total de clubes, usuarios registrados y volumen transaccional (GMV) del SaaS.
+ * @summary Obtener visión macro y analítica global de la plataforma (Exclusivo SuperAdmin)
+ */
+ superAdminClubsControllerGetOverview<TData = SuperadminOverviewResponseDto>( options?: HttpClientBodyOptions): Observable<TData>;
+ superAdminClubsControllerGetOverview<TData = SuperadminOverviewResponseDto>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
+ superAdminClubsControllerGetOverview<TData = SuperadminOverviewResponseDto>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
+  superAdminClubsControllerGetOverview<TData = SuperadminOverviewResponseDto>(
+     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.get<TData>(
+      `/api/v1/superadmin/clubs/analytics/overview`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      }
+    );
+    }
+
+    if (options?.observe === 'response') {
+      return this.http.get<TData>(
+      `/api/v1/superadmin/clubs/analytics/overview`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      }
+    );
+    }
+
+    return this.http.get<TData>(
+      `/api/v1/superadmin/clubs/analytics/overview`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'body',
+      }
+    );
+  }
 /**
  * Devuelve todos los centros deportivos registrados con filtros y conteos agregados.
  * @summary Listar todos los clubes de la plataforma (Exclusivo SuperAdmin)

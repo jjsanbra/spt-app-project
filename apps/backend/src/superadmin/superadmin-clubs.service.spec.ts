@@ -37,10 +37,15 @@ describe('SuperAdminClubsService', () => {
       findUnique: jest.fn(),
       create: jest.fn(),
       update: jest.fn(),
+      count: jest.fn(),
     },
     user: {
       findUnique: jest.fn(),
       create: jest.fn(),
+      count: jest.fn(),
+    },
+    booking: {
+      findMany: jest.fn(),
     },
     clubMembership: {
       create: jest.fn(),
@@ -209,6 +214,25 @@ describe('SuperAdminClubsService', () => {
         data: { isActive: false },
       });
       expect(result.isActive).toBe(false);
+    });
+  });
+
+  describe('getOverview', () => {
+    it('debe retornar métricas macro de la plataforma', async () => {
+      mockPrisma.club.count.mockResolvedValueOnce(10).mockResolvedValueOnce(8);
+      mockPrisma.user.count.mockResolvedValue(150);
+      mockPrisma.booking.findMany
+        .mockResolvedValueOnce([{ totalPrice: 1000 }]) // mes actual
+        .mockResolvedValueOnce([{ totalPrice: 800 }]); // mes anterior
+
+      const result = await service.getOverview();
+
+      expect(result).toBeDefined();
+      expect(result.totalClubs).toBe(10);
+      expect(result.activeClubs).toBe(8);
+      expect(result.totalUsers).toBe(150);
+      expect(result.monthlyGmv).toBe(1000);
+      expect(result.gmvGrowthPercent).toBe(25);
     });
   });
 });

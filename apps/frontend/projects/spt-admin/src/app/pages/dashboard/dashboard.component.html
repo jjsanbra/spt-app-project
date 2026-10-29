@@ -1,9 +1,10 @@
 <div class="admin-dashboard-page">
   <div class="admin-dashboard-container">
+    <!-- Cabecera de Bienvenida y Contexto -->
     <div class="welcome-card">
       <div class="welcome-header">
         <div class="admin-badge">
-          <i class="pi pi-shield"></i>
+          <i class="pi pi-chart-bar"></i>
         </div>
         <div class="welcome-info">
           <h1 class="welcome-title">{{ 'ADMIN.DASHBOARD.TITLE' | translate }}</h1>
@@ -13,92 +14,331 @@
             </span>
             @if (authService.isSuperAdmin()) {
               <p-tag [value]="'USERS.SUPERADMIN_BADGE' | translate" severity="danger"></p-tag>
+            } @else if (authService.isOwner()) {
+              <p-tag value="OWNER" severity="warn"></p-tag>
+            } @else if (authService.isStaff()) {
+              <p-tag value="STAFF" severity="info"></p-tag>
             }
           </div>
         </div>
+
+        <!-- Selector de Club para SuperAdmin -->
+        @if (authService.isSuperAdmin() && clubOptions().length > 0) {
+          <div class="superadmin-club-selector">
+            <label class="selector-label">{{ 'ADMIN.DASHBOARD.SELECT_CLUB_TO_INSPECT' | translate }}</label>
+            <p-select
+              [options]="clubOptions()"
+              [(ngModel)]="selectedClubId"
+              (onChange)="onClubChange($event.value)"
+              optionLabel="label"
+              optionValue="value"
+              class="w-full"
+              [appendTo]="'body'"
+            ></p-select>
+          </div>
+        }
       </div>
+    </div>
 
-      <p class="welcome-desc">
-        {{ 'ADMIN.DASHBOARD.DESCRIPTION' | translate }}
-      </p>
+    <!-- BLOQUE 0: MÉTRICAS GLOBALES SAAS (Exclusivo SuperAdmin) -->
+    @if (authService.isSuperAdmin() && superadminOverview()) {
+      <div class="dashboard-section">
+        <h2 class="section-title">
+          <i class="pi pi-globe"></i>
+          {{ 'ADMIN.DASHBOARD.SUPERADMIN_SECTION' | translate }}
+        </h2>
 
-      <div class="dashboard-cards-grid">
-        <a routerLink="/admin/facilities" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-th-large"></i>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-icon-wrapper is-primary">
+              <i class="pi pi-building"></i>
             </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_DESC' | translate }}</p>
-            </div>
-          </div>
-        </a>
-
-        <a routerLink="/admin/pricing" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-dollar"></i>
-            </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.PRICING_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'ADMIN.DASHBOARD.PRICING_CARD_DESC' | translate }}</p>
+            <div class="kpi-body">
+              <span class="kpi-label">{{ 'ADMIN.DASHBOARD.SUPERADMIN_TOTAL_CLUBS' | translate }}</span>
+              <span class="kpi-value">{{ superadminOverview()?.totalClubs }}</span>
+              <span class="kpi-hint">{{ superadminOverview()?.activeClubs }} {{ 'ADMIN.DASHBOARD.SUPERADMIN_ACTIVE_CLUBS' | translate | lowercase }}</span>
             </div>
           </div>
-        </a>
 
-        <a routerLink="/admin/members" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">
+          <div class="kpi-card">
+            <div class="kpi-icon-wrapper is-success">
               <i class="pi pi-users"></i>
             </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.MEMBERS_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'ADMIN.DASHBOARD.MEMBERS_CARD_DESC' | translate }}</p>
+            <div class="kpi-body">
+              <span class="kpi-label">{{ 'ADMIN.DASHBOARD.SUPERADMIN_TOTAL_USERS' | translate }}</span>
+              <span class="kpi-value">{{ superadminOverview()?.totalUsers }}</span>
             </div>
           </div>
-        </a>
 
-        <a routerLink="/admin/settings" class="feature-card-link">
-          <div class="feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-cog"></i>
+          <div class="kpi-card">
+            <div class="kpi-icon-wrapper is-accent">
+              <i class="pi pi-dollar"></i>
             </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'ADMIN.SETTINGS.TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'ADMIN.SETTINGS.SUBTITLE' | translate }}</p>
+            <div class="kpi-body">
+              <span class="kpi-label">{{ 'ADMIN.DASHBOARD.SUPERADMIN_MONTHLY_GMV' | translate }}</span>
+              <span class="kpi-value">{{ superadminOverview()?.monthlyGmv | currency:'EUR':'symbol':'1.0-2' }}</span>
+              <span class="kpi-delta is-positive">
+                <i class="pi pi-arrow-up-right"></i>
+                +{{ superadminOverview()?.gmvGrowthPercent }}% {{ 'ADMIN.DASHBOARD.VS_LAST_MONTH' | translate }}
+              </span>
             </div>
           </div>
-        </a>
+        </div>
       </div>
+    }
 
-      <div class="quick-actions">
-        <a routerLink="/admin/facilities">
-          <button type="button" pButton icon="pi pi-th-large">
-            {{ 'ADMIN.FACILITIES.TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/admin/pricing">
-          <button type="button" pButton icon="pi pi-dollar" severity="secondary" [outlined]="true">
-            {{ 'ADMIN.PRICING.TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/admin/members">
-          <button type="button" pButton icon="pi pi-users" severity="secondary" [outlined]="true">
-            {{ 'ADMIN.MEMBERS.TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/admin/settings">
-          <button type="button" pButton icon="pi pi-cog" severity="secondary" [outlined]="true">
-            {{ 'ADMIN.SETTINGS.TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/profile">
-          <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
-            {{ 'ADMIN.DASHBOARD.GO_TO_PROFILE' | translate }}
-          </button>
-        </a>
+    <!-- SPINNER DE CARGA -->
+    @if (loading()) {
+      <div class="loading-state">
+        <i class="pi pi-spin pi-spinner loading-spinner"></i>
+        <span>{{ 'ADMIN.DASHBOARD.LOADING' | translate }}</span>
       </div>
+    } @else if (dashboardData()) {
+
+      <!-- BLOQUE 1: OPERATIVA DE HOY (Staff + Owner + Admin) -->
+      @if (authService.canViewOperational()) {
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="pi pi-clock text-primary"></i>
+              {{ 'ADMIN.DASHBOARD.OPERATIONAL_SECTION' | translate }}
+            </h2>
+            <span class="section-badge">Hoy</span>
+          </div>
+
+          <div class="kpi-grid">
+            <!-- 1. Ocupación Hoy -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-primary">
+                <i class="pi pi-percentage"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.TODAY_OCCUPANCY' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.today?.occupancyPercent }}%</span>
+                <p-progressbar [value]="dashboardData()?.today?.occupancyPercent" [showValue]="false" styleClass="mini-progress"></p-progressbar>
+              </div>
+            </div>
+
+            <!-- 2. Pistas Libres Próximas 3h -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-success">
+                <i class="pi pi-check-circle"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.AVAILABLE_COURTS' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.today?.availableCourtsNext3Hours }}</span>
+                <span class="kpi-hint">{{ 'ADMIN.FACILITIES.TITLE' | translate | lowercase }}</span>
+              </div>
+            </div>
+
+            <!-- 3. Cobros / Check-ins Pendientes -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-warning">
+                <i class="pi pi-wallet"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.PENDING_PAYMENTS' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.today?.pendingPaymentsCount }}</span>
+                <span class="kpi-hint">en recepción</span>
+              </div>
+            </div>
+
+            <!-- 4. Bloqueos de Hoy -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-muted">
+                <i class="pi pi-lock"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.ACTIVE_BLOCKS' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.today?.activeBlocksCount }}</span>
+                <span class="kpi-hint">mantenimiento o eventos</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- BLOQUE 2: RENDIMIENTO Y NEGOCIO DEL MES (Owner + Admin) -->
+      @if (authService.canViewFinancials()) {
+        <div class="dashboard-section">
+          <div class="section-header">
+            <h2 class="section-title">
+              <i class="pi pi-chart-line text-primary"></i>
+              {{ 'ADMIN.DASHBOARD.FINANCIAL_SECTION' | translate }}
+            </h2>
+            <span class="section-badge">Mes en curso</span>
+          </div>
+
+          <div class="kpi-grid">
+            <!-- 1. Facturación del Mes -->
+            <div class="kpi-card is-highlight">
+              <div class="kpi-icon-wrapper is-primary">
+                <i class="pi pi-euro"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.MONTH_REVENUE' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.month?.totalRevenue | currency:'EUR':'symbol':'1.0-2' }}</span>
+                <span class="kpi-delta" [class.is-positive]="(dashboardData()?.month?.revenueGrowthPercent ?? 0) >= 0" [class.is-negative]="(dashboardData()?.month?.revenueGrowthPercent ?? 0) < 0">
+                  <i class="pi" [class.pi-arrow-up-right]="(dashboardData()?.month?.revenueGrowthPercent ?? 0) >= 0" [class.pi-arrow-down-right]="(dashboardData()?.month?.revenueGrowthPercent ?? 0) < 0"></i>
+                  {{ (dashboardData()?.month?.revenueGrowthPercent ?? 0) >= 0 ? '+' : '' }}{{ dashboardData()?.month?.revenueGrowthPercent }}% {{ 'ADMIN.DASHBOARD.VS_LAST_MONTH' | translate }}
+                </span>
+              </div>
+            </div>
+
+            <!-- 2. Ocupación Media Mensual -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-info">
+                <i class="pi pi-calendar"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.MONTH_OCCUPANCY' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.month?.occupancyPercent }}%</span>
+                <span class="kpi-hint">promedio mensual</span>
+              </div>
+            </div>
+
+            <!-- 3. Nuevas Altas de Socios -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-success">
+                <i class="pi pi-user-plus"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.NEW_MEMBERS' | translate }}</span>
+                <span class="kpi-value">+{{ dashboardData()?.month?.newMembersCount }}</span>
+                <span class="kpi-hint">socios activos</span>
+              </div>
+            </div>
+
+            <!-- 4. Ticket Medio -->
+            <div class="kpi-card">
+              <div class="kpi-icon-wrapper is-accent">
+                <i class="pi pi-tag"></i>
+              </div>
+              <div class="kpi-body">
+                <span class="kpi-label">{{ 'ADMIN.DASHBOARD.AVERAGE_TICKET' | translate }}</span>
+                <span class="kpi-value">{{ dashboardData()?.month?.averageTicketPrice | currency:'EUR':'symbol':'1.0-2' }}</span>
+                <span class="kpi-hint">por sesión de juego</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BLOQUE 3: GRÁFICAS ANALÍTICAS (PrimeNG <p-chart>) -->
+        <div class="dashboard-section">
+          <div class="charts-grid">
+            <!-- Gráfico de Tendencia Diaria -->
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h3 class="chart-card-title">
+                  <i class="pi pi-chart-line"></i>
+                  {{ 'ADMIN.DASHBOARD.TREND_CHART_TITLE' | translate }}
+                </h3>
+              </div>
+              <div class="chart-wrapper">
+                <p-chart type="line" [data]="trendChartData" [options]="trendChartOptions" height="260px"></p-chart>
+              </div>
+            </div>
+
+            <!-- Gráfico de Ingresos por Deporte -->
+            <div class="chart-card">
+              <div class="chart-card-header">
+                <h3 class="chart-card-title">
+                  <i class="pi pi-chart-pie"></i>
+                  {{ 'ADMIN.DASHBOARD.REVENUE_CHART_TITLE' | translate }}
+                </h3>
+              </div>
+              <div class="chart-wrapper">
+                <p-chart type="doughnut" [data]="sportChartData" [options]="sportChartOptions" height="200px"></p-chart>
+                @if (sportMeters.length > 0) {
+                  <div class="sport-meters-wrapper">
+                    <p-metergroup [value]="sportMeters"></p-metergroup>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- BLOQUE 4: ACCIONES RÁPIDAS Y NAVEGACIÓN -->
+    <div class="dashboard-cards-grid">
+      <a routerLink="/admin/facilities" class="feature-card-link">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-th-large"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'ADMIN.DASHBOARD.FACILITIES_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/admin/pricing" class="feature-card-link">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-dollar"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.PRICING_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'ADMIN.DASHBOARD.PRICING_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/admin/members" class="feature-card-link">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'ADMIN.DASHBOARD.MEMBERS_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'ADMIN.DASHBOARD.MEMBERS_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/admin/settings" class="feature-card-link">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-cog"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'ADMIN.SETTINGS.TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'ADMIN.SETTINGS.SUBTITLE' | translate }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Barra de Botones Rápidos -->
+    <div class="quick-actions">
+      <a routerLink="/admin/facilities">
+        <button type="button" pButton icon="pi pi-th-large">
+          {{ 'ADMIN.FACILITIES.TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/admin/pricing">
+        <button type="button" pButton icon="pi pi-dollar" severity="secondary" [outlined]="true">
+          {{ 'ADMIN.PRICING.TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/admin/members">
+        <button type="button" pButton icon="pi pi-users" severity="secondary" [outlined]="true">
+          {{ 'ADMIN.MEMBERS.TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/admin/settings">
+        <button type="button" pButton icon="pi pi-cog" severity="secondary" [outlined]="true">
+          {{ 'ADMIN.SETTINGS.TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/profile">
+        <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
+          {{ 'ADMIN.DASHBOARD.GO_TO_PROFILE' | translate }}
+        </button>
+      </a>
     </div>
   </div>
 </div>

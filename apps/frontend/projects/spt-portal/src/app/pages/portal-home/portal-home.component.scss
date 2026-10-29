@@ -1,11 +1,8 @@
 @use "base/responsive" as *;
 
 .portal-home-page {
-  min-height: calc(100vh - 64px);
   padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: var(--bg-canvas);
   color: var(--text-color);
-  transition: var(--theme-transition);
 
   @include mobile {
     padding: var(--spacing-md) var(--spacing-sm);
@@ -15,12 +12,15 @@
 .portal-home-container {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
 }
 
 .welcome-card {
   background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-card);
   transition: var(--theme-transition);
@@ -83,18 +83,284 @@
   color: var(--text-muted);
   font-size: var(--font-size-sm);
   line-height: 1.6;
-  margin: var(--spacing-md) 0 var(--spacing-lg) 0;
+  margin: 0;
 }
 
-.portal-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+/* Tarjeta de Próxima Reserva */
+.next-booking-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.next-booking-card {
+  background: linear-gradient(135deg, rgba(255, 45, 120, 0.08) 0%, var(--surface-card) 100%);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 0 20px rgba(255, 45, 120, 0.12);
+
+  @include mobile-or-tablet {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-md);
+  }
+}
+
+.booking-status-indicator {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-lg);
+  background: var(--primary-gradient);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-2xl);
+  box-shadow: var(--shadow-glow-pink);
+  flex-shrink: 0;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  flex: 1;
+}
+
+.booking-tag {
+  font-family: var(--font-label);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  color: var(--primary-color);
+  letter-spacing: 0.06em;
+}
+
+.facility-name {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+}
+
+.booking-meta {
+  display: flex;
+  align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  flex-wrap: wrap;
+
+  .meta-item {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xs);
+
+    i {
+      color: var(--primary-color);
+    }
+  }
+}
+
+.booking-action {
+  @include mobile-or-tablet {
+    width: 100%;
+    margin-top: var(--spacing-xs);
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+.no-booking-card {
+  background-color: var(--surface-card);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+
+  @include mobile-or-tablet {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--spacing-md);
+
+    a, button {
+      width: 100%;
+    }
+  }
+}
+
+.no-booking-content {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+
+  i {
+    font-size: var(--font-size-2xl);
+  }
+
+  .no-booking-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+  }
+
+  .no-booking-desc {
+    margin: var(--spacing-2xs) 0 0 0;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+  }
+}
+
+/* Grilla de KPIs del Jugador */
+.player-kpis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+
+  @include tablet {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   @include mobile {
     grid-template-columns: 1fr;
   }
+}
+
+.kpi-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-tier2);
+  }
+}
+
+.kpi-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+
+  &.is-primary {
+    background: rgba(255, 45, 120, 0.12);
+    color: var(--primary-color);
+  }
+
+  &.is-info {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366F1;
+  }
+
+  &.is-accent {
+    background: rgba(6, 182, 212, 0.12);
+    color: #06B6D4;
+  }
+
+  &.is-success {
+    background: rgba(0, 210, 106, 0.12);
+    color: #00D26A;
+  }
+}
+
+.kpi-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  flex: 1;
+}
+
+.kpi-label {
+  font-family: var(--font-label);
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+.kpi-value {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-color);
+  line-height: 1.1;
+
+  &.is-level {
+    font-size: var(--font-size-base);
+    color: var(--primary-color);
+  }
+}
+
+.kpi-hint {
+  font-size: var(--font-size-2xs);
+  color: var(--text-dim);
+}
+
+/* Gráfico de Actividad */
+.activity-chart-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.chart-header {
+  margin-bottom: var(--spacing-md);
+
+  .chart-title {
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+  }
+}
+
+.chart-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Accesos Rápidos */
+.portal-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-md);
+
+  @include mobile-or-tablet {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .portal-feature-card {
@@ -102,15 +368,16 @@
   align-items: flex-start;
   gap: var(--spacing-md);
   padding: var(--spacing-md);
-  background-color: var(--surface-container-low);
+  background-color: var(--surface-card);
   border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-tier2);
-    border-color: var(--primary);
+    border-color: var(--primary-color);
 
     .feature-icon {
       background: var(--primary-gradient);
@@ -129,7 +396,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary);
+  color: var(--primary-color);
   font-size: var(--font-size-md);
   flex-shrink: 0;
   transition: all 0.2s ease;

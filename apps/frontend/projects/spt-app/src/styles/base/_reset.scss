@@ -11,6 +11,12 @@ body, h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd {
   margin: 0;
 }
 
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
+
 html {
   scroll-behavior: smooth;
   font-size: 16px;
@@ -24,10 +30,8 @@ body {
   font-family: var(--font-body);
   background-color: var(--bg-canvas);
   color: var(--text-color);
-  min-height: 100vh;
   line-height: 1.6;
   background-attachment: fixed;
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: var(--theme-transition);

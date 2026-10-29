@@ -445,6 +445,20 @@ describe('App', () => {
       expect(app.currentUrl()).toBe('/portal/activity');
       expect(app.sidebarOpen()).toBe(false);
     });
+
+    it('navigation should reset scroll position on NavigationEnd', () => {
+      const fixture = TestBed.createComponent(App);
+      const app = fixture.componentInstance;
+      const resetScrollSpy = vi.spyOn(app, 'resetScrollPosition');
+
+      (router as any).events.next(new (class extends NavigationEnd {
+        constructor() {
+          super(1, '/admin/facilities', '/admin/facilities');
+        }
+      })());
+
+      expect(resetScrollSpy).toHaveBeenCalled();
+    });
   });
 
   describe('Change club dialog & real-time search', () => {

@@ -29,7 +29,15 @@ export class AuthService {
   readonly isAuthenticated = computed(() => !!this.currentUser());
   readonly isSuperAdmin = computed(() => !!this.currentUser()?.isSuperAdmin);
   readonly isOwner = computed(() => this.activeClub()?.role === 'OWNER');
+  readonly isClubAdmin = computed(() => this.activeClub()?.role === 'ADMIN');
+  readonly isStaff = computed(() => this.activeClub()?.role === 'STAFF');
   readonly isOwnerOrSuperAdmin = computed(() => this.isSuperAdmin() || this.isOwner());
+  readonly canViewFinancials = computed(
+    () => this.isSuperAdmin() || this.isOwner() || this.isClubAdmin(),
+  );
+  readonly canViewOperational = computed(
+    () => this.isSuperAdmin() || this.isOwner() || this.isClubAdmin() || this.isStaff(),
+  );
   readonly userMemberships = computed(() => this.currentUser()?.memberships || []);
 
   constructor() {

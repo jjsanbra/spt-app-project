@@ -10,9 +10,12 @@ import {
 } from '@faker-js/faker';
 
 import type {
+  UserDashboardResponseDto,
   UserSummaryDto
 } from '../../model';
 
+
+export const getUsersControllerGetDashboardResponseMock = (overrideResponse: Partial<Extract<UserDashboardResponseDto, object>> = {}): UserDashboardResponseDto => ({nextBooking: faker.helpers.arrayElement([{id: faker.string.alpha({length: {min: 10, max: 20}}), facilityName: faker.string.alpha({length: {min: 10, max: 20}}), sportType: faker.string.alpha({length: {min: 10, max: 20}}), startTime: faker.string.alpha({length: {min: 10, max: 20}}), endTime: faker.string.alpha({length: {min: 10, max: 20}})},null,]), monthlyStats: {...{matchesPlayed: faker.number.float({fractionDigits: 2}), hoursPlayed: faker.number.float({fractionDigits: 2}), totalSpent: faker.number.float({fractionDigits: 2}), estimatedLevel: faker.string.alpha({length: {min: 10, max: 20}})},}, activityHistory: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({month: faker.string.alpha({length: {min: 10, max: 20}}), matchesCount: faker.number.float({fractionDigits: 2})})), ...overrideResponse})
 
 export const getUsersControllerUpdateProfileResponseMock = (overrideResponse: Partial<Extract<UserSummaryDto, object>> = {}): UserSummaryDto => ({id: faker.string.alpha({length: {min: 10, max: 20}}), email: faker.string.alpha({length: {min: 10, max: 20}}), firstName: faker.string.alpha({length: {min: 10, max: 20}}), lastName: faker.string.alpha({length: {min: 10, max: 20}}), phone: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), avatarUrl: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), isSuperAdmin: faker.datatype.boolean(), memberships: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({clubId: faker.string.alpha({length: {min: 10, max: 20}}), clubName: faker.string.alpha({length: {min: 10, max: 20}}), clubSlug: faker.string.alpha({length: {min: 10, max: 20}}), clubCity: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), role: faker.helpers.arrayElement(['OWNER','ADMIN','STAFF','MEMBER','GUEST'] as const), memberNumber: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), null]), walletBalance: faker.number.float({fractionDigits: 2})})), ...overrideResponse})
 

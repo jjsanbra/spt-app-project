@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, ElementRef, ViewChild, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
   NavigationCancel,
@@ -61,6 +61,8 @@ import { NotificationBellComponent } from './layout/notification-bell/notificati
   styleUrls: ['./app.scss'],
 })
 export class App {
+  @ViewChild('mainWrapper') mainWrapperRef?: ElementRef<HTMLElement>;
+
   readonly authService = inject(AuthService);
   readonly themeService = inject(ThemeService);
   readonly loadingService = inject(LoadingService);
@@ -145,9 +147,31 @@ export class App {
             this.sidebarOpen.set(false);
           }
           this.currentUrl.set(event.urlAfterRedirects || event.url);
+          this.resetScrollPosition();
         }
       }
     });
+  }
+
+  resetScrollPosition(): void {
+    const scrollToTop = () => {
+      if (this.mainWrapperRef?.nativeElement) {
+        this.mainWrapperRef.nativeElement.scrollTop = 0;
+      } else if (typeof document !== 'undefined') {
+        const el = document.querySelector('.app-main-wrapper');
+        if (el) {
+          el.scrollTop = 0;
+        }
+      }
+      if (typeof window !== 'undefined') {
+        window.scrollTo(0, 0);
+      }
+    };
+
+    scrollToTop();
+    if (typeof requestAnimationFrame !== 'undefined') {
+      requestAnimationFrame(scrollToTop);
+    }
   }
 
   toggleSidebar(): void {

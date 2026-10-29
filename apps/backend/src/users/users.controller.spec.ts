@@ -6,11 +6,13 @@ describe('UsersController', () => {
   let controller: UsersController;
   let usersService: {
     updateProfile: jest.Mock;
+    getDashboard: jest.Mock;
   };
 
   beforeEach(async () => {
     usersService = {
       updateProfile: jest.fn(),
+      getDashboard: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -37,5 +39,18 @@ describe('UsersController', () => {
     const result = await controller.updateProfile('u1', dto);
     expect(usersService.updateProfile).toHaveBeenCalledWith('u1', dto);
     expect(result.firstName).toBe('Carlos');
+  });
+
+  it('getDashboard debe delegar en usersService.getDashboard', async () => {
+    const mockDashboard = {
+      nextBooking: null,
+      monthlyStats: { matchesPlayed: 5, hoursPlayed: 7.5, totalSpent: 100, estimatedLevel: '3.5 Intermedio' },
+      activityHistory: [],
+    };
+    usersService.getDashboard.mockResolvedValue(mockDashboard);
+
+    const result = await controller.getDashboard('u1');
+    expect(usersService.getDashboard).toHaveBeenCalledWith('u1');
+    expect(result.monthlyStats.matchesPlayed).toBe(5);
   });
 });

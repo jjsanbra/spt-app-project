@@ -25,6 +25,7 @@ import type {
 
 import type {
   UpdateProfileDto,
+  UserDashboardResponseDto,
   UserSummaryDto
 } from '../../model';
 
@@ -81,6 +82,39 @@ type HttpClientObserveOptions = HttpClientOptions & {
 @Injectable({ providedIn: 'root' })
 export class UsersService {
   private readonly http = inject(HttpClient);
+/**
+ * @summary Obtener métricas personales, actividad y próxima reserva del usuario
+ */
+ usersControllerGetDashboard<TData = UserDashboardResponseDto>( options?: HttpClientBodyOptions): Observable<TData>;
+ usersControllerGetDashboard<TData = UserDashboardResponseDto>( options?: HttpClientEventOptions): Observable<HttpEvent<TData>>;
+ usersControllerGetDashboard<TData = UserDashboardResponseDto>( options?: HttpClientResponseOptions): Observable<AngularHttpResponse<TData>>;
+  usersControllerGetDashboard<TData = UserDashboardResponseDto>(
+     options?: HttpClientObserveOptions): Observable<TData | HttpEvent<TData> | AngularHttpResponse<TData>> {
+    if (options?.observe === 'events') {
+      return this.http.get<TData>(
+      `/api/v1/users/dashboard`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'events',
+      }
+    );
+    }
+
+    if (options?.observe === 'response') {
+      return this.http.get<TData>(
+      `/api/v1/users/dashboard`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'response',
+      }
+    );
+    }
+
+    return this.http.get<TData>(
+      `/api/v1/users/dashboard`,{
+        ...(options as Omit<NonNullable<typeof options>, 'observe'>),
+        observe: 'body',
+      }
+    );
+  }
 /**
  * @summary Actualizar los datos del perfil del usuario autenticado
  */

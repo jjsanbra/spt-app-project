@@ -1,9 +1,10 @@
 <div class="portal-home-page">
   <div class="portal-home-container">
+    <!-- Cabecera de Bienvenida -->
     <div class="welcome-card">
       <div class="welcome-header">
         <div class="portal-badge">
-          <i class="pi pi-calendar"></i>
+          <i class="pi pi-bolt"></i>
         </div>
         <div class="welcome-info">
           <h1 class="welcome-title">{{ 'PORTAL.HOME.TITLE' | translate }}</h1>
@@ -12,71 +13,183 @@
           </p>
         </div>
       </div>
-
       <p class="welcome-desc">
         {{ 'PORTAL.HOME.DESCRIPTION' | translate }}
       </p>
+    </div>
 
-      <div class="portal-cards-grid">
-        <a routerLink="/portal/book" class="feature-card-link">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-table"></i>
+    <!-- TARJETA DESTACADA: PRÓXIMA RESERVA -->
+    @if (!loading() && dashboardData()) {
+      <div class="next-booking-section">
+        @if (dashboardData()?.nextBooking; as next) {
+          <div class="next-booking-card">
+            <div class="booking-status-indicator">
+              <i class="pi pi-calendar-clock"></i>
             </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'PORTAL.HOME.BOOKINGS_CARD_DESC' | translate }}</p>
+            <div class="booking-details">
+              <span class="booking-tag">{{ 'PORTAL.HOME.NEXT_BOOKING_TITLE' | translate }}</span>
+              <h3 class="facility-name">{{ next.facilityName }}</h3>
+              <div class="booking-meta">
+                <span class="meta-item">
+                  <i class="pi pi-trophy"></i>
+                  {{ next.sportType }}
+                </span>
+                <span class="meta-item">
+                  <i class="pi pi-clock"></i>
+                  {{ next.startTime | date:'EEEE d MMMM, HH:mm' }}
+                </span>
+              </div>
+            </div>
+            <div class="booking-action">
+              <a routerLink="/portal/my-bookings">
+                <button type="button" pButton icon="pi pi-arrow-right" [outlined]="true">
+                  {{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}
+                </button>
+              </a>
             </div>
           </div>
-        </a>
-
-        <a routerLink="/portal/open-matches" class="feature-card-link">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-users"></i>
+        } @else {
+          <div class="no-booking-card">
+            <div class="no-booking-content">
+              <i class="pi pi-calendar-plus text-primary"></i>
+              <div>
+                <h4 class="no-booking-title">{{ 'PORTAL.HOME.NO_NEXT_BOOKING' | translate }}</h4>
+                <p class="no-booking-desc">{{ 'PORTAL.HOME.NO_NEXT_BOOKING_DESC' | translate }}</p>
+              </div>
             </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_DESC' | translate }}</p>
-            </div>
+            <a routerLink="/portal/book">
+              <button type="button" pButton icon="pi pi-plus">
+                {{ 'PORTAL.HOME.BOOK_NOW' | translate }}
+              </button>
+            </a>
           </div>
-        </a>
-
-        <a routerLink="/portal/my-bookings" class="feature-card-link">
-          <div class="portal-feature-card">
-            <div class="feature-icon">
-              <i class="pi pi-clock"></i>
-            </div>
-            <div class="feature-content">
-              <h3 class="feature-title">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}</h3>
-              <p class="feature-desc">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_DESC' | translate }}</p>
-            </div>
-          </div>
-        </a>
+        }
       </div>
 
-      <div class="quick-actions">
-        <a routerLink="/portal/book">
-          <button type="button" pButton icon="pi pi-calendar-plus">
-            {{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/portal/open-matches">
-          <button type="button" pButton icon="pi pi-users" severity="success" [outlined]="true">
-            {{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/portal/my-bookings">
-          <button type="button" pButton icon="pi pi-calendar" severity="secondary" [outlined]="true">
-            {{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}
-          </button>
-        </a>
-        <a routerLink="/profile">
-          <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
-            {{ 'PORTAL.HOME.GO_TO_PROFILE' | translate }}
-          </button>
-        </a>
+      <!-- KPIS DE ACTIVIDAD DEL JUGADOR -->
+      <div class="player-kpis-grid">
+        <div class="kpi-card">
+          <div class="kpi-icon-wrapper is-primary">
+            <i class="pi pi-trophy"></i>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">{{ 'PORTAL.HOME.MATCHES_THIS_MONTH' | translate }}</span>
+            <span class="kpi-value">{{ dashboardData()?.monthlyStats?.matchesPlayed }}</span>
+            <span class="kpi-hint">{{ 'PORTAL.HOME.HINT_MATCHES' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrapper is-info">
+            <i class="pi pi-clock"></i>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">{{ 'PORTAL.HOME.HOURS_PLAYED' | translate }}</span>
+            <span class="kpi-value">{{ dashboardData()?.monthlyStats?.hoursPlayed }}h</span>
+            <span class="kpi-hint">{{ 'PORTAL.HOME.HINT_HOURS' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrapper is-accent">
+            <i class="pi pi-wallet"></i>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">{{ 'PORTAL.HOME.TOTAL_SPENT' | translate }}</span>
+            <span class="kpi-value">{{ dashboardData()?.monthlyStats?.totalSpent | currency:'EUR':'symbol':'1.0-2' }}</span>
+            <span class="kpi-hint">{{ 'PORTAL.HOME.HINT_SPENT' | translate }}</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-icon-wrapper is-success">
+            <i class="pi pi-star"></i>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-label">{{ 'PORTAL.HOME.ESTIMATED_LEVEL' | translate }}</span>
+            <span class="kpi-value is-level">{{ dashboardData()?.monthlyStats?.estimatedLevel }}</span>
+            <span class="kpi-hint">{{ 'PORTAL.HOME.HINT_LEVEL' | translate }}</span>
+          </div>
+        </div>
       </div>
+
+      <!-- GRÁFICO DE HISTORIAL DE FRECUENCIA -->
+      @if (dashboardData()?.activityHistory?.length) {
+        <div class="activity-chart-card">
+          <div class="chart-header">
+            <h3 class="chart-title">
+              <i class="pi pi-chart-bar text-primary"></i>
+              {{ 'PORTAL.HOME.ACTIVITY_HISTORY_TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="chart-wrapper">
+            <p-chart type="bar" [data]="activityChartData" [options]="activityChartOptions" height="180px"></p-chart>
+          </div>
+        </div>
+      }
+    }
+
+    <!-- ACCESOS RÁPIDOS TRADICIONALES -->
+    <div class="portal-cards-grid">
+      <a routerLink="/portal/book" class="feature-card-link">
+        <div class="portal-feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-table"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'PORTAL.HOME.BOOKINGS_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/portal/open-matches" class="feature-card-link">
+        <div class="portal-feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-users"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'PORTAL.HOME.OPEN_MATCHES_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+
+      <a routerLink="/portal/my-bookings" class="feature-card-link">
+        <div class="portal-feature-card">
+          <div class="feature-icon">
+            <i class="pi pi-clock"></i>
+          </div>
+          <div class="feature-content">
+            <h3 class="feature-title">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}</h3>
+            <p class="feature-desc">{{ 'PORTAL.HOME.MY_BOOKINGS_CARD_DESC' | translate }}</p>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Barra de Botones Rápidos -->
+    <div class="quick-actions">
+      <a routerLink="/portal/book">
+        <button type="button" pButton icon="pi pi-calendar-plus">
+          {{ 'PORTAL.HOME.BOOKINGS_CARD_TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/portal/open-matches">
+        <button type="button" pButton icon="pi pi-users" severity="success" [outlined]="true">
+          {{ 'PORTAL.HOME.OPEN_MATCHES_CARD_TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/portal/my-bookings">
+        <button type="button" pButton icon="pi pi-calendar" severity="secondary" [outlined]="true">
+          {{ 'PORTAL.HOME.MY_BOOKINGS_CARD_TITLE' | translate }}
+        </button>
+      </a>
+      <a routerLink="/profile">
+        <button type="button" pButton icon="pi pi-user" severity="secondary" [text]="true">
+          {{ 'PORTAL.HOME.GO_TO_PROFILE' | translate }}
+        </button>
+      </a>
     </div>
   </div>
 </div>

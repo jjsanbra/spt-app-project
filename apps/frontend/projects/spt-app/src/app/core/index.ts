@@ -9,6 +9,7 @@ export { FacilitiesService } from './api/endpoints/facilities/facilities.service
 export { PricingService } from './api/endpoints/pricing/pricing.service';
 export { ClubsMembersService } from './api/endpoints/clubs-members/clubs-members.service';
 export { ClubsSettingsService } from './api/endpoints/clubs-settings/clubs-settings.service';
+export { ClubsDashboardService } from './api/endpoints/clubs-dashboard/clubs-dashboard.service';
 export { BookingsService } from './api/endpoints/bookings/bookings.service';
 export { NotificationsService } from './api/endpoints/notifications/notifications.service';
 export { ActivityLogsService } from './api/endpoints/activity-logs/activity-logs.service';
@@ -44,4 +45,5 @@ export * from './api/endpoints/notifications/notifications.faker';
 export * from './api/endpoints/superadmin-clubs/superadmin-clubs.faker';
 export * from './api/endpoints/clubs-members/clubs-members.faker';
 export * from './api/endpoints/clubs-settings/clubs-settings.faker';
+export * from './api/endpoints/clubs-dashboard/clubs-dashboard.faker';
 export * from './api/endpoints/activity-logs/activity-logs.faker';

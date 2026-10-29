@@ -22,6 +22,7 @@ import {
   SuperAdminClubListResponseDto,
   SuperAdminClubResponseDto,
 } from './dto/superadmin-club-response.dto';
+import { SuperadminOverviewResponseDto } from './dto/superadmin-overview-response.dto';
 import { UpdateSuperAdminClubDto } from './dto/update-superadmin-club.dto';
 import { SuperAdminClubsService } from './superadmin-clubs.service';
 
@@ -31,6 +32,16 @@ import { SuperAdminClubsService } from './superadmin-clubs.service';
 @Controller({ path: 'superadmin/clubs', version: '1' })
 export class SuperAdminClubsController {
   constructor(private readonly superadminClubsService: SuperAdminClubsService) {}
+
+  @Get('analytics/overview')
+  @ApiOperation({
+    summary: 'Obtener visión macro y analítica global de la plataforma (Exclusivo SuperAdmin)',
+    description: 'Devuelve el total de clubes, usuarios registrados y volumen transaccional (GMV) del SaaS.',
+  })
+  @ApiResponse({ status: 200, type: SuperadminOverviewResponseDto })
+  async getOverview(): Promise<SuperadminOverviewResponseDto> {
+    return this.superadminClubsService.getOverview();
+  }
 
   @Get()
   @ApiOperation({

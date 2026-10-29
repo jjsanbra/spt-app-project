@@ -174,6 +174,33 @@
         ]
       }
     },
+    "/api/v1/users/dashboard": {
+      "get": {
+        "operationId": "UsersController_getDashboard",
+        "summary": "Obtener métricas personales, actividad y próxima reserva del usuario",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Dashboard del usuario obtenido exitosamente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserDashboardResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/users/profile": {
       "put": {
         "operationId": "UsersController_updateProfile",
@@ -1176,6 +1203,80 @@
         ]
       }
     },
+    "/api/v1/clubs/dashboard": {
+      "get": {
+        "operationId": "ClubDashboardController_getDashboard",
+        "summary": "Obtener dashboard analítico integral del club para Owners y Administradores",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubDashboardResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Dashboard"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/clubs/dashboard/operational": {
+      "get": {
+        "operationId": "ClubDashboardController_getOperationalDashboard",
+        "summary": "Obtener dashboard operativo de hoy del club para Staff y Recepción",
+        "parameters": [
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "description": "Identificador único del club (Tenant UUID)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClubOperationalDashboardResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Clubs - Dashboard"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/api/v1/clubs/members": {
       "get": {
         "operationId": "ClubsMembersController_findAll",
@@ -1821,6 +1922,34 @@
         },
         "tags": [
           "Notifications"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/superadmin/clubs/analytics/overview": {
+      "get": {
+        "operationId": "SuperAdminClubsController_getOverview",
+        "summary": "Obtener visión macro y analítica global de la plataforma (Exclusivo SuperAdmin)",
+        "description": "Devuelve el total de clubes, usuarios registrados y volumen transaccional (GMV) del SaaS.",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuperadminOverviewResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "SuperAdmin - Clubs"
         ],
         "security": [
           {
@@ -2691,6 +2820,126 @@
         },
         "required": [
           "accessToken"
+        ]
+      },
+      "UserNextBookingDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Identificador único de la reserva",
+            "example": "bk-123"
+          },
+          "facilityName": {
+            "type": "string",
+            "description": "Nombre de la pista reservada",
+            "example": "Pista 1 Central"
+          },
+          "sportType": {
+            "type": "string",
+            "description": "Deporte de la pista",
+            "example": "PADEL"
+          },
+          "startTime": {
+            "type": "string",
+            "description": "Fecha y hora de inicio en formato ISO",
+            "example": "2026-10-30T18:00:00.000Z"
+          },
+          "endTime": {
+            "type": "string",
+            "description": "Fecha y hora de finalización en formato ISO",
+            "example": "2026-10-30T19:30:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "facilityName",
+          "sportType",
+          "startTime",
+          "endTime"
+        ]
+      },
+      "UserMonthlyStatsDto": {
+        "type": "object",
+        "properties": {
+          "matchesPlayed": {
+            "type": "number",
+            "description": "Partidos jugados durante el mes actual",
+            "example": 6
+          },
+          "hoursPlayed": {
+            "type": "number",
+            "description": "Horas totales jugadas durante el mes",
+            "example": 9
+          },
+          "totalSpent": {
+            "type": "number",
+            "description": "Importe total invertido en reservas este mes en euros",
+            "example": 120
+          },
+          "estimatedLevel": {
+            "type": "string",
+            "description": "Nivel estimado de juego / Rating Stitch",
+            "example": "3.75 Intermedio"
+          }
+        },
+        "required": [
+          "matchesPlayed",
+          "hoursPlayed",
+          "totalSpent",
+          "estimatedLevel"
+        ]
+      },
+      "UserActivityHistoryDto": {
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "string",
+            "description": "Nombre o código del mes",
+            "example": "Oct"
+          },
+          "matchesCount": {
+            "type": "number",
+            "description": "Número de partidos disputados ese mes",
+            "example": 8
+          }
+        },
+        "required": [
+          "month",
+          "matchesCount"
+        ]
+      },
+      "UserDashboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "nextBooking": {
+            "nullable": true,
+            "description": "Próxima reserva inminente del usuario si existe",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserNextBookingDto"
+              }
+            ]
+          },
+          "monthlyStats": {
+            "description": "Estadísticas deportivas y gasto del mes en curso",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/UserMonthlyStatsDto"
+              }
+            ]
+          },
+          "activityHistory": {
+            "description": "Historial de partidos jugados en los últimos meses",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserActivityHistoryDto"
+            }
+          }
+        },
+        "required": [
+          "monthlyStats",
+          "activityHistory"
         ]
       },
       "UpdateProfileDto": {
@@ -3785,6 +4034,199 @@
           }
         }
       },
+      "ClubDashboardTodayDto": {
+        "type": "object",
+        "properties": {
+          "totalBookings": {
+            "type": "number",
+            "description": "Total de reservas registradas para hoy",
+            "example": 14
+          },
+          "occupancyPercent": {
+            "type": "number",
+            "description": "Porcentaje de ocupación de pistas hoy (0-100)",
+            "example": 68.5
+          },
+          "availableCourtsNext3Hours": {
+            "type": "number",
+            "description": "Pistas libres disponibles en las próximas 3 horas",
+            "example": 3
+          },
+          "pendingPaymentsCount": {
+            "type": "number",
+            "description": "Número de reservas de hoy pendientes de pago",
+            "example": 2
+          },
+          "activeBlocksCount": {
+            "type": "number",
+            "description": "Bloqueos de pista activos durante el día de hoy",
+            "example": 1
+          }
+        },
+        "required": [
+          "totalBookings",
+          "occupancyPercent",
+          "availableCourtsNext3Hours",
+          "pendingPaymentsCount",
+          "activeBlocksCount"
+        ]
+      },
+      "ClubDashboardMonthDto": {
+        "type": "object",
+        "properties": {
+          "totalRevenue": {
+            "type": "number",
+            "description": "Facturación total del mes en curso en euros",
+            "example": 4850
+          },
+          "revenueGrowthPercent": {
+            "type": "number",
+            "description": "Porcentaje de crecimiento de facturación respecto al mes anterior",
+            "example": 12.4
+          },
+          "occupancyPercent": {
+            "type": "number",
+            "description": "Porcentaje medio de ocupación de pistas en el mes",
+            "example": 62
+          },
+          "averageTicketPrice": {
+            "type": "number",
+            "description": "Ticket medio por reserva en euros",
+            "example": 28.5
+          },
+          "newMembersCount": {
+            "type": "number",
+            "description": "Nuevas altas de socios en el club durante este mes",
+            "example": 9
+          }
+        },
+        "required": [
+          "totalRevenue",
+          "revenueGrowthPercent",
+          "occupancyPercent",
+          "averageTicketPrice",
+          "newMembersCount"
+        ]
+      },
+      "ClubRevenueBySportDto": {
+        "type": "object",
+        "properties": {
+          "sportType": {
+            "type": "string",
+            "description": "Identificador del deporte",
+            "example": "PADEL"
+          },
+          "label": {
+            "type": "string",
+            "description": "Etiqueta legible del deporte",
+            "example": "Pádel"
+          },
+          "amount": {
+            "type": "number",
+            "description": "Ingresos generados por el deporte en euros",
+            "example": 3400
+          },
+          "percent": {
+            "type": "number",
+            "description": "Porcentaje sobre el total de ingresos del club",
+            "example": 70.1
+          }
+        },
+        "required": [
+          "sportType",
+          "label",
+          "amount",
+          "percent"
+        ]
+      },
+      "ClubOccupancyTrendDto": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "Fecha en formato ISO YYYY-MM-DD",
+            "example": "2026-10-28"
+          },
+          "label": {
+            "type": "string",
+            "description": "Etiqueta legible de la fecha",
+            "example": "28 Oct"
+          },
+          "bookingsCount": {
+            "type": "number",
+            "description": "Número total de reservas ese día",
+            "example": 18
+          },
+          "occupancyPercent": {
+            "type": "number",
+            "description": "Porcentaje de ocupación alcanzado ese día",
+            "example": 75
+          }
+        },
+        "required": [
+          "date",
+          "label",
+          "bookingsCount",
+          "occupancyPercent"
+        ]
+      },
+      "ClubDashboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "today": {
+            "description": "Métricas operativas del día de hoy (Staff y Owner)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClubDashboardTodayDto"
+              }
+            ]
+          },
+          "month": {
+            "description": "Métricas de rendimiento y negocio del mes (Owner)",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClubDashboardMonthDto"
+              }
+            ]
+          },
+          "revenueBySport": {
+            "description": "Distribución de facturación por deporte",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClubRevenueBySportDto"
+            }
+          },
+          "occupancyTrend": {
+            "description": "Serie temporal de ocupación de los últimos 14 días",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ClubOccupancyTrendDto"
+            }
+          }
+        },
+        "required": [
+          "today",
+          "month",
+          "revenueBySport",
+          "occupancyTrend"
+        ]
+      },
+      "ClubOperationalDashboardResponseDto": {
+        "type": "object",
+        "properties": {
+          "today": {
+            "description": "Métricas operativas inmediatas de hoy para Staff",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ClubDashboardTodayDto"
+              }
+            ]
+          }
+        },
+        "required": [
+          "today"
+        ]
+      },
       "MemberUserSummaryDto": {
         "type": "object",
         "properties": {
@@ -4429,6 +4871,43 @@
         "required": [
           "items",
           "unreadCount"
+        ]
+      },
+      "SuperadminOverviewResponseDto": {
+        "type": "object",
+        "properties": {
+          "totalClubs": {
+            "type": "number",
+            "description": "Total de clubes registrados en la plataforma",
+            "example": 12
+          },
+          "activeClubs": {
+            "type": "number",
+            "description": "Total de clubes activos actualmente",
+            "example": 10
+          },
+          "totalUsers": {
+            "type": "number",
+            "description": "Total de usuarios registrados en el sistema",
+            "example": 840
+          },
+          "monthlyGmv": {
+            "type": "number",
+            "description": "Volumen bruto de reservas procesadas (GMV) este mes en euros",
+            "example": 28500
+          },
+          "gmvGrowthPercent": {
+            "type": "number",
+            "description": "Porcentaje de crecimiento de GMV respecto al mes anterior",
+            "example": 8.5
+          }
+        },
+        "required": [
+          "totalClubs",
+          "activeClubs",
+          "totalUsers",
+          "monthlyGmv",
+          "gmvGrowthPercent"
         ]
       },
       "SuperAdminClubResponseDto": {

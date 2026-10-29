@@ -14,15 +14,29 @@ import type {
 } from 'msw';
 
 import type {
+  UserDashboardResponseDto,
   UserSummaryDto
 } from '../../model';
 
 import {
+  getUsersControllerGetDashboardResponseMock,
   getUsersControllerUpdateProfileResponseMock
 } from './users.faker';
 
-export { getUsersControllerUpdateProfileResponseMock } from './users.faker';
+export { getUsersControllerGetDashboardResponseMock, getUsersControllerUpdateProfileResponseMock } from './users.faker';
 
+
+export const getUsersControllerGetDashboardMockHandler = (overrideResponse?: UserDashboardResponseDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<UserDashboardResponseDto> | UserDashboardResponseDto), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/users/dashboard', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getUsersControllerGetDashboardResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
 
 export const getUsersControllerUpdateProfileMockHandler = (overrideResponse?: UserSummaryDto | ((info: Parameters<Parameters<typeof http.put>[1]>[0]) => Promise<UserSummaryDto> | UserSummaryDto), options?: RequestHandlerOptions) => {
   return http.put('*/api/v1/users/profile', async (info: Parameters<Parameters<typeof http.put>[1]>[0]) => {
@@ -36,4 +50,5 @@ export const getUsersControllerUpdateProfileMockHandler = (overrideResponse?: Us
   }, options)
 }
 export const getUsersMock = () => [
+  getUsersControllerGetDashboardMockHandler(),
   getUsersControllerUpdateProfileMockHandler()]

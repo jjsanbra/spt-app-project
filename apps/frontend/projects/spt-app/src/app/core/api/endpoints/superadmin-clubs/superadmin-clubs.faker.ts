@@ -11,9 +11,12 @@ import {
 
 import type {
   SuperAdminClubListResponseDto,
-  SuperAdminClubResponseDto
+  SuperAdminClubResponseDto,
+  SuperadminOverviewResponseDto
 } from '../../model';
 
+
+export const getSuperAdminClubsControllerGetOverviewResponseMock = (overrideResponse: Partial<Extract<SuperadminOverviewResponseDto, object>> = {}): SuperadminOverviewResponseDto => ({totalClubs: faker.number.float({fractionDigits: 2}), activeClubs: faker.number.float({fractionDigits: 2}), totalUsers: faker.number.float({fractionDigits: 2}), monthlyGmv: faker.number.float({fractionDigits: 2}), gmvGrowthPercent: faker.number.float({fractionDigits: 2}), ...overrideResponse})
 
 export const getSuperAdminClubsControllerFindAllResponseMock = (overrideResponse: Partial<Extract<SuperAdminClubListResponseDto, object>> = {}): SuperAdminClubListResponseDto => ({items: Array.from({ length: faker.number.int({min: 1, max: 10}) }, (_, i) => i + 1).map(() => ({id: faker.string.alpha({length: {min: 10, max: 20}}), name: faker.string.alpha({length: {min: 10, max: 20}}), slug: faker.string.alpha({length: {min: 10, max: 20}}), description: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), email: faker.string.alpha({length: {min: 10, max: 20}}), phone: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), address: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), city: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), postalCode: faker.helpers.arrayElement([faker.string.alpha({length: {min: 10, max: 20}}), undefined]), openingHour: faker.number.float({fractionDigits: 2}), closingHour: faker.number.float({fractionDigits: 2}), slotDurationMinutes: faker.number.float({fractionDigits: 2}), openGameMinNoticeHours: faker.number.float({fractionDigits: 2}), paymentMode: faker.helpers.arrayElement(['PRESENTIAL','ONLINE','HYBRID'] as const), isActive: faker.datatype.boolean(), facilitiesCount: faker.number.float({fractionDigits: 2}), membersCount: faker.number.float({fractionDigits: 2}), createdAt: faker.date.past().toISOString().slice(0, 19) + 'Z', updatedAt: faker.date.past().toISOString().slice(0, 19) + 'Z'})), total: faker.number.float({fractionDigits: 2}), ...overrideResponse})
 

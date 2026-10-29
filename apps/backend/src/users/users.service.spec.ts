@@ -10,6 +10,11 @@ describe('UsersService', () => {
       findUnique: jest.Mock;
       update: jest.Mock;
     };
+    booking: {
+      findFirst: jest.Mock;
+      findMany: jest.Mock;
+      count: jest.Mock;
+    };
   };
 
   beforeEach(async () => {
@@ -17,6 +22,11 @@ describe('UsersService', () => {
       user: {
         findUnique: jest.fn(),
         update: jest.fn(),
+      },
+      booking: {
+        findFirst: jest.fn(),
+        findMany: jest.fn(),
+        count: jest.fn(),
       },
     };
 
@@ -97,6 +107,49 @@ describe('UsersService', () => {
       expect(result.memberships).toHaveLength(1);
       expect(result.memberships[0].clubId).toBe('c1');
       expect(result.memberships[0].walletBalance).toBe(25.5);
+    });
+  });
+
+  describe('getDashboard', () => {
+    it('debe lanzar NotFoundException si el usuario no existe', async () => {
+      prisma.user.findUnique.mockResolvedValue(null);
+
+      await expect(service.getDashboard('non-existent')).rejects.toThrow(NotFoundException);
+    });
+
+    it('debe retornar métricas del usuario y próxima reserva', async () => {
+      prisma.user.findUnique.mockResolvedValue({ id: 'u1' });
+
+      const now = new Date();
+      prisma.booking.findFirst.mockResolvedValue({
+        id: 'bk-1',
+        startTime: now,
+        endTime: new Date(now.getTime() + 90 * 60000),
+        facility: {
+          name: 'Pista Central',
+          sportType: 'PADEL',
+        },
+      });
+
+      prisma.booking.findMany.mockResolvedValue([
+        {
+          totalPrice: 20,
+          startTime: now,
+          endTime: new Date(now.getTime() + 90 * 60000),
+        },
+      ]);
+
+      prisma.booking.count.mockResolvedValue(2);
+
+      const result = await service.getDashboard('u1');
+
+      expect(result).toBeDefined();
+      expect(result.nextBooking).toBeDefined();
+      expect(result.nextBooking?.facilityName).toBe('Pista Central');
+      expect(result.monthlyStats.matchesPlayed).toBe(1);
+      expect(result.monthlyStats.hoursPlayed).toBe(1.5);
+      expect(result.monthlyStats.totalSpent).toBe(20);
+      expect(result.activityHistory).toHaveLength(4);
     });
   });
 });

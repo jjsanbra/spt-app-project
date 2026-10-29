@@ -10,6 +10,7 @@ describe('SuperAdminClubsController', () => {
     findById: jest.Mock;
     updateClub: jest.Mock;
     toggleStatus: jest.Mock;
+    getOverview: jest.Mock;
   };
 
   const clubId = 'club-uuid-1';
@@ -21,6 +22,7 @@ describe('SuperAdminClubsController', () => {
       findById: jest.fn(),
       updateClub: jest.fn(),
       toggleStatus: jest.fn(),
+      getOverview: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -80,5 +82,14 @@ describe('SuperAdminClubsController', () => {
     const result = await controller.toggleStatus(clubId);
     expect(superadminClubsService.toggleStatus).toHaveBeenCalledWith(clubId);
     expect(result.isActive).toBe(false);
+  });
+
+  it('getOverview debe delegar en superadminClubsService.getOverview', async () => {
+    const mockOverview = { totalClubs: 10, activeClubs: 8, totalUsers: 200, monthlyGmv: 5000, gmvGrowthPercent: 12 };
+    superadminClubsService.getOverview.mockResolvedValue(mockOverview);
+
+    const result = await controller.getOverview();
+    expect(superadminClubsService.getOverview).toHaveBeenCalled();
+    expect(result.totalClubs).toBe(10);
   });
 });

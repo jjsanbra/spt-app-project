@@ -12,11 +12,60 @@ import {
   SuperAdminClubListResponseDto,
   SuperAdminClubResponseDto,
 } from './dto/superadmin-club-response.dto';
+import { SuperadminOverviewResponseDto } from './dto/superadmin-overview-response.dto';
 import { UpdateSuperAdminClubDto } from './dto/update-superadmin-club.dto';
 
 @Injectable()
 export class SuperAdminClubsService {
   constructor(private readonly prisma: PrismaService) {}
+
+  /**
+   * Obtener visión macro y analítica global de la plataforma (SuperAdmin)
+   */
+  async getOverview(): Promise<SuperadminOverviewResponseDto> {
+    const totalClubs = await this.prisma.club.count();
+    const activeClubs = await this.prisma.club.count({ where: { isActive: true } });
+    const totalUsers = await this.prisma.user.count();
+
+    const now = new Date();
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1, 0, 0, 0, 0);
+    const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
+
+    const currentMonthBookings = await this.prisma.booking.findMany({
+      where: {
+        startTime: { gte: monthStart },
+        status: { not: 'CANCELLED' },
+      },
+      select: { totalPrice: true },
+    });
+
+    const monthlyGmv = currentMonthBookings.reduce((sum, b) => sum + Number(b.totalPrice || 0), 0);
+
+    const prevMonthBookings = await this.prisma.booking.findMany({
+      where: {
+        startTime: { gte: prevMonthStart, lte: prevMonthEnd },
+        status: { not: 'CANCELLED' },
+      },
+      select: { totalPrice: true },
+    });
+
+    const prevGmv = prevMonthBookings.reduce((sum, b) => sum + Number(b.totalPrice || 0), 0);
+    const gmvGrowthPercent =
+      prevGmv > 0
+        ? Math.round(((monthlyGmv - prevGmv) / prevGmv) * 1000) / 10
+        : monthlyGmv > 0
+          ? 100
+          : 0;
+
+    return {
+      totalClubs,
+      activeClubs,
+      totalUsers,
+      monthlyGmv: Math.round(monthlyGmv * 100) / 100,
+      gmvGrowthPercent,
+    };
+  }
 
   /**
    * Listar todos los clubes de la plataforma con filtros y conteos agregados

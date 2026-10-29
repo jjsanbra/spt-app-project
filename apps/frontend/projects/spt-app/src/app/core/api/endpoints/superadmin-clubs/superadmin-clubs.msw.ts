@@ -15,19 +15,33 @@ import type {
 
 import type {
   SuperAdminClubListResponseDto,
-  SuperAdminClubResponseDto
+  SuperAdminClubResponseDto,
+  SuperadminOverviewResponseDto
 } from '../../model';
 
 import {
   getSuperAdminClubsControllerCreateResponseMock,
   getSuperAdminClubsControllerFindAllResponseMock,
   getSuperAdminClubsControllerFindByIdResponseMock,
+  getSuperAdminClubsControllerGetOverviewResponseMock,
   getSuperAdminClubsControllerToggleStatusResponseMock,
   getSuperAdminClubsControllerUpdateResponseMock
 } from './superadmin-clubs.faker';
 
-export { getSuperAdminClubsControllerFindAllResponseMock, getSuperAdminClubsControllerCreateResponseMock, getSuperAdminClubsControllerFindByIdResponseMock, getSuperAdminClubsControllerUpdateResponseMock, getSuperAdminClubsControllerToggleStatusResponseMock } from './superadmin-clubs.faker';
+export { getSuperAdminClubsControllerGetOverviewResponseMock, getSuperAdminClubsControllerFindAllResponseMock, getSuperAdminClubsControllerCreateResponseMock, getSuperAdminClubsControllerFindByIdResponseMock, getSuperAdminClubsControllerUpdateResponseMock, getSuperAdminClubsControllerToggleStatusResponseMock } from './superadmin-clubs.faker';
 
+
+export const getSuperAdminClubsControllerGetOverviewMockHandler = (overrideResponse?: SuperadminOverviewResponseDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<SuperadminOverviewResponseDto> | SuperadminOverviewResponseDto), options?: RequestHandlerOptions) => {
+  return http.get('*/api/v1/superadmin/clubs/analytics/overview', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
+
+
+    return HttpResponse.json(overrideResponse !== undefined
+    ? (typeof overrideResponse === "function" ? await overrideResponse(info) : overrideResponse)
+    : getSuperAdminClubsControllerGetOverviewResponseMock(),
+      { status: 200
+      })
+  }, options)
+}
 
 export const getSuperAdminClubsControllerFindAllMockHandler = (overrideResponse?: SuperAdminClubListResponseDto | ((info: Parameters<Parameters<typeof http.get>[1]>[0]) => Promise<SuperAdminClubListResponseDto> | SuperAdminClubListResponseDto), options?: RequestHandlerOptions) => {
   return http.get('*/api/v1/superadmin/clubs', async (info: Parameters<Parameters<typeof http.get>[1]>[0]) => {
@@ -89,6 +103,7 @@ export const getSuperAdminClubsControllerToggleStatusMockHandler = (overrideResp
   }, options)
 }
 export const getSuperadminClubsMock = () => [
+  getSuperAdminClubsControllerGetOverviewMockHandler(),
   getSuperAdminClubsControllerFindAllMockHandler(),
   getSuperAdminClubsControllerCreateMockHandler(),
   getSuperAdminClubsControllerFindByIdMockHandler(),
